@@ -1,0 +1,10 @@
+{
+    "COMMON": {
+        "FILTER": "Filter",
+        "FROM_DATE": "From Date",
+        "TO_DATE": "To Date",
+        "ACTION": "Action",
+        "ORDER_NUMBER": "#",
+        "SEARCH": "Search"
+    }
+}
