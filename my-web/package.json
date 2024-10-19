@@ -9,6 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/icons-material": "^6.1.4",
+    "@mui/material": "^6.1.4",
     "axios": "^1.7.7",
     "i18next": "^23.15.2",
     "lodash.debounce": "^4.0.8",
@@ -16,7 +20,8 @@
     "next": "14.2.15",
     "react": "^18",
     "react-dom": "^18",
-    "react-i18next": "^15.0.2"
+    "react-i18next": "^15.0.2",
+    "react-perfect-scrollbar": "^1.5.8"
   },
   "devDependencies": {
     "@types/i18next": "^12.1.0",
