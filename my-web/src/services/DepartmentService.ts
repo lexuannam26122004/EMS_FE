@@ -1,11 +1,20 @@
-import axios from './axios'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-export const getDataDepartment = async () => {
-    try {
-        const result = await axios.get('/Timekeeping/GetAllDepartments')
-        return result.data.Data
-    } catch (error) {
-        console.error('Error fetching data', error)
-        throw error
-    }
+interface DepartmentResponse {
+    Success: boolean
+    Data: any
 }
+
+const apiPath = 'https://localhost:44381/api/admin/Timekeeping'
+
+export const departmentApi = createApi({
+    reducerPath: 'departmentApi',
+    baseQuery: fetchBaseQuery({ baseUrl: apiPath }),
+    endpoints: builder => ({
+        getAllDepartments: builder.query<DepartmentResponse, void>({
+            query: () => 'GetAllDepartments'
+        })
+    })
+})
+
+export const { useGetAllDepartmentsQuery } = departmentApi

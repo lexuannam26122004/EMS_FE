@@ -1,3 +1,5 @@
+'use client'
+
 import { MoreVertical, ChevronLast, ChevronFirst } from 'lucide-react'
 import { useContext, createContext, useState, ReactNode, FC } from 'react'
 import { useRouter } from 'next/navigation'

@@ -1,12 +1,24 @@
-// pages/index.tsx
-import Layout from '../components/Layout'
+'use client'
+import { Box } from '@mui/material'
+import { useGetAllUsersQuery } from '@/services/AspNetUserService'
+import { IAspNetUserGetAll } from '@/models/AspNetUser'
 
 const Home = () => {
+    const { data: response, isLoading } = useGetAllUsersQuery()
+
+    const userData = response?.Data.Records as IAspNetUserGetAll[]
+
     return (
-        <Layout>
+        <Box>
             <h1>Welcome to the Home Page</h1>
-            <p>This is the content of the home page.</p>
-        </Layout>
+            {!isLoading && (
+                <ul>
+                    {userData?.map((item, index) => (
+                        <li key={index}>{item.UserName}</li>
+                    ))}
+                </ul>
+            )}
+        </Box>
     )
 }
 

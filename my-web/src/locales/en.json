@@ -5,6 +5,28 @@
         "TO_DATE": "To Date",
         "ACTION": "Action",
         "ORDER_NUMBER": "#",
-        "SEARCH": "Search"
+        "SEARCH": "Search",
+        "PERMISSION": {
+            "TITLE": "Permission",
+            "TABS": {
+                "PERMISSION_FOR_USER": "Permission for User",
+                "PERMISSION_FOR_ROLE": "Permission for Role"
+            }
+        },
+        "TABLE": {
+            "COMMON": {
+                "ID": "ID",
+                "ACTION": "ACTION"
+            },
+            "PERMISSION": {
+                "USER": {
+                    "FULLNAME": "FULLNAME",
+                    "ROLE": "ROLE"
+                },
+                "ROLE": {
+                    "NAME": "NAME"
+                }
+            }
+        }
     }
 }
