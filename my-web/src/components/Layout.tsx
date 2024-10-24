@@ -1,6 +1,5 @@
 'use client'
-
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import Sidebar, { SidebarItem } from '@/components/Sidebar'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import 'react-perfect-scrollbar/dist/css/styles.css'
@@ -9,9 +8,17 @@ import { Calendar, Settings, Wallet} from 'lucide-react'
 import MenuIcon from '@mui/icons-material/Menu'
 import { useRouter, usePathname } from 'next/navigation'
 
+import { Unlock, Calendar, Settings } from 'lucide-react'
+import { usePathname } from 'next/navigation'
+import i18n from '@/i18n/i18n'
+
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [isNavbarOpen, setIsNavbarOpen] = useState(true)
     const pathname = usePathname() // Lấy đường dẫn hiện tại
+
+    useEffect(() => {
+        // Chỉ khởi tạo một lần
+        i18n.changeLanguage('vi') // Hoặc ngôn ngữ khác mà bạn muốn
+    }, [])
 
     return (
         <div style={{ display: 'flex', height: '100vh' }}>
@@ -23,19 +30,17 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                     alert={true}
                     active={pathname === '/timekeeping'}
                 />
+                <SidebarItem
+                    icon={<Unlock />}
+                    text='Permission'
+                    route='/permission'
+                    active={pathname === '/permission'}
+                />
                 <SidebarItem icon={<Settings />} text='Settings' route='/' active={pathname === '/'} />
                 <SidebarItem icon={<Wallet />} text='Salary' route='/salary' active={pathname === '/salary'} />
             </Sidebar>
             <PerfectScrollbar style={{ flex: 1 }}>
-                <main style={{ padding: '0 5px', height: '100%', overflowY: 'scroll' }}>
-                    <IconButton
-                        onClick={() => {
-                            setIsNavbarOpen(true)
-                        }}
-                        style={{ margin: '10px', visibility: isNavbarOpen ? 'hidden' : 'visible' }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
+                <main style={{ padding: '0 5px', height: '100%', overflowY: 'scroll', backgroundColor: '#eeeeff' }}>
                     {children}
                 </main>
             </PerfectScrollbar>

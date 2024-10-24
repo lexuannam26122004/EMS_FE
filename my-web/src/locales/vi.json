@@ -5,6 +5,28 @@
         "TO_DATE": "Đến ngày",
         "ACTION": "Hành động",
         "ORDER_NUMBER": "#",
-        "SEARCH": "Tìm kiếm"
+        "SEARCH": "Tìm kiếm",
+        "PERMISSION": {
+            "TITLE": "Phân quyền",
+            "TABS": {
+                "PERMISSION_FOR_USER": "Phần quyền cho Người dùng",
+                "PERMISSION_FOR_ROLE": "Phân quyền cho Chức vụ"
+            }
+        },
+        "TABLE": {
+            "COMMON": {
+                "ID": "ID",
+                "ACTION": "HÀNH ĐỘNG"
+            },
+            "PERMISSION": {
+                "USER": {
+                    "FULLNAME": "HỌ VÀ TÊN",
+                    "ROLE": "CHỨC VỤ"
+                },
+                "ROLE": {
+                    "NAME": "TÊN CHỨC VỤ"
+                }
+            }
+        }
     }
 }

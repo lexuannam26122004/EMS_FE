@@ -1,22 +1,21 @@
-import { ITimekeepingCreate } from '@/models/Timekeeping'
-import axios from './axios'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { IFilterTimekeeping } from '@/models/Timekeeping'
 
-export const getData = async () => {
-    try {
-        const response = await axios.get('/Timekeeping/Search') // Thay thế bằng endpoint của bạn
-        return response.data.Data
-    } catch (error) {
-        console.error('Error fetching data', error)
-        throw error
-    }
+interface TimekeepingResponse {
+    Success: boolean
+    Data: any
 }
 
-export const postData = async (data: ITimekeepingCreate) => {
-    try {
-        const response = await axios.post('/Timekeeping/Create', data) // Thay thế bằng endpoint của bạn
-        return response.data
-    } catch (error) {
-        console.error('Error posting data', error)
-        throw error
-    }
-}
+const apiPath = 'https://localhost:44381/api/admin/Timekeeping'
+
+export const timekeepingApi = createApi({
+    reducerPath: 'timekeepingApi',
+    baseQuery: fetchBaseQuery({ baseUrl: apiPath }),
+    endpoints: builder => ({
+        searchTimekeeping: builder.query<TimekeepingResponse, IFilterTimekeeping | void>({
+            query: () => 'Search'
+        })
+    })
+})
+
+export const { useSearchTimekeepingQuery } = timekeepingApi

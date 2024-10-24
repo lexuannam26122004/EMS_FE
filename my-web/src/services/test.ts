@@ -1,3 +1,4 @@
+import { IAspNetUserGetAll } from '@/models/AspNetUser'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 interface ApiResponse {
@@ -7,14 +8,14 @@ interface ApiResponse {
 
 const apiPath = 'https://localhost:44381/api/admin/AspNetUser'
 
-export const userApi = createApi({
-    reducerPath: 'userApi',
+export const aspNetUserApi = createApi({
+    reducerPath: 'aspNetUserApi',
     baseQuery: fetchBaseQuery({ baseUrl: apiPath }),
     endpoints: builder => ({
-        getAllUsers: builder.query<ApiResponse, void>({
+        getAll: builder.query<ApiResponse, void>({
             query: () => 'GetAll'
         })
     })
 })
 
-export const { useGetAllUsersQuery } = userApi
+export const { useGetAllQuery } = aspNetUserApi

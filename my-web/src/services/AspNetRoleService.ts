@@ -1,11 +1,20 @@
-import axios from './axios'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-export const getDataRole = async () => {
-    try {
-        const response = await axios.get('/AspNetRole/GetAll')
-        return response.data.Data.Records
-    } catch (error) {
-        console.error('Error fetching data', error)
-        throw error
-    }
+interface RoleResponse {
+    Success: boolean
+    Data: any
 }
+
+const apiPath = 'https://localhost:44381/api/admin/AspNetRole'
+
+export const roleApi = createApi({
+    reducerPath: 'roleApi',
+    baseQuery: fetchBaseQuery({ baseUrl: apiPath }),
+    endpoints: builder => ({
+        getAllRoles: builder.query<RoleResponse, void>({
+            query: () => 'GetAll'
+        })
+    })
+})
+
+export const { useGetAllRolesQuery } = roleApi
