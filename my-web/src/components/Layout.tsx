@@ -22,6 +22,12 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <Sidebar>
                 <SidebarItem
                     icon={<Calendar />}
+                    text='Employee'
+                    route='/employee'
+                    active={pathname === '/employee'}
+                />
+                <SidebarItem
+                    icon={<Calendar />}
                     text='Timekeeping'
                     route='/timekeeping'
                     alert={true}
