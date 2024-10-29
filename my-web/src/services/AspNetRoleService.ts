@@ -13,8 +13,18 @@ export const roleApi = createApi({
     endpoints: builder => ({
         getAllRoles: builder.query<RoleResponse, void>({
             query: () => 'GetAll'
+        }),
+        getJsonRoleHasFunctions: builder.query<RoleResponse, string>({
+            query: id => `GetJsonRoleHasFunctions?roleId=${id}`
+        }),
+        updateJsonRoleHasFunctions: builder.mutation<RoleResponse, any>({
+            query: data => ({
+                url: '/UpdateJsonRoleHasFunctions',
+                method: 'PUT',
+                body: data
+            })
         })
     })
 })
 
-export const { useGetAllRolesQuery } = roleApi
+export const { useGetAllRolesQuery, useGetJsonRoleHasFunctionsQuery, useUpdateJsonRoleHasFunctionsMutation } = roleApi

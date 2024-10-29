@@ -1,5 +1,5 @@
 import { IAspNetRoleGetAll } from '@/models/AspNetRole'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import Grid2 from '@mui/material/Grid2'
 import { Columns } from './ColumnRoleList'
 import { CircleEditOutline } from 'mdi-material-ui'
@@ -9,6 +9,7 @@ import { Button, Paper, CircularProgress, Table, TableCell, TableBody } from '@m
 import { TableSortLabel, Typography, TableContainer, TableHead, TableRow } from '@mui/material'
 import sortTable, { getComparator } from '@/common/sortTable'
 import { useTranslation } from 'react-i18next'
+import PermissionForRoleModal from './PermissionForRoleModal'
 
 export default function PermissionForRole() {
     const { t } = useTranslation('common')
@@ -28,9 +29,12 @@ export default function PermissionForRole() {
         setOrderBy(property)
     }
 
-    const handleOpenModal = (data: any) => {
-        setRoleSelected(data)
-    }
+    const handleOpenModal = useCallback(
+        (data: IAspNetRoleGetAll | null) => {
+            setRoleSelected(data)
+        },
+        [roleSelected]
+    )
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -147,6 +151,13 @@ export default function PermissionForRole() {
                         </TableBody>
                     </Table>
                 </TableContainer>
+            )}
+            {roleSelected && (
+                <PermissionForRoleModal
+                    data={roleSelected}
+                    open={!!roleSelected}
+                    onClose={() => setRoleSelected(null)}
+                />
             )}
         </Paper>
     )

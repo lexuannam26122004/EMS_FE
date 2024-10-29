@@ -6,11 +6,24 @@
         "ACTION": "Hành động",
         "ORDER_NUMBER": "#",
         "SEARCH": "Tìm kiếm",
-        "PERMISSION": {
+        "PERMISSIONS": {
             "TITLE": "Phân quyền",
             "TABS": {
                 "PERMISSION_FOR_USER": "Phần quyền cho Người dùng",
                 "PERMISSION_FOR_ROLE": "Phân quyền cho Chức vụ"
+            },
+            "MESSAGE": {
+                "ERROR": {
+                    "GET_PERMISSION": "Không thể lấy quyền",
+                    "CREATE_PERMISSION": "Không thể tạo quyền",
+                    "UPDATE_PERMISSION": "Không thể cập nhật quyền",
+                    "DELETE_PERMISSION": "Không thể xóa quyền"
+                },
+                "SUCCESS": {
+                    "CREATE_PERMISSION": "Tạo quyền thành công",
+                    "UPDATE_PERMISSION": "Cập nhật quyền thành công",
+                    "DELETE_PERMISSION": "Xóa quyền thành công"
+                }
             }
         },
         "TABLE": {
@@ -27,6 +40,14 @@
                     "NAME": "TÊN CHỨC VỤ"
                 }
             }
+        },
+        "BUTTON": {
+            "SAVE": "LƯU",
+            "SAVE_AND_CLOSE": "Lưu và Đóng",
+            "CANCEL": "HỦY",
+            "ADD": "THÊM",
+            "UPDATING": "ĐANG CẬP NHẬT",
+            "DELETE": "XÓA"
         }
     }
 }
