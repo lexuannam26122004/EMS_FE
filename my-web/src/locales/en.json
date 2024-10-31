@@ -11,6 +11,19 @@
             "TABS": {
                 "PERMISSION_FOR_USER": "Permission for User",
                 "PERMISSION_FOR_ROLE": "Permission for Role"
+            },
+            "MESSAGE": {
+                "ERROR": {
+                    "GET_PERMISSION": "Failed to get permission",
+                    "CREATE_PERMISSION": "Failed to create permission",
+                    "UPDATE_PERMISSION": "Failed to update permission",
+                    "DELETE_PERMISSION": "Failed to delete permission"
+                },
+                "SUCCESS": {
+                    "CREATE_PERMISSION": "Create permission successfully",
+                    "UPDATE_PERMISSION": "Update permission successfully",
+                    "DELETE_PERMISSION": "Delete permission successfully"
+                }
             }
         },
         "TABLE": {
@@ -18,7 +31,7 @@
                 "ID": "ID",
                 "ACTION": "ACTION"
             },
-            "PERMISSION": {
+            "PERMISSIONS": {
                 "USER": {
                     "FULLNAME": "FULLNAME",
                     "ROLE": "ROLE"
@@ -26,6 +39,25 @@
                 "ROLE": {
                     "NAME": "NAME"
                 }
+            }
+        },
+        "BUTTON": {
+            "SAVE": "SAVE",
+            "SAVE_AND_CLOSE": "SAVE AND CLOSE",
+            "CANCEL": "CANCEL",
+            "ADD": "ADD",
+            "UPDATING": "UPDATING",
+            "DELETE": "DELETE"
+        },
+        "NOTIFICATION": {
+            "TITLE": "Notification",
+            "BUTTON": {
+                "ALL": "All",
+                "UNREAD": "Unread",
+                "MARK_ALL_AS_READ": "Mark all as read"
+            },
+            "MESSAGES": {
+                "NO_NOTIFICATION": "You do not have any notifications"
             }
         }
     }

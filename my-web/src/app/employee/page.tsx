@@ -4,27 +4,14 @@ import Layout from '@/components/Layout'
 import './page.css'
 import React, { useEffect, useState } from 'react'
 import { IAspNetUserGetAll } from '@/models/AspNetUser'
-import { getDataUser } from '@/services/AspNetUserService'
+import { useGetAllUsersQuery } from '@/services/AspNetUserService'
 
 const StripedTable: React.FC = () => {
-    const [users, setUsers] = useState<IAspNetUserGetAll[]>([])
-    const [loading, setLoading] = useState<boolean>(true)
     const [searchTerm, setSearchTerm] = useState<string>('')
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const data = await getDataUser()
-                setUsers(data)
-            } catch (error) {
-                console.error('Failed to fetch user data', error)
-            } finally {
-                setLoading(false)
-            }
-        }
+    const { data: userResponse, isLoading: loading } = useGetAllUsersQuery()
 
-        fetchData()
-    }, [])
+    const users = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
 
     if (loading) {
         return <div>Loading...</div>
