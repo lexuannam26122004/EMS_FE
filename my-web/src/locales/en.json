@@ -48,6 +48,17 @@
             "ADD": "ADD",
             "UPDATING": "UPDATING",
             "DELETE": "DELETE"
+        },
+        "NOTIFICATION": {
+            "TITLE": "Notification",
+            "BUTTON": {
+                "ALL": "All",
+                "UNREAD": "Unread",
+                "MARK_ALL_AS_READ": "Mark all as read"
+            },
+            "MESSAGES": {
+                "NO_NOTIFICATION": "You do not have any notifications"
+            }
         }
     }
 }

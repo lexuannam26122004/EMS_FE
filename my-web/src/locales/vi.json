@@ -48,6 +48,17 @@
             "ADD": "THÊM",
             "UPDATING": "ĐANG CẬP NHẬT",
             "DELETE": "XÓA"
+        },
+        "NOTIFICATION": {
+            "TITLE": "Thông báo",
+            "BUTTON": {
+                "ALL": "Tất cả",
+                "UNREAD": "Chưa đọc",
+                "MARK_ALL_AS_READ": "Đánh dấu tất cả đã đọc"
+            },
+            "MESSAGES": {
+                "NO_NOTIFICATION": "Bạn không có thông báo nào"
+            }
         }
     }
 }

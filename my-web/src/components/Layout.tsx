@@ -4,8 +4,8 @@ import Sidebar, { SidebarItem } from '@/components/Sidebar'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import 'react-perfect-scrollbar/dist/css/styles.css'
 // import { IconButton } from '@mui/material'
-import { Wallet} from 'lucide-react'
-import { Unlock, Calendar, Settings } from 'lucide-react'
+import { Wallet } from 'lucide-react'
+import { Unlock, Calendar, Settings, Bell } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import i18n from '@/i18n/i18n'
 
@@ -20,12 +20,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     return (
         <div style={{ display: 'flex', height: '100vh' }}>
             <Sidebar>
-                <SidebarItem
-                    icon={<Calendar />}
-                    text='Employee'
-                    route='/employee'
-                    active={pathname === '/employee'}
-                />
+                <SidebarItem icon={<Calendar />} text='Employee' route='/employee' active={pathname === '/employee'} />
                 <SidebarItem
                     icon={<Calendar />}
                     text='Timekeeping'
@@ -38,6 +33,12 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                     text='Permission'
                     route='/permission'
                     active={pathname === '/permission'}
+                />
+                <SidebarItem
+                    icon={<Bell />}
+                    text='Notifications'
+                    route='/notifications'
+                    active={pathname === '/notifications'}
                 />
                 <SidebarItem icon={<Settings />} text='Settings' route='/' active={pathname === '/'} />
                 <SidebarItem icon={<Wallet />} text='Salary' route='/salary' active={pathname === '/salary'} />

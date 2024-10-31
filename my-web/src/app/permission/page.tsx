@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Link, Tab, Tabs, Typography } from '@mui/material'
+import { Link, Typography } from '@mui/material'
 import Grid2 from '@mui/material/Grid2'
 import { useTranslation } from 'react-i18next'
 import PermissionForRole from './PermissionForRole'
