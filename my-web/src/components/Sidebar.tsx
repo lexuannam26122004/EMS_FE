@@ -18,7 +18,7 @@ const Sidebar: FC<{ children: ReactNode }> = ({ children }) => {
 
     return (
         <SidebarContext.Provider value={{ expanded }}>
-            <aside className='h-screen'>
+            <aside className='h-screen' style={{ userSelect: 'none' }}>
                 <nav className='h-full flex flex-col bg-white border-r shadow-sm'>
                     <div className='p-4 pb-2 flex justify-between items-center'>
                         <img

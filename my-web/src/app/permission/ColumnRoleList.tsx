@@ -16,6 +16,7 @@ export const Columns: readonly Column[] = [
         format: (value: number) => value.toString(),
         width: '5%',
         minWidth: 50,
+        maxWidth: '200px',
         sortable: false
     },
     {
@@ -23,13 +24,13 @@ export const Columns: readonly Column[] = [
         label: 'COMMON.TABLE.PERMISSION.ROLE.NAME',
         align: 'left',
         width: '30%',
+        maxWidth: '200px',
         sortable: true
     },
     {
         id: 'Action',
         label: 'COMMON.TABLE.COMMON.ACTION',
         width: '5%',
-        minWidth: 50,
         align: 'center',
         sortable: false
     }

@@ -1,11 +1,9 @@
 'use client'
 import React, { useEffect } from 'react'
 import Sidebar, { SidebarItem } from '@/components/Sidebar'
-import PerfectScrollbar from 'react-perfect-scrollbar'
-import 'react-perfect-scrollbar/dist/css/styles.css'
-// import { IconButton } from '@mui/material'
+import { Box } from '@mui/material'
 import { Wallet } from 'lucide-react'
-import { Unlock, Calendar, Settings, Bell } from 'lucide-react'
+import { Unlock, Calendar, House, Bell } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import i18n from '@/i18n/i18n'
 
@@ -20,6 +18,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     return (
         <div style={{ display: 'flex', height: '100vh' }}>
             <Sidebar>
+                <SidebarItem icon={<House />} text='Home' route='/' active={pathname === '/'} />
                 <SidebarItem icon={<Calendar />} text='Employee' route='/employee' active={pathname === '/employee'} />
                 <SidebarItem
                     icon={<Calendar />}
@@ -40,14 +39,28 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                     route='/notifications'
                     active={pathname === '/notifications'}
                 />
-                <SidebarItem icon={<Settings />} text='Settings' route='/' active={pathname === '/'} />
                 <SidebarItem icon={<Wallet />} text='Salary' route='/salary' active={pathname === '/salary'} />
             </Sidebar>
-            <PerfectScrollbar style={{ flex: 1 }}>
-                <main style={{ padding: '0 5px', height: '100%', overflowY: 'scroll', backgroundColor: '#eeeeff' }}>
-                    {children}
-                </main>
-            </PerfectScrollbar>
+            <Box
+                component='main'
+                sx={{
+                    flex: 1,
+                    padding: '0 5px',
+                    height: '100%',
+                    overflowY: 'auto',
+                    backgroundColor: '#eeeeff',
+                    '&::-webkit-scrollbar': {
+                        width: '8px',
+                        height: '8px'
+                    },
+                    '&::-webkit-scrollbar-thumb': {
+                        backgroundColor: '#919292',
+                        borderRadius: '10px'
+                    }
+                }}
+            >
+                {children}
+            </Box>
         </div>
     )
 }

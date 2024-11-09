@@ -1,7 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Snackbar, Alert } from '@mui/material'
-import { useEffect } from 'react'
 import { toastSlice, toastSelector } from '@/redux/slices/toastSlice'
 
 const ToastContainer = () => {

@@ -58,6 +58,28 @@
             },
             "MESSAGES": {
                 "NO_NOTIFICATION": "Bạn không có thông báo nào"
+            },
+            "MENU": {
+                "MARK_AS_UNREAD": "Đánh dấu là chưa đọc",
+                "MARK_AS_READ": "Đánh dấu là đã đọc",
+                "DELETE": "Xóa thông báo này"
+            },
+            "MESSAGE": {
+                "SUCCESS": {
+                    "CREATE_NOTIFICATION": "Tạo thông báo thành công!",
+                    "UPDATE_NOTIFICATION": "Cập nhật thông báo thành công!",
+                    "DELETE_NOTIFICATION": "Xoá thông báo thành công!"
+                },
+                "ERROR": {
+                    "GET_NOTIFICATION": "Không thể lấy thông báo",
+                    "MARK_AS_READ": "Không thể đánh dấu đã đọc",
+                    "MARK_AS_UNREAD": "Không thể đánh dấu chưa đọc",
+                    "DELETE_NOTIFICATION": "Không thể xóa thông báo"
+                }
+            },
+            "GET_NOTIFICATION_BY_ID": {
+                "TITLE": "Thông báo bởi ",
+                "NOT_FOUND": "Không tìm thấy thông báo"
             }
         }
     }

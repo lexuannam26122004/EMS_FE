@@ -4,8 +4,10 @@ import { departmentApi } from '@/services/DepartmentService'
 import { configureStore } from '@reduxjs/toolkit'
 import { timekeepingApi } from '@/services/TimekeepingService'
 import { sysFunctionApi } from '@/services/SysFunctionService'
+import { notificationsApi } from '@/services/NotificationsService'
 import { toastSlice } from './slices/toastSlice'
 import { tablePermissionSlice } from './slices/tablePermissionSlice'
+import { notificationsSlice } from './slices/notificationsSlice'
 
 export const store = configureStore({
     reducer: {
@@ -15,7 +17,9 @@ export const store = configureStore({
         [timekeepingApi.reducerPath]: timekeepingApi.reducer,
         [sysFunctionApi.reducerPath]: sysFunctionApi.reducer,
         [toastSlice.name]: toastSlice.reducer,
-        [tablePermissionSlice.name]: tablePermissionSlice.reducer
+        [tablePermissionSlice.name]: tablePermissionSlice.reducer,
+        [notificationsSlice.name]: notificationsSlice.reducer,
+        [notificationsApi.reducerPath]: notificationsApi.reducer
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware().concat(
@@ -23,7 +27,8 @@ export const store = configureStore({
             roleApi.middleware,
             departmentApi.middleware,
             timekeepingApi.middleware,
-            sysFunctionApi.middleware
+            sysFunctionApi.middleware,
+            notificationsApi.middleware
         )
 })
 

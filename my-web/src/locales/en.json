@@ -58,6 +58,28 @@
             },
             "MESSAGES": {
                 "NO_NOTIFICATION": "You do not have any notifications"
+            },
+            "MENU": {
+                "MARK_AS_UNREAD": "Mark as unread",
+                "MARK_AS_READ": "Mark as read",
+                "DELETE": "Delete this notification"
+            },
+            "MESSAGE": {
+                "ERROR": {
+                    "GET_NOTIFICATION": "Failed to get notification",
+                    "MARK_AS_READ": "Failed to mark as read",
+                    "MARK_AS_UNREAD": "Failed to mark as unread",
+                    "DELETE_NOTIFICATION": "Failed to delete notification"
+                },
+                "SUCCESS": {
+                    "MARK_AS_READ": "Mark as read successfully",
+                    "MARK_AS_UNREAD": "Mark as unread successfully",
+                    "DELETE_NOTIFICATION": "Delete notification successfully"
+                }
+            },
+            "GET_NOTIFICATION_BY_ID": {
+                "TITLE": "Notification by ",
+                "NOT_FOUND": "Notification not found"
             }
         }
     }
