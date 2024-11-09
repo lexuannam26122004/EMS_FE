@@ -432,7 +432,7 @@ const TimekeepingPage: React.FC<TimekeepingPageProps> = ({
                     </Typography>
                     <Box
                         sx={{
-                            marginTop: '10px',
+                            marginTop: '6px',
                             overflowX: 'auto',
                             paddingRight: '10px',
                             '&::-webkit-scrollbar': {
@@ -455,7 +455,7 @@ const TimekeepingPage: React.FC<TimekeepingPageProps> = ({
                                         alignItems: 'center',
                                         fontSize: '15px',
                                         color: '#146ca1',
-                                        marginTop: '2px',
+                                        marginTop: '4px',
                                         fontWeight: '600'
                                     }}
                                 >
@@ -499,7 +499,7 @@ const TimekeepingPage: React.FC<TimekeepingPageProps> = ({
                     </Typography>
                     <Box
                         sx={{
-                            marginTop: '10px',
+                            marginTop: '6px',
                             overflowX: 'auto',
                             paddingRight: '10px',
                             '&::-webkit-scrollbar': {
@@ -522,7 +522,7 @@ const TimekeepingPage: React.FC<TimekeepingPageProps> = ({
                                         alignItems: 'center',
                                         fontSize: '15px',
                                         color: '#146ca1',
-                                        marginTop: '2px',
+                                        marginTop: '4px',
                                         fontWeight: '600'
                                     }}
                                 >
