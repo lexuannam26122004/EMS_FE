@@ -3,9 +3,10 @@ import React, { useEffect } from 'react'
 import Sidebar, { SidebarItem } from '@/components/Sidebar'
 import { Box } from '@mui/material'
 import { Wallet } from 'lucide-react'
-import { Unlock, Calendar, House, Bell } from 'lucide-react'
+import { Unlock, Calendar, House, Bell, Settings } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import i18n from '@/i18n/i18n'
+import { BiCalendarStar } from 'react-icons/bi'
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const pathname = usePathname() // Lấy đường dẫn hiện tại
@@ -40,6 +41,17 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                     active={pathname === '/notifications'}
                 />
                 <SidebarItem icon={<Wallet />} text='Salary' route='/salary' active={pathname === '/salary'} />
+                <SidebarItem
+                    icon={
+                        <BiCalendarStar
+                            size={24}
+                            style={{ display: 'flex', alignItems: 'center' }} // Căn giữa và khoảng cách giữa icon và text
+                        />
+                    }
+                    text='Holiday'
+                    route='/holiday'
+                    active={pathname === '/holiday'}
+                />
             </Sidebar>
             <Box
                 component='main'
