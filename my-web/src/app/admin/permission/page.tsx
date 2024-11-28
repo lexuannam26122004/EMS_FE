@@ -9,13 +9,7 @@ const Permissions = () => {
     const { t } = useTranslation('common')
 
     return (
-        <Grid2 container spacing={6}>
-            <Grid2 size={12}>
-                <Typography variant='h5'>
-                    <Link href='#'>{t('COMMON.PERMISSIONS.TITLE')}</Link>
-                </Typography>
-            </Grid2>
-
+        <Grid2 container spacing={3}>
             <Grid2 size={12}>
                 <PermissionForRole />
             </Grid2>

@@ -36,17 +36,27 @@ export default function PermissionForRole() {
     )
 
     return (
-        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+        <Paper
+            elevation={0}
+            sx={{
+                width: '100%',
+                overflow: 'hidden',
+                borderTop: '1px solid var(--border-color)',
+                borderLeft: '1px solid var(--border-color)',
+                borderRight: '1px solid var(--border-color)',
+                backgroundColor: 'var(--background-color)'
+            }}
+        >
             <TableContainer
                 sx={{
                     maxHeight: '80vh',
                     overflow: 'auto',
                     '&::-webkit-scrollbar': {
-                        width: '8px',
-                        height: '8px'
+                        width: '7px',
+                        height: '7px'
                     },
                     '&::-webkit-scrollbar-thumb': {
-                        backgroundColor: '#919292',
+                        backgroundColor: 'var(--scrollbar-color)',
                         borderRadius: '10px'
                     }
                 }}
@@ -65,7 +75,11 @@ export default function PermissionForRole() {
                                             width: column.width,
                                             whiteSpace: 'nowrap',
                                             overflow: 'hidden',
-                                            textOverflow: 'ellipsis'
+                                            padding: '14px',
+                                            textOverflow: 'ellipsis',
+                                            backgroundColor: 'var(--background-color)',
+                                            color: 'var(--text-color)',
+                                            borderBottom: '1px solid var(--border-color)'
                                         }}
                                     >
                                         {column.sortable ? (
@@ -73,11 +87,20 @@ export default function PermissionForRole() {
                                                 active={column.id === orderBy}
                                                 direction={orderBy === column.id ? order : 'asc'}
                                                 onClick={() => handleSort(column.id)}
+                                                sx={{
+                                                    '& .MuiTableSortLabel-icon': {
+                                                        color: 'var(--text-color) !important'
+                                                    }
+                                                }}
                                             >
-                                                <Typography>{t(column.label)}</Typography>
+                                                <Typography sx={{ color: 'var(--text-color)' }}>
+                                                    {t(column.label)}
+                                                </Typography>
                                             </TableSortLabel>
                                         ) : (
-                                            <Typography>{t(column.label)}</Typography>
+                                            <Typography sx={{ color: 'var(--text-color)' }}>
+                                                {t(column.label)}
+                                            </Typography>
                                         )}
                                     </TableCell>
                                 )
@@ -96,7 +119,10 @@ export default function PermissionForRole() {
                                                   sx={{
                                                       minWidth: column.minWidth,
                                                       maxWidth: column.maxWidth,
-                                                      width: column.width
+                                                      width: column.width,
+                                                      backgroundColor: 'var(--background-color)',
+                                                      color: 'var(--text-color)',
+                                                      borderBottom: '1px solid var(--border-color)'
                                                   }}
                                               >
                                                   <Skeleton
@@ -104,7 +130,7 @@ export default function PermissionForRole() {
                                                       width='80%'
                                                       height={35}
                                                       sx={{
-                                                          bgcolor: '#f8f8fa',
+                                                          bgcolor: 'var(--skeleton-color)',
                                                           display: 'inline-block'
                                                       }}
                                                   />
@@ -115,20 +141,32 @@ export default function PermissionForRole() {
                               ))
                             : sortedRecords.map(row => {
                                   return (
-                                      <TableRow hover role='checkbox' tabIndex={-1} key={row.Id}>
+                                      <TableRow
+                                          role='checkbox'
+                                          tabIndex={-1}
+                                          key={row.Id}
+                                          sx={{
+                                              '&:hover': {
+                                                  backgroundColor: 'var(--hover-color-table) !important' // Thêm !important để override style mặc định
+                                              }
+                                          }}
+                                      >
                                           <TableCell
                                               align='center'
                                               sx={{
                                                   width: '5%',
                                                   minWidth: 50,
-                                                  maxWidth: '200px'
+                                                  padding: '14px',
+                                                  maxWidth: '200px',
+                                                  borderBottom: '1px solid var(--border-color)'
                                               }}
                                           >
                                               <Typography
                                                   sx={{
                                                       overflow: 'hidden',
                                                       textOverflow: 'ellipsis',
-                                                      whiteSpace: 'nowrap'
+                                                      whiteSpace: 'nowrap',
+                                                      color: 'var(--text-color)'
                                                   }}
                                               >
                                                   {row.Id}
@@ -138,16 +176,19 @@ export default function PermissionForRole() {
                                               sx={{
                                                   maxWidth: '200px',
                                                   width: '30%',
+                                                  padding: '14px',
                                                   whiteSpace: 'nowrap',
                                                   overflow: 'hidden',
-                                                  textOverflow: 'ellipsis'
+                                                  textOverflow: 'ellipsis',
+                                                  borderBottom: '1px solid var(--border-color)'
                                               }}
                                           >
                                               <Typography
                                                   sx={{
                                                       overflow: 'hidden',
                                                       textOverflow: 'ellipsis',
-                                                      whiteSpace: 'nowrap'
+                                                      whiteSpace: 'nowrap',
+                                                      color: 'var(--text-color)'
                                                   }}
                                               >
                                                   {row.Name}
@@ -156,12 +197,19 @@ export default function PermissionForRole() {
                                           <TableCell
                                               align='center'
                                               sx={{
-                                                  width: '5%'
+                                                  width: '5%',
+                                                  padding: 0,
+                                                  borderBottom: '1px solid var(--border-color)'
                                               }}
                                           >
                                               <Button
                                                   onClick={() => {
                                                       handleOpenModal(row)
+                                                  }}
+                                                  sx={{
+                                                      '&:hover': {
+                                                          backgroundColor: 'var(--hover-color)'
+                                                      }
                                                   }}
                                               >
                                                   <CircleEditOutline style={{ color: 'green' }} />

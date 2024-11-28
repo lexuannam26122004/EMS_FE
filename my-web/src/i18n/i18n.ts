@@ -1,4 +1,4 @@
-import i18n from 'i18next'
+import i18next from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import enMessages from '../locales/en.json'
 import viMessages from '../locales/vi.json'
@@ -17,14 +17,20 @@ export const resources = {
     }
 }
 
+const i18n = i18next.createInstance()
+
 i18n.use(initReactI18next).init({
-    resources,
+    resources: resources,
     lng: 'vi',
-    fallbackLng: 'vi',
-    ns: ['common', 'permission'], // Thêm namespace `permission` ở đây
-    defaultNS: 'common', // Ngôn ngữ mặc định
+    fallbackLng: ['vi', 'en'],
+    ns: ['common', 'permission'],
+    defaultNS: 'common',
     interpolation: {
-        escapeValue: false // React đã xử lý thoát ký tự
+        escapeValue: false
+    },
+    react: {
+        useSuspense: false,
+        bindI18n: 'languageChanged loaded'
     }
 })
 

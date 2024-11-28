@@ -1,8 +1,7 @@
 'use client'
 
-import Layout from '@/components/Layout'
 import './page.css'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { IAspNetUserGetAll } from '@/models/AspNetUser'
 import { useGetAllUsersQuery } from '@/services/AspNetUserService'
 

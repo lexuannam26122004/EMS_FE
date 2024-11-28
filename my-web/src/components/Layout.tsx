@@ -1,78 +1,208 @@
 'use client'
-import React, { useEffect } from 'react'
-import Sidebar, { SidebarItem } from '@/components/Sidebar'
-import { Box } from '@mui/material'
-import { Wallet } from 'lucide-react'
-import { Unlock, Calendar, House, Bell, Settings } from 'lucide-react'
+import React, { useEffect, useRef } from 'react'
+import Sidebar, { SidebarItem, TypographyItem } from '@/components/Sidebar'
+import { Alert, Box, Divider } from '@mui/material'
+import { Building2, Wallet } from 'lucide-react'
+import {
+    ShieldCheck,
+    Calendar,
+    CalendarDays,
+    Network,
+    Home,
+    ScrollText,
+    Landmark,
+    Gift,
+    Scale,
+    Clock,
+    CalendarClock,
+    SlidersHorizontal
+} from 'lucide-react'
+import { ChartNoAxesCombined, Users, FileSignature, Stethoscope, Award, CalendarX, BellRing } from 'lucide-react'
 import { usePathname } from 'next/navigation'
-import i18n from '@/i18n/i18n'
-import { BiCalendarStar } from 'react-icons/bi'
+import Header from './Header'
+import { useTranslation } from 'react-i18next'
+import NotificationRealTime from './NotificationRealTime'
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const pathname = usePathname() // Lấy đường dẫn hiện tại
+    const pathname = usePathname()
 
-    useEffect(() => {
-        // Chỉ khởi tạo một lần
-        i18n.changeLanguage('vi') // Hoặc ngôn ngữ khác mà bạn muốn
-    }, [])
+    const { t } = useTranslation('common')
 
     return (
         <div style={{ display: 'flex', height: '100vh' }}>
             <Sidebar>
-                <SidebarItem icon={<House />} text='Home' route='/' active={pathname === '/'} />
-                <SidebarItem icon={<Calendar />} text='Employee' route='/employee' active={pathname === '/employee'} />
+                <TypographyItem text={t('COMMON.SIDEBAR.DASHBOARD')} />
+                <SidebarItem
+                    icon={<Home />}
+                    text={t('COMMON.SIDEBAR.HOME')}
+                    route='/admin'
+                    active={pathname === '/admin'}
+                />
+                <SidebarItem
+                    icon={<ChartNoAxesCombined />}
+                    text={t('COMMON.SIDEBAR.STATISTICS')}
+                    route='/admin/statistics'
+                    active={pathname === '/admin/statistics'}
+                />
+                <Divider sx={{ marginTop: '15px', marginBottom: '10px', borderColor: 'var(--border-color)' }} />
+                <TypographyItem text={t('COMMON.SIDEBAR.HUMAN_RESOURCES')} />
+                <SidebarItem
+                    icon={<Users />}
+                    text={t('COMMON.SIDEBAR.EMPLOYEE')}
+                    route='/admin/employee'
+                    active={pathname === '/admin/employee'}
+                />
+                <SidebarItem
+                    icon={<FileSignature />}
+                    text={t('COMMON.SIDEBAR.CONTRACT')}
+                    route='/admin/contract'
+                    active={pathname === '/admin/contract'}
+                />
+                <SidebarItem
+                    icon={<Wallet />}
+                    text={t('COMMON.SIDEBAR.SALARY')}
+                    route='/admin/salary'
+                    active={pathname === '/admin/salary'}
+                />
+                <SidebarItem
+                    icon={<CalendarClock />}
+                    text={t('COMMON.SIDEBAR.SCHEDULAR')}
+                    route='/admin/schedular'
+                    active={pathname === '/admin/schedular'}
+                />
+                <SidebarItem
+                    icon={<CalendarDays />}
+                    text={t('COMMON.SIDEBAR.TIMEKEEPING')}
+                    route='/admin/timekeeping'
+                    alert={true}
+                    active={pathname === '/admin/timekeeping'}
+                />
+                <SidebarItem
+                    icon={<CalendarX />}
+                    text={t('COMMON.SIDEBAR.TIME_OFF')}
+                    route='/admin/time-off'
+                    alert={true}
+                    active={pathname === '/admin/time-off'}
+                />
+                <SidebarItem
+                    icon={<ShieldCheck />}
+                    text={t('COMMON.SIDEBAR.PERMISSION')}
+                    route='/admin/permission'
+                    active={pathname === '/admin/permission'}
+                />
+                <Divider sx={{ marginTop: '15px', marginBottom: '10px', borderColor: 'var(--border-color)' }} />
+                <TypographyItem text={t('COMMON.SIDEBAR.ORGANIZATION_DESIGN')} />
+                <SidebarItem
+                    icon={<Building2 />}
+                    text={t('COMMON.SIDEBAR.DEPARTMENT')}
+                    route='/admin/department'
+                    active={pathname === '/admin/department'}
+                />
+                <SidebarItem
+                    icon={<Landmark />}
+                    text={t('COMMON.SIDEBAR.ROLE')}
+                    route='/admin/role'
+                    active={pathname === '/admin/role'}
+                />
+                <SidebarItem
+                    icon={<Network />}
+                    text={t('COMMON.SIDEBAR.ORG_STRUCTURE')}
+                    route='/admin/org-structure'
+                    active={pathname === '/admin/org-structure'}
+                />
+                <Divider sx={{ marginTop: '15px', marginBottom: '10px', borderColor: 'var(--border-color)' }} />
+                <TypographyItem text={t('COMMON.SIDEBAR.REGULATIONS_AND_POLICIES')} />
+                <SidebarItem
+                    icon={<ScrollText />}
+                    text={t('COMMON.SIDEBAR.WORK_REGULATIONS')}
+                    route='/admin/work-regulations'
+                    active={pathname === '/admin/work-regulations'}
+                />
+                <SidebarItem
+                    icon={<Clock />}
+                    text={t('COMMON.SIDEBAR.WORK_SHIFT')}
+                    route='/admin/work-shift'
+                    alert={false}
+                    active={pathname === '/admin/work-shift'}
+                />
+                <SidebarItem
+                    icon={<Stethoscope />}
+                    text={t('COMMON.SIDEBAR.INSURANCE')}
+                    route='/admin/insurance'
+                    active={pathname === '/admin/insurance'}
+                />
+                <SidebarItem
+                    icon={<Award />}
+                    text={t('COMMON.SIDEBAR.REWARD')}
+                    route='/admin/reward'
+                    active={pathname === '/admin/reward'}
+                />
+                <SidebarItem
+                    icon={<Gift />}
+                    text={t('COMMON.SIDEBAR.BENEFIT')}
+                    route='/admin/benefit'
+                    active={pathname === '/admin/benefit'}
+                />
+                <SidebarItem
+                    icon={<Scale />}
+                    text={t('COMMON.SIDEBAR.DISCIPLINE')}
+                    route='/admin/discipline'
+                    active={pathname === '/admin/discipline'}
+                />
                 <SidebarItem
                     icon={<Calendar />}
-                    text='Timekeeping'
-                    route='/timekeeping'
-                    alert={true}
-                    active={pathname === '/timekeeping'}
+                    text={t('COMMON.SIDEBAR.HOLIDAY')}
+                    route='/admin/holiday'
+                    active={pathname === '/admin/holiday'}
                 />
                 <SidebarItem
-                    icon={<Unlock />}
-                    text='Permission'
-                    route='/permission'
-                    active={pathname === '/permission'}
-                />
-                <SidebarItem
-                    icon={<Bell />}
-                    text='Notifications'
-                    route='/notifications'
-                    active={pathname === '/notifications'}
-                />
-                <SidebarItem icon={<Wallet />} text='Salary' route='/salary' active={pathname === '/salary'} />
-                <SidebarItem
-                    icon={
-                        <BiCalendarStar
-                            size={24}
-                            style={{ display: 'flex', alignItems: 'center' }} // Căn giữa và khoảng cách giữa icon và text
-                        />
-                    }
-                    text='Holiday'
-                    route='/holiday'
-                    active={pathname === '/holiday'}
+                    icon={<SlidersHorizontal />}
+                    text={t('COMMON.SIDEBAR.CONFIGURATION')}
+                    route='/admin/configuration'
+                    active={pathname === '/admin/configuration'}
                 />
             </Sidebar>
             <Box
                 component='main'
                 sx={{
                     flex: 1,
-                    padding: '0 5px',
                     height: '100%',
                     overflowY: 'auto',
-                    backgroundColor: '#eeeeff',
-                    '&::-webkit-scrollbar': {
-                        width: '8px',
-                        height: '8px'
-                    },
-                    '&::-webkit-scrollbar-thumb': {
-                        backgroundColor: '#919292',
-                        borderRadius: '10px'
-                    }
+                    backgroundColor: 'var(--background-color)'
                 }}
             >
-                {children}
+                <Header />
+                <Box
+                    sx={{
+                        flex: 1,
+                        height: 'calc(100vh - 60px)',
+                        position: 'relative',
+                        scrollbarGutter: 'stable both-edges',
+                        '&::-webkit-scrollbar': {
+                            width: '7px',
+                            height: '7px',
+                            backgroundColor: 'var(--background-after-color)'
+                        },
+                        '&::-webkit-scrollbar-thumb': {
+                            backgroundColor: 'var(--scrollbar-color)',
+                            borderRadius: '10px'
+                        },
+                        backgroundColor: 'var(--background-after-color)',
+                        overflowY: 'auto'
+                    }}
+                >
+                    <Box
+                        sx={{
+                            padding: '15px 8px',
+                            minHeight: '100%'
+                        }}
+                    >
+                        {children}
+                    </Box>
+                </Box>
             </Box>
+
+            <NotificationRealTime />
         </div>
     )
 }

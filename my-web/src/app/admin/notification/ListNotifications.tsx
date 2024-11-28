@@ -1,52 +1,21 @@
 import { INotificationsForUser } from '@/models/Notifications'
-import React, { useMemo, useCallback, useRef, useState, useEffect } from 'react'
+import React, { useCallback, useRef, useState, useEffect } from 'react'
 import { Box, Typography, Avatar, Popper, Paper, MenuItem, styled } from '@mui/material'
 import { Ellipsis, Check, Trash2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useChangeNotificationReadMutation, useDeleteNotificationMutation } from '@/services/NotificationsService'
 import { useDispatch, useSelector } from 'react-redux'
 import { useToast } from '@/hooks/useToast'
-import NotificationModal from './NotificationModal'
 import { notificationsSelector, notificationsSlice } from '@/redux/slices/notificationsSlice'
-import DOMPurify from 'dompurify'
-
-function getTimeDifferenceText(sentTime: string) {
-    const now = new Date()
-    const sentDate = new Date(sentTime)
-    const diffInSeconds = Math.floor((now.getTime() - sentDate.getTime()) / 1000)
-
-    if (diffInSeconds < 60) return `${diffInSeconds} giây trước`
-    const diffInMinutes = Math.floor(diffInSeconds / 60)
-    if (diffInMinutes < 60) return `${diffInMinutes} phút trước`
-    const diffInHours = Math.floor(diffInMinutes / 60)
-    if (diffInHours < 24) return `${diffInHours} giờ trước`
-    const diffInDays = Math.floor(diffInHours / 24)
-    if (diffInDays < 7) return `${diffInDays} ngày trước`
-    const diffInWeeks = Math.floor(diffInDays / 7)
-    if (diffInWeeks < 5) return `${diffInWeeks} tuần trước`
-    const diffInMonths = Math.floor(diffInDays / 30)
-    if (diffInMonths < 12) return `${diffInMonths} tháng trước`
-    const diffInYears = Math.floor(diffInMonths / 12)
-    return `${diffInYears} năm trước`
-}
-
-const icons: Record<string, string> = {
-    Salary: '/images/salary_icon.png',
-    Reward: '/images/reward_icon.png',
-    Insurance: '/images/insurance_icon.png',
-    Holiday: '/images/holiday_icon.png',
-    Benefit: '/images/benefit_icon.png',
-    Discipline: '/images/discipline_icon.png',
-    Timekeeping: '/images/timekeeping_icon.png',
-    Public: '/images/public_icon.png'
-}
+import { iconsForNotification, getTimeDifferenceText } from '@/utils/calcForNotification'
 
 const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
     padding: '7.5px',
     fontSize: '14px',
     fontWeight: 'bold',
+    color: 'var(--text-color)',
     '&:hover': {
-        backgroundColor: '#f0f0f0',
+        backgroundColor: 'var(--hover-color)',
         borderRadius: '5px'
     }
 }))
@@ -56,17 +25,17 @@ interface ListNotificationsProps {
 }
 
 const NotificationsComponent = React.memo(({ setNotificationId }: ListNotificationsProps) => {
+    const { t } = useTranslation('common')
+
     const dispatch = useDispatch()
     const notifications = useSelector(notificationsSelector)
 
-    const toast = useToast()
+    console.log(notifications)
 
-    const { t } = useTranslation('common')
-    const arrowRef = useRef(null)
+    const toast = useToast()
     const [changeNotificationRead, resultChange] = useChangeNotificationReadMutation()
     const [deleteNotification, resultDelete] = useDeleteNotificationMutation()
     const [isHovered, setIsHovered] = useState(false)
-    const [placement, setPlacement] = useState('bottom')
     const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
     const [selectedNotification, setSelectedNotification] = useState<INotificationsForUser | null>(null)
 
@@ -146,7 +115,7 @@ const NotificationsComponent = React.memo(({ setNotificationId }: ListNotificati
                     ? {}
                     : {
                           '&:hover': {
-                              backgroundColor: '#f0f0f0',
+                              backgroundColor: 'var(--hover-color)',
                               borderRadius: '10px'
                           }
                       })
@@ -157,15 +126,15 @@ const NotificationsComponent = React.memo(({ setNotificationId }: ListNotificati
                 className='flex-1 flex items-center'
                 style={{
                     width: '100%',
-                    padding: '7.5px'
+                    padding: '7.5px 0.5px 7.5px 7.5px'
                 }}
                 onClick={() => handleClickNotification(notification)}
             >
                 {!notification.IsRead && (
-                    <div className={`absolute right-2 top-1/2 w-3 h-3 rounded-full bg-blue-500 -translate-y-1/2`} />
+                    <div className={`absolute right-2 top-1/2 w-3 h-3 rounded-full bg-[red] -translate-y-1/2`} />
                 )}
                 <Avatar
-                    src={icons[notification.Type]}
+                    src={iconsForNotification[notification.Type]}
                     style={{
                         borderRadius: '50%',
                         objectFit: 'cover',
@@ -182,7 +151,7 @@ const NotificationsComponent = React.memo(({ setNotificationId }: ListNotificati
                         justifyContent: 'center',
                         alignItems: 'left',
                         marginLeft: '10px',
-                        width: 'calc(100% - 85px)'
+                        width: 'calc(100% - 95px)'
                     }}
                 >
                     <Typography
@@ -193,7 +162,8 @@ const NotificationsComponent = React.memo(({ setNotificationId }: ListNotificati
                             fontSize: '14px',
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap'
+                            whiteSpace: 'nowrap',
+                            color: 'var(--text-color)'
                         }}
                     >
                         {notification.Title}
@@ -207,7 +177,8 @@ const NotificationsComponent = React.memo(({ setNotificationId }: ListNotificati
                             fontSize: '14px',
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap'
+                            whiteSpace: 'nowrap',
+                            color: 'var(--text-color)'
                         }}
                     >
                         {new DOMParser().parseFromString(notification.Content, 'text/html').body.textContent}
@@ -221,9 +192,9 @@ const NotificationsComponent = React.memo(({ setNotificationId }: ListNotificati
                             textOverflow: 'ellipsis',
                             whiteSpace: 'nowrap'
                         }}
-                        className={notification.IsRead ? `text-gray-500` : `text-blue-500 font-bold`}
+                        className={notification.IsRead ? 'text-gray-500' : 'text-[var(--text-role-color)] font-bold'}
                     >
-                        {getTimeDifferenceText(notification.SentTime)}
+                        {getTimeDifferenceText(notification.SentTime, t)}
                     </Typography>
                 </Box>
             </div>
@@ -231,21 +202,21 @@ const NotificationsComponent = React.memo(({ setNotificationId }: ListNotificati
             <Box
                 className='absolute right-7 group-hover:opacity-100 cursor-pointer'
                 sx={{
-                    backgroundColor: 'white',
+                    backgroundColor: 'var(--background-color)',
                     padding: '5px',
                     borderRadius: '50%',
                     opacity: anchorEl && selectedNotification?.Id === notification.Id ? 1 : 0,
                     zIndex: 10,
-                    border: '1px solid #cecece',
+                    border: '1px solid var(--border-color)',
                     '&:hover': {
-                        backgroundColor: '#f0f0f0'
+                        backgroundColor: 'var(--hover-color)'
                     }
                 }}
                 onClick={event => handleClick(event, notification)}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
             >
-                <Ellipsis />
+                <Ellipsis style={{ color: 'var(--text-color)' }} />
             </Box>
 
             <Popper
@@ -256,69 +227,36 @@ const NotificationsComponent = React.memo(({ setNotificationId }: ListNotificati
                     {
                         name: 'offset',
                         options: {
-                            offset: [0, 12]
-                        }
-                    },
-                    {
-                        name: 'arrow',
-                        options: {
-                            element: arrowRef.current
-                        }
-                    },
-                    {
-                        name: 'updatePlacement',
-                        enabled: true,
-                        phase: 'main',
-                        fn: ({ state }) => {
-                            setPlacement(state.placement)
+                            offset: [0, 4]
                         }
                     }
                 ]}
-                sx={{ zIndex: 100, width: '250px', position: 'relative' }}
+                sx={{
+                    zIndex: 2000,
+                    width: '250px',
+                    position: 'relative'
+                }}
             >
-                <div
-                    style={{
-                        width: 0,
-                        height: 0,
-                        borderLeft: '8px solid transparent',
-                        borderRight: '8px solid transparent',
-                        ...(placement === 'bottom' && {
-                            borderBottom: '8px solid white',
-                            top: '-8px'
-                        }),
-                        ...(placement === 'top' && {
-                            borderTop: '8px solid white',
-                            bottom: '-8px'
-                        }),
-                        position: 'absolute',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        zIndex: -1,
-                        filter: 'drop-shadow(0px -1px 2px rgba(0,0,0,0.02))'
-                    }}
-                    ref={arrowRef}
-                ></div>
-
-                <Paper
-                    elevation={1}
+                <Box
                     sx={{
                         padding: '7.5px',
                         transition: 'none',
-                        ...(placement === 'bottom' && { boxShadow: '0px 2px 6px rgba(0, 0, 0, 0.05)' }),
-                        ...(placement === 'top' && { boxShadow: '0px -2px 6px rgba(0, 0, 0, 0.05)' })
+                        backgroundColor: 'var(--background-color)',
+                        border: '1px solid var(--border-color)',
+                        borderRadius: '6px'
                     }}
                 >
                     <StyledMenuItem onClick={() => handleAction('mark')} onMouseDown={e => e.stopPropagation()}>
-                        <Check style={{ color: 'primary.main', width: '21px', margin: '0 10px 0 -2px' }} />
+                        <Check style={{ color: 'var(--text-color)', width: '21px', margin: '0 10px 0 -2px' }} />
                         {selectedNotification?.IsRead
                             ? t('COMMON.NOTIFICATION.MENU.MARK_AS_UNREAD')
                             : t('COMMON.NOTIFICATION.MENU.MARK_AS_READ')}
                     </StyledMenuItem>
                     <StyledMenuItem onClick={() => handleAction('delete')} onMouseDown={e => e.stopPropagation()}>
-                        <Trash2 style={{ color: 'primary.main', width: '21px', margin: '-1px 10px 0 -2px' }} />
+                        <Trash2 style={{ color: 'var(--text-color)', width: '21px', margin: '-1px 10px 0 -2px' }} />
                         {t('COMMON.NOTIFICATION.MENU.DELETE')}
                     </StyledMenuItem>
-                </Paper>
+                </Box>
             </Popper>
         </Box>
     ))

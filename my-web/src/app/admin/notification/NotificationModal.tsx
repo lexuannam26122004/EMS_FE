@@ -7,31 +7,12 @@ import { X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import DOMPurify from 'dompurify'
 import ImageGrid from './ImageGrid'
+import { getTimeDifferenceText } from '@/utils/calcForNotification'
 
 interface NotificationModalProps {
     notificationId: number
     open: boolean
     handleClose: () => void
-}
-
-function getTimeDifferenceText(sentTime: string) {
-    const now = new Date()
-    const sentDate = new Date(sentTime)
-    const diffInSeconds = Math.floor((now.getTime() - sentDate.getTime()) / 1000)
-
-    if (diffInSeconds < 60) return `${diffInSeconds} giây trước`
-    const diffInMinutes = Math.floor(diffInSeconds / 60)
-    if (diffInMinutes < 60) return `${diffInMinutes} phút trước`
-    const diffInHours = Math.floor(diffInMinutes / 60)
-    if (diffInHours < 24) return `${diffInHours} giờ trước`
-    const diffInDays = Math.floor(diffInHours / 24)
-    if (diffInDays < 7) return `${diffInDays} ngày trước`
-    const diffInWeeks = Math.floor(diffInDays / 7)
-    if (diffInWeeks < 5) return `${diffInWeeks} tuần trước`
-    const diffInMonths = Math.floor(diffInDays / 30)
-    if (diffInMonths < 12) return `${diffInMonths} tháng trước`
-    const diffInYears = Math.floor(diffInMonths / 12)
-    return `${diffInYears} năm trước`
 }
 
 function NotificationModal({ notificationId, open, handleClose }: NotificationModalProps) {
@@ -65,6 +46,8 @@ function NotificationModal({ notificationId, open, handleClose }: NotificationMo
                     position: 'absolute',
                     top: '50%',
                     left: '50%',
+                    backgroundColor: 'var(--background-color)',
+                    border: '1px solid var(--border-color)',
                     borderRadius: '10px',
                     transform: 'translate(-50%, -50%)'
                 }}
@@ -86,7 +69,7 @@ function NotificationModal({ notificationId, open, handleClose }: NotificationMo
                             height={30}
                             sx={{
                                 borderRadius: '13px',
-                                bgcolor: '#f8f8fa'
+                                bgcolor: 'var(--skeleton-color)'
                             }}
                         />
                     ) : showError ? (
@@ -99,7 +82,8 @@ function NotificationModal({ notificationId, open, handleClose }: NotificationMo
                                 margin: 'auto',
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap'
+                                whiteSpace: 'nowrap',
+                                color: 'var(--text-color)'
                             }}
                         >
                             {t('COMMON.NOTIFICATION.GET_NOTIFICATION_BY_ID.NOT_FOUND')}
@@ -114,7 +98,8 @@ function NotificationModal({ notificationId, open, handleClose }: NotificationMo
                                 margin: 'auto',
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap'
+                                whiteSpace: 'nowrap',
+                                color: 'var(--text-color)'
                             }}
                         >
                             {t('COMMON.NOTIFICATION.GET_NOTIFICATION_BY_ID.TITLE') + notificationData?.FullName}
@@ -123,20 +108,21 @@ function NotificationModal({ notificationId, open, handleClose }: NotificationMo
                     <Box
                         className='absolute right-4 cursor-pointer'
                         sx={{
-                            backgroundColor: 'white',
+                            backgroundColor: 'var(--background-color)',
                             padding: '5px',
                             borderRadius: '50%',
-                            border: '1px solid #cecece',
+                            border: '1px solid var(--border-color)',
                             '&:hover': {
-                                backgroundColor: '#f0f0f0'
+                                backgroundColor: 'var(--hover-color)',
+                                borderColor: 'var(--hover-color)'
                             }
                         }}
                         onClick={handleClose}
                     >
-                        <X />
+                        <X style={{ color: 'var(--text-color)' }} />
                     </Box>
                 </Box>
-                <Divider sx={{ zIndex: '1' }} />
+                <Divider sx={{ zIndex: '1', borderColor: 'var(--border-color)' }} />
                 <Box
                     sx={{
                         height: '85vh',
@@ -152,11 +138,11 @@ function NotificationModal({ notificationId, open, handleClose }: NotificationMo
                         justifyContent: 'space-between',
                         overflow: 'auto',
                         '&::-webkit-scrollbar': {
-                            width: '8px',
-                            height: '8px'
+                            width: '7px',
+                            height: '7px'
                         },
                         '&::-webkit-scrollbar-thumb': {
-                            backgroundColor: '#919292',
+                            backgroundColor: 'var(--scrollbar-color)',
                             borderRadius: '10px'
                         }
                     }}
@@ -168,20 +154,20 @@ function NotificationModal({ notificationId, open, handleClose }: NotificationMo
                                     variant='circular'
                                     width='42px'
                                     height='42px'
-                                    sx={{ bgcolor: '#f8f8fa', marginRight: '10px' }}
+                                    sx={{ bgcolor: 'var(--skeleton-color)', marginRight: '10px' }}
                                 />
                                 <Box>
                                     <Skeleton
                                         variant='text'
                                         width='200px'
                                         height='30px'
-                                        sx={{ borderRadius: '13px', bgcolor: '#f8f8fa' }}
+                                        sx={{ borderRadius: '13px', bgcolor: 'var(--skeleton-color)' }}
                                     />
                                     <Skeleton
                                         variant='text'
                                         width='130px'
                                         height='30px'
-                                        sx={{ borderRadius: '13px', bgcolor: '#f8f8fa', mt: '-10px' }}
+                                        sx={{ borderRadius: '13px', bgcolor: 'var(--skeleton-color)', mt: '-10px' }}
                                     />
                                 </Box>
                             </Box>
@@ -189,19 +175,19 @@ function NotificationModal({ notificationId, open, handleClose }: NotificationMo
                                 variant='rectangular'
                                 height={150}
                                 width='80%'
-                                sx={{ borderRadius: '16px', bgcolor: '#f8f8fa' }}
+                                sx={{ borderRadius: '16px', bgcolor: 'var(--skeleton-color)' }}
                             />
                             <Skeleton
                                 variant='rectangular'
                                 height={200}
                                 width='70%'
-                                sx={{ borderRadius: '16px', bgcolor: '#f0f0f5' }}
+                                sx={{ borderRadius: '16px', bgcolor: 'var(--skeleton-color)' }}
                             />
                             <Skeleton
                                 variant='rectangular'
                                 height={100}
                                 width='90%'
-                                sx={{ borderRadius: '16px', bgcolor: '#f5f5f9' }}
+                                sx={{ borderRadius: '16px', bgcolor: 'var(--skeleton-color)' }}
                             />
                         </Box>
                     ) : showError ? (
@@ -229,7 +215,8 @@ function NotificationModal({ notificationId, open, handleClose }: NotificationMo
                                                 fontSize: '15px',
                                                 overflow: 'hidden',
                                                 textOverflow: 'ellipsis',
-                                                whiteSpace: 'nowrap'
+                                                whiteSpace: 'nowrap',
+                                                color: 'var(--text-color)'
                                             }}
                                         >
                                             {notificationData?.FullName}
@@ -250,15 +237,18 @@ function NotificationModal({ notificationId, open, handleClose }: NotificationMo
                                     </Box>
                                     <Typography
                                         variant='h6'
-                                        sx={{ color: 'red', fontSize: '11px', mt: '-2px' }}
+                                        sx={{ color: 'var(--text-role-color)', fontSize: '12px', mt: '-2px' }}
                                         className='text-gray-500'
                                     >
-                                        {getTimeDifferenceText(notificationData?.SentTime || '')}
+                                        {getTimeDifferenceText(notificationData?.SentTime || '', t)}
                                     </Typography>
                                 </Box>
                             </Box>
 
-                            <Typography variant='h6' sx={{ fontSize: '15px', mt: '10px', fontWeight: 'Bold' }}>
+                            <Typography
+                                variant='h6'
+                                sx={{ fontSize: '15px', mt: '10px', fontWeight: 'Bold', color: 'var(--text-color)' }}
+                            >
                                 {notificationData?.Title}
                             </Typography>
 
@@ -268,6 +258,7 @@ function NotificationModal({ notificationId, open, handleClose }: NotificationMo
                                 sx={{
                                     fontSize: '15px',
                                     mt: '10px',
+                                    color: 'var(--text-color)',
                                     '& p': { marginBottom: '0.5rem' },
                                     '& ul': {
                                         paddingLeft: '1.5rem',
@@ -276,9 +267,8 @@ function NotificationModal({ notificationId, open, handleClose }: NotificationMo
                                     '& li': { marginBottom: '0.3rem' },
                                     '& strong': { fontWeight: 600 },
                                     '& br': { display: 'block', marginBottom: '0.5rem' },
-                                    // Thêm style cho links nếu có
                                     '& a': {
-                                        color: 'primary.main',
+                                        color: 'var(--text-color)',
                                         textDecoration: 'none',
                                         '&:hover': {
                                             textDecoration: 'underline'
@@ -293,7 +283,12 @@ function NotificationModal({ notificationId, open, handleClose }: NotificationMo
                             {notificationData?.ListFile && notificationData.ListFile.length > 0 && (
                                 <Box>
                                     <Divider
-                                        sx={{ borderColor: '#b6b6b6', mt: '10px', marginLeft: -1, marginRight: -2 }}
+                                        sx={{
+                                            borderColor: 'var(--border-color)',
+                                            mt: '10px',
+                                            marginLeft: -1,
+                                            marginRight: -2
+                                        }}
                                     />
                                     <ImageGrid images={notificationData.ListFile} />
                                 </Box>

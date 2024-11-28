@@ -26,11 +26,9 @@ export default function Home() {
                     </div>
                 </div>
 
-                {/* Background decoration */}
                 <div className='absolute right-0 top-0 w-1/2 h-full opacity-10 bg-gradient-to-l from-blue-500' />
             </section>
 
-            {/* Features Section */}
             <section className='py-20 bg-gray-50'>
                 <div className='container mx-auto px-4'>
                     <h2 className='text-3xl font-bold text-center mb-12'>Dịch Vụ Của Chúng Tôi</h2>

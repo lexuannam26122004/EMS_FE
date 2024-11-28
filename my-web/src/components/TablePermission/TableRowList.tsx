@@ -35,11 +35,11 @@ function TableRowList({ data, level = 0 }: Props) {
                 key={data.Name}
                 sx={{
                     background: !isCheckBox
-                        ? 'rgb(153 213 54 / 10%)' //'rgb(83 173 247 / 10%)'
-                        : ''
+                        ? 'var(--header-color-table)' //'rgb(83 173 247 / 10%)'
+                        : 'var(--background-color)'
                 }}
             >
-                <TableCell component='th' scope='row'>
+                <TableCell component='th' scope='row' sx={{ color: 'var(--text-color)' }}>
                     <Typography sx={{ paddingLeft: 6 * level }}>{data.Name}</Typography>
                 </TableCell>
 

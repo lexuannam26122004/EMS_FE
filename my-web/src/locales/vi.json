@@ -6,8 +6,18 @@
         "ACTION": "Hành động",
         "ORDER_NUMBER": "#",
         "SEARCH": "Tìm kiếm",
+        "SEARCH_ANYTHING": "Tìm kiếm tất cả",
         "PERMISSIONS": {
             "TITLE": "Phân quyền",
+            "MANAGEMENT_PAGE": "Tên trang quản lý",
+            "ALL": "Tất cả",
+            "VIEW": "Chỉ xem",
+            "EDIT": "Chỉnh sửa",
+            "CREATE": "Thêm mới",
+            "PRINT": "In ấn",
+            "DELETE": "Xóa",
+            "SELECT_ALL": "Chọn hết",
+            "UNSELECT_ALL": "Bỏ hết",
             "TABS": {
                 "PERMISSION_FOR_USER": "Phần quyền cho Người dùng",
                 "PERMISSION_FOR_ROLE": "Phân quyền cho Chức vụ"
@@ -42,12 +52,19 @@
             }
         },
         "BUTTON": {
-            "SAVE": "LƯU",
+            "SAVE": "Lưu",
             "SAVE_AND_CLOSE": "Lưu và Đóng",
-            "CANCEL": "HỦY",
-            "ADD": "THÊM",
-            "UPDATING": "ĐANG CẬP NHẬT",
-            "DELETE": "XÓA"
+            "CANCEL": "Hủy",
+            "CREATE": "Thêm mới",
+            "EDIT": "Cập nhật",
+            "UPDATING": "Đang cập nhật",
+            "DELETE": "Xóa",
+            "VIEW_DETAIL": "Xem chi tiết",
+            "CLOSE": "Đóng"
+        },
+        "TEXTFIELD": {
+            "SEARCH": "Tìm kiếm",
+            "REQUIRED": "Trường này không được để trống*"
         },
         "NOTIFICATION": {
             "TITLE": "Thông báo",
@@ -80,6 +97,116 @@
             "GET_NOTIFICATION_BY_ID": {
                 "TITLE": "Thông báo bởi ",
                 "NOT_FOUND": "Không tìm thấy thông báo"
+            },
+            "ELLIPSIS": {
+                "MARK_ALL_AS_READ": "Đánh dấu tất cả đã đọc",
+                "OPEN_NOTIFICATION": "Mở thông báo"
+            }
+        },
+        "SIDEBAR": {
+            "DASHBOARD": "Bảng điều khiển",
+            "HOME": "Trang chủ",
+            "HUMAN_RESOURCES": "Nhân sự",
+            "ORGANIZATION_DESIGN": "Thiết kế tổ chức",
+            "REGULATIONS_AND_POLICIES": "Quy định & Chính sách",
+            "EMPLOYEE": "Nhân viên",
+            "NOTIFICATION": "Thông báo",
+            "TIMEKEEPING": "Chấm công",
+            "PERMISSION": "Phân quyền",
+            "SALARY": "Bảng lương",
+            "HOLIDAY": "Nghỉ phép",
+            "CONTRACT": "Hợp đồng",
+            "TIME_OFF": "Nghỉ phép",
+            "DEPARTMENT": "Phòng ban",
+            "ROLE": "Chức vụ",
+            "ORG_STRUCTURE": "Cấu trúc tổ chức",
+            "WORK_REGULATIONS": "Quy chế làm việc",
+            "INSURANCE": "Bảo hiểm",
+            "REWARD": "Thưởng",
+            "BENEFIT": "Lợi ích",
+            "DISCIPLINE": "Kỉ luật",
+            "SETTING": "Cài đặt",
+            "STATISTICS": "Thống kê",
+            "CONFIGURATION": "Cấu hình",
+            "SCHEDULAR": "Lịch làm việc",
+            "WORK_SHIFT": "Ca làm việc"
+        },
+        "MODE": {
+            "LIGHT": "Sáng",
+            "DARK": "Tối",
+            "SYSTEM": "Hệ thống"
+        },
+        "LANGUAGE": {
+            "VI": "Tiếng Việt",
+            "EN": "Tiếng Anh"
+        },
+        "AVATAR_MENU": {
+            "PROFILE": "Thông tin cá nhân",
+            "SETTINGS": "Cài đặt",
+            "LOGOUT": "Đăng xuất",
+            "TIMEKEEPING": "Chấm công",
+            "CALENDAR": "Lịch",
+            "LOGIN_HISTORY": "Lịch sử đăng nhập",
+            "HELP": "Trợ giúp",
+            "CREATE_NOTIFICATION": "Tạo thông báo"
+        },
+        "TIME_DIFFERENCE": {
+            "SECONDS_AGO": "{{seconds}} giây trước",
+            "MINUTES_AGO": "{{minutes}} phút trước",
+            "HOURS_AGO": "{{hours}} giờ trước",
+            "DAYS_AGO": "{{days}} ngày trước",
+            "WEEKS_AGO": "{{weeks}} tuần trước",
+            "MONTHS_AGO": "{{months}} tháng trước",
+            "YEARS_AGO": "{{years}} năm trước"
+        },
+        "TIMEKEEPING": {
+            "FILTER_BY_ROLES": "Lọc theo Chức vụ",
+            "FILTER_BY_DEPARTMENTS": "Lọc theo Phòng ban",
+            "WORKING_DAYS": "Ngày làm việc",
+            "LATE": "Trễ",
+            "ABSENCES": "Vắng mặt",
+            "EMPLOYEES": "Nhân viên"
+        },
+        "ALERT": {
+            "NOTIFICATION_NEW": "Thông báo mới",
+            "ONE_MINUTE": "1 phút",
+            "ZERO_MINUTE_AGO": "0 phút trước"
+        },
+        "PAGINATION": {
+            "ROWS_PER_PAGE": "Số hàng mỗi trang:",
+            "FROM_TO": "{{from}} - {{to}} của {{totalRecords}}",
+            "ROWS": "Hàng"
+        },
+        "DIALOG": {
+            "CONFIRM_DELETE": {
+                "TITLE": "Xác nhận",
+                "CONTENT": "Bạn có chắc chắn muốn xóa không?",
+                "CANCEL": "Hủy",
+                "DELETE": "Xóa"
+            }
+        },
+        "COUNT_ROWS_SELECTED": "Đã chọn {{countRows}} hàng",
+        "SYS_CONFIGURATION": {
+            "KEY": "Khóa",
+            "TYPE": "Loại",
+            "DESCRIPTION": "Mô Tả",
+            "VALUE": "Giá Trị",
+            "CREATED_DATE": "Ngày Tạo",
+            "CREATED_BY": "Người Tạo",
+            "ACTION": "Hành động",
+            "PLACEHOLDER_SEARCH": "Tìm kiếm theo khóa, loại, giá trị...",
+            "ACTION_CONFIGURATION": {
+                "KEY": "Khóa*",
+                "TYPE": "Loại*",
+                "DESCRIPTION": "Mô Tả",
+                "VALUE": "Giá Trị*",
+                "TITLE": "Thêm một Cấu hình mới",
+                "CREATE_SUCCESS": "Tạo một Cấu hình mới thành công",
+                "UPDATE_SUCCESS": "Cập nhật Cấu hình thành công",
+                "DELETE_SUCCESS": "Xóa Cấu hình thành công",
+                "CREATE_ERROR": "Tạo Cấu hình thất bại",
+                "UPDATE_ERROR": "Cập nhật Cấu hình thất bại",
+                "DELETE_ERROR": "Xóa Cấu hình thất bại"
             }
         }
     }

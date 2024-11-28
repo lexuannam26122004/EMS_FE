@@ -84,14 +84,17 @@ function PermissionForRoleModal({ data, open, onClose }: Props) {
                     position: 'absolute',
                     top: '50%',
                     left: '50%',
-                    transform: 'translate(-50%, -50%)'
+                    transform: 'translate(-50%, -50%)',
+                    backgroundColor: 'var(--background-color)',
+                    border: '1px solid var(--border-color)',
+                    borderRadius: '6px'
                 }}
             >
                 <Box
                     sx={{
                         flexGrow: 1,
-                        paddingInline: 5,
-                        paddingBlock: 3,
+                        paddingInline: 4,
+                        paddingBlock: 2,
                         borderWidth: '0px',
                         height: '90vh',
                         borderStyle: 'solid',
@@ -102,10 +105,16 @@ function PermissionForRoleModal({ data, open, onClose }: Props) {
                     }}
                 >
                     <Box sx={{ paddingBottom: 2 }}>
-                        <Typography variant='h5' sx={{ fontWeight: 'Bold', textAlign: 'center' }}>
+                        <Typography
+                            variant='h5'
+                            sx={{ fontWeight: 'Bold', color: 'var(--text-color)', textAlign: 'center' }}
+                        >
                             {t('COMMON.PERMISSIONS.TABS.PERMISSION_FOR_ROLE')}
                         </Typography>
-                        <Typography variant='h5' sx={{ color: '#a60b0a', fontWeight: 'Bold', textAlign: 'center' }}>
+                        <Typography
+                            variant='h5'
+                            sx={{ color: 'var(--text-role-color)', fontWeight: 'Bold', textAlign: 'center' }}
+                        >
                             {data?.Name}
                         </Typography>
                     </Box>
@@ -122,7 +131,15 @@ function PermissionForRoleModal({ data, open, onClose }: Props) {
                         <Button
                             size='medium'
                             type='button'
-                            variant='contained'
+                            variant='outlined'
+                            sx={{
+                                borderColor: 'var(--border-color)',
+                                color: 'var(--text-color)',
+                                '&:hover': {
+                                    borderColor: 'var(--hover-color)',
+                                    backgroundColor: 'var(--hover-color)'
+                                }
+                            }}
                             startIcon={<ContentSaveEditOutline />}
                             onClick={handleSave}
                         >
@@ -131,7 +148,15 @@ function PermissionForRoleModal({ data, open, onClose }: Props) {
                         <Button
                             size='medium'
                             type='button'
-                            variant='contained'
+                            variant='outlined'
+                            sx={{
+                                borderColor: 'var(--border-color)',
+                                color: 'var(--text-color)',
+                                '&:hover': {
+                                    borderColor: 'var(--hover-color)',
+                                    backgroundColor: 'var(--hover-color)'
+                                }
+                            }}
                             startIcon={<Close />}
                             onClick={handleClose}
                         >

@@ -4,6 +4,7 @@ import { IFunctions } from '@/models/TablePermissionModel'
 import { getDataPermissionByParentSelector, tablePermissionSlice } from '@/redux/slices/tablePermissionSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/redux/store'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
     id: number
@@ -15,7 +16,7 @@ let elementHoverSelectors: NodeListOf<Element> | any[] = []
 function TableCellLabel({ id, keyName }: Props) {
     const dataSelectorCol = useSelector((state: RootState) => getDataPermissionByParentSelector(state, id, keyName))
     const dispatch = useDispatch()
-
+    const { t } = useTranslation('common')
     const handleClick = useCallback(() => {
         dispatch(
             tablePermissionSlice.actions.updateDataByCheckAll({
@@ -47,7 +48,7 @@ function TableCellLabel({ id, keyName }: Props) {
             elementHoverSelectors.forEach(element => {
                 // @ts-ignore
                 const el = element as HTMLElement
-                el.style.background = 'rgb(33 213 54 / 15%)'
+                el.style.background = 'var(--hover-color-permission)'
             })
         }
     }
@@ -71,14 +72,16 @@ function TableCellLabel({ id, keyName }: Props) {
                 paddingRight: 1,
                 cursor: 'pointer',
                 '&:hover': {
-                    background: 'rgb(33 213 54 / 15%)'
+                    background: 'var(--hover-color-permission)'
                 }
             }}
             onMouseOver={handleMouseOver}
             onMouseLeave={handleMouseLeave}
             onClick={handleClick}
         >
-            <Typography p={1}>{dataSelectorCol.allow ? 'Bỏ hết' : 'Chọn hết'}</Typography>
+            <Typography p={1} sx={{ color: 'var(--text-color)' }}>
+                {dataSelectorCol.allow ? t('COMMON.PERMISSION.UNSELECT_ALL') : t('COMMON.PERMISSION.SELECT_ALL')}
+            </Typography>
         </TableCell>
     )
 }

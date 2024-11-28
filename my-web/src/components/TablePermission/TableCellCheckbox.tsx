@@ -37,7 +37,7 @@ function TableCellCheckbox({ id, checked, keyName }: Props) {
             elementHoverSelectors = document.querySelectorAll(`[data-hover^="${id}_"]`)
             if (elementHoverSelectors) {
                 elementHoverSelectors.forEach(element => {
-                    ;(element as HTMLElement).style.background = 'rgb(33 213 54 / 15%)'
+                    ;(element as HTMLElement).style.background = 'var(--hover-color-permission)'
                 })
             }
         }
@@ -62,7 +62,7 @@ function TableCellCheckbox({ id, checked, keyName }: Props) {
                 paddingRight: 1,
                 cursor: 'pointer',
                 '&:hover': {
-                    background: 'rgb(33 213 54 / 15%)'
+                    background: 'var(--hover-color-permission)'
                 }
             }}
             data-hover={id + '_' + keyName}
@@ -70,7 +70,16 @@ function TableCellCheckbox({ id, checked, keyName }: Props) {
             onMouseLeave={handleMouseLeave}
             onClick={handleClick}
         >
-            <Checkbox sx={{ padding: 1 }} checked={checked} />
+            <Checkbox
+                sx={{
+                    padding: 1,
+                    color: 'var(--text-color)',
+                    '&.Mui-checked': {
+                        color: 'var(--selected-color-checkbox)'
+                    }
+                }}
+                checked={checked}
+            />
         </TableCell>
     )
 }

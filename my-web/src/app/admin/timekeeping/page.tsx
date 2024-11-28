@@ -12,6 +12,7 @@ import { useGetAllUsersQuery } from '@/services/AspNetUserService'
 import { useGetAllRolesQuery } from '@/services/AspNetRoleService'
 import { useGetAllDepartmentsQuery } from '@/services/DepartmentService'
 import debounce from 'lodash.debounce'
+import { useTranslation } from 'react-i18next'
 
 interface UserRowProps {
     user: IAspNetUserGetAll
@@ -28,6 +29,7 @@ interface TimekeepingPageProps {
 const TimekeepingPage: React.FC<TimekeepingPageProps> = ({
     filterModel = { Month: new Date().getMonth() + 1, Year: new Date().getFullYear() }
 }) => {
+    const { t } = useTranslation('common')
     const [filters, setFilters] = useState({
         roles: [] as string[],
         departments: [] as string[]
@@ -121,7 +123,8 @@ const TimekeepingPage: React.FC<TimekeepingPageProps> = ({
         const cellStyles: CSSProperties = {
             textAlign: 'center',
             padding: '0 5px',
-            borderRight: '1px solid #e0e0e0',
+            borderRight: '1px solid var(--border-color)',
+            borderBottom: '1px solid var(--border-color)',
             backgroundColor: !isSunday
                 ? typeof timekeepingData !== 'undefined'
                     ? timekeepingData.CheckInTime.slice(0, 5) > checkIn
@@ -154,7 +157,7 @@ const TimekeepingPage: React.FC<TimekeepingPageProps> = ({
         () =>
             users.filter(
                 user =>
-                    filters.roles.includes(Array.isArray(user.Roles) && user.Roles.length > 0 ? user.Roles[0] : '') &&
+                    filters.roles.some(role => Array.isArray(user.Roles) && user.Roles.includes(role)) &&
                     filters.departments.includes(user.DepartmentName)
             ),
         [users, filters]
@@ -168,12 +171,13 @@ const TimekeepingPage: React.FC<TimekeepingPageProps> = ({
                         sx={{
                             position: 'sticky',
                             left: 0,
-                            backgroundColor: 'white',
+                            backgroundColor: 'var(--background-color)',
                             minWidth: '14vw',
                             maxWidth: '20vw',
                             textAlign: 'left',
                             padding: '4px 10px',
-                            borderRight: '1px solid #e0e0e0'
+                            borderRight: '1px solid var(--border-color)',
+                            borderBottom: '1px solid var(--border-color)'
                         }}
                     >
                         <img
@@ -203,7 +207,11 @@ const TimekeepingPage: React.FC<TimekeepingPageProps> = ({
                                     textOverflow: 'ellipsis'
                                 }}
                             >
-                                <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{user.FullName}</span>
+                                <span
+                                    style={{ overflow: 'hidden', textOverflow: 'ellipsis', color: 'var(--text-color)' }}
+                                >
+                                    {user.FullName}
+                                </span>
                             </p>
                             <p
                                 style={{
@@ -218,7 +226,7 @@ const TimekeepingPage: React.FC<TimekeepingPageProps> = ({
                                 }}
                             >
                                 <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                    {user.Roles?.at(0)} - {user.DepartmentName}
+                                    {user.Roles ? user.Roles?.join(', ') : '#'} - {user.DepartmentName}
                                 </span>
                             </p>
                         </div>
@@ -242,10 +250,10 @@ const TimekeepingPage: React.FC<TimekeepingPageProps> = ({
     )
 
     return (
-        <Box display='flex' mt={2}>
+        <Box display='flex'>
             <Box flexGrow={1} mr={0.7} sx={{ overflowX: 'auto', overflowY: 'auto' }}>
                 <Paper
-                    elevation={3}
+                    elevation={0}
                     sx={{
                         padding: '0px',
                         position: 'relative'
@@ -253,16 +261,20 @@ const TimekeepingPage: React.FC<TimekeepingPageProps> = ({
                 >
                     <TableContainer
                         sx={{
-                            borderLeft: '1px solid #e0e0e0',
-                            borderTop: '1px solid #e0e0e0',
-                            maxHeight: 'calc(100vh - 16px)',
+                            borderLeft: '1px solid var(--border-color)',
+                            borderTop: '1px solid var(--border-color)',
+                            maxHeight: 'calc(100vh - 90px)',
                             '&::-webkit-scrollbar': {
-                                width: '8px',
-                                height: '8px'
+                                width: '7px',
+                                height: '7px',
+                                backgroundColor: 'var(--background-color)'
                             },
                             '&::-webkit-scrollbar-thumb': {
-                                backgroundColor: '#919292',
+                                backgroundColor: 'var(--scrollbar-color)',
                                 borderRadius: '10px'
+                            },
+                            '&::-webkit-scrollbar-corner': {
+                                backgroundColor: 'var(--scrollbar-color)'
                             }
                         }}
                     >
@@ -273,12 +285,12 @@ const TimekeepingPage: React.FC<TimekeepingPageProps> = ({
                                         sx={{
                                             position: 'sticky',
                                             left: 0,
-                                            backgroundColor: 'white',
+                                            backgroundColor: 'var(--background-color)',
                                             zIndex: 5,
                                             minWidth: '3vw',
                                             whiteSpace: 'nowrap',
-                                            padding: '4px 10px',
-                                            borderRight: '1px solid #e0e0e0'
+                                            borderRight: '1px solid var(--border-color)',
+                                            borderBottom: '1px solid var(--border-color)'
                                         }}
                                     ></TableCell>
 
@@ -286,8 +298,7 @@ const TimekeepingPage: React.FC<TimekeepingPageProps> = ({
                                         const date = new Date(filterModel.Year, filterModel.Month - 1, day)
                                         const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'short' })
 
-                                        const isSunday = dayOfWeek === 'Sun'
-                                        const isSundayOrSaturday = isSunday || dayOfWeek === 'Sat'
+                                        const isSundayOrSaturday = dayOfWeek === 'Sun' || dayOfWeek === 'Sat'
 
                                         return (
                                             <TableCell
@@ -296,25 +307,33 @@ const TimekeepingPage: React.FC<TimekeepingPageProps> = ({
                                                     textAlign: 'center',
                                                     fontSize: '10px',
                                                     position: 'sticky',
-                                                    backgroundColor: 'white',
+                                                    backgroundColor: 'var(--background-color)',
                                                     top: 0,
                                                     color: 'gray',
-                                                    zIndex: 2,
+                                                    zIndex: 4,
                                                     padding: '0 10px',
-                                                    borderRight: '1px solid #e0e0e0'
+                                                    width: '45px',
+                                                    minWidth: '45px',
+                                                    maxWidth: '45px',
+                                                    borderRight: '1px solid var(--border-color)',
+                                                    borderBottom: '1px solid var(--border-color)'
                                                 }}
                                             >
                                                 <span
                                                     style={{
                                                         fontWeight: 'bold',
                                                         color: isSundayOrSaturday ? '#ff3939' : 'gray',
-                                                        fontSize: '10px'
+                                                        fontSize: '10px',
+                                                        display: 'block',
+                                                        width: '100%'
                                                     }}
                                                 >
                                                     {dayOfWeek.toUpperCase()}
                                                 </span>
                                                 <div style={{ margin: '-10px 0' }} />
-                                                {day.toString().padStart(2, '0') + '/' + filterModel.Month}
+                                                <span style={{ display: 'block', width: '100%' }}>
+                                                    {day.toString().padStart(2, '0') + '/' + filterModel.Month}
+                                                </span>
                                             </TableCell>
                                         )
                                     })}
@@ -339,14 +358,17 @@ const TimekeepingPage: React.FC<TimekeepingPageProps> = ({
 
             <Box flex={1}>
                 <Paper
-                    elevation={1}
+                    elevation={0}
                     sx={{
                         padding: '9px 5px 10px 5px',
                         minHeight: '16vh',
                         maxHeight: '18vh',
                         display: 'flex',
                         minWidth: '250px',
-                        maxWidth: '19vw'
+                        maxWidth: '19vw',
+                        border: '1px solid var(--border-color)',
+                        borderRadius: '6px',
+                        backgroundColor: 'var(--background-color)'
                     }}
                 >
                     <Box
@@ -354,22 +376,22 @@ const TimekeepingPage: React.FC<TimekeepingPageProps> = ({
                         display='flex'
                         flexDirection='column'
                         justifyContent='space-between'
-                        borderRight='1px solid #e0e0e0'
+                        borderRight='1px solid var(--border-color)'
                     >
                         <Box textAlign='center'>
                             <Typography variant='subtitle1' sx={{ fontSize: '16px', color: '#1dcafa' }}>
                                 {employee}
                             </Typography>
-                            <Typography variant='body2' sx={{ fontSize: '10px' }}>
-                                Employees
+                            <Typography variant='body2' sx={{ fontSize: '10px', color: 'var(--text-color)' }}>
+                                {t('COMMON.TIMEKEEPING.EMPLOYEES')}
                             </Typography>
                         </Box>
                         <Box textAlign='center'>
                             <Typography variant='subtitle1' sx={{ fontSize: '16px', color: 'rgb(46, 233, 46)' }}>
                                 {workingDays}
                             </Typography>
-                            <Typography variant='body2' sx={{ fontSize: '10px' }}>
-                                Working Days
+                            <Typography variant='body2' sx={{ fontSize: '10px', color: 'var(--text-color)' }}>
+                                {t('COMMON.TIMEKEEPING.WORKING_DAYS')}
                             </Typography>
                         </Box>
                     </Box>
@@ -378,22 +400,22 @@ const TimekeepingPage: React.FC<TimekeepingPageProps> = ({
                         display='flex'
                         flexDirection='column'
                         justifyContent='space-between'
-                        borderRight='1px solid #e0e0e0'
+                        borderRight='1px solid var(--border-color)'
                     >
                         <Box textAlign='center'>
                             <Typography variant='subtitle1' sx={{ fontSize: '16px', color: '#ff3939' }}>
                                 {lates}
                             </Typography>
-                            <Typography variant='body2' sx={{ fontSize: '10px' }}>
-                                Lates
+                            <Typography variant='body2' sx={{ fontSize: '10px', color: 'var(--text-color)' }}>
+                                {t('COMMON.TIMEKEEPING.LATE')}
                             </Typography>
                         </Box>
                         <Box textAlign='center'>
                             <Typography variant='subtitle1' sx={{ fontSize: '16px', color: '#ff3939' }}>
                                 {latesPercent}
                             </Typography>
-                            <Typography variant='body2' sx={{ fontSize: '10px' }}>
-                                Lates
+                            <Typography variant='body2' sx={{ fontSize: '10px', color: 'var(--text-color)' }}>
+                                {t('COMMON.TIMEKEEPING.LATE')}
                             </Typography>
                         </Box>
                     </Box>
@@ -402,33 +424,36 @@ const TimekeepingPage: React.FC<TimekeepingPageProps> = ({
                             <Typography variant='subtitle1' sx={{ fontSize: '16px', color: 'rgb(252 129 30)' }}>
                                 {absences}
                             </Typography>
-                            <Typography variant='body2' sx={{ fontSize: '10px' }}>
-                                Absences
+                            <Typography variant='body2' sx={{ fontSize: '10px', color: 'var(--text-color)' }}>
+                                {t('COMMON.TIMEKEEPING.ABSENCES')}
                             </Typography>
                         </Box>
                         <Box textAlign='center'>
                             <Typography variant='subtitle1' sx={{ fontSize: '16px', color: 'rgb(252 129 30)' }}>
                                 {absencesPercent}
                             </Typography>
-                            <Typography variant='body2' sx={{ fontSize: '10px' }}>
-                                Absences
+                            <Typography variant='body2' sx={{ fontSize: '10px', color: 'var(--text-color)' }}>
+                                {t('COMMON.TIMEKEEPING.ABSENCES')}
                             </Typography>
                         </Box>
                     </Box>
                 </Paper>
 
                 <Paper
-                    elevation={1}
+                    elevation={0}
                     sx={{
                         marginTop: '10px',
                         padding: '10px',
                         minWidth: '250px',
                         maxWidth: '19vw',
-                        overflow: 'hidden'
+                        overflow: 'hidden',
+                        border: '1px solid var(--border-color)',
+                        borderRadius: '6px',
+                        backgroundColor: 'var(--background-color)'
                     }}
                 >
-                    <Typography variant='h6' sx={{ fontSize: '11px', color: 'gray' }}>
-                        Filter by Roles
+                    <Typography variant='h6' sx={{ fontSize: '11px', color: 'var(--text-color)' }}>
+                        {t('COMMON.TIMEKEEPING.FILTER_BY_ROLES')}
                     </Typography>
                     <Box
                         sx={{
@@ -436,13 +461,13 @@ const TimekeepingPage: React.FC<TimekeepingPageProps> = ({
                             overflowX: 'auto',
                             paddingRight: '10px',
                             '&::-webkit-scrollbar': {
-                                width: '8px',
-                                height: '8px',
-                                backgroundColor: '#f4f4f4',
-                                borderRadius: '10px'
+                                width: '7px',
+                                height: '7px',
+                                borderRadius: '10px',
+                                backgroundColor: 'var(--background-color)'
                             },
                             '&::-webkit-scrollbar-thumb': {
-                                backgroundColor: '#919292',
+                                backgroundColor: 'var(--scrollbar-color)',
                                 borderRadius: '10px'
                             }
                         }}
@@ -468,7 +493,8 @@ const TimekeepingPage: React.FC<TimekeepingPageProps> = ({
                                             minWidth: '15px',
                                             height: '15px',
                                             marginRight: '8px',
-                                            transform: 'scale(0.8)'
+                                            transform: 'scale(0.8)',
+                                            accentColor: '#146ca1'
                                         }}
                                     />
                                     <span
@@ -485,17 +511,20 @@ const TimekeepingPage: React.FC<TimekeepingPageProps> = ({
                 </Paper>
 
                 <Paper
-                    elevation={1}
+                    elevation={0}
                     sx={{
                         marginTop: '10px',
                         padding: '10px',
                         minWidth: '250px',
                         maxWidth: '19vw',
-                        overflow: 'hidden'
+                        overflow: 'hidden',
+                        border: '1px solid var(--border-color)',
+                        borderRadius: '6px',
+                        backgroundColor: 'var(--background-color)'
                     }}
                 >
-                    <Typography variant='h6' sx={{ fontSize: '11px', color: 'gray' }}>
-                        Filter by Departments
+                    <Typography variant='h6' sx={{ fontSize: '11px', color: 'var(--text-color)' }}>
+                        {t('COMMON.TIMEKEEPING.FILTER_BY_DEPARTMENTS')}
                     </Typography>
                     <Box
                         sx={{
@@ -503,13 +532,13 @@ const TimekeepingPage: React.FC<TimekeepingPageProps> = ({
                             overflowX: 'auto',
                             paddingRight: '10px',
                             '&::-webkit-scrollbar': {
-                                width: '8px',
-                                height: '8px',
-                                backgroundColor: '#f4f4f4',
-                                borderRadius: '10px'
+                                width: '7px',
+                                height: '7px',
+                                borderRadius: '10px',
+                                backgroundColor: 'var(--background-color)'
                             },
                             '&::-webkit-scrollbar-thumb': {
-                                backgroundColor: '#919292',
+                                backgroundColor: 'var(--scrollbar-color)',
                                 borderRadius: '10px'
                             }
                         }}
@@ -534,7 +563,8 @@ const TimekeepingPage: React.FC<TimekeepingPageProps> = ({
                                             width: '15px',
                                             height: '15px',
                                             marginRight: '8px',
-                                            transform: 'scale(0.8)'
+                                            transform: 'scale(0.8)',
+                                            accentColor: '#146ca1'
                                         }}
                                     />
                                     <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>

@@ -45,8 +45,18 @@ export const notificationsApi = createApi({
         getNotificationById: builder.query<NotificationsResponse, number>({
             query: id => `GetById?id=${id}`
         }),
+        getCountIsNew: builder.query<NotificationsResponse, string>({
+            query: userId => `GetCountIsNew?UserId=${userId}`
+        }),
         changeAllRead: builder.mutation<NotificationsResponse, string>({
             query: userId => ({ url: `ChangeAllRead`, method: 'PUT', body: { UserId: userId } })
+        }),
+        updateIsNew: builder.mutation<NotificationsResponse, string>({
+            query: userId => ({
+                url: `UpdateIsNew`,
+                method: 'PUT',
+                body: { UserId: userId }
+            })
         }),
         changeNotificationRead: builder.mutation<NotificationsResponse, number>({
             query: id => ({
@@ -70,5 +80,7 @@ export const {
     useChangeAllReadMutation,
     useChangeNotificationReadMutation,
     useDeleteNotificationMutation,
-    useGetNotificationByIdQuery
+    useGetNotificationByIdQuery,
+    useGetCountIsNewQuery,
+    useUpdateIsNewMutation
 } = notificationsApi
