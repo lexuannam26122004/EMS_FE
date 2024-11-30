@@ -6,6 +6,7 @@ import { timekeepingApi } from '@/services/TimekeepingService'
 import { sysFunctionApi } from '@/services/SysFunctionService'
 import { toastSlice } from './slices/toastSlice'
 import { tablePermissionSlice } from './slices/tablePermissionSlice'
+import { holidayApi } from '@/services/HolidayService'
 
 export const store = configureStore({
     reducer: {
@@ -15,7 +16,8 @@ export const store = configureStore({
         [timekeepingApi.reducerPath]: timekeepingApi.reducer,
         [sysFunctionApi.reducerPath]: sysFunctionApi.reducer,
         [toastSlice.name]: toastSlice.reducer,
-        [tablePermissionSlice.name]: tablePermissionSlice.reducer
+        [tablePermissionSlice.name]: tablePermissionSlice.reducer,
+        [holidayApi.reducerPath]: holidayApi.reducer
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware().concat(
@@ -23,7 +25,8 @@ export const store = configureStore({
             roleApi.middleware,
             departmentApi.middleware,
             timekeepingApi.middleware,
-            sysFunctionApi.middleware
+            sysFunctionApi.middleware,
+            holidayApi.middleware
         )
 })
 
