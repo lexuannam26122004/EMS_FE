@@ -10,6 +10,7 @@ import { tablePermissionSlice } from './slices/tablePermissionSlice'
 import { notificationsSlice } from './slices/notificationsSlice'
 import { countNewNotificationSlice } from './slices/countNewNotificationSlice'
 import { sysConfigurationApis } from '@/services/SysConfigurationService'
+import { holidayApi } from '@/services/HolidayService'
 
 export const store = configureStore({
     reducer: {
@@ -23,7 +24,8 @@ export const store = configureStore({
         [notificationsSlice.name]: notificationsSlice.reducer,
         [notificationsApi.reducerPath]: notificationsApi.reducer,
         [countNewNotificationSlice.name]: countNewNotificationSlice.reducer,
-        [sysConfigurationApis.reducerPath]: sysConfigurationApis.reducer
+        [sysConfigurationApis.reducerPath]: sysConfigurationApis.reducer,
+        [holidayApi.reducerPath]: holidayApi.reducer
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware().concat(
@@ -33,7 +35,8 @@ export const store = configureStore({
             timekeepingApi.middleware,
             sysFunctionApi.middleware,
             notificationsApi.middleware,
-            sysConfigurationApis.middleware
+            sysConfigurationApis.middleware,
+            holidayApi.middleware
         )
 })
 
