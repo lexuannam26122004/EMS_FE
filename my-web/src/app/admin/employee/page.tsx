@@ -3,34 +3,40 @@
 import React, { useState } from 'react'
 import {
     Box,
-    Typography,
     Select,
-    MenuItem,
     Pagination,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    TableSortLabel,
-    Avatar,
+    Typography,
+    MenuItem,
+    SelectChangeEvent,
     Paper,
+    Checkbox,
+    TableRow,
+    TableBody,
+    Table,
+    TableCell,
+    TableHead,
+    TableContainer,
     Button,
-    Stack
+    TextField,
+    InputAdornment,
+    IconButton,
+    Tooltip,
+    TableSortLabel,
+    Avatar
 } from '@mui/material'
 import { IAspNetUserGetAll } from '@/models/AspNetUser'
 import { useGetAllUsersQuery } from '@/services/AspNetUserService'
-import TextField from '@mui/material/TextField'
-import Tooltip from '@mui/material/Tooltip'
+
 import { CirclePlus, EyeIcon, Pencil, Trash2 } from 'lucide-react'
 import SearchIcon from '@mui/icons-material/Search'
 import { useTranslation } from 'react-i18next'
-import Checkbox from '@mui/material/Checkbox'
 
 const EmployeeTable: React.FC = () => {
+    const [openDialog, setOpenDialog] = useState(false)
+    const [isChangeMany, setIsChangeMany] = useState(false)
+    const [selected, setSelected] = useState<string[]>([])
     const [searchTerm, setSearchTerm] = useState<string>('')
-    const [rowsPerPage, setRowsPerPage] = useState<number>(10)
+    const [rowsPerPage, setRowsPerPage] = useState('10')
     const [currentPage, setCurrentPage] = useState<number>(1)
     const [sortConfig, setSortConfig] = useState<{
         key: keyof IAspNetUserGetAll | 'Id'
@@ -50,6 +56,12 @@ const EmployeeTable: React.FC = () => {
             user.DepartmentName?.toLowerCase().includes(searchTerm.toLowerCase())
     )
 
+    const isSelected = (id: string) => selected.includes(id)
+
+    const handleCheckboxClick = (id: string) => {
+        setSelected(prev => (prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]))
+    }
+
     const sortedUsers = filteredUsers.sort((a, b) => {
         if (sortConfig.direction === '') return 0
         const aValue = a[sortConfig.key]?.toString().toLowerCase() || ''
@@ -58,7 +70,7 @@ const EmployeeTable: React.FC = () => {
     })
 
     const totalRecords = sortedUsers.length
-    const paginatedUsers = sortedUsers.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
+    const paginatedUsers = sortedUsers.slice((currentPage - 1) * Number(rowsPerPage), currentPage * Number(rowsPerPage))
 
     const handleSort = (key: keyof IAspNetUserGetAll | 'Id') => {
         setSortConfig(prev => ({
@@ -67,35 +79,30 @@ const EmployeeTable: React.FC = () => {
         }))
     }
 
-
     const handleChangePage = (_event: React.ChangeEvent<unknown>, page: number) => setCurrentPage(page)
 
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setRowsPerPage(Number(event.target.value))
+    const handleChangeRowsPerPage = (event: SelectChangeEvent<string>) => {
+        setRowsPerPage(event.target.value)
         setCurrentPage(1)
     }
 
-    const handleEdit = (id: string) => {
-        console.log(`Edit user with ID: ${id}`)
-        // Thêm logic xử lý chỉnh sửa tại đây
+    const handleDeleteManyClick = async () => {
+        setIsChangeMany(true)
+        setOpenDialog(true)
     }
 
-    const handleDelete = (id: string) => {
-        console.log(`Delete user with ID: ${id}`)
-        // Thêm logic xử lý xóa tại đây
+    const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.checked) {
+            setSelected(users.map(row => row.Id))
+        } else {
+            setSelected([])
+        }
     }
 
-    const handleViewDetails = (id: string) => {
-        console.log(`View details of user with ID: ${id}`)
-        // Thêm logic hiển thị chi tiết tại đây
-    }
+    const from = (currentPage - 1) * Number(rowsPerPage) + 1
+    const to = Math.min(currentPage * Number(rowsPerPage), totalRecords)
 
-    const from = (currentPage - 1) * rowsPerPage + 1
-    const to = Math.min(currentPage * rowsPerPage, totalRecords)
-
-
-
-
+    const countRows = selected.length
 
     return (
         <Box>
@@ -136,7 +143,85 @@ const EmployeeTable: React.FC = () => {
                                 }
                             }}
                             onChange={e => setSearchTerm(e.target.value)}
+                            slotProps={{
+                                input: {
+                                    endAdornment: (
+                                        <InputAdornment position='end'>
+                                            <IconButton
+                                                color='primary'
+                                                sx={{
+                                                    height: '100%',
+                                                    backgroundColor: 'var(--button-color)',
+                                                    color: 'white',
+                                                    borderRadius: '0 8px 8px 0',
+                                                    padding: '10.5px',
+                                                    zIndex: 100,
+                                                    '&:hover': {
+                                                        backgroundColor: 'var(--hover-button-color)'
+                                                    }
+                                                }}
+                                            >
+                                                <SearchIcon />
+                                            </IconButton>
+                                        </InputAdornment>
+                                    )
+                                }
+                            }}
                         />
+                    </Box>
+
+                    <Box display='flex' alignItems='center' justifyContent='center' gap='20px'>
+                        <Typography
+                            sx={{
+                                color: 'red',
+                                whiteSpace: 'nowrap',
+                                visibility: countRows > 0 ? 'visible' : 'hidden'
+                            }}
+                        >
+                            {t('COMMON.COUNT_ROWS_SELECTED', { countRows })}
+                        </Typography>
+                        <Button
+                            variant='contained'
+                            startIcon={<Trash2 />}
+                            sx={{
+                                height: '44px',
+                                visibility: countRows > 0 ? 'visible' : 'hidden',
+                                backgroundColor: 'var(--button-color)',
+                                width: 'auto',
+                                padding: '0px 24px',
+                                '&:hover': {
+                                    backgroundColor: 'var(--hover-button-color)'
+                                },
+                                fontSize: '16px',
+                                fontWeight: 'bold',
+                                whiteSpace: 'nowrap',
+                                textTransform: 'none'
+                            }}
+                            onClick={() => handleDeleteManyClick()}
+                        >
+                            {t('COMMON.BUTTON.DELETE')}
+                        </Button>
+
+                        <Button
+                            variant='contained'
+                            startIcon={<CirclePlus />}
+                            sx={{
+                                height: '44px',
+                                backgroundColor: 'var(--button-color)',
+                                width: 'auto',
+                                padding: '0px 24px',
+                                '&:hover': {
+                                    backgroundColor: 'var(--hover-button-color)'
+                                },
+                                fontSize: '16px',
+                                fontWeight: 'bold',
+                                whiteSpace: 'nowrap',
+                                textTransform: 'none'
+                            }}
+                            //onClick={() => router.push('/admin/configuration/create-configuration')}
+                        >
+                            {t('COMMON.BUTTON.CREATE')}
+                        </Button>
                     </Box>
                 </Box>
 
@@ -157,10 +242,24 @@ const EmployeeTable: React.FC = () => {
                     <Table>
                         <TableHead>
                             <TableRow sx={{ backgroundColor: 'var(--header-color-table)' }}>
+                                <TableCell
+                                    padding='checkbox'
+                                    sx={{ borderColor: 'var(--border-color)', paddingLeft: '8.5px' }}
+                                >
+                                    <Checkbox
+                                        indeterminate={selected.length > 0 && selected.length < users.length}
+                                        checked={
+                                            users && selected.length > 0 ? selected.length === users.length : false
+                                        }
+                                        onChange={handleSelectAllClick}
+                                        sx={{
+                                            color: 'var(--text-color)'
+                                        }}
+                                    />
+                                </TableCell>
                                 <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                     <TableSortLabel
                                         active={sortConfig.key === 'Id'}
-                                        direction={sortConfig.key === 'Id' ? sortConfig.direction : 'asc'}
                                         onClick={() => handleSort('Id')}
                                         sx={{
                                             '& .MuiTableSortLabel-icon': {
@@ -202,8 +301,7 @@ const EmployeeTable: React.FC = () => {
                                     <TableCell key={index} sx={{ borderColor: 'var(--border-color)' }}>
                                         <TableSortLabel
                                             active={sortConfig.key === column}
-                                            direction={sortConfig.key === column ? sortConfig.direction : 'asc'}
-                                            onClick={() => handleSort(column)}
+                                            onClick={() => handleSort(column as keyof IAspNetUserGetAll)}
                                             sx={{
                                                 '& .MuiTableSortLabel-icon': {
                                                     color: 'var(--text-color) !important'
@@ -252,7 +350,20 @@ const EmployeeTable: React.FC = () => {
                         </TableHead>
                         <TableBody>
                             {paginatedUsers.map(user => (
-                                <TableRow key={user.Id}>
+                                <TableRow key={user.Id} selected={isSelected(user.Id)}>
+                                    <TableCell
+                                        padding='checkbox'
+                                        sx={{ borderColor: 'var(--border-color)', paddingLeft: '8.5px' }}
+                                    >
+                                        <Checkbox
+                                            checked={isSelected(user.Id)}
+                                            onChange={() => handleCheckboxClick(user.Id)}
+                                            sx={{
+                                                color: 'var(--text-color)'
+                                            }}
+                                        />
+                                    </TableCell>
+
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                         <Typography
                                             sx={{
@@ -487,7 +598,7 @@ const EmployeeTable: React.FC = () => {
                         </Typography>
                     </Box>
                     <Pagination
-                        count={Math.ceil(totalRecords / rowsPerPage)}
+                        count={Math.ceil(totalRecords / Number(rowsPerPage))}
                         page={currentPage}
                         onChange={handleChangePage}
                         boundaryCount={1}
