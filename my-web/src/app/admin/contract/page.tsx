@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Box,
     Select,
@@ -24,8 +24,11 @@ import {
     TableSortLabel,
     Avatar
 } from '@mui/material'
+
 import { IAspNetUserGetAll } from '@/models/AspNetUser'
 import { useGetAllUsersQuery } from '@/services/AspNetUserService'
+import { IEmploymentContractSearch } from '@/models/EmploymentContract'
+import { useSearchEmploymentContractsQuery } from '@/services/EmploymentContractService'
 
 import { CirclePlus, EyeIcon, Pencil, Trash2 } from 'lucide-react'
 import SearchIcon from '@mui/icons-material/Search'
@@ -39,21 +42,37 @@ const EmployeeTable: React.FC = () => {
     const [rowsPerPage, setRowsPerPage] = useState('10')
     const [currentPage, setCurrentPage] = useState<number>(1)
     const [sortConfig, setSortConfig] = useState<{
-        key: keyof IAspNetUserGetAll | 'Id'
-        direction: 'asc' | 'desc' 
-    }>({ key: 'Id', direction: 'asc' })  
+        key: keyof IEmploymentContractSearch | 'Id'
+        direction: 'asc' | 'desc'
+    }>({ key: 'Id', direction: 'asc' })
     const { t } = useTranslation('common')
-    const { data: userResponse, isLoading: loading } = useGetAllUsersQuery()
-    const users = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
 
-    if (loading) return <div>Loading...</div>
+    const { data: contractResponse, isLoading: isContractsLoading } = useSearchEmploymentContractsQuery()
+    const { data: userResponse, isLoading: isUsersLoading } = useGetAllUsersQuery()
+
+    const contract = (contractResponse?.Data?.Records as IEmploymentContractSearch[]) || []
+    const employee = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
+
+    const users = contract.map(contract => {
+        const matchedEmployee = employee.find(emp => emp.Id === contract.UserId)
+        return {
+            ...contract,
+            FullName: matchedEmployee?.FullName || 'N/A',
+            AvatarPath:
+                matchedEmployee?.AvatarPath ||
+                'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'
+        }
+    })
+
+    if (isContractsLoading || isUsersLoading) return <div>Loading...</div>
 
     const filteredUsers = users.filter(
         user =>
-            user.FullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.Email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.PhoneNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.DepartmentName?.toLowerCase().includes(searchTerm.toLowerCase())
+            user.UserId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.ContractName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.BasicSalary?.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (user.StartDate &&
+                new Date(user.StartDate).toLocaleDateString().toLowerCase().includes(searchTerm.toLowerCase()))
     )
 
     const isSelected = (id: string) => selected.includes(id)
@@ -71,7 +90,7 @@ const EmployeeTable: React.FC = () => {
     const totalRecords = sortedUsers.length
     const paginatedUsers = sortedUsers.slice((currentPage - 1) * Number(rowsPerPage), currentPage * Number(rowsPerPage))
 
-    const handleSort = (key: keyof IAspNetUserGetAll | 'Id') => {
+    const handleSort = (key: keyof IEmploymentContractSearch | 'Id') => {
         setSortConfig(prev => ({
             key,
             direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc'
@@ -282,6 +301,7 @@ const EmployeeTable: React.FC = () => {
                                         </Typography>
                                     </TableSortLabel>
                                 </TableCell>
+
                                 <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                     <Typography
                                         sx={{
@@ -297,12 +317,13 @@ const EmployeeTable: React.FC = () => {
                                         Avatar
                                     </Typography>
                                 </TableCell>
-                                {['FullName', 'Email', 'PhoneNumber', 'DepartmentName'].map((column, index) => (
+
+                                {['FullName', 'UserId', 'ContractName', 'StartDate'].map((column, index) => (
                                     <TableCell key={index} sx={{ borderColor: 'var(--border-color)' }}>
                                         <TableSortLabel
                                             active={sortConfig.key === column}
                                             direction={sortConfig.key === column ? sortConfig.direction : 'asc'}
-                                            onClick={() => handleSort(column as keyof IAspNetUserGetAll)}
+                                            onClick={() => handleSort(column as keyof IEmploymentContractSearch)}
                                             sx={{
                                                 '& .MuiTableSortLabel-icon': {
                                                     color: 'var(--text-color) !important'
@@ -380,9 +401,10 @@ const EmployeeTable: React.FC = () => {
                                             {user.Id}
                                         </Typography>
                                     </TableCell>
+
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                         <Avatar
-                                            src={user.AvatarPath || 'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'}
+                                            src={user.AvatarPath}
                                             alt='Avatar'
                                         />
                                     </TableCell>
@@ -398,7 +420,23 @@ const EmployeeTable: React.FC = () => {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {user.FullName || 'N/A'}{' '}
+                                            {user.FullName}
+                                        </Typography>
+                                    </TableCell>
+
+                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                        <Typography
+                                            sx={{
+                                                fontWeight: 'bold',
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                overflow: 'hidden',
+                                                maxWidth: '260px',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            {user.UserId}
                                         </Typography>
                                     </TableCell>
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
@@ -413,7 +451,7 @@ const EmployeeTable: React.FC = () => {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {user.Email}
+                                            {user.ContractName || 'N/A'}
                                         </Typography>
                                     </TableCell>
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
@@ -428,22 +466,7 @@ const EmployeeTable: React.FC = () => {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {user.PhoneNumber || 'N/A'}
-                                        </Typography>
-                                    </TableCell>
-                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
-                                        <Typography
-                                            sx={{
-                                                fontWeight: 'bold',
-                                                color: 'var(--text-color)',
-                                                fontSize: '16px',
-                                                overflow: 'hidden',
-                                                maxWidth: '260px',
-                                                textOverflow: 'ellipsis',
-                                                whiteSpace: 'nowrap'
-                                            }}
-                                        >
-                                            {user.DepartmentName}
+                                            {user.StartDate ? new Date(user.StartDate).toLocaleDateString() : 'N/A'}
                                         </Typography>
                                     </TableCell>
                                     <TableCell

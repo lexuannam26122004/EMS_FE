@@ -11,6 +11,7 @@ import { notificationsSlice } from './slices/notificationsSlice'
 import { countNewNotificationSlice } from './slices/countNewNotificationSlice'
 import { sysConfigurationApis } from '@/services/SysConfigurationService'
 import { holidayApi } from '@/services/HolidayService'
+import { EmploymentContractApi } from '@/services/EmploymentContractService'
 
 export const store = configureStore({
     reducer: {
@@ -25,7 +26,8 @@ export const store = configureStore({
         [notificationsApi.reducerPath]: notificationsApi.reducer,
         [countNewNotificationSlice.name]: countNewNotificationSlice.reducer,
         [sysConfigurationApis.reducerPath]: sysConfigurationApis.reducer,
-        [holidayApi.reducerPath]: holidayApi.reducer
+        [holidayApi.reducerPath]: holidayApi.reducer,
+        [EmploymentContractApi.reducerPath]: EmploymentContractApi.reducer,
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware().concat(
@@ -36,7 +38,8 @@ export const store = configureStore({
             sysFunctionApi.middleware,
             notificationsApi.middleware,
             sysConfigurationApis.middleware,
-            holidayApi.middleware
+            holidayApi.middleware,
+            EmploymentContractApi.middleware,
         )
 })
 
