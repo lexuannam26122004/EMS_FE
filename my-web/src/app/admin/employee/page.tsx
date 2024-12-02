@@ -50,6 +50,7 @@ const EmployeeTable: React.FC = () => {
 
     const filteredUsers = users.filter(
         user =>
+            user.Id?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.FullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.Email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.PhoneNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||

@@ -68,6 +68,8 @@ const EmployeeTable: React.FC = () => {
 
     const filteredUsers = users.filter(
         user =>
+            user.Id?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.FullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.UserId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.ContractName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.BasicSalary?.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -403,10 +405,7 @@ const EmployeeTable: React.FC = () => {
                                     </TableCell>
 
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
-                                        <Avatar
-                                            src={user.AvatarPath}
-                                            alt='Avatar'
-                                        />
+                                        <Avatar src={user.AvatarPath} alt='Avatar' />
                                     </TableCell>
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                         <Typography
