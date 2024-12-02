@@ -320,34 +320,36 @@ const EmployeeTable: React.FC = () => {
                                     </Typography>
                                 </TableCell>
 
-                                {['FullName', 'UserId', 'ContractName', 'StartDate'].map((column, index) => (
-                                    <TableCell key={index} sx={{ borderColor: 'var(--border-color)' }}>
-                                        <TableSortLabel
-                                            active={sortConfig.key === column}
-                                            direction={sortConfig.key === column ? sortConfig.direction : 'asc'}
-                                            onClick={() => handleSort(column as keyof IEmploymentContractSearch)}
-                                            sx={{
-                                                '& .MuiTableSortLabel-icon': {
-                                                    color: 'var(--text-color) !important'
-                                                }
-                                            }}
-                                        >
-                                            <Typography
+                                {['FullName', 'UserId', 'ContractName', 'StartDate', 'BasicSalary'].map(
+                                    (column, index) => (
+                                        <TableCell key={index} sx={{ borderColor: 'var(--border-color)' }}>
+                                            <TableSortLabel
+                                                active={sortConfig.key === column}
+                                                direction={sortConfig.key === column ? sortConfig.direction : 'asc'}
+                                                onClick={() => handleSort(column as keyof IEmploymentContractSearch)}
                                                 sx={{
-                                                    fontWeight: 'bold',
-                                                    color: 'var(--text-color)',
-                                                    fontSize: '16px',
-                                                    overflow: 'hidden',
-                                                    maxWidth: '260px',
-                                                    textOverflow: 'ellipsis',
-                                                    whiteSpace: 'nowrap'
+                                                    '& .MuiTableSortLabel-icon': {
+                                                        color: 'var(--text-color) !important'
+                                                    }
                                                 }}
                                             >
-                                                {column}
-                                            </Typography>
-                                        </TableSortLabel>
-                                    </TableCell>
-                                ))}
+                                                <Typography
+                                                    sx={{
+                                                        fontWeight: 'bold',
+                                                        color: 'var(--text-color)',
+                                                        fontSize: '16px',
+                                                        overflow: 'hidden',
+                                                        maxWidth: '260px',
+                                                        textOverflow: 'ellipsis',
+                                                        whiteSpace: 'nowrap'
+                                                    }}
+                                                >
+                                                    {column}
+                                                </Typography>
+                                            </TableSortLabel>
+                                        </TableCell>
+                                    )
+                                )}
 
                                 <TableCell
                                     sx={{
@@ -465,9 +467,28 @@ const EmployeeTable: React.FC = () => {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {user.StartDate ? new Date(user.StartDate).toLocaleDateString() : 'N/A'}
+                                            {user.StartDate && !isNaN(new Date(user.StartDate).getTime())
+                                                ? new Date(user.StartDate).toLocaleDateString()
+                                                : 'N/A'}
                                         </Typography>
                                     </TableCell>
+
+                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                        <Typography
+                                            sx={{
+                                                fontWeight: 'bold',
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                overflow: 'hidden',
+                                                maxWidth: '260px',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            {user.BasicSalary ? user.BasicSalary.toString().toLowerCase() : 'N/A'}
+                                        </Typography>
+                                    </TableCell>
+
                                     <TableCell
                                         sx={{
                                             padding: '0px 9.5px 0px 0px',

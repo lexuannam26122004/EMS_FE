@@ -26,6 +26,8 @@ import {
 } from '@mui/material'
 import { IAspNetUserGetAll } from '@/models/AspNetUser'
 import { useGetAllUsersQuery } from '@/services/AspNetUserService'
+import { IEmploymentContractSearch } from '@/models/EmploymentContract'
+import { useSearchEmploymentContractsQuery } from '@/services/EmploymentContractService'
 
 import { CirclePlus, EyeIcon, Pencil, Trash2 } from 'lucide-react'
 import SearchIcon from '@mui/icons-material/Search'
@@ -40,13 +42,26 @@ const EmployeeTable: React.FC = () => {
     const [currentPage, setCurrentPage] = useState<number>(1)
     const [sortConfig, setSortConfig] = useState<{
         key: keyof IAspNetUserGetAll | 'Id'
-        direction: 'asc' | 'desc' 
-    }>({ key: 'Id', direction: 'asc' })  
+        direction: 'asc' | 'desc'
+    }>({ key: 'Id', direction: 'asc' })
     const { t } = useTranslation('common')
-    const { data: userResponse, isLoading: loading } = useGetAllUsersQuery()
-    const users = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
 
-    if (loading) return <div>Loading...</div>
+    const { data: contractResponse, isLoading: isContractsLoading } = useSearchEmploymentContractsQuery()
+    const { data: userResponse, isLoading: isUsersLoading } = useGetAllUsersQuery()
+
+    const contract = (contractResponse?.Data?.Records as IEmploymentContractSearch[]) || []
+    const employee = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
+
+    const users = employee.map(employee => {
+        const matchedEmployee = contract.find(ct => ct.UserId === employee.Id)
+        return {
+            ...employee,
+            ContractName: matchedEmployee?.ContractName || 'N/A',
+            StartDate: matchedEmployee?.StartDate || 'N/A'
+        }
+    })
+
+    if (isContractsLoading || isUsersLoading) return <div>Loading...</div>
 
     const filteredUsers = users.filter(
         user =>
@@ -54,7 +69,16 @@ const EmployeeTable: React.FC = () => {
             user.FullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.Email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.PhoneNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.DepartmentName?.toLowerCase().includes(searchTerm.toLowerCase())
+            user.DepartmentName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.UserName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.Roles?.some(role => role.toLowerCase().includes(searchTerm.toLowerCase())) ||
+            (user.Birthday &&
+                new Date(user.Birthday).toLocaleDateString().toLowerCase().includes(searchTerm.toLowerCase())) ||
+            user.Sex?.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.Address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.ContractName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (user.StartDate &&
+                new Date(user.StartDate).toLocaleDateString().toLowerCase().includes(searchTerm.toLowerCase()))
     )
 
     const isSelected = (id: string) => selected.includes(id)
@@ -298,7 +322,19 @@ const EmployeeTable: React.FC = () => {
                                         Avatar
                                     </Typography>
                                 </TableCell>
-                                {['FullName', 'Email', 'PhoneNumber', 'DepartmentName'].map((column, index) => (
+                                {[
+                                    'FullName',
+                                    'Email',
+                                    'PhoneNumber',
+                                    'DepartmentName',
+                                    'UserName',
+                                    'Roles',
+                                    'Birthday',
+                                    'Sex',
+                                    'Address',
+                                    'ContractName',
+                                    'StartDate'
+                                ].map((column, index) => (
                                     <TableCell key={index} sx={{ borderColor: 'var(--border-color)' }}>
                                         <TableSortLabel
                                             active={sortConfig.key === column}
@@ -383,7 +419,10 @@ const EmployeeTable: React.FC = () => {
                                     </TableCell>
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                         <Avatar
-                                            src={user.AvatarPath || 'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'}
+                                            src={
+                                                user.AvatarPath ||
+                                                'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'
+                                            }
                                             alt='Avatar'
                                         />
                                     </TableCell>
@@ -399,7 +438,7 @@ const EmployeeTable: React.FC = () => {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {user.FullName || 'N/A'}{' '}
+                                            {user.FullName || 'N/A'}
                                         </Typography>
                                     </TableCell>
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
@@ -414,7 +453,7 @@ const EmployeeTable: React.FC = () => {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {user.Email}
+                                            {user.Email || 'N/A'}
                                         </Typography>
                                     </TableCell>
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
@@ -444,7 +483,120 @@ const EmployeeTable: React.FC = () => {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {user.DepartmentName}
+                                            {user.DepartmentName || 'N/A'}
+                                        </Typography>
+                                    </TableCell>
+
+                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                        <Typography
+                                            sx={{
+                                                fontWeight: 'bold',
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                overflow: 'hidden',
+                                                maxWidth: '260px',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            {user.UserName || 'N/A'}
+                                        </Typography>
+                                    </TableCell>
+
+                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                        <Typography
+                                            sx={{
+                                                fontWeight: 'bold',
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                overflow: 'hidden',
+                                                maxWidth: '260px',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            {user.Roles || 'N/A'}
+                                        </Typography>
+                                    </TableCell>
+
+                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                        <Typography
+                                            sx={{
+                                                fontWeight: 'bold',
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                overflow: 'hidden',
+                                                maxWidth: '260px',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            {user.Birthday && !isNaN(new Date(user.Birthday).getTime())
+                                                ? new Date(user.Birthday).toLocaleDateString()
+                                                : 'N/A'}
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                        <Typography
+                                            sx={{
+                                                fontWeight: 'bold',
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                overflow: 'hidden',
+                                                maxWidth: '260px',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            {user.Sex || 'N/A'}
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                        <Typography
+                                            sx={{
+                                                fontWeight: 'bold',
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                overflow: 'hidden',
+                                                maxWidth: '260px',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            {user.Address || 'N/A'}
+                                        </Typography>
+                                    </TableCell>
+
+                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                        <Typography
+                                            sx={{
+                                                fontWeight: 'bold',
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                overflow: 'hidden',
+                                                maxWidth: '260px',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            {user.ContractName || 'N/A'}
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                        <Typography
+                                            sx={{
+                                                fontWeight: 'bold',
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                overflow: 'hidden',
+                                                maxWidth: '260px',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            {user.StartDate && !isNaN(new Date(user.StartDate).getTime())
+                                                ? new Date(user.StartDate).toLocaleDateString()
+                                                : 'N/A'}
                                         </Typography>
                                     </TableCell>
                                     <TableCell
