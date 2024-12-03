@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react'
 import { Box, TextField, Button } from '@mui/material'
 import { useToast } from '@/hooks/useToast'
+import { IAspNetUserGetAll } from '@/models/AspNetUser'
+import { useGetAllUsersQuery } from '@/services/AspNetUserService'
 
 const LoginForm: React.FC = () => {
     const [email, setEmail] = useState('')
@@ -9,15 +11,21 @@ const LoginForm: React.FC = () => {
     const [isSuccess, setIsSuccess] = useState<boolean | null>(null)
     const [isError, setIsError] = useState<boolean | null>(null)
     const [loading, setLoading] = useState(false)
+    const [userId, setUserId] = useState<string | null>(null)
     const toast = useToast()
+
+    const { data: userResponse } = useGetAllUsersQuery()
+    const employee = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
+
     useEffect(() => {
         if (isSuccess === true) {
-            toast('Đăng nhập thành công!', 'success')
+            const users = employee.find(ep => ep.Id === userId)
+            toast(`Đăng nhập thành công! Chào mừng ${users?.FullName}`, 'success')
         }
         if (isError === true) {
             toast('Đăng nhập thất bại!', 'error')
         }
-    }, [isSuccess, isError]) 
+    }, [isSuccess, isError, toast, userId, employee])
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -44,13 +52,15 @@ const LoginForm: React.FC = () => {
 
             if (response.ok) {
                 localStorage.setItem('auth_token', data.Data.auth_token)
-                setIsSuccess(true) 
+                setIsSuccess(true)
+                setUserId(data.Data.id)
             } else {
-                setIsError(true) 
+                setIsError(true)
             }
         } catch (err) {
             console.error(err)
-            setIsError(true) 
+            toast('Đã xảy ra lỗi. Vui lòng thử lại sau!', 'error')
+            setIsError(true)
         } finally {
             setLoading(false)
         }
