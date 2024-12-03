@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Box, TextField, Button } from '@mui/material'
 import { useToast } from '@/hooks/useToast'
 import { IAspNetUserGetAll } from '@/models/AspNetUser'
@@ -8,8 +8,7 @@ import { useGetAllUsersQuery } from '@/services/AspNetUserService'
 const LoginForm: React.FC = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [isSuccess, setIsSuccess] = useState<boolean | null>(null)
-    const [isError, setIsError] = useState<boolean | null>(null)
+
     const [loading, setLoading] = useState(false)
     const [userId, setUserId] = useState<string | null>(null)
     const toast = useToast()
@@ -17,22 +16,10 @@ const LoginForm: React.FC = () => {
     const { data: userResponse } = useGetAllUsersQuery()
     const employee = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
 
-    useEffect(() => {
-        if (isSuccess === true) {
-            const users = employee.find(ep => ep.Id === userId)
-            toast(`Đăng nhập thành công! Chào mừng ${users?.FullName}`, 'success')
-        }
-        if (isError === true) {
-            toast('Đăng nhập thất bại!', 'error')
-        }
-    }, [isSuccess, isError, toast, userId, employee])
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
 
         setLoading(true)
-        setIsSuccess(null)
-        setIsError(null)
 
         const loginData = {
             Email: email,
@@ -52,15 +39,16 @@ const LoginForm: React.FC = () => {
 
             if (response.ok) {
                 localStorage.setItem('auth_token', data.Data.auth_token)
-                setIsSuccess(true)
+
                 setUserId(data.Data.id)
+                const users = employee.find(ep => ep.Id === userId)
+                toast(`Đăng nhập thành công! Chào mừng ${users?.FullName}`, 'success')
             } else {
-                setIsError(true)
+                toast('Đăng nhập thất bại!', 'error')
             }
         } catch (err) {
             console.error(err)
             toast('Đã xảy ra lỗi. Vui lòng thử lại sau!', 'error')
-            setIsError(true)
         } finally {
             setLoading(false)
         }
