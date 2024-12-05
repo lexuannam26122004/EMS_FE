@@ -13,7 +13,7 @@ const LoginForm: React.FC = () => {
     const [userId, setUserId] = useState<string | null>(null)
     const toast = useToast()
 
-    const { data: userResponse } = useGetAllUsersQuery()
+    const { data: userResponse, isLoading: isLoading } = useGetAllUsersQuery()
     const employee = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -107,7 +107,7 @@ const LoginForm: React.FC = () => {
                     }}
                     disabled={loading}
                 >
-                    {loading ? 'Đang xử lý...' : 'Đăng nhập'}
+                    {loading || isLoading ? 'Đang xử lý...' : 'Đăng nhập'}
                 </Button>
                 <a
                     href='#'
