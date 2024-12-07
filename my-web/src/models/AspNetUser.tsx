@@ -13,3 +13,20 @@ export interface IAspNetUserGetAll {
     AvatarPath: string | null
     DepartmentName: string
 }
+
+export interface IAspNetUserCreate {
+    FullName: string
+    UserName: string
+    Email: string
+    PhoneNumber: string
+    StartDateWork: Date
+    AvatarFileId: number
+    Sex: number
+    Address: string
+    Note: string
+    Birthday: Date
+    DepartmentId: number
+    Password: string
+    Roles: string[]
+    IsActive: boolean
+}
