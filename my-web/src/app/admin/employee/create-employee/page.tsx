@@ -79,7 +79,7 @@ const CreateEmployeePage = () => {
             !Array.isArray(roles) ||
             roles.length === 0 ||
             isExistingUser ||
-            isExistingEmail||
+            isExistingEmail ||
             !isPasswordValid
         ) {
             return
@@ -131,7 +131,7 @@ const CreateEmployeePage = () => {
             !Array.isArray(roles) ||
             roles.length === 0 ||
             isExistingUser ||
-            isExistingEmail||
+            isExistingEmail ||
             !isPasswordValid
         ) {
             return
@@ -286,7 +286,7 @@ const CreateEmployeePage = () => {
                                 ? t('COMMON.TEXTFIELD.REQUIRED')
                                 : isExistingEmail
                                   ? t('Email đã tồn tại')
-                                  : ''}
+                                  : 'Hợp lệ'}
                         </Typography>
                     </Box>
                 </Box>
@@ -352,7 +352,7 @@ const CreateEmployeePage = () => {
                                 ? t('COMMON.TEXTFIELD.REQUIRED')
                                 : isExistingUser
                                   ? t('Tên tài khoản này đã tồn tại')
-                                  : ''}
+                                  : 'Hợp lệ'}
                         </Typography>
                     </Box>
 
@@ -407,7 +407,7 @@ const CreateEmployeePage = () => {
                                 ? t('COMMON.TEXTFIELD.REQUIRED')
                                 : !isPasswordValid
                                   ? t('Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ cái và số.')
-                                  : ''}
+                                  : 'Hợp lệ'}
                         </Typography>
                     </Box>
                 </Box>
@@ -817,7 +817,13 @@ const CreateEmployeePage = () => {
                                 }
                             }}
                             value={phoneNumber}
-                            onChange={e => setPhoneNumber(e.target.value)}
+                            onChange={e => {
+                                const value = e.target.value
+
+                                if (/^\d*$/.test(value)) {
+                                    setPhoneNumber(value)
+                                }
+                            }}
                         />
                         <Typography
                             sx={{

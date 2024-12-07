@@ -29,6 +29,7 @@
     "deepmerge": "^4.3.1",
     "dompurify": "^3.1.7",
     "i18next": "^23.16.2",
+    "libphonenumber-js": "^1.11.16",
     "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.453.0",
     "mdi-material-ui": "^7.9.2",
