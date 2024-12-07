@@ -22,6 +22,12 @@ import LoadingButton from '@mui/lab/LoadingButton'
 import { useToast } from '@/hooks/useToast'
 import { IAspNetUserGetAll } from '@/models/AspNetUser'
 
+import { IAspNetRoleGetAll } from '@/models/AspNetRole'
+import { useGetAllRolesQuery } from '@/services/AspNetRoleService'
+
+import { IDepartmentGetAll } from '@/models/Department'
+import { useGetAllDepartmentsQuery } from '@/services/DepartmentService'
+
 const getCurrentDateTime = () => {
     const now = new Date()
     const year = now.getFullYear()
@@ -52,8 +58,15 @@ const CreateEmployeePage = () => {
     const [isSubmit, setIsSubmit] = useState(false)
 
     const [createUsers, { isSuccess, isLoading, isError, reset }] = useCreateUsersMutation()
+
     const { data: userResponse, isLoading: isUsersLoading } = useGetAllUsersQuery()
     const employee = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
+
+    const { data: roleResponse, isLoading: isRoleLoading } = useGetAllRolesQuery()
+    const role = (roleResponse?.Data?.Records as IAspNetRoleGetAll[]) || []
+
+    const { data: departmentResponse, isLoading: isDepartmentLoading } = useGetAllDepartmentsQuery()
+    const department = (departmentResponse?.Data?.Records as IDepartmentGetAll[]) || []
 
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
     const isPasswordValid = passwordRegex.test(password)
@@ -157,7 +170,7 @@ const CreateEmployeePage = () => {
         router.push('/admin/employee')
     }
 
-    if (isUsersLoading) return <div>Loading...</div>
+    if (isUsersLoading || isRoleLoading || isDepartmentLoading) return <div>Loading...</div>
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -236,12 +249,9 @@ const CreateEmployeePage = () => {
                             width: 'calc(50% - 10px)'
                         }}
                     >
-                        <TextField
-                            variant='outlined'
-                            label={'Email*'}
+                        <FormControl
                             fullWidth
-                            {...(isSubmit && (email === '' || isExistingEmail) && { error: true })}
-                            type='email'
+                            error={isSubmit && departmentId === ''}
                             sx={{
                                 color: 'var(--text-color)',
                                 '& fieldset': {
@@ -265,29 +275,44 @@ const CreateEmployeePage = () => {
                                 },
                                 '& .MuiInputLabel-root.Mui-focused': {
                                     color: 'var(--selected-color)'
+                                },
+                                '& .MuiSelect-icon': {
+                                    color: 'var(--text-color)'
                                 }
                             }}
-                            value={email}
-                            onChange={e => {
-                                setEmail(e.target.value)
-                                setIsExistingEmail(employee.some(user => user.Email === e.target.value.trim()))
-                            }}
-                        />
-                        <Typography
-                            sx={{
-                                color: 'red',
-                                margin: '1px 0 0 10px',
-                                fontSize: '12px',
-                                visibility:
-                                    isSubmit && email === '' ? 'visible' : isExistingEmail ? 'visible' : 'hidden'
-                            }}
                         >
-                            {isSubmit && email === ''
-                                ? t('COMMON.TEXTFIELD.REQUIRED')
-                                : isExistingEmail
-                                  ? t('Email đã tồn tại')
-                                  : 'Hợp lệ'}
-                        </Typography>
+                            <InputLabel>Phòng ban*</InputLabel>
+                            <Select
+                                value={departmentId}
+                                onChange={e => setDepartmentId(e.target.value)}
+                                label='Phòng ban*'
+                                MenuProps={{
+                                    PaperProps: {
+                                        sx: {
+                                            backgroundColor: 'var(--background-color)',
+                                            color: 'var(--text-color)',
+                                            boxShadow: '0px 2px 6px var(--text-color)'
+                                        }
+                                    }
+                                }}
+                            >
+                                {department.map(dept => (
+                                    <MenuItem key={dept.Id} value={dept.Id}>
+                                        {dept.Name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                            <Typography
+                                sx={{
+                                    color: 'red',
+                                    margin: '1px 0 0 10px',
+                                    fontSize: '12px',
+                                    visibility: isSubmit && departmentId === '' ? 'visible' : 'hidden'
+                                }}
+                            >
+                                {t('COMMON.TEXTFIELD.REQUIRED')}
+                            </Typography>
+                        </FormControl>
                     </Box>
                 </Box>
                 <Box
@@ -464,15 +489,15 @@ const CreateEmployeePage = () => {
                                 }
                             }}
                         >
-                            {['Administrator', 'Manager', 'Employee', 'IT Support'].map(role => (
-                                <MenuItem key={role} value={role}>
+                            {role.map(roleItem => (
+                                <MenuItem key={roleItem.Name} value={roleItem.Name}>
                                     <Checkbox
-                                        checked={roles.includes(role)}
+                                        checked={roles.includes(roleItem.Name)}
                                         sx={{
                                             color: 'var(--text-color)'
                                         }}
                                     />
-                                    <ListItemText primary={role} />
+                                    <ListItemText primary={roleItem.Name} />
                                 </MenuItem>
                             ))}
                         </Select>
@@ -738,9 +763,10 @@ const CreateEmployeePage = () => {
                     >
                         <TextField
                             variant='outlined'
-                            label={'Phòng ban*'}
+                            label={'Email*'}
                             fullWidth
-                            {...(isSubmit && departmentId === '' && { error: true })}
+                            {...(isSubmit && (email === '' || isExistingEmail) && { error: true })}
+                            type='email'
                             sx={{
                                 color: 'var(--text-color)',
                                 '& fieldset': {
@@ -766,18 +792,26 @@ const CreateEmployeePage = () => {
                                     color: 'var(--selected-color)'
                                 }
                             }}
-                            value={departmentId}
-                            onChange={e => setDepartmentId(e.target.value)}
+                            value={email}
+                            onChange={e => {
+                                setEmail(e.target.value)
+                                setIsExistingEmail(employee.some(user => user.Email === e.target.value.trim()))
+                            }}
                         />
                         <Typography
                             sx={{
                                 color: 'red',
                                 margin: '1px 0 0 10px',
                                 fontSize: '12px',
-                                visibility: isSubmit && departmentId === '' ? 'visible' : 'hidden'
+                                visibility:
+                                    isSubmit && email === '' ? 'visible' : isExistingEmail ? 'visible' : 'hidden'
                             }}
                         >
-                            {t('COMMON.TEXTFIELD.REQUIRED')}
+                            {isSubmit && email === ''
+                                ? t('COMMON.TEXTFIELD.REQUIRED')
+                                : isExistingEmail
+                                  ? t('Email đã tồn tại')
+                                  : 'Hợp lệ'}
                         </Typography>
                     </Box>
 
