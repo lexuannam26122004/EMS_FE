@@ -517,7 +517,7 @@ const EmployeeTable: React.FC = () => {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {user.Roles || 'N/A'}
+                                            {user.Roles?.join(', ') || 'N/A'}
                                         </Typography>
                                     </TableCell>
 
@@ -648,7 +648,7 @@ const EmployeeTable: React.FC = () => {
                                                             backgroundColor: 'var(--hover-color)'
                                                         }
                                                     }}
-                                                    //onClick={() => handleButtonUpdateClick(row.Id)}
+                                                    onClick={() =>  router.push(`/admin/employee/update-employee?id=${user.Id}`)}
                                                 >
                                                     <Pencil />
                                                 </Box>

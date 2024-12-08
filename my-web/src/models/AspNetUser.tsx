@@ -30,3 +30,22 @@ export interface IAspNetUserCreate {
     Roles: string[]
     IsActive: boolean
 }
+
+
+export interface IAspNetUserUpdate {
+    Id: string
+    FullName: string | null
+    UserName: string
+    Email: string
+    PhoneNumber: string | null
+    AvatarFileId: number | null
+    Sex: number | null
+    Address: string
+    Note: string
+    Birthday: Date | null
+    Roles?: string[] | null
+    StartDateWork: Date 
+    DepartmentId: number 
+    IsActive: boolean
+}
+
