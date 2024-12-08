@@ -14,7 +14,7 @@ import {
     ListItemText
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { SaveIcon, XIcon } from 'lucide-react'
+import { SaveIcon, XIcon, RefreshCcwIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useGetAllUsersQuery, useCreateUsersMutation } from '@/services/AspNetUserService'
 import { useEffect, useState } from 'react'
@@ -57,9 +57,9 @@ const CreateEmployeePage = () => {
     const toast = useToast()
     const [isSubmit, setIsSubmit] = useState(false)
 
-    const [createUsers, { isSuccess, isLoading, isError, reset }] = useCreateUsersMutation()
+    const [createUsers, { isSuccess, isError, reset }] = useCreateUsersMutation()
 
-    const { data: userResponse, isLoading: isUsersLoading } = useGetAllUsersQuery()
+    const { data: userResponse, isLoading: isUsersLoading, refetch } = useGetAllUsersQuery()
     const employee = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
 
     const { data: roleResponse, isLoading: isRoleLoading } = useGetAllRolesQuery()
@@ -71,12 +71,16 @@ const CreateEmployeePage = () => {
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
     const isPasswordValid = passwordRegex.test(password)
 
+    const [isSaveLoading, setIsSaveLoading] = useState(false)
+    const [isSaveAndCloseLoading, setIsSaveAndCloseLoading] = useState(false)
+
     useEffect(() => {
         setStartDateWork(getCurrentDateTime())
         setBirthday(getCurrentDateTime())
     }, [])
 
     const handleSave = async () => {
+        setIsSaveLoading(true)
         setIsSubmit(true)
         if (
             fullName === '' ||
@@ -95,6 +99,7 @@ const CreateEmployeePage = () => {
             isExistingEmail ||
             !isPasswordValid
         ) {
+            setIsSaveLoading(false)
             return
         }
         const data = {
@@ -113,22 +118,30 @@ const CreateEmployeePage = () => {
             IsActive: true,
             AvatarFileId: 0
         }
-        await createUsers(data).unwrap()
+        try {
+            await createUsers(data).unwrap()
+        } finally {
+            setIsSaveLoading(false)
+        }
         setIsSubmit(false)
     }
 
     useEffect(() => {
         if (isSuccess === true) {
             toast(t('Tạo nhân viên thành công'), 'success')
+            refetch()
+            setIsExistingUser(true)
+            setIsExistingEmail(true)
             reset()
         }
         if (isError === true) {
             toast(t('Tạo nhân viên thất bại'), 'error')
             reset()
         }
-    }, [isSuccess, isError, toast, t, reset])
+    }, [isSuccess, isError, toast, t, reset, refetch])
 
     const handleSaveAndClose = async () => {
+        setIsSaveAndCloseLoading(true)
         setIsSubmit(true)
         if (
             fullName === '' ||
@@ -147,6 +160,7 @@ const CreateEmployeePage = () => {
             isExistingEmail ||
             !isPasswordValid
         ) {
+            setIsSaveAndCloseLoading(false)
             return
         }
         const data = {
@@ -165,9 +179,13 @@ const CreateEmployeePage = () => {
             IsActive: true,
             AvatarFileId: 0
         }
-        await createUsers(data).unwrap()
+        try {
+            await createUsers(data).unwrap()
+            router.push('/admin/employee')
+        } finally {
+            setIsSaveAndCloseLoading(false)
+        }
         setIsSubmit(false)
-        router.push('/admin/employee')
     }
 
     if (isUsersLoading || isRoleLoading || isDepartmentLoading) return <div>Loading...</div>
@@ -911,9 +929,32 @@ const CreateEmployeePage = () => {
                 />
 
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px', mt: '20px' }}>
+                    <Button
+                        variant='contained'
+                        startIcon={<RefreshCcwIcon />}
+                        sx={{
+                            height: '44px',
+                            backgroundColor: 'var(--button-color)',
+                            width: 'auto',
+                            fontSize: '16px',
+                            '&:hover': {
+                                backgroundColor: 'var(--hover-button-color)'
+                            },
+                            padding: '0px 20px',
+                            fontWeight: 'bold',
+                            whiteSpace: 'nowrap',
+                            textTransform: 'none'
+                        }}
+                        onClick={() => {
+                            window.location.reload();
+                        }}
+                    >
+                        {t('Làm mới')}
+                    </Button>
+
                     <LoadingButton
                         variant='contained'
-                        {...(isLoading && { loading: true })}
+                        loading={isSaveLoading}
                         loadingPosition='start'
                         startIcon={<SaveIcon />}
                         sx={{
@@ -936,7 +977,7 @@ const CreateEmployeePage = () => {
 
                     <LoadingButton
                         variant='contained'
-                        {...(isLoading && { loading: true })}
+                        loading={isSaveAndCloseLoading}
                         loadingPosition='start'
                         startIcon={<SaveIcon />}
                         sx={{

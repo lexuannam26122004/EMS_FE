@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import {
     Box,
     Select,
@@ -45,6 +46,7 @@ const EmployeeTable: React.FC = () => {
         direction: 'asc' | 'desc'
     }>({ key: 'Id', direction: 'asc' })
     const { t } = useTranslation('common')
+    const router = useRouter()
 
     const { data: contractResponse, isLoading: isContractsLoading } = useSearchEmploymentContractsQuery()
     const { data: userResponse, isLoading: isUsersLoading } = useGetAllUsersQuery()
@@ -242,7 +244,7 @@ const EmployeeTable: React.FC = () => {
                                 whiteSpace: 'nowrap',
                                 textTransform: 'none'
                             }}
-                            //onClick={() => router.push('/admin/configuration/create-configuration')}
+                            onClick={() => router.push('/admin/employee/create-employee')}
                         >
                             {t('COMMON.BUTTON.CREATE')}
                         </Button>
