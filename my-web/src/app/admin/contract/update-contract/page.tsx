@@ -53,7 +53,6 @@ const UpdateEmploymentContract = () => {
     const [typeContract, setTypeContract] = useState('')
     const [managerId, setManagerId] = useState('')
 
-
     function formatDate(dateString: string): string {
         const date = new Date(dateString)
         if (isNaN(date.getTime())) {
@@ -65,11 +64,9 @@ const UpdateEmploymentContract = () => {
 
         return `${year}-${month}-${day}`
     }
-    
+
     const toast = useToast()
     const [isSubmit, setIsSubmit] = useState(false)
-
-
 
     const searchParams = useSearchParams()
     const id = searchParams.get('id') || ''
@@ -78,17 +75,17 @@ const UpdateEmploymentContract = () => {
     const data = responseData?.Data
     useEffect(() => {
         if (!isFetchingGetById && data) {
-            setUserId(data.UserId)
-            setContractName(data.ContractName); 
-            setStartDate(formatDate(data.StartDate)); 
-            setEndDate(formatDate(data.EndDate));
-            setBasicSalary(data.BasicSalary); 
-            setClause(data.Clause); 
-            setProbationPeriod(data.ProbationPeriod);
-            setWorkingHours(data.WorkingHours);
-            setTerminationClause(data.TerminationClause); 
-            setTypeContract(data.TypeContract); 
-            setManagerId(data.ManagerId); 
+            setUserId(data.UserId || '')
+            setContractName(data.ContractName || '')
+            setStartDate(formatDate(data.StartDate))
+            setEndDate(formatDate(data.EndDate))
+            setBasicSalary(data.BasicSalary || '')
+            setClause(data.Clause || '')
+            setProbationPeriod(data.ProbationPeriod || '')
+            setWorkingHours(data.WorkingHours || '')
+            setTerminationClause(data.TerminationClause || '')
+            setTypeContract(data.TypeContract || '')
+            setManagerId(data.ManagerId || '')
         }
     }, [data, isFetchingGetById])
 
