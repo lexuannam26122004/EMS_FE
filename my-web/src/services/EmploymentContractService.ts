@@ -33,6 +33,13 @@ export const EmploymentContractApi = createApi({
 
         getByIdEmploymentContracts: builder.query<EmploymentContractResponse, string>({
             query: id => `GetById/${id}`
+        }),
+
+        changeStatusEmploymentContracts: builder.mutation<void, string>({
+            query: id => ({
+                url: `ChangeStatus/${id}/status`,
+                method: 'PUT'
+            })
         })
     })
 })
@@ -41,5 +48,6 @@ export const {
     useSearchEmploymentContractsQuery,
     useCreateEmploymentContractsMutation,
     useGetByIdEmploymentContractsQuery,
-    useUpdateEmploymentContractsMutation
+    useUpdateEmploymentContractsMutation,
+    useChangeStatusEmploymentContractsMutation
 } = EmploymentContractApi
