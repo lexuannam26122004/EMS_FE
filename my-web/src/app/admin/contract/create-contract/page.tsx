@@ -9,9 +9,6 @@ import {
     MenuItem,
     FormControl,
     InputLabel,
-    FormHelperText,
-    Checkbox,
-    ListItemText,
     Autocomplete,
     Avatar
 } from '@mui/material'
@@ -233,7 +230,12 @@ const CreateEmploymentContract = () => {
                                             display: 'flex',
                                             alignItems: 'center',
                                             gap: '10px',
-                                            padding: '8px'
+                                            padding: '8px',
+                                            color: 'var(--text-color)',
+                                            backgroundColor: 'var(--background-color)',
+                                            '&:hover': {
+                                                color: 'black'
+                                            }
                                         }}
                                     >
                                         <Avatar
@@ -317,7 +319,12 @@ const CreateEmploymentContract = () => {
                                             display: 'flex',
                                             alignItems: 'center',
                                             gap: '10px',
-                                            padding: '8px'
+                                            padding: '8px',
+                                            color: 'var(--text-color)',
+                                            backgroundColor: 'var(--background-color)',
+                                            '&:hover': {
+                                                color: 'black'
+                                            }
                                         }}
                                     >
                                         <Avatar
