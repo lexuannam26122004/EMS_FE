@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import {
     Box,
     Select,
@@ -46,7 +47,7 @@ const EmployeeTable: React.FC = () => {
         direction: 'asc' | 'desc'
     }>({ key: 'Id', direction: 'asc' })
     const { t } = useTranslation('common')
-
+    const router = useRouter()
     const { data: contractResponse, isLoading: isContractsLoading } = useSearchEmploymentContractsQuery()
     const { data: userResponse, isLoading: isUsersLoading } = useGetAllUsersQuery()
 
@@ -83,10 +84,18 @@ const EmployeeTable: React.FC = () => {
         setSelected(prev => (prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]))
     }
 
+
     const sortedUsers = filteredUsers.sort((a, b) => {
-        const aValue = a[sortConfig.key]?.toString().toLowerCase() || ''
-        const bValue = b[sortConfig.key]?.toString().toLowerCase() || ''
-        return sortConfig.direction === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue)
+        const aValue = a[sortConfig.key]
+        const bValue = b[sortConfig.key]
+
+        if (typeof aValue === 'number' && typeof bValue === 'number') {
+            return sortConfig.direction === 'asc' ? aValue - bValue : bValue - aValue
+        } else {
+            const aString = aValue?.toString().toLowerCase() || ''
+            const bString = bValue?.toString().toLowerCase() || ''
+            return sortConfig.direction === 'asc' ? aString.localeCompare(bString) : bString.localeCompare(aString)
+        }
     })
 
     const totalRecords = sortedUsers.length
@@ -238,7 +247,7 @@ const EmployeeTable: React.FC = () => {
                                 whiteSpace: 'nowrap',
                                 textTransform: 'none'
                             }}
-                            //onClick={() => router.push('/admin/configuration/create-configuration')}
+                            onClick={() => router.push('/admin/contract/create-contract')}
                         >
                             {t('COMMON.BUTTON.CREATE')}
                         </Button>
@@ -304,21 +313,7 @@ const EmployeeTable: React.FC = () => {
                                     </TableSortLabel>
                                 </TableCell>
 
-                                <TableCell sx={{ borderColor: 'var(--border-color)' }}>
-                                    <Typography
-                                        sx={{
-                                            fontWeight: 'bold',
-                                            color: 'var(--text-color)',
-                                            fontSize: '16px',
-                                            overflow: 'hidden',
-                                            maxWidth: '260px',
-                                            textOverflow: 'ellipsis',
-                                            whiteSpace: 'nowrap'
-                                        }}
-                                    >
-                                        Avatar
-                                    </Typography>
-                                </TableCell>
+                               
 
                                 {['FullName', 'UserId', 'ContractName', 'StartDate', 'BasicSalary'].map(
                                     (column, index) => (
@@ -407,9 +402,6 @@ const EmployeeTable: React.FC = () => {
                                     </TableCell>
 
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
-                                        <Avatar src={user.AvatarPath} alt='Avatar' />
-                                    </TableCell>
-                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                         <Typography
                                             sx={{
                                                 fontWeight: 'bold',
@@ -418,13 +410,23 @@ const EmployeeTable: React.FC = () => {
                                                 overflow: 'hidden',
                                                 maxWidth: '260px',
                                                 textOverflow: 'ellipsis',
-                                                whiteSpace: 'nowrap'
+                                                whiteSpace: 'nowrap',
+                                                display: 'flex',       // Dùng Flexbox để căn chỉnh
+                                                alignItems: 'center',
                                             }}
                                         >
-                                            {user.FullName}
+                                            <Avatar
+                                                src={
+                                                    user.AvatarPath ||
+                                                    'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'
+                                                }
+                                                alt='Avatar'
+                                                sx={{ marginRight: '20px' }} 
+                                            />
+                                            {user.FullName || 'N/A'}
                                         </Typography>
                                     </TableCell>
-
+                                    
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                         <Typography
                                             sx={{

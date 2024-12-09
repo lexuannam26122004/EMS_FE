@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState} from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import {
     Box,
@@ -342,21 +342,7 @@ const EmployeeTable: React.FC = () => {
                                         </Typography>
                                     </TableSortLabel>
                                 </TableCell>
-                                <TableCell sx={{ borderColor: 'var(--border-color)' }}>
-                                    <Typography
-                                        sx={{
-                                            fontWeight: 'bold',
-                                            color: 'var(--text-color)',
-                                            fontSize: '16px',
-                                            overflow: 'hidden',
-                                            maxWidth: '260px',
-                                            textOverflow: 'ellipsis',
-                                            whiteSpace: 'nowrap'
-                                        }}
-                                    >
-                                        Avatar
-                                    </Typography>
-                                </TableCell>
+
                                 {[
                                     'FullName',
                                     'Email',
@@ -452,15 +438,7 @@ const EmployeeTable: React.FC = () => {
                                             {user.Id}
                                         </Typography>
                                     </TableCell>
-                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
-                                        <Avatar
-                                            src={
-                                                user.AvatarPath ||
-                                                'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'
-                                            }
-                                            alt='Avatar'
-                                        />
-                                    </TableCell>
+
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                         <Typography
                                             sx={{
@@ -470,9 +448,19 @@ const EmployeeTable: React.FC = () => {
                                                 overflow: 'hidden',
                                                 maxWidth: '260px',
                                                 textOverflow: 'ellipsis',
-                                                whiteSpace: 'nowrap'
+                                                whiteSpace: 'nowrap',
+                                                display: 'flex',       // Dùng Flexbox để căn chỉnh
+                                                alignItems: 'center',
                                             }}
                                         >
+                                            <Avatar
+                                                src={
+                                                    user.AvatarPath ||
+                                                    'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'
+                                                }
+                                                alt='Avatar'
+                                                sx={{ marginRight: '20px' }} 
+                                            />
                                             {user.FullName || 'N/A'}
                                         </Typography>
                                     </TableCell>
