@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { IEmploymentContractCreate } from '@/models/EmploymentContract'
+import { IEmploymentContractCreate, IEmploymentContractUpdate } from '@/models/EmploymentContract'
 interface EmploymentContractResponse {
     Success: boolean
     Data: any
@@ -21,8 +21,25 @@ export const EmploymentContractApi = createApi({
                 method: 'POST',
                 body: body
             })
+        }),
+
+        updateEmploymentContracts: builder.mutation<void, IEmploymentContractUpdate>({
+            query: body => ({
+                url: `Update`,
+                method: 'PUT',
+                body: body
+            })
+        }),
+
+        getByIdEmploymentContracts: builder.query<EmploymentContractResponse, string>({
+            query: id => `GetById/${id}`
         })
     })
 })
 
-export const { useSearchEmploymentContractsQuery, useCreateEmploymentContractsMutation } = EmploymentContractApi
+export const {
+    useSearchEmploymentContractsQuery,
+    useCreateEmploymentContractsMutation,
+    useGetByIdEmploymentContractsQuery,
+    useUpdateEmploymentContractsMutation
+} = EmploymentContractApi

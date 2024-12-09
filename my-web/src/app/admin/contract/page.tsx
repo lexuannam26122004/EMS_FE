@@ -538,7 +538,9 @@ const EmployeeTable: React.FC = () => {
                                                             backgroundColor: 'var(--hover-color)'
                                                         }
                                                     }}
-                                                    //onClick={() => handleButtonUpdateClick(row.Id)}
+                                                    onClick={() =>
+                                                        router.push(`/admin/contract/update-contract?id=${user.Id}`)
+                                                    }
                                                 >
                                                     <Pencil />
                                                 </Box>

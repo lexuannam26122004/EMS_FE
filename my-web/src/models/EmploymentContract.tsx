@@ -28,3 +28,20 @@ export interface IEmploymentContractCreate {
     TypeContract: string
     ManagerId: string
 }
+
+export interface IEmploymentContractUpdate {
+    Id: string
+    UserId: string
+    ContractName: string
+    StartDate: Date
+    EndDate: Date
+    BasicSalary: number
+    Clause: string
+    IsActive: boolean
+    ProbationPeriod: number
+    WorkingHours: number
+    TerminationClause: string
+    ContractFileId: number
+    TypeContract: string
+    ManagerId: string
+}
