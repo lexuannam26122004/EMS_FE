@@ -212,7 +212,7 @@ const UpdateEmployeePage = () => {
                 }}
             >
                 <Typography sx={{ fontWeight: 'bold', fontSize: '22px', color: 'var(--text-color)' }}>
-                    {'Update a New Employee'}
+                    {'Update a Employee'}
                 </Typography>
                 <Box
                     sx={{
