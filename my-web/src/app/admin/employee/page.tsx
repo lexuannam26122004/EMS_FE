@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState} from 'react'
 import { useRouter } from 'next/navigation'
 import {
     Box,
@@ -50,7 +50,7 @@ const EmployeeTable: React.FC = () => {
     const { t } = useTranslation('common')
     const router = useRouter()
 
-    const [changeEmployee, { isSuccess: isSuccessChange }] = useChangeStatusUsersMutation()
+    const [changeEmployee] = useChangeStatusUsersMutation()
 
     const { data: contractResponse, isLoading: isContractsLoading } = useSearchEmploymentContractsQuery()
     const { data: userResponse, isLoading: isUsersLoading, refetch } = useGetAllUsersQuery()
