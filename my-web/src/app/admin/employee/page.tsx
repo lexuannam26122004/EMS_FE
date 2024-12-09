@@ -449,9 +449,10 @@ const EmployeeTable: React.FC = () => {
                                                 maxWidth: '260px',
                                                 textOverflow: 'ellipsis',
                                                 whiteSpace: 'nowrap',
-                                                display: 'flex',       // Dùng Flexbox để căn chỉnh
+                                                display: 'flex',     
                                                 alignItems: 'center',
                                             }}
+                                            component="div"
                                         >
                                             <Avatar
                                                 src={
