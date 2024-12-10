@@ -52,6 +52,7 @@ body {
     --text-label-color: #494949;
     --hover-button-color: #03d794;
     --border-alert-color: #3e3e3e;
+    --selected-tab: #00b7ff;
     --icon-delete-chip-color: #e5e7eb;
     --hover-icon-delete-chip-color: #8f8f8f;
     --search-color: #1c1c1c;
@@ -66,6 +67,7 @@ body {
     --selected-color: #bcd7ff;
     --menu-color: #fff;
     --text-role-color: #ed0000;
+    --selected-tab: #0000ff;
     --filter-color: drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.32));
     --skeleton-color: #e7e7e7;
     --scrollbar-color: #e4e4e7;

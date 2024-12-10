@@ -17,11 +17,21 @@ import {
     CalendarClock,
     SlidersHorizontal
 } from 'lucide-react'
-import { ChartNoAxesCombined, Users, FileSignature, Stethoscope, Award, CalendarX, BellRing } from 'lucide-react'
+import {
+    ChartNoAxesCombined,
+    Users,
+    FileSignature,
+    Stethoscope,
+    Award,
+    CalendarX,
+    BellRing,
+    CalendarHeart
+} from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import Header from './Header'
 import { useTranslation } from 'react-i18next'
 import NotificationRealTime from './NotificationRealTime'
+import Chat from './chat'
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const pathname = usePathname()
@@ -83,6 +93,12 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                     route='/admin/time-off'
                     alert={true}
                     active={pathname === '/admin/time-off'}
+                />
+                <SidebarItem
+                    icon={<CalendarHeart />}
+                    text={t('COMMON.SIDEBAR.HOLIDAY')}
+                    route='/admin/holiday'
+                    active={pathname === '/admin/holiday'}
                 />
                 <SidebarItem
                     icon={<ShieldCheck />}
@@ -203,6 +219,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             </Box>
 
             <NotificationRealTime />
+            <Chat />
         </div>
     )
 }
