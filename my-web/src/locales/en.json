@@ -231,11 +231,6 @@
             "NOTE": "Note",
             "ACTION": "Action",
             "TITLE": "Create a New Holiday"
-                "CREATE_ERROR": "Create Configuration error",
-                "UPDATE_ERROR": "Update Configuration error",
-                "DELETE_ERROR": "Delete Configuration error"
-            },
-            "VIEW_DETAIL": "View detail Configuration"
         },
         "WORK_SHIFT": {
             "SHIFT_NAME": "Shift name",

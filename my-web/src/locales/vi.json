@@ -230,9 +230,8 @@
             "NOTE": "Mô tả ngày lễ",
             "ACTION": "Hành động",
             "TITLE": "Tạo một ngày nghỉ lễ"
-            },
-            "VIEW_DETAIL": "Xem chi tiết Cấu hình"
         },
+
         "CREATE_NOTIFICATION": {
             "TITLE_PAGE": "Tạo thông báo mới",
             "TITLE*": "Tiêu đề*",
