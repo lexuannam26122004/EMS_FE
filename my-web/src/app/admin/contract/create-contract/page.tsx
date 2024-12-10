@@ -215,11 +215,21 @@ const CreateEmploymentContract = () => {
                                 },
                                 '& .MuiInputLabel-root.Mui-focused': {
                                     color: 'var(--selected-color)'
+                                },
+                                '& .MuiAutocomplete-popupIndicator': {
+                                    '& svg': {
+                                        fill: 'var(--text-color)'
+                                    }
+                                },
+                                '& .MuiAutocomplete-clearIndicator': {
+                                    '& svg': {
+                                        fill: 'var(--text-color)'
+                                    }
                                 }
                             }}
                             options={employee}
                             getOptionLabel={option => `${option.Id} - ${option.FullName}`}
-                            renderOption={(props, option) => {
+                            renderOption={(props, option, { selected }) => {
                                 const { key, ...otherProps } = props
                                 return (
                                     <Box
@@ -231,7 +241,7 @@ const CreateEmploymentContract = () => {
                                             alignItems: 'center',
                                             gap: '10px',
                                             padding: '8px',
-                                            color: 'var(--text-color)',
+                                            color: selected ? 'black' : 'var(--text-color)',
                                             backgroundColor: 'var(--background-color)',
                                             '&:hover': {
                                                 color: 'black'
@@ -304,11 +314,21 @@ const CreateEmploymentContract = () => {
                                 },
                                 '& .MuiInputLabel-root.Mui-focused': {
                                     color: 'var(--selected-color)'
+                                },
+                                '& .MuiAutocomplete-popupIndicator': {
+                                    '& svg': {
+                                        fill: 'var(--text-color)'
+                                    }
+                                },
+                                '& .MuiAutocomplete-clearIndicator': {
+                                    '& svg': {
+                                        fill: 'var(--text-color)'
+                                    }
                                 }
                             }}
                             options={employee}
                             getOptionLabel={option => `${option.Id} - ${option.FullName}`}
-                            renderOption={(props, option) => {
+                            renderOption={(props, option, { selected }) => {
                                 const { key, ...otherProps } = props
                                 return (
                                     <Box
@@ -320,7 +340,7 @@ const CreateEmploymentContract = () => {
                                             alignItems: 'center',
                                             gap: '10px',
                                             padding: '8px',
-                                            color: 'var(--text-color)',
+                                            color: selected ? 'black' : 'var(--text-color)',
                                             backgroundColor: 'var(--background-color)',
                                             '&:hover': {
                                                 color: 'black'
