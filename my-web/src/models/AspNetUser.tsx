@@ -1,6 +1,6 @@
 export interface IAspNetUserGetAll {
     Id: string
-    FullName: string | null
+    FullName: string
     UserName: string
     Email: string
     PhoneNumber: string | null

@@ -190,7 +190,12 @@ function NotificationRealTime() {
                                 }}
                                 className={'text-[var(--text-role-color)] font-bold'}
                             >
-                                {getTimeDifferenceText(currentNotificationAlert.SentTime, t)}
+                                {getTimeDifferenceText(
+                                    new Date(
+                                        new Date(currentNotificationAlert.SentTime).getTime() - 7 * 60 * 60 * 1000
+                                    ).toISOString(),
+                                    t
+                                )}
                             </Typography>
                         </Box>
                     </Box>

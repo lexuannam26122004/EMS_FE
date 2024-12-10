@@ -128,13 +128,13 @@ function NotificationModal({ notificationId, open, handleClose }: NotificationMo
                         height: '85vh',
                         width: '100%',
                         flexGrow: 1,
-                        paddingInline: 2,
-                        paddingBlock: 1.8,
+                        padding: '20px 3px 20px 10px',
                         borderWidth: '0px',
                         borderStyle: 'solid',
                         borderColor: 'divider',
                         display: 'flex',
                         flexDirection: 'column',
+                        scrollbarGutter: 'stable',
                         justifyContent: 'space-between',
                         overflow: 'auto',
                         '&::-webkit-scrollbar': {
@@ -282,15 +282,15 @@ function NotificationModal({ notificationId, open, handleClose }: NotificationMo
 
                             {notificationData?.ListFile && notificationData.ListFile.length > 0 && (
                                 <Box>
-                                    <Divider
+                                    {/* <Divider
                                         sx={{
                                             borderColor: 'var(--border-color)',
                                             mt: '10px',
-                                            marginLeft: -1,
+                                            marginLeft: -2,
                                             marginRight: -2
                                         }}
-                                    />
-                                    <ImageGrid images={notificationData.ListFile} />
+                                    /> */}
+                                    <ImageGrid files={notificationData.ListFile} />
                                 </Box>
                             )}
                         </Box>

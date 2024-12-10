@@ -59,12 +59,26 @@
             "EDIT": "Edit",
             "UPDATING": "Updating",
             "DELETE": "Delete",
+            "AFTER": "After",
+            "BEFORE": "Before",
             "VIEW_DETAIL": "View detail",
-            "CLOSE": "Close"
+            "CLOSE": "Close",
+            "SELECT": "Select",
+            "UNSELECT": "Unselect"
         },
         "TEXTFIELD": {
             "SEARCH": "Search",
             "REQUIRED": "This field is required*"
+        },
+        "NOTIFICATION_TYPE": {
+            "PUBLIC": "Public",
+            "SALARY": "Salary",
+            "REWARD": "Reward",
+            "INSURANCE": "Insurance",
+            "DISCIPLINE": "Discipline",
+            "BENEFIT": "Benefit",
+            "HOLIDAY": "Holiday",
+            "TIMEKEEPING": "Timekeeping"
         },
         "NOTIFICATION": {
             "TITLE": "Notification",
@@ -205,10 +219,63 @@
                 "CREATE_SUCCESS": "Create a Configuration successfully",
                 "UPDATE_SUCCESS": "Update Configuration successfully",
                 "DELETE_SUCCESS": "Delete Configuration successfully",
-                "CREATE_ERROR": "Create Configuration failed",
-                "UPDATE_ERROR": "Update Configuration failed",
-                "DELETE_ERROR": "Delete Configuration failed"
-            }
+                "CREATE_ERROR": "Create Configuration error",
+                "UPDATE_ERROR": "Update Configuration error",
+                "DELETE_ERROR": "Delete Configuration error"
+            },
+            "VIEW_DETAIL": "View detail Configuration"
+        },
+        "WORK_SHIFT": {
+            "SHIFT_NAME": "Shift name",
+            "START_TIME": "Start time",
+            "END_TIME": "End time",
+            "DESCRIPTION": "Description",
+            "CREATED_DATE": "Created Date",
+            "CREATED_BY": "Created By",
+            "ACTION": "Action",
+            "PLACEHOLDER_SEARCH": "Search for Shift Name",
+            "ACTION_WORK_SHIFT": {
+                "CREATE_TITLE": "Create a new Work shift",
+                "UPDATE_TITLE": "Update a Work shift",
+                "SHIFT_NAME": "Shift name*",
+                "START_TIME": "Start time*",
+                "END_TIME": "End time*",
+                "DESCRIPTION": "Description",
+                "CREATE_SUCCESS": "Create a Work shift successfully",
+                "UPDATE_SUCCESS": "Update Work shift successfully",
+                "DELETE_SUCCESS": "Delete Work shift successfully",
+                "CREATE_ERROR": "Create Work shift error",
+                "UPDATE_ERROR": "Update Work shift error",
+                "DELETE_ERROR": "Delete Work shift error"
+            },
+            "VIEW_DETAIL": "View detail Work shift"
+        },
+        "CREATE_NOTIFICATION": {
+            "TITLE_PAGE": "Create a Notification",
+            "TITLE*": "Title*",
+            "TYPE": "Type*",
+            "CONTENT*": "Content*",
+            "TITLE": "Title",
+            "CONTENT": "Content",
+            "DEPARTMENT_AND_ROLE": "By Departments and Roles",
+            "ALL_USERS": "All",
+            "ADD_IMAGES_OR_FILES": "Add images or files",
+            "BY_ROLE": "By roles",
+            "BY_DEPARTMENT": "By departments",
+            "BY_ROLE_H": "By roles: ",
+            "SEARCH_USERS": "Search users",
+            "EMPTY": "Empty",
+            "NOT_FOUND": "No results found",
+            "BY_DEPARTMENT_H": "By departments: ",
+            "SPECIFIC_USERS": "Specific users",
+            "USERS_WILL_SEE_THE_POST": "Users will see the post",
+            "USERS_TO_NOTIFY": "Users to notify",
+            "CREATE_SUCCESS": "Create a Notification successfully",
+            "UPDATE_SUCCESS": "Update Notification successfully",
+            "DELETE_SUCCESS": "Delete Notification successfully",
+            "CREATE_ERROR": "Create Notification error",
+            "UPDATE_ERROR": "Update Notification error",
+            "DELETE_ERROR": "Delete Notification error"
         }
     }
 }

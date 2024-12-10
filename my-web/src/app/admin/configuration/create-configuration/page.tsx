@@ -63,6 +63,7 @@ function createConfigurationPage() {
     return (
         <Box sx={{ width: '100%' }}>
             <Paper
+                elevation={0}
                 sx={{
                     width: '100%',
                     overflow: 'hidden',

@@ -1,10 +1,10 @@
 'use client'
-import { IFilterSysConfiguration, IGetAllSysConfiguration } from '@/models/SysConfiguration'
+import { IFilterWorkShift, IGetAllWorkShift } from '@/models/WorkShift'
 import {
-    useSearchSysConfigurationQuery,
-    useChangeStatusSysConfigurationMutation,
-    useChangeStatusManySysConfigurationMutation
-} from '@/services/SysConfigurationService'
+    useSearchWorkShiftQuery,
+    useChangeStatusWorkShiftMutation,
+    useChangeStatusManyWorkShiftMutation
+} from '@/services/WorkShiftService'
 import { formatDate } from '@/utils/formatDate'
 import {
     Box,
@@ -36,7 +36,7 @@ import { CirclePlus, EyeIcon, Pencil, Trash2 } from 'lucide-react'
 import AlertDialog from '@/components/AlertDialog'
 import DetailModal from './DetailModal'
 
-function ConfigurationPage() {
+function WorkShiftPage() {
     const { t } = useTranslation('common')
     const router = useRouter()
     const [selected, setSelected] = useState<number[]>([])
@@ -44,7 +44,7 @@ function ConfigurationPage() {
     const [rowsPerPage, setRowsPerPage] = useState('10')
     const [from, setFrom] = useState(1)
     const [to, setTo] = useState(10)
-    const [filter, setFilter] = useState<IFilterSysConfiguration>({
+    const [filter, setFilter] = useState<IFilterWorkShift>({
         pageSize: 10,
         pageNumber: 1
     })
@@ -54,23 +54,23 @@ function ConfigurationPage() {
     const [selectedRow, setSelectedRow] = useState<number | null>(null)
     const [order, setOrder] = useState<'asc' | 'desc'>('asc')
     const [orderBy, setOrderBy] = useState<string>('')
-    const [selectedConfig, setSelectedConfig] = useState<IGetAllSysConfiguration | null>(null)
+    const [selectedWorkShift, setSelectedWorkShift] = useState<IGetAllWorkShift | null>(null)
     const [openModal, setOpenModal] = useState(false)
 
-    const { data: responseData, isFetching, refetch } = useSearchSysConfigurationQuery(filter)
-    const [changeSysConfiguration, { isError: isErrorChange, isSuccess: isSuccessChange, isLoading: isLoadingChange }] =
-        useChangeStatusSysConfigurationMutation()
+    const { data: responseData, isFetching, refetch } = useSearchWorkShiftQuery(filter)
+    const [changeWorkShift, { isError: isErrorChange, isSuccess: isSuccessChange, isLoading: isLoadingChange }] =
+        useChangeStatusWorkShiftMutation()
     const [
-        changeManySysConfiguration,
+        changeManyWorkShift,
         { isError: isErrorChangeMany, isSuccess: isSuccessChangeMany, isLoading: isLoadingChangeMany }
-    ] = useChangeStatusManySysConfigurationMutation()
+    ] = useChangeStatusManyWorkShiftMutation()
 
-    const handleClickDetail = (config: IGetAllSysConfiguration) => {
-        setSelectedConfig(config)
+    const handleClickDetail = (workShift: IGetAllWorkShift) => {
+        setSelectedWorkShift(workShift)
         setOpenModal(true)
     }
 
-    const sysConfigurationData = responseData?.Data.Records as IGetAllSysConfiguration[]
+    const workShiftData = responseData?.Data.Records as IGetAllWorkShift[]
     const totalRecords = responseData?.Data.TotalRecords as number
 
     const isSelected = (id: number) => selected.includes(id)
@@ -81,7 +81,7 @@ function ConfigurationPage() {
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
-            setSelected(sysConfigurationData.map(row => row.Id))
+            setSelected(workShiftData.map(row => row.Id))
         } else {
             setSelected([])
         }
@@ -122,10 +122,10 @@ function ConfigurationPage() {
 
     useEffect(() => {
         if (!isFetching && responseData?.Data) {
-            const from = (page - 1) * Number(rowsPerPage) + Math.min(1, sysConfigurationData.length)
+            const from = (page - 1) * Number(rowsPerPage) + Math.min(1, workShiftData.length)
             setFrom(from)
 
-            const to = Math.min(sysConfigurationData.length + (page - 1) * Number(rowsPerPage), totalRecords)
+            const to = Math.min(workShiftData.length + (page - 1) * Number(rowsPerPage), totalRecords)
             setTo(to)
         }
     }, [isFetching, responseData, page, rowsPerPage])
@@ -135,7 +135,7 @@ function ConfigurationPage() {
     }, [filter])
 
     const handleButtonUpdateClick = (id: number) => {
-        router.push(`/admin/configuration/update-configuration?id=${id}`)
+        router.push(`/admin/work-shift/update?id=${id}`)
     }
 
     const handleDeleteClick = async (id: number) => {
@@ -143,9 +143,9 @@ function ConfigurationPage() {
         setSelectedRow(id)
     }
 
-    const handleDeleteSysConfiguration = async () => {
+    const handleDeleteWorkShift = async () => {
         if (selectedRow) {
-            await changeSysConfiguration(selectedRow)
+            await changeWorkShift(selectedRow)
             if (isSelected(selectedRow)) {
                 setSelected(prev => prev.filter(item => item !== selectedRow))
             }
@@ -159,9 +159,9 @@ function ConfigurationPage() {
         setOpenDialog(true)
     }
 
-    const handleDeleteManySysConfiguration = async () => {
+    const handleDeleteManyWorkShift = async () => {
         if (selected.length > 0) {
-            await changeManySysConfiguration(selected)
+            await changeManyWorkShift(selected)
             setIsChangeMany(false)
             setSelected([])
             setOpenDialog(false)
@@ -205,7 +205,7 @@ function ConfigurationPage() {
                         <TextField
                             id='location-search'
                             type='search'
-                            placeholder={t('COMMON.SYS_CONFIGURATION.PLACEHOLDER_SEARCH')}
+                            placeholder={t('COMMON.WORK_SHIFT.PLACEHOLDER_SEARCH')}
                             variant='outlined'
                             required
                             value={keyword}
@@ -312,7 +312,7 @@ function ConfigurationPage() {
                                 whiteSpace: 'nowrap',
                                 textTransform: 'none'
                             }}
-                            onClick={() => router.push('/admin/configuration/create-configuration')}
+                            onClick={() => router.push('/admin/work-shift/create')}
                         >
                             {t('COMMON.BUTTON.CREATE')}
                         </Button>
@@ -340,12 +340,10 @@ function ConfigurationPage() {
                                     sx={{ borderColor: 'var(--border-color)', paddingLeft: '8.5px' }}
                                 >
                                     <Checkbox
-                                        indeterminate={
-                                            selected.length > 0 && selected.length < sysConfigurationData.length
-                                        }
+                                        indeterminate={selected.length > 0 && selected.length < workShiftData.length}
                                         checked={
-                                            sysConfigurationData && selected.length > 0
-                                                ? selected.length === sysConfigurationData.length
+                                            workShiftData && selected.length > 0
+                                                ? selected.length === workShiftData.length
                                                 : false
                                         }
                                         onChange={handleSelectAllClick}
@@ -383,9 +381,9 @@ function ConfigurationPage() {
                                 </TableCell>
                                 <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                     <TableSortLabel
-                                        active={'Key' === orderBy}
-                                        direction={orderBy === 'Key' ? order : 'asc'}
-                                        onClick={() => handleSort('Key')}
+                                        active={'ShiftName' === orderBy}
+                                        direction={orderBy === 'ShiftName' ? order : 'asc'}
+                                        onClick={() => handleSort('ShiftName')}
                                         sx={{
                                             '& .MuiTableSortLabel-icon': {
                                                 color: 'var(--text-color) !important'
@@ -403,15 +401,15 @@ function ConfigurationPage() {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {t('COMMON.SYS_CONFIGURATION.KEY')}
+                                            {t('COMMON.WORK_SHIFT.SHIFT_NAME')}
                                         </Typography>
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                     <TableSortLabel
-                                        active={'Type' === orderBy}
-                                        direction={orderBy === 'Type' ? order : 'asc'}
-                                        onClick={() => handleSort('Type')}
+                                        active={'StartTime' === orderBy}
+                                        direction={orderBy === 'StartTime' ? order : 'asc'}
+                                        onClick={() => handleSort('StartTime')}
                                         sx={{
                                             '& .MuiTableSortLabel-icon': {
                                                 color: 'var(--text-color) !important'
@@ -429,15 +427,15 @@ function ConfigurationPage() {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {t('COMMON.SYS_CONFIGURATION.TYPE')}
+                                            {t('COMMON.WORK_SHIFT.START_TIME')}
                                         </Typography>
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                     <TableSortLabel
-                                        active={'Value' === orderBy}
-                                        direction={orderBy === 'Value' ? order : 'asc'}
-                                        onClick={() => handleSort('Value')}
+                                        active={'EndTime' === orderBy}
+                                        direction={orderBy === 'EndTime' ? order : 'asc'}
+                                        onClick={() => handleSort('EndTime')}
                                         sx={{
                                             '& .MuiTableSortLabel-icon': {
                                                 color: 'var(--text-color) !important'
@@ -455,7 +453,7 @@ function ConfigurationPage() {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {t('COMMON.SYS_CONFIGURATION.VALUE')}
+                                            {t('COMMON.WORK_SHIFT.END_TIME')}
                                         </Typography>
                                     </TableSortLabel>
                                 </TableCell>
@@ -481,7 +479,7 @@ function ConfigurationPage() {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {t('COMMON.SYS_CONFIGURATION.DESCRIPTION')}
+                                            {t('COMMON.WORK_SHIFT.DESCRIPTION')}
                                         </Typography>
                                     </TableSortLabel>
                                 </TableCell>
@@ -506,7 +504,7 @@ function ConfigurationPage() {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {t('COMMON.SYS_CONFIGURATION.CREATED_DATE')}
+                                            {t('COMMON.WORK_SHIFT.CREATED_DATE')}
                                         </Typography>
                                     </TableSortLabel>
                                 </TableCell>
@@ -532,7 +530,7 @@ function ConfigurationPage() {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {t('COMMON.SYS_CONFIGURATION.CREATED_BY')}
+                                            {t('COMMON.WORK_SHIFT.CREATED_BY')}
                                         </Typography>
                                     </TableSortLabel>
                                 </TableCell>
@@ -555,14 +553,14 @@ function ConfigurationPage() {
                                             whiteSpace: 'nowrap'
                                         }}
                                     >
-                                        {t('COMMON.SYS_CONFIGURATION.ACTION')}
+                                        {t('COMMON.WORK_SHIFT.ACTION')}
                                     </Typography>
                                 </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {sysConfigurationData &&
-                                sysConfigurationData.map(row => (
+                            {workShiftData &&
+                                workShiftData.map(row => (
                                     <TableRow key={row.Id} selected={isSelected(row.Id)}>
                                         <TableCell
                                             padding='checkbox'
@@ -606,7 +604,7 @@ function ConfigurationPage() {
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                {row.Key}
+                                                {row.ShiftName}
                                             </Typography>
                                         </TableCell>
                                         <TableCell sx={{ borderColor: 'var(--border-color)' }}>
@@ -620,7 +618,7 @@ function ConfigurationPage() {
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                {row.Type}
+                                                {row.StartTime}
                                             </Typography>
                                         </TableCell>
                                         <TableCell sx={{ borderColor: 'var(--border-color)' }}>
@@ -634,7 +632,7 @@ function ConfigurationPage() {
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                {row.Value}
+                                                {row.EndTime}
                                             </Typography>
                                         </TableCell>
                                         <TableCell sx={{ borderColor: 'var(--border-color)' }}>
@@ -866,14 +864,14 @@ function ConfigurationPage() {
                 setOpen={setOpenDialog}
                 buttonCancel={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.CANCEL')}
                 buttonConfirm={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.DELETE')}
-                onConfirm={() => (isChangeMany ? handleDeleteManySysConfiguration() : handleDeleteSysConfiguration())}
+                onConfirm={() => (isChangeMany ? handleDeleteManyWorkShift() : handleDeleteWorkShift())}
             />
 
-            {selectedConfig && (
-                <DetailModal handleToggle={() => setOpenModal(false)} open={openModal} configuration={selectedConfig} />
+            {selectedWorkShift && (
+                <DetailModal handleToggle={() => setOpenModal(false)} open={openModal} workShift={selectedWorkShift} />
             )}
         </Box>
     )
 }
 
-export default ConfigurationPage
+export default WorkShiftPage

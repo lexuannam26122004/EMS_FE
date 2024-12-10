@@ -3,85 +3,67 @@ import { Box, Button, Grid2, Paper, TextField, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { SaveIcon, XIcon, Loader } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useUpdateSysConfigurationMutation, useGetByIdSysConfigurationQuery } from '@/services/SysConfigurationService'
+import { useCreateWorkShiftMutation } from '@/services/WorkShiftService'
 import { useEffect, useState } from 'react'
 import LoadingButton from '@mui/lab/LoadingButton'
 import { useToast } from '@/hooks/useToast'
-import { useSearchParams } from 'next/navigation'
 
-function updateConfigurationPage() {
+function createWorkShiftPage() {
     const { t } = useTranslation('common')
     const router = useRouter()
-    const [key, setKey] = useState('')
-    const [type, setType] = useState('')
-    const [value, setValue] = useState('')
+    const [shiftName, setShiftName] = useState('')
+    const [startTime, setStartTime] = useState('')
+    const [endTime, setEndTime] = useState('')
     const [description, setDescription] = useState('')
     const toast = useToast()
     const [isSubmit, setIsSubmit] = useState(false)
 
-    const searchParams = useSearchParams()
-    const id = searchParams.get('id') ? parseInt(searchParams.get('id') as string) : 0
-
-    const { data: responseData, isFetching: isFetchingGetById, refetch } = useGetByIdSysConfigurationQuery(id)
-    const [updateSysConfiguration, { isSuccess, isLoading, isError }] = useUpdateSysConfigurationMutation()
-
-    const data = responseData?.Data
-    useEffect(() => {
-        if (!isFetchingGetById && data) {
-            setKey(data.Key)
-            setType(data.Type)
-            setValue(data.Value)
-            setDescription(data.Description)
-        }
-    }, [data, isFetchingGetById])
+    const [createWorkShift, { isSuccess, isLoading, isError }] = useCreateWorkShiftMutation()
 
     const handleSave = async () => {
         setIsSubmit(true)
-        if (key === '' || type === '' || value === '') {
+        if (shiftName === '' || startTime === '' || endTime === '') {
             return
         }
         const data = {
-            Id: id,
-            Key: key,
-            Type: type,
-            Value: value,
+            ShiftName: shiftName,
+            StartTime: startTime,
+            EndTime: endTime,
             Description: description
         }
-        await updateSysConfiguration(data).unwrap()
-        refetch()
+        await createWorkShift(data).unwrap()
         setIsSubmit(false)
     }
 
     useEffect(() => {
         if (isSuccess === true) {
-            toast(t('COMMON.SYS_CONFIGURATION.ACTION_CONFIGURATION.UPDATE_SUCCESS'), 'success')
+            toast(t('COMMON.SYS_CONFIGURATION.ACTION_CONFIGURATION.CREATE_SUCCESS'), 'success')
         }
         if (isError === true) {
-            toast(t('COMMON.SYS_CONFIGURATION.ACTION_CONFIGURATION.UPDATE_ERROR'), 'error')
+            toast(t('COMMON.SYS_CONFIGURATION.ACTION_CONFIGURATION.CREATE_ERROR'), 'error')
         }
     }, [isSuccess, isError])
 
     const handleSaveAndClose = async () => {
         setIsSubmit(true)
-        if (key === '' || type === '' || value === '') {
+        if (shiftName === '' || startTime === '' || endTime === '') {
             return
         }
         const data = {
-            Id: id,
-            Key: key,
-            Type: type,
-            Value: value,
+            ShiftName: shiftName,
+            StartTime: startTime,
+            EndTime: endTime,
             Description: description
         }
-        await updateSysConfiguration(data).unwrap()
-        refetch()
+        await createWorkShift(data).unwrap()
         setIsSubmit(false)
-        router.push('/admin/configuration')
+        router.push('/admin/work-shift')
     }
 
     return (
         <Box sx={{ width: '100%' }}>
             <Paper
+                elevation={0}
                 sx={{
                     width: '100%',
                     overflow: 'hidden',
@@ -91,7 +73,7 @@ function updateConfigurationPage() {
                 }}
             >
                 <Typography sx={{ fontWeight: 'bold', fontSize: '22px', color: 'var(--text-color)' }}>
-                    {t('COMMON.SYS_CONFIGURATION.ACTION_CONFIGURATION.UPDATE_TITLE')}
+                    {t('COMMON.SYS_CONFIGURATION.ACTION_CONFIGURATION.CREATE_TITLE')}
                 </Typography>
                 <Box
                     sx={{
@@ -110,7 +92,7 @@ function updateConfigurationPage() {
                             variant='outlined'
                             label={t('COMMON.SYS_CONFIGURATION.ACTION_CONFIGURATION.KEY')}
                             fullWidth
-                            {...(isSubmit && key === '' && { error: true })}
+                            {...(isSubmit && shiftName === '' && { error: true })}
                             sx={{
                                 color: 'var(--text-color)',
                                 '& fieldset': {
@@ -136,15 +118,15 @@ function updateConfigurationPage() {
                                     color: 'var(--selected-color)'
                                 }
                             }}
-                            value={key}
-                            onChange={e => setKey(e.target.value)}
+                            value={shiftName}
+                            onChange={e => setShiftName(e.target.value)}
                         />
                         <Typography
                             sx={{
                                 color: 'red',
                                 margin: '1px 0 0 10px',
                                 fontSize: '12px',
-                                visibility: isSubmit && key === '' ? 'visible' : 'hidden'
+                                visibility: isSubmit && shiftName === '' ? 'visible' : 'hidden'
                             }}
                         >
                             {t('COMMON.TEXTFIELD.REQUIRED')}
@@ -160,7 +142,7 @@ function updateConfigurationPage() {
                             variant='outlined'
                             label={t('COMMON.SYS_CONFIGURATION.ACTION_CONFIGURATION.TYPE')}
                             fullWidth
-                            {...(isSubmit && type === '' && { error: true })}
+                            {...(isSubmit && startTime === '' && { error: true })}
                             sx={{
                                 color: 'var(--text-color)',
                                 '& fieldset': {
@@ -186,15 +168,15 @@ function updateConfigurationPage() {
                                     color: 'var(--selected-color)'
                                 }
                             }}
-                            value={type}
-                            onChange={e => setType(e.target.value)}
+                            value={startTime}
+                            onChange={e => setStartTime(e.target.value)}
                         />
                         <Typography
                             sx={{
                                 color: 'red',
                                 margin: '1px 0 0 10px',
                                 fontSize: '12px',
-                                visibility: isSubmit && type === '' ? 'visible' : 'hidden'
+                                visibility: isSubmit && startTime === '' ? 'visible' : 'hidden'
                             }}
                         >
                             {t('COMMON.TEXTFIELD.REQUIRED')}
@@ -212,7 +194,7 @@ function updateConfigurationPage() {
                         label={t('COMMON.SYS_CONFIGURATION.ACTION_CONFIGURATION.VALUE')}
                         fullWidth
                         multiline
-                        {...(isSubmit && value === '' && { error: true })}
+                        {...(isSubmit && endTime === '' && { error: true })}
                         minRows={1}
                         maxRows={3}
                         sx={{
@@ -240,15 +222,15 @@ function updateConfigurationPage() {
                                 color: 'var(--selected-color)'
                             }
                         }}
-                        value={value}
-                        onChange={e => setValue(e.target.value)}
+                        value={endTime}
+                        onChange={e => setEndTime(e.target.value)}
                     />
                     <Typography
                         sx={{
                             color: 'red',
                             margin: '1px 0 0 10px',
                             fontSize: '12px',
-                            visibility: isSubmit && value === '' ? 'visible' : 'hidden'
+                            visibility: isSubmit && endTime === '' ? 'visible' : 'hidden'
                         }}
                     >
                         {t('COMMON.TEXTFIELD.REQUIRED')}
@@ -327,10 +309,10 @@ function updateConfigurationPage() {
                             backgroundColor: 'var(--button-color)',
                             width: 'auto',
                             padding: '0px 20px',
-                            fontSize: '16px',
                             '&:hover': {
                                 backgroundColor: 'var(--hover-button-color)'
                             },
+                            fontSize: '16px',
                             fontWeight: 'bold',
                             whiteSpace: 'nowrap',
                             textTransform: 'none'
@@ -347,11 +329,11 @@ function updateConfigurationPage() {
                             height: '44px',
                             backgroundColor: 'var(--button-color)',
                             width: 'auto',
-                            padding: '0px 20px',
                             fontSize: '16px',
                             '&:hover': {
                                 backgroundColor: 'var(--hover-button-color)'
                             },
+                            padding: '0px 20px',
                             fontWeight: 'bold',
                             whiteSpace: 'nowrap',
                             textTransform: 'none'
@@ -368,4 +350,4 @@ function updateConfigurationPage() {
     )
 }
 
-export default updateConfigurationPage
+export default createWorkShiftPage

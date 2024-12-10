@@ -52,6 +52,9 @@ body {
     --text-label-color: #494949;
     --hover-button-color: #03d794;
     --border-alert-color: #3e3e3e;
+    --icon-delete-chip-color: #e5e7eb;
+    --hover-icon-delete-chip-color: #8f8f8f;
+    --search-color: #1c1c1c;
 }
 
 .light {
@@ -80,6 +83,9 @@ body {
     --text-label-color: #c6c6c6;
     --hover-button-color: #02b97f;
     --border-alert-color: #e5e5e5;
+    --icon-delete-chip-color: #bdbdbd;
+    --hover-icon-delete-chip-color: #888888;
+    --search-color: #f0f2f5;
 }
 
 body {

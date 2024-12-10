@@ -1,6 +1,7 @@
 export function getTimeDifferenceText(sentTime: string, t: any) {
     const now = new Date()
     const sentDate = new Date(sentTime)
+
     const diffInSeconds = Math.floor((now.getTime() - sentDate.getTime()) / 1000)
 
     const diffInMinutes = Math.floor(diffInSeconds / 60)
