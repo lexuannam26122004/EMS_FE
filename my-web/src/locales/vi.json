@@ -208,6 +208,7 @@
             "CREATED_DATE": "Ngày Tạo",
             "CREATED_BY": "Người Tạo",
             "ACTION": "Hành động",
+            "VIEW_DETAIL": "Xem chi tiết Cấu hình",
             "PLACEHOLDER_SEARCH": "Tìm kiếm theo khóa, loại, giá trị...",
             "ACTION_CONFIGURATION": {
                 "KEY": "Khóa*",

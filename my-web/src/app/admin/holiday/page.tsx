@@ -4,7 +4,8 @@ import {
     useGetAllHolidayQuery,
     useDeleteHolidayMutation,
     useUpdateHolidayMutation,
-    useCreateHolidayMutation
+    useCreateHolidayMutation,
+    useDeleteManyHolidayMutation
 } from '@/services/HolidayService'
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
 import { formatDate } from '@/utils/formatDate'
@@ -39,7 +40,6 @@ import { useRouter } from 'next/navigation'
 
 function HolidayPage() {
     const { t } = useTranslation('common')
-    const router = useRouter()
     const [selected, setSelected] = useState<number[]>([])
     const [page, setPage] = useState(1)
     const [rowsPerPage, setRowsPerPage] = useState('10')
@@ -60,6 +60,10 @@ function HolidayPage() {
     const [deleteHoliday, { isSuccess: isSuccessDelete }] = useDeleteHolidayMutation()
     const [createHoliday, { isSuccess, isLoading, isError }] = useCreateHolidayMutation()
     const [updateHoliday] = useUpdateHolidayMutation()
+    const [
+        deleteManyHoliday,
+        { isError: isErrorDeleteMany, isSuccess: isSuccessDeleteMany, isLoading: isLoadingDeleteMany }
+    ] = useDeleteManyHolidayMutation()
 
     const holidayData = responseData?.Data.Records as IHolidayGetAll[]
     const totalRecords = responseData?.Data.TotalRecords as number
@@ -215,6 +219,20 @@ function HolidayPage() {
             setSelectedRow(null)
         }
     }
+
+    const handleDeleteManyHoliday = async () => {
+        if (selected.length > 0) {
+            await deleteManyHoliday(selected)
+            setIsChangeMany(false)
+            setSelected([])
+            setOpenDialog(false)
+        }
+    }
+    useEffect(() => {
+        if (isSuccessDelete || isSuccessDeleteMany) {
+            refetch()
+        }
+    }, [isSuccessDelete, isSuccessDeleteMany])
 
     const handleDeleteManyClick = async () => {
         setIsChangeMany(true)
@@ -385,29 +403,75 @@ function HolidayPage() {
                     <Table>
                         <TableHead>
                             <TableRow sx={{ backgroundColor: 'var(--header-color-table)' }}>
-                                <TableCell padding='checkbox'>
+                                <TableCell
+                                    padding='checkbox'
+                                    sx={{ borderColor: 'var(--border-color)', paddingLeft: '8.5px' }}
+                                >
                                     <Checkbox
-                                        indeterminate={selected.length > 0 && selected.length < holidayData?.length}
-                                        checked={holidayData && selected.length === holidayData.length}
+                                        indeterminate={selected.length > 0 && selected.length < holidayData.length}
+                                        checked={
+                                            holidayData && selected.length > 0
+                                                ? selected.length === holidayData.length
+                                                : false
+                                        }
                                         onChange={handleSelectAllClick}
+                                        sx={{
+                                            color: 'var(--text-color)'
+                                        }}
                                     />
                                 </TableCell>
-                                <TableCell>
+                                <TableCell
+                                    sx={{ borderColor: 'var(--border-color)', minWidth: '49px', maxWidth: '60px' }}
+                                >
                                     <TableSortLabel
-                                        active={orderBy === 'Id'}
+                                        active={'Id' === orderBy}
                                         direction={orderBy === 'Id' ? order : 'asc'}
                                         onClick={() => handleSort('Id')}
+                                        sx={{
+                                            '& .MuiTableSortLabel-icon': {
+                                                color: 'var(--text-color) !important'
+                                            }
+                                        }}
                                     >
-                                        <Typography sx={{ fontWeight: 'bold' }}>ID</Typography>
+                                        <Typography
+                                            sx={{
+                                                fontWeight: 'bold',
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            ID
+                                        </Typography>
                                     </TableSortLabel>
                                 </TableCell>
-                                <TableCell>
+                                <TableCell
+                                    sx={{ borderColor: 'var(--border-color)', minWidth: '49px', maxWidth: '60px' }}
+                                >
                                     <TableSortLabel
                                         active={orderBy === 'Name'}
                                         direction={orderBy === 'Name' ? order : 'asc'}
                                         onClick={() => handleSort('Name')}
+                                        sx={{
+                                            '& .MuiTableSortLabel-icon': {
+                                                color: 'var(--text-color) !important'
+                                            }
+                                        }}
                                     >
-                                        <Typography sx={{ fontWeight: 'bold' }}>{t('COMMON.HOLIDAY.NAME')}</Typography>
+                                        <Typography
+                                            sx={{
+                                                fontWeight: 'bold',
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            {t('COMMON.HOLIDAY.NAME')}
+                                        </Typography>
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell>
@@ -415,8 +479,22 @@ function HolidayPage() {
                                         active={orderBy === 'StartDate'}
                                         direction={orderBy === 'StartDate' ? order : 'asc'}
                                         onClick={() => handleSort('StartDate')}
+                                        sx={{
+                                            '& .MuiTableSortLabel-icon': {
+                                                color: 'var(--text-color) !important'
+                                            }
+                                        }}
                                     >
-                                        <Typography sx={{ fontWeight: 'bold' }}>
+                                        <Typography
+                                            sx={{
+                                                fontWeight: 'bold',
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
                                             {t('COMMON.HOLIDAY.START_DATE')}
                                         </Typography>
                                     </TableSortLabel>
@@ -426,17 +504,55 @@ function HolidayPage() {
                                         active={orderBy === 'EndDate'}
                                         direction={orderBy === 'EndDate' ? order : 'asc'}
                                         onClick={() => handleSort('EndDate')}
+                                        sx={{
+                                            '& .MuiTableSortLabel-icon': {
+                                                color: 'var(--text-color) !important'
+                                            }
+                                        }}
                                     >
-                                        <Typography sx={{ fontWeight: 'bold' }}>
+                                        <Typography
+                                            sx={{
+                                                fontWeight: 'bold',
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
                                             {t('COMMON.HOLIDAY.END_DATE')}
                                         </Typography>
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell>
-                                    <Typography sx={{ fontWeight: 'bold' }}>{t('COMMON.HOLIDAY.NOTE')}</Typography>
+                                    <Typography
+                                        sx={{
+                                            fontWeight: 'bold',
+                                            color: 'var(--text-color)',
+                                            fontSize: '16px',
+                                            overflow: 'hidden',
+                                            maxWidth: '300px',
+                                            textOverflow: 'ellipsis',
+                                            whiteSpace: 'nowrap'
+                                        }}
+                                    >
+                                        {t('COMMON.HOLIDAY.NOTE')}
+                                    </Typography>
                                 </TableCell>
                                 <TableCell>
-                                    <Typography sx={{ fontWeight: 'bold' }}>{t('COMMON.HOLIDAY.ACTION')}</Typography>
+                                    <Typography
+                                        sx={{
+                                            fontWeight: 'bold',
+                                            color: 'var(--text-color)',
+                                            fontSize: '16px',
+                                            overflow: 'hidden',
+                                            textAlign: 'center',
+                                            textOverflow: 'ellipsis',
+                                            whiteSpace: 'nowrap'
+                                        }}
+                                    >
+                                        {t('COMMON.HOLIDAY.ACTION')}
+                                    </Typography>
                                 </TableCell>
                             </TableRow>
                         </TableHead>
@@ -453,23 +569,83 @@ function HolidayPage() {
                                     <TableCell>{row.Name}</TableCell>
                                     <TableCell>{formatDate(row.StartDate.toString())}</TableCell>
                                     <TableCell>{formatDate(row.EndDate.toString())}</TableCell>
-                                    <TableCell>{row.Note}</TableCell>
+                                    <TableCell
+                                        sx={{
+                                            color: 'var(--text-color)',
+                                            fontSize: '16px',
+                                            overflow: 'hidden',
+                                            maxWidth: '300px',
+                                            textOverflow: 'ellipsis',
+                                            whiteSpace: 'nowrap'
+                                        }}
+                                    >
+                                        {row.Note}
+                                    </TableCell>
                                     <TableCell>
-                                        <Box display='flex' gap='10px'>
+                                        <Box
+                                            display='flex'
+                                            alignItems='center'
+                                            justifyContent='space-between'
+                                            gap='10px'
+                                        >
                                             <Tooltip title={t('COMMON.BUTTON.VIEW_DETAIL')}>
-                                                <IconButton>
-                                                    <EyeIcon color='#00d100' />
-                                                </IconButton>
+                                                <Box
+                                                    display='flex'
+                                                    alignItems='center'
+                                                    justifyContent='center'
+                                                    sx={{
+                                                        cursor: 'pointer',
+                                                        color: '#00d100',
+                                                        borderRadius: '50%',
+                                                        width: '42px',
+                                                        height: '42px',
+                                                        '&:hover': {
+                                                            backgroundColor: 'var(--hover-color)'
+                                                        }
+                                                    }}
+                                                >
+                                                    <EyeIcon />
+                                                </Box>
                                             </Tooltip>
                                             <Tooltip title={t('COMMON.BUTTON.EDIT')}>
-                                                <IconButton onClick={() => handleUpdate(row)}>
-                                                    <Pencil color='#00d4ff' />
-                                                </IconButton>
+                                                <Box
+                                                    display='flex'
+                                                    alignItems='center'
+                                                    justifyContent='center'
+                                                    sx={{
+                                                        cursor: 'pointer',
+                                                        color: '#00d4ff',
+                                                        borderRadius: '50%',
+                                                        width: '42px',
+                                                        height: '42px',
+                                                        '&:hover': {
+                                                            backgroundColor: 'var(--hover-color)'
+                                                        }
+                                                    }}
+                                                    onClick={() => handleUpdate(row)}
+                                                >
+                                                    <Pencil />
+                                                </Box>
                                             </Tooltip>
                                             <Tooltip title={t('COMMON.BUTTON.DELETE')}>
-                                                <IconButton onClick={() => handleDeleteClick(row.Id)}>
-                                                    <Trash2 color='red' />
-                                                </IconButton>
+                                                <Box
+                                                    display='flex'
+                                                    alignItems='center'
+                                                    justifyContent='center'
+                                                    sx={{
+                                                        cursor: 'pointer',
+                                                        color: 'red',
+                                                        borderRadius: '50%',
+                                                        width: '42px',
+                                                        height: '42px',
+                                                        '&:hover': {
+                                                            backgroundColor: 'var(--hover-color)'
+                                                        }
+                                                    }}
+                                                    onClick={() => handleDeleteClick(row.Id)}
+                                                >
+                                                    <Trash2 />
+                                                </Box>
                                             </Tooltip>
                                         </Box>
                                     </TableCell>
@@ -576,7 +752,7 @@ function HolidayPage() {
                 setOpen={setOpenDialog}
                 buttonCancel={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.CANCEL')}
                 buttonConfirm={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.DELETE')}
-                onConfirm={handleDeleteHoliday}
+                onConfirm={() => (isChangeMany ? handleDeleteManyHoliday() : handleDeleteHoliday())}
             />
 
             {isOpen && (
