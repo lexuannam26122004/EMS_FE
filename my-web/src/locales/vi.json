@@ -114,7 +114,7 @@
             "TIMEKEEPING": "Chấm công",
             "PERMISSION": "Phân quyền",
             "SALARY": "Bảng lương",
-            "HOLIDAY": "Nghỉ phép",
+            "HOLIDAY": "Nghỉ lễ",
             "CONTRACT": "Hợp đồng",
             "TIME_OFF": "Nghỉ phép",
             "DEPARTMENT": "Phòng ban",
@@ -208,6 +208,14 @@
                 "UPDATE_ERROR": "Cập nhật Cấu hình thất bại",
                 "DELETE_ERROR": "Xóa Cấu hình thất bại"
             }
+        },
+        "HOLIDAY": {
+            "NAME": "Tên ngày lễ ",
+            "START_DATE": "Ngày bắt đầu",
+            "END_DATE": "Ngày kết thúc",
+            "NOTE": "Mô tả ngày lễ",
+            "ACTION": "Hành động",
+            "TITLE": "Tạo một ngày nghỉ lễ"
         }
     }
 }

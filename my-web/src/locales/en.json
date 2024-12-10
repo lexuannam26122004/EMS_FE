@@ -209,6 +209,14 @@
                 "UPDATE_ERROR": "Update Configuration failed",
                 "DELETE_ERROR": "Delete Configuration failed"
             }
+        },
+        "HOLIDAY": {
+            "NAME": "Name",
+            "START_DATE": "Start Date",
+            "END_DATE": "End Date",
+            "NOTE": "Note",
+            "ACTION": "Action",
+            "TITLE": "Create a New Holiday"
         }
     }
 }

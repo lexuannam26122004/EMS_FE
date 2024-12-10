@@ -1,41 +1,832 @@
 'use client'
-
-import React, { useState } from 'react'
+import { IHolidayGetAll } from '@/models/Holiday'
+import {
+    useGetAllHolidayQuery,
+    useDeleteHolidayMutation,
+    useUpdateHolidayMutation,
+    useCreateHolidayMutation
+} from '@/services/HolidayService'
+import { IFilterSysConfiguration } from '@/models/SysConfiguration'
+import { formatDate } from '@/utils/formatDate'
 import {
     Box,
+    Select,
+    Pagination,
+    Typography,
+    MenuItem,
+    SelectChangeEvent,
     Paper,
-    Table,
+    Checkbox,
+    TableRow,
     TableBody,
+    Table,
     TableCell,
     TableHead,
-    TableRow,
+    TableContainer,
     Button,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
     TextField,
-    Snackbar,
-    Alert
+    InputAdornment,
+    IconButton,
+    Tooltip,
+    TableSortLabel
 } from '@mui/material'
-import { IHolidayGetAll, IHolidayCreate } from '@/models/Holiday'
-import {
-    useGetAllHolidaysQuery,
-    useCreateHolidayMutation,
-    useDeleteHolidayMutation,
-    useUpdateHolidayMutation
-} from '@/services/HolidayService'
-import DeleteIcon from '@mui/icons-material/Delete'
-import { IconButton } from '@mui/material'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import SearchIcon from '@mui/icons-material/Search'
+import { CirclePlus, EyeIcon, Pencil, Trash2 } from 'lucide-react'
+import AlertDialog from '@/components/AlertDialog'
+import { useRouter } from 'next/navigation'
 
-const HolidayPage = () => {
-    const { data: holidayResponse, isLoading: loading, error: holidayError } = useGetAllHolidaysQuery()
-    const [createHoliday, { isLoading: isCreating, error: createError }] = useCreateHolidayMutation()
-    const [deleteHoliday, { isLoading: isDeleting, error: deleteError }] = useDeleteHolidayMutation()
-    const handleCreate = async () => {}
-    const handleDelete = async () => {}
-    //
+function HolidayPage() {
+    const { t } = useTranslation('common')
+    const router = useRouter()
+    const [selected, setSelected] = useState<number[]>([])
+    const [page, setPage] = useState(1)
+    const [rowsPerPage, setRowsPerPage] = useState('10')
+    const [from, setFrom] = useState(1)
+    const [to, setTo] = useState(10)
+    const [keyword, setKeyword] = useState('')
+    const [isChangeMany, setIsChangeMany] = useState(false)
+    const [openDialog, setOpenDialog] = useState(false)
+    const [selectedRow, setSelectedRow] = useState<number | null>(null)
+    const [order, setOrder] = useState<'asc' | 'desc'>('asc')
+    const [orderBy, setOrderBy] = useState<string>('')
+    const [filter, setFilter] = useState<IFilterSysConfiguration>({
+        pageSize: 10,
+        pageNumber: 1
+    })
+
+    const { data: responseData, isFetching, refetch } = useGetAllHolidayQuery(filter)
+    const [deleteHoliday, { isSuccess: isSuccessDelete }] = useDeleteHolidayMutation()
+    const [createHoliday, { isSuccess, isLoading, isError }] = useCreateHolidayMutation()
+    const [updateHoliday] = useUpdateHolidayMutation()
+
+    const holidayData = responseData?.Data.Records as IHolidayGetAll[]
+    const totalRecords = responseData?.Data.TotalRecords as number
+
+    const isSelected = (id: number) => selected.includes(id)
+
+    const handleCheckboxClick = (id: number) => {
+        setSelected(prev => (prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]))
+    }
+
+    const handleSave = async () => {
+        if (!holidayForm.name || !holidayForm.startDate || !holidayForm.endDate) {
+            return
+        }
+
+        try {
+            const startDate = new Date(holidayForm.startDate)
+            const endDate = new Date(holidayForm.endDate)
+
+            if (selectedRow) {
+                await updateHoliday({
+                    Id: selectedRow, // ID của bản ghi cần cập nhật
+                    Name: holidayForm.name,
+                    StartDate: startDate,
+                    EndDate: endDate,
+                    Note: holidayForm.note || ''
+                }).unwrap() // unwrap để xử lý lỗi nếu có
+            } else {
+                // Nếu không có selectedRow, tức là đang tạo mới
+                await createHoliday({
+                    Name: holidayForm.name,
+                    StartDate: startDate,
+                    EndDate: endDate,
+                    Note: holidayForm.note || ''
+                }).unwrap()
+            }
+
+            handleCloseCreateDialog()
+            setHolidayForm({
+                name: '',
+                startDate: '',
+                endDate: '',
+                note: ''
+            })
+            setSelectedRow(null) // Reset selectedRow
+        } catch (error) {
+            console.error('Failed to save holiday:', error)
+        }
+    }
+
+    useEffect(() => {
+        if (isSuccess) {
+            refetch() // Gọi lại dữ liệu sau khi tạo hoặc cập nhật thành công
+        }
+    }, [isSuccess])
+
+    const handleUpdate = async (holiday: IHolidayGetAll) => {
+        const startDate = typeof holiday.StartDate === 'string' ? new Date(holiday.StartDate) : holiday.StartDate
+        const endDate = typeof holiday.EndDate === 'string' ? new Date(holiday.EndDate) : holiday.EndDate
+        setHolidayForm({
+            name: holiday.Name,
+            startDate: startDate.toISOString().split('T')[0], // Chuyển đổi sang định dạng YYYY-MM-DD
+            endDate: endDate.toISOString().split('T')[0], // Chuyển đổi sang định dạng YYYY-MM-DD
+            note: holiday.Note || '' // Ghi chú có thể null
+        })
+        setSelectedRow(holiday.Id) // Lưu ID của bản ghi đang chỉnh sửa
+        setIsOpen(true) // Mở dialog
+    }
+
+    const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.checked) {
+            setSelected(holidayData.map(row => row.Id))
+        } else {
+            setSelected([])
+        }
+    }
+
+    // Thêm state ở đầu component
+    const [holidayForm, setHolidayForm] = useState({
+        name: '',
+        startDate: '',
+        endDate: '',
+        note: ''
+    })
+
+    // Thêm handler
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target
+        setHolidayForm(prev => ({
+            ...prev,
+            [name]: value
+        }))
+    }
+
+    const handleChangePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
+        setPage(newPage)
+        setFilter(prev => {
+            return {
+                ...prev,
+                pageNumber: newPage
+            }
+        })
+    }
+
+    const handleChangeRowsPerPage = (event: SelectChangeEvent) => {
+        const newRowsPerPage = event.target.value as string
+        setRowsPerPage(newRowsPerPage)
+        setPage(1)
+        setFilter(prev => ({
+            ...prev,
+            pageSize: Number(newRowsPerPage),
+            pageNumber: 1
+        }))
+    }
+
+    const handleSearchKeyword = () => {
+        setPage(1)
+        setFilter(prev => {
+            return {
+                ...prev,
+                keyword: keyword,
+                pageNumber: 1
+            }
+        })
+    }
+
+    useEffect(() => {
+        if (!isFetching && responseData?.Data) {
+            const from = (page - 1) * Number(rowsPerPage) + 1
+            setFrom(from)
+
+            const to = Math.min(page * Number(rowsPerPage), totalRecords)
+            setTo(to)
+        }
+    }, [isFetching, responseData, page, rowsPerPage]) // Thêm filter vào dependencies
+
+    useEffect(() => {
+        refetch()
+    }, [filter])
+
+    const handleDeleteClick = async (id: number) => {
+        setOpenDialog(true)
+        setSelectedRow(id)
+    }
+
+    const handleDeleteHoliday = async () => {
+        if (selectedRow) {
+            await deleteHoliday(selectedRow)
+            if (isSelected(selectedRow)) {
+                setSelected(prev => prev.filter(item => item !== selectedRow))
+            }
+            setOpenDialog(false)
+            setSelectedRow(null)
+        }
+    }
+
+    const handleDeleteManyClick = async () => {
+        setIsChangeMany(true)
+        setOpenDialog(true)
+    }
+
+    const [isOpen, setIsOpen] = useState(false)
+    const handleOpenCreateDialog = () => {
+        setIsOpen(true)
+    }
+    const handleCloseCreateDialog = () => {
+        setIsOpen(false)
+        setHolidayForm({
+            name: '',
+            startDate: '',
+            endDate: '',
+            note: ''
+        })
+        setSelectedRow(null)
+    }
+
+    useEffect(() => {
+        if (isSuccessDelete) {
+            refetch()
+        }
+    }, [isSuccessDelete])
+
+    const handleSort = (property: string) => {
+        setFilter(prev => ({
+            ...prev,
+            sortBy: property,
+            isDescending: orderBy === property && order === 'asc' ? true : false
+        }))
+        if (orderBy === property) {
+            setOrder(order === 'asc' ? 'desc' : 'asc')
+        } else {
+            setOrder('asc')
+        }
+        setOrderBy(property)
+    }
+
+    const countRows = selected.length
+
+    return (
+        <Box>
+            <Paper
+                sx={{
+                    width: '100%',
+                    overflow: 'hidden',
+                    borderRadius: '6px',
+                    backgroundColor: 'var(--background-color)'
+                }}
+            >
+                <Box display='flex' alignItems='center' justifyContent='space-between' margin='20px'>
+                    <Box sx={{ position: 'relative', width: '100%' }}>
+                        <TextField
+                            fullWidth
+                            id='location-search'
+                            type='search'
+                            placeholder={t('COMMON.SYS_CONFIGURATION.PLACEHOLDER_SEARCH')}
+                            variant='outlined'
+                            value={keyword}
+                            onChange={e => setKeyword(e.target.value)}
+                            sx={{
+                                color: 'var(--text-color)',
+                                padding: '0px',
+                                width: '335px',
+                                '& fieldset': {
+                                    borderRadius: '8px',
+                                    borderColor: 'var(--border-color)'
+                                },
+                                '& .MuiInputBase-root': { paddingRight: '0px' },
+                                '& .MuiInputBase-input': {
+                                    padding: '11px 0 11px 14px',
+                                    color: 'var(--text-color)',
+                                    fontSize: '16px'
+                                },
+                                '& .MuiOutlinedInput-root:hover fieldset': {
+                                    borderColor: 'var(--hover-color)'
+                                },
+                                '& .MuiOutlinedInput-root.Mui-focused fieldset': {
+                                    borderColor: 'var(--selected-color)'
+                                }
+                            }}
+                            onKeyDown={e => {
+                                if (e.key === 'Enter') {
+                                    e.preventDefault()
+                                    handleSearchKeyword()
+                                }
+                            }}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position='end'>
+                                        <IconButton
+                                            onClick={handleSearchKeyword}
+                                            sx={{
+                                                backgroundColor: 'var(--button-color)',
+                                                borderRadius: '0 8px 8px 0',
+                                                padding: '10.5px',
+                                                '&:hover': {
+                                                    backgroundColor: 'var(--hover-button-color)'
+                                                }
+                                            }}
+                                        >
+                                            <SearchIcon sx={{ color: 'white' }} />
+                                        </IconButton>
+                                    </InputAdornment>
+                                )
+                            }}
+                        />
+                    </Box>
+                    <Box display='flex' alignItems='center' justifyContent='center' gap='20px'>
+                        <Typography
+                            sx={{
+                                color: 'red',
+                                whiteSpace: 'nowrap',
+                                visibility: countRows > 0 ? 'visible' : 'hidden'
+                            }}
+                        >
+                            {t('COMMON.COUNT_ROWS_SELECTED', { countRows })}
+                        </Typography>
+                        <Button
+                            variant='contained'
+                            startIcon={<Trash2 />}
+                            sx={{
+                                height: '44px',
+                                visibility: countRows > 0 ? 'visible' : 'hidden',
+                                backgroundColor: 'var(--button-color)',
+                                width: 'auto',
+                                padding: '0px 24px',
+                                '&:hover': {
+                                    backgroundColor: 'var(--hover-button-color)'
+                                },
+                                fontSize: '16px',
+                                fontWeight: 'bold',
+                                whiteSpace: 'nowrap',
+                                textTransform: 'none'
+                            }}
+                            onClick={() => handleDeleteManyClick()}
+                        >
+                            {t('COMMON.BUTTON.DELETE')}
+                        </Button>
+
+                        <Button
+                            variant='contained'
+                            startIcon={<CirclePlus />}
+                            sx={{
+                                height: '44px',
+                                backgroundColor: 'var(--button-color)',
+                                width: 'auto',
+                                padding: '0px 24px',
+                                '&:hover': {
+                                    backgroundColor: 'var(--hover-button-color)'
+                                },
+                                fontSize: '16px',
+                                fontWeight: 'bold',
+                                whiteSpace: 'nowrap',
+                                textTransform: 'none'
+                            }}
+                            onClick={() => handleOpenCreateDialog()}
+                        >
+                            {t('COMMON.BUTTON.CREATE')}
+                        </Button>
+                    </Box>
+                </Box>
+
+                <TableContainer>
+                    <Table>
+                        <TableHead>
+                            <TableRow sx={{ backgroundColor: 'var(--header-color-table)' }}>
+                                <TableCell padding='checkbox'>
+                                    <Checkbox
+                                        indeterminate={selected.length > 0 && selected.length < holidayData?.length}
+                                        checked={holidayData && selected.length === holidayData.length}
+                                        onChange={handleSelectAllClick}
+                                    />
+                                </TableCell>
+                                <TableCell>
+                                    <TableSortLabel
+                                        active={orderBy === 'Id'}
+                                        direction={orderBy === 'Id' ? order : 'asc'}
+                                        onClick={() => handleSort('Id')}
+                                    >
+                                        <Typography sx={{ fontWeight: 'bold' }}>ID</Typography>
+                                    </TableSortLabel>
+                                </TableCell>
+                                <TableCell>
+                                    <TableSortLabel
+                                        active={orderBy === 'Name'}
+                                        direction={orderBy === 'Name' ? order : 'asc'}
+                                        onClick={() => handleSort('Name')}
+                                    >
+                                        <Typography sx={{ fontWeight: 'bold' }}>{t('COMMON.HOLIDAY.NAME')}</Typography>
+                                    </TableSortLabel>
+                                </TableCell>
+                                <TableCell>
+                                    <TableSortLabel
+                                        active={orderBy === 'StartDate'}
+                                        direction={orderBy === 'StartDate' ? order : 'asc'}
+                                        onClick={() => handleSort('StartDate')}
+                                    >
+                                        <Typography sx={{ fontWeight: 'bold' }}>
+                                            {t('COMMON.HOLIDAY.START_DATE')}
+                                        </Typography>
+                                    </TableSortLabel>
+                                </TableCell>
+                                <TableCell>
+                                    <TableSortLabel
+                                        active={orderBy === 'EndDate'}
+                                        direction={orderBy === 'EndDate' ? order : 'asc'}
+                                        onClick={() => handleSort('EndDate')}
+                                    >
+                                        <Typography sx={{ fontWeight: 'bold' }}>
+                                            {t('COMMON.HOLIDAY.END_DATE')}
+                                        </Typography>
+                                    </TableSortLabel>
+                                </TableCell>
+                                <TableCell>
+                                    <Typography sx={{ fontWeight: 'bold' }}>{t('COMMON.HOLIDAY.NOTE')}</Typography>
+                                </TableCell>
+                                <TableCell>
+                                    <Typography sx={{ fontWeight: 'bold' }}>{t('COMMON.HOLIDAY.ACTION')}</Typography>
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {holidayData?.map(row => (
+                                <TableRow key={row.Id} selected={isSelected(row.Id)}>
+                                    <TableCell padding='checkbox'>
+                                        <Checkbox
+                                            checked={isSelected(row.Id)}
+                                            onChange={() => handleCheckboxClick(row.Id)}
+                                        />
+                                    </TableCell>
+                                    <TableCell>{row.Id}</TableCell>
+                                    <TableCell>{row.Name}</TableCell>
+                                    <TableCell>{formatDate(row.StartDate.toString())}</TableCell>
+                                    <TableCell>{formatDate(row.EndDate.toString())}</TableCell>
+                                    <TableCell>{row.Note}</TableCell>
+                                    <TableCell>
+                                        <Box display='flex' gap='10px'>
+                                            <Tooltip title={t('COMMON.BUTTON.VIEW_DETAIL')}>
+                                                <IconButton>
+                                                    <EyeIcon color='#00d100' />
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title={t('COMMON.BUTTON.EDIT')}>
+                                                <IconButton onClick={() => handleUpdate(row)}>
+                                                    <Pencil color='#00d4ff' />
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title={t('COMMON.BUTTON.DELETE')}>
+                                                <IconButton onClick={() => handleDeleteClick(row.Id)}>
+                                                    <Trash2 color='red' />
+                                                </IconButton>
+                                            </Tooltip>
+                                        </Box>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+
+                <Box display='flex' alignItems='center' justifyContent='space-between' padding='15px'>
+                    <Box display='flex' alignItems='center'>
+                        <Typography sx={{ mr: '10px' }}>{t('COMMON.PAGINATION.ROWS_PER_PAGE')}</Typography>
+                        <Select
+                            id='select'
+                            sx={{
+                                width: '71px',
+                                padding: '5px',
+                                color: 'var(--text-color)',
+                                '& .MuiSelect-icon': {
+                                    color: 'var(--text-color)'
+                                },
+                                '& .MuiOutlinedInput-notchedOutline': {
+                                    borderColor: 'var(--border-color)'
+                                },
+                                '&:hover .MuiOutlinedInput-notchedOutline': {
+                                    borderColor: 'var(--hover-color)'
+                                },
+                                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                    borderColor: 'var(--selected-color)'
+                                },
+                                '& .MuiSelect-select': {
+                                    padding: '6px 32px 6px 10px'
+                                }
+                            }}
+                            value={rowsPerPage}
+                            defaultValue='5'
+                            onChange={handleChangeRowsPerPage}
+                            MenuProps={{
+                                PaperProps: {
+                                    elevation: 0,
+                                    sx: {
+                                        border: '1px solid var(--border-color)',
+                                        '& .MuiList-root': {
+                                            backgroundColor: 'var(--background-color)',
+                                            padding: '5px',
+                                            '& .MuiMenuItem-root': {
+                                                color: 'var(--text-color)',
+                                                borderRadius: '4px',
+                                                '&:hover': {
+                                                    backgroundColor: 'var(--hover-color)'
+                                                },
+                                                '&.Mui-selected': {
+                                                    backgroundColor: 'var(--selected-color)'
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }}
+                        >
+                            {[1, 2, 3, 4, 5, 10, 20, 30, 40].map(value => (
+                                <MenuItem key={value} value={value}>
+                                    {value}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                        <Typography sx={{ ml: '30px' }}>
+                            {t('COMMON.PAGINATION.FROM_TO', { from, to, totalRecords })}
+                        </Typography>
+                    </Box>
+                    <Pagination
+                        count={Math.ceil(totalRecords / Number(rowsPerPage))}
+                        page={page}
+                        onChange={handleChangePage}
+                        boundaryCount={1}
+                        siblingCount={2}
+                        variant='outlined'
+                        sx={{
+                            color: 'var(--text-color)',
+                            borderColor: 'var(--border-color)',
+                            '& .MuiPaginationItem-root': {
+                                color: 'var(--text-color)',
+                                borderColor: 'var(--border-color)',
+                                '&.Mui-selected': {
+                                    backgroundColor: 'var(--selected-color)',
+                                    color: 'var(--text-color)'
+                                },
+                                '&:hover': {
+                                    backgroundColor: 'var(--hover-color)',
+                                    borderColor: 'var(--hover-color)'
+                                }
+                            }
+                        }}
+                        color='primary'
+                    />
+                </Box>
+            </Paper>
+
+            <AlertDialog
+                title={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.TITLE')}
+                content={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.CONTENT')}
+                type='warning'
+                open={openDialog}
+                setOpen={setOpenDialog}
+                buttonCancel={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.CANCEL')}
+                buttonConfirm={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.DELETE')}
+                onConfirm={handleDeleteHoliday}
+            />
+
+            {isOpen && (
+                <Box
+                    sx={{
+                        position: 'fixed',
+                        top: 0,
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyItems: 'center',
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        zIndex: 1000
+                    }}
+                >
+                    <Box //box nội dung
+                        sx={{
+                            width: '500px',
+                            backgroundColor: 'white',
+                            borderRadius: '12px',
+                            boxShadow: '0 8px 16px rgba(0,0,0,0.1)',
+                            overflow: 'hidden', //ẩn nội dung khi bị tràn
+                            margin: 'auto'
+                        }}
+                    >
+                        <Box //header
+                            sx={{
+                                padding: '16px 24px',
+                                borderBottom: '1px solid var(--border-color)',
+                                fontSize: '24px',
+                                fontWeight: 'bold',
+                                backgroundColor: 'var(--background-color)' //màu nền
+                            }}
+                        >
+                            {t('COMMON.HOLIDAY.TITLE')}
+                        </Box>
+                        <Box
+                            sx={{
+                                padding: '24px',
+                                backgroundColor: 'var(--background-color)',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '20px'
+                            }}
+                        >
+                            {/* Name Field - Required */}
+                            <TextField
+                                fullWidth
+                                required
+                                name='name'
+                                label={t('COMMON.HOLIDAY.NAME')}
+                                value={holidayForm.name}
+                                onChange={handleInputChange}
+                                error={!holidayForm.name}
+                                helperText={!holidayForm.name ? t('COMMON.TEXTFIELD.REQUIRED') : ''}
+                                sx={{
+                                    color: 'var(--text-color)',
+                                    '& fieldset': {
+                                        borderRadius: '8px',
+                                        color: 'var(--text-color)',
+                                        borderColor: 'var(--border-color)'
+                                    },
+                                    '& .MuiInputBase-root': { paddingRight: '0px' },
+                                    '& .MuiInputBase-input': {
+                                        color: 'var(--text-color)',
+                                        fontSize: '16px'
+                                    },
+                                    '& .MuiOutlinedInput-root:hover fieldset': {
+                                        borderColor: 'var(--hover-color)'
+                                    },
+                                    '& .MuiOutlinedInput-root.Mui-focused fieldset': {
+                                        borderColor: 'var(--selected-color)'
+                                    },
+                                    '& .MuiInputLabel-root': {
+                                        color: 'var(--text-label-color)'
+                                    },
+                                    '& .MuiInputLabel-root.Mui-focused': {
+                                        color: 'var(--selected-color)'
+                                    }
+                                }}
+                            />
+
+                            {/* Start Date Field - Required */}
+                            <TextField
+                                fullWidth
+                                required
+                                name='startDate'
+                                label={t('COMMON.HOLIDAY.START_DATE')}
+                                type='date'
+                                value={holidayForm.startDate}
+                                onChange={handleInputChange}
+                                error={!holidayForm.startDate}
+                                helperText={!holidayForm.startDate ? t('COMMON.TEXTFIELD.REQUIRED') : ''}
+                                InputLabelProps={{ shrink: true }}
+                                sx={{
+                                    color: 'var(--text-color)',
+                                    '& fieldset': {
+                                        borderRadius: '8px',
+                                        color: 'var(--text-color)',
+                                        borderColor: 'var(--border-color)'
+                                    },
+                                    '& .MuiInputBase-root': { paddingRight: '0px' },
+                                    '& .MuiInputBase-input': {
+                                        color: 'var(--text-color)',
+                                        fontSize: '16px'
+                                    },
+                                    '& .MuiOutlinedInput-root:hover fieldset': {
+                                        borderColor: 'var(--hover-color)'
+                                    },
+                                    '& .MuiOutlinedInput-root.Mui-focused fieldset': {
+                                        borderColor: 'var(--selected-color)'
+                                    },
+                                    '& .MuiInputLabel-root': {
+                                        color: 'var(--text-label-color)'
+                                    },
+                                    '& .MuiInputLabel-root.Mui-focused': {
+                                        color: 'var(--selected-color)'
+                                    }
+                                }}
+                            />
+
+                            {/* End Date Field - Required */}
+                            <TextField
+                                fullWidth
+                                required
+                                name='endDate'
+                                label={t('COMMON.HOLIDAY.END_DATE')}
+                                type='date'
+                                value={holidayForm.endDate}
+                                onChange={handleInputChange}
+                                error={!holidayForm.endDate}
+                                helperText={!holidayForm.endDate ? t('COMMON.TEXTFIELD.REQUIRED') : ''}
+                                InputLabelProps={{ shrink: true }}
+                                sx={{
+                                    color: 'var(--text-color)',
+                                    '& fieldset': {
+                                        borderRadius: '8px',
+                                        color: 'var(--text-color)',
+                                        borderColor: 'var(--border-color)'
+                                    },
+                                    '& .MuiInputBase-root': { paddingRight: '0px' },
+                                    '& .MuiInputBase-input': {
+                                        color: 'var(--text-color)',
+                                        fontSize: '16px'
+                                    },
+                                    '& .MuiOutlinedInput-root:hover fieldset': {
+                                        borderColor: 'var(--hover-color)'
+                                    },
+                                    '& .MuiOutlinedInput-root.Mui-focused fieldset': {
+                                        borderColor: 'var(--selected-color)'
+                                    },
+                                    '& .MuiInputLabel-root': {
+                                        color: 'var(--text-label-color)'
+                                    },
+                                    '& .MuiInputLabel-root.Mui-focused': {
+                                        color: 'var(--selected-color)'
+                                    }
+                                }}
+                            />
+
+                            {/* Note Field - Optional */}
+                            <TextField
+                                fullWidth
+                                name='note'
+                                label={t('COMMON.HOLIDAY.NOTE')}
+                                value={holidayForm.note}
+                                onChange={handleInputChange}
+                                multiline
+                                rows={4}
+                                sx={{
+                                    color: 'var(--text-color)',
+                                    '& fieldset': {
+                                        borderRadius: '8px',
+                                        color: 'var(--text-color)',
+                                        borderColor: 'var(--border-color)'
+                                    },
+                                    '& .MuiInputBase-root': { paddingRight: '0px' },
+                                    '& .MuiInputBase-input': {
+                                        color: 'var(--text-color)',
+                                        fontSize: '16px'
+                                    },
+                                    '& .MuiOutlinedInput-root:hover fieldset': {
+                                        borderColor: 'var(--hover-color)'
+                                    },
+                                    '& .MuiOutlinedInput-root.Mui-focused fieldset': {
+                                        borderColor: 'var(--selected-color)'
+                                    },
+                                    '& .MuiInputLabel-root': {
+                                        color: 'var(--text-label-color)'
+                                    },
+                                    '& .MuiInputLabel-root.Mui-focused': {
+                                        color: 'var(--selected-color)'
+                                    }
+                                }}
+                            />
+                        </Box>
+                        <Box
+                            sx={{
+                                //footer
+                                padding: '16px 24px',
+                                borderTop: '2px solid var(--border-color)',
+                                display: 'flex',
+                                justifyContent: 'flex-end',
+                                gap: '12px',
+                                backgroundColor: 'var(--background-color)'
+                            }}
+                        >
+                            <Button //nút lưu
+                                variant='contained'
+                                onClick={handleSave}
+                                sx={{
+                                    height: '44px',
+                                    backgroundColor: 'var(--button-color)',
+                                    padding: '0px 24px',
+                                    '&:hover': {
+                                        backgroundColor: 'var(--hover-button-color)'
+                                    },
+                                    fontSize: '16px',
+                                    fontWeight: 'bold',
+                                    textTransform: 'none'
+                                }}
+                            >
+                                Lưu
+                            </Button>
+
+                            <Button //nút hủy
+                                variant='contained'
+                                onClick={handleCloseCreateDialog}
+                                sx={{
+                                    height: '44px',
+                                    backgroundColor: 'var(--button-color)',
+                                    padding: '0px 24px',
+                                    '&:hover': {
+                                        backgroundColor: 'var(--hover-button-color)'
+                                    },
+                                    fontSize: '16px',
+                                    fontWeight: 'bold',
+                                    textTransform: 'none'
+                                }}
+                            >
+                                Hủy
+                            </Button>
+                        </Box>
+                    </Box>
+                </Box>
+            )}
+        </Box>
+    )
 }
 
 export default HolidayPage
-
