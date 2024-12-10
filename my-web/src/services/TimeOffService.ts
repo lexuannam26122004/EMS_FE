@@ -30,11 +30,11 @@ export const TimeOffApi = createApi({
             })
         }),
 
-        getByIdTimeOffs: builder.query<TimeOffResponse, string>({
+        getByIdTimeOffs: builder.query<TimeOffResponse, number>({
             query: id => `GetById/${id}`
         }),
 
-        changeStatusTimeOffs: builder.mutation<void, string>({
+        changeStatusTimeOffs: builder.mutation<void, number>({
             query: id => ({
                 url: `ChangeStatus/${id}/status`,
                 method: 'PUT'

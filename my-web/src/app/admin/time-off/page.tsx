@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import {
     Box,
     Select,
@@ -28,13 +29,17 @@ import {
 import { IAspNetUserGetAll } from '@/models/AspNetUser'
 import { useGetAllUsersQuery } from '@/services/AspNetUserService'
 import { ITimeOffSearch } from '@/models/TimeOff'
-import { useSearchTimeOffQuery } from '@/services/TimeOffService'
+import { useSearchTimeOffQuery, useChangeStatusTimeOffsMutation } from '@/services/TimeOffService'
 
 import { CirclePlus, EyeIcon, Pencil, Trash2 } from 'lucide-react'
 import SearchIcon from '@mui/icons-material/Search'
 import { useTranslation } from 'react-i18next'
+import AlertDialog from '@/components/AlertDialog'
 
 const EmployeeTable: React.FC = () => {
+    const router = useRouter()
+    const [selectedRow, setSelectedRow] = useState<number | null>(null)
+
     const [openDialog, setOpenDialog] = useState(false)
     const [isChangeMany, setIsChangeMany] = useState(false)
     const [selected, setSelected] = useState<number[]>([])
@@ -47,7 +52,9 @@ const EmployeeTable: React.FC = () => {
     }>({ key: 'Id', direction: 'asc' })
     const { t } = useTranslation('common')
 
-    const { data: timeoffResponse, isLoading: istimeoffsLoading } = useSearchTimeOffQuery()
+    const [changeTimeOff] = useChangeStatusTimeOffsMutation()
+
+    const { data: timeoffResponse, isLoading: istimeoffsLoading, refetch } = useSearchTimeOffQuery()
     const { data: userResponse, isLoading: isUsersLoading } = useGetAllUsersQuery()
 
     const timeoff = (timeoffResponse?.Data?.Records as ITimeOffSearch[]) || []
@@ -130,6 +137,35 @@ const EmployeeTable: React.FC = () => {
     const to = Math.min(currentPage * Number(rowsPerPage), totalRecords)
 
     const countRows = selected.length
+
+    const handleDeleteClick = async (id: number) => {
+        setOpenDialog(true)
+        setSelectedRow(id)
+    }
+
+    const handleDeleteTimeOff = async () => {
+        if (selectedRow) {
+            await changeTimeOff(selectedRow)
+            if (isSelected(selectedRow)) {
+                setSelected(prev => prev.filter(item => item !== selectedRow))
+            }
+            setOpenDialog(false)
+            setSelectedRow(null)
+            refetch()
+        }
+    }
+
+    const handleDeleteManyTimeOff = async () => {
+        if (selected.length > 0) {
+            for (const id of selected) {
+                await changeTimeOff(id)
+            }
+            setIsChangeMany(false)
+            setSelected([])
+            setOpenDialog(false)
+            refetch()
+        }
+    }
 
     return (
         <Box>
@@ -245,7 +281,7 @@ const EmployeeTable: React.FC = () => {
                                 whiteSpace: 'nowrap',
                                 textTransform: 'none'
                             }}
-                            //onClick={() => router.push('/admin/configuration/create-configuration')}
+                            onClick={() => router.push('/admin/time-off/create-timeoff')}
                         >
                             {t('COMMON.BUTTON.CREATE')}
                         </Button>
@@ -543,7 +579,9 @@ const EmployeeTable: React.FC = () => {
                                                             backgroundColor: 'var(--hover-color)'
                                                         }
                                                     }}
-                                                    //onClick={() => handleButtonUpdateClick(row.Id)}
+                                                    onClick={() =>
+                                                        router.push(`/admin/time-off/update-timeoff?id=${user.Id}`)
+                                                    }
                                                 >
                                                     <Pencil />
                                                 </Box>
@@ -563,7 +601,7 @@ const EmployeeTable: React.FC = () => {
                                                             backgroundColor: 'var(--hover-color)'
                                                         }
                                                     }}
-                                                    //onClick={() => handleDeleteClick(row.Id)}
+                                                    onClick={() => handleDeleteClick(user.Id)}
                                                 >
                                                     <Trash2 />
                                                 </Box>
@@ -675,6 +713,17 @@ const EmployeeTable: React.FC = () => {
                     />
                 </Box>
             </Paper>
+
+            <AlertDialog
+                title={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.TITLE')}
+                content={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.CONTENT')}
+                type='warning'
+                open={openDialog}
+                setOpen={setOpenDialog}
+                buttonCancel={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.CANCEL')}
+                buttonConfirm={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.DELETE')}
+                onConfirm={() => (isChangeMany ? handleDeleteManyTimeOff() : handleDeleteTimeOff())}
+            />
         </Box>
     )
 }
