@@ -26,7 +26,8 @@ import { useGetAllUsersQuery } from '@/services/AspNetUserService'
 
 import {
     useUpdateEmploymentContractsMutation,
-    useGetByIdEmploymentContractsQuery
+    useGetByIdEmploymentContractsQuery,
+    useSearchEmploymentContractsQuery
 } from '@/services/EmploymentContractService'
 
 const getCurrentDateTime = () => {
@@ -89,7 +90,8 @@ const UpdateEmploymentContract = () => {
         }
     }, [data, isFetchingGetById])
 
-    const { data: userResponse, isLoading: isUsersLoading, refetch } = useGetAllUsersQuery()
+    const { refetch } = useSearchEmploymentContractsQuery()
+    const { data: userResponse, isLoading: isUsersLoading } = useGetAllUsersQuery()
     const employee = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
 
     const [isSaveLoading, setIsSaveLoading] = useState(false)
@@ -255,12 +257,12 @@ const UpdateEmploymentContract = () => {
                                 },
                                 '& .MuiAutocomplete-popupIndicator': {
                                     '& svg': {
-                                        fill: 'var(--text-color)' 
+                                        fill: 'var(--text-color)'
                                     }
                                 },
                                 '& .MuiAutocomplete-clearIndicator': {
                                     '& svg': {
-                                        fill: 'var(--text-color)' 
+                                        fill: 'var(--text-color)'
                                     }
                                 }
                             }}
@@ -354,12 +356,12 @@ const UpdateEmploymentContract = () => {
                                 },
                                 '& .MuiAutocomplete-popupIndicator': {
                                     '& svg': {
-                                        fill: 'var(--text-color)' 
+                                        fill: 'var(--text-color)'
                                     }
                                 },
                                 '& .MuiAutocomplete-clearIndicator': {
                                     '& svg': {
-                                        fill: 'var(--text-color)' 
+                                        fill: 'var(--text-color)'
                                     }
                                 }
                             }}

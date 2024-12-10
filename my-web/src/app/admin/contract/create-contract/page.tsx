@@ -23,7 +23,10 @@ import { useToast } from '@/hooks/useToast'
 import { IAspNetUserGetAll } from '@/models/AspNetUser'
 import { useGetAllUsersQuery } from '@/services/AspNetUserService'
 
-import { useCreateEmploymentContractsMutation } from '@/services/EmploymentContractService'
+import {
+    useCreateEmploymentContractsMutation,
+    useSearchEmploymentContractsQuery
+} from '@/services/EmploymentContractService'
 
 const getCurrentDateTime = () => {
     const now = new Date()
@@ -54,7 +57,9 @@ const CreateEmploymentContract = () => {
 
     const [createEmploymentContract, { isSuccess, isError, reset }] = useCreateEmploymentContractsMutation()
 
-    const { data: userResponse, isLoading: isUsersLoading, refetch } = useGetAllUsersQuery()
+    const { refetch } = useSearchEmploymentContractsQuery()
+
+    const { data: userResponse, isLoading: isUsersLoading } = useGetAllUsersQuery()
     const employee = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
 
     const [isSaveLoading, setIsSaveLoading] = useState(false)
