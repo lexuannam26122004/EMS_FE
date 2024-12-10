@@ -51,6 +51,16 @@ export const holidayApi = createApi({
             // Invalidates 'Holiday' cache so list refreshes
             invalidatesTags: ['Holiday']
         }),
+        deleteManyHoliday: builder.mutation<void, number[]>({
+            // Makes DELETE request to /Remove/{id}
+            query: ids => ({
+                url: `DeleteMany`,
+                method: 'DELETE',
+                body: { Ids: ids }
+            }),
+            // Invalidates 'Holiday' cache so list refreshes
+            invalidatesTags: ['Holiday']
+        }),
         updateHoliday: builder.mutation<void, IHolidayGetAll>({
             query: holiday => ({
                 url: 'Update',
@@ -81,5 +91,10 @@ export const holidayApi = createApi({
     })
 })
 
-export const { useGetAllHolidayQuery, useCreateHolidayMutation, useDeleteHolidayMutation, useUpdateHolidayMutation } =
-    holidayApi
+export const {
+    useGetAllHolidayQuery,
+    useCreateHolidayMutation,
+    useDeleteHolidayMutation,
+    useUpdateHolidayMutation,
+    useDeleteManyHolidayMutation
+} = holidayApi

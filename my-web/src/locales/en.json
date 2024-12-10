@@ -208,6 +208,7 @@
             "CREATED_DATE": "Created Date",
             "CREATED_BY": "Created By",
             "ACTION": "Action",
+            "VIEW_DETAIL": "View detail Configuration",
             "PLACEHOLDER_SEARCH": "Search for Key, Type, Value, Desc...",
             "ACTION_CONFIGURATION": {
                 "CREATE_TITLE": "Create a New Configuration",
