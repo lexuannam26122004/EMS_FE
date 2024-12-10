@@ -1,15 +1,16 @@
-import { Box } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import { useState } from 'react'
 import Lightbox from 'yet-another-react-lightbox'
 import Zoom from 'yet-another-react-lightbox/plugins/zoom'
 import 'yet-another-react-lightbox/styles.css'
 import './ImageGrid.css'
-
+import { Description, PictureAsPdf } from '@mui/icons-material'
+import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded'
 interface ImageGridProps {
-    images: string[]
+    files: string[]
 }
 
-export default function ImageGrid({ images }: ImageGridProps) {
+export default function ImageGrid({ files }: ImageGridProps) {
     const [openLightbox, setOpenLightbox] = useState(false)
     const [selectedImageIndex, setSelectedImageIndex] = useState(0)
 
@@ -18,20 +19,88 @@ export default function ImageGrid({ images }: ImageGridProps) {
         setOpenLightbox(true)
     }
 
+    // Tách file tài liệu và ảnh
+    const documentFiles = files.filter(file => /\.(pdf|docx?|xlsx?|pptx?)$/i.test(file))
+    const imageFiles = files.filter(file => /\.(png|jpe?g|gif|bmp|webp)$/i.test(file))
+
+    // Hiển thị tài liệu
+    const renderDocuments = () => (
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mb: 1 }}>
+            {documentFiles.map((file, index) => {
+                const fileName = file.split('/').pop() || file
+                const fileExtension = file.split('.').pop()?.toLowerCase()
+                const getIcon = () => {
+                    switch (fileExtension) {
+                        case 'pdf':
+                            return <PictureAsPdf sx={{ color: 'red' }} /> // Icon PDF
+                        case 'doc':
+                        case 'docx':
+                            return <Description fontSize='small' sx={{ color: 'blue' }} />
+                        case 'xls':
+                        case 'xlsx':
+                            return <Description fontSize='small' sx={{ color: 'green' }} />
+                    }
+                }
+                return (
+                    <Box
+                        key={index}
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            padding: 1,
+                            border: '1px solid var(--border-color)',
+                            borderRadius: 1,
+                            '&:hover': {
+                                border: '1px solid var(--button-color)'
+                            },
+                            cursor: 'pointer'
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 1
+                            }}
+                            onClick={() => window.open(file, '_blank')}
+                        >
+                            <Typography variant='body1' sx={{ fontSize: '18px' }}>
+                                {getIcon()}
+                            </Typography>
+                            <Typography
+                                variant='body1'
+                                sx={{
+                                    color: 'var(--text-color)'
+                                }}
+                            >
+                                {fileName}
+                            </Typography>
+                        </Box>
+                        <DownloadRoundedIcon sx={{ color: 'var(--text-color)' }} />
+                    </Box>
+                )
+            })}
+        </Box>
+    )
+
     const renderImages = () => {
-        switch (images.length) {
+        switch (imageFiles.length) {
             case 1:
                 return (
                     <Box
                         sx={{
                             width: '100%',
+                            '&:hover': {
+                                border: '1px solid var(--button-color)'
+                            },
                             height: '400px', // hoặc tùy chỉnh chiều cao
                             position: 'relative'
                         }}
                         onClick={() => handleImageClick(0)}
                     >
                         <img
-                            src={images[0]}
+                            src={imageFiles[0]}
                             alt='Single image'
                             style={{
                                 width: '100%',
@@ -46,12 +115,16 @@ export default function ImageGrid({ images }: ImageGridProps) {
             case 2:
                 return (
                     <Box sx={{ display: 'grid', gap: 0.5, gridTemplateRows: '1fr 1fr' }}>
-                        {images.map((img, index) => (
+                        {imageFiles.map((img, index) => (
                             <Box
                                 key={index}
                                 sx={{
                                     height: '200px',
-                                    position: 'relative'
+                                    position: 'relative',
+                                    '&:hover': {
+                                        border: '1px solid var(--button-color)'
+                                    },
+                                    border: '1px solid var(--border-color)'
                                 }}
                                 onClick={() => handleImageClick(index)}
                             >
@@ -76,12 +149,16 @@ export default function ImageGrid({ images }: ImageGridProps) {
                         <Box
                             sx={{
                                 height: '300px',
-                                position: 'relative'
+                                position: 'relative',
+                                '&:hover': {
+                                    border: '1px solid var(--button-color)'
+                                },
+                                border: '1px solid var(--border-color)'
                             }}
                             onClick={() => handleImageClick(0)}
                         >
                             <img
-                                src={images[0]}
+                                src={imageFiles[0]}
                                 alt='Top image'
                                 style={{
                                     width: '100%',
@@ -92,12 +169,16 @@ export default function ImageGrid({ images }: ImageGridProps) {
                             />
                         </Box>
                         <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 0.5 }}>
-                            {images.slice(1).map((img, index) => (
+                            {imageFiles.slice(1).map((img, index) => (
                                 <Box
                                     key={index + 1}
                                     sx={{
                                         height: '150px',
-                                        position: 'relative'
+                                        position: 'relative',
+                                        '&:hover': {
+                                            border: '1px solid var(--button-color)'
+                                        },
+                                        border: '1px solid var(--border-color)'
                                     }}
                                     onClick={() => handleImageClick(index + 1)}
                                 >
@@ -121,12 +202,16 @@ export default function ImageGrid({ images }: ImageGridProps) {
                 return (
                     <Box sx={{ display: 'grid', gridTemplateRows: '1fr 1fr', gap: 0.5 }}>
                         <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 0.5 }}>
-                            {images.slice(0, 2).map((img, index) => (
+                            {imageFiles.slice(0, 2).map((img, index) => (
                                 <Box
                                     key={index}
                                     sx={{
                                         height: '200px',
-                                        position: 'relative'
+                                        position: 'relative',
+                                        '&:hover': {
+                                            border: '1px solid var(--button-color)'
+                                        },
+                                        border: '1px solid var(--border-color)'
                                     }}
                                     onClick={() => handleImageClick(index)}
                                 >
@@ -144,12 +229,16 @@ export default function ImageGrid({ images }: ImageGridProps) {
                             ))}
                         </Box>
                         <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 0.5 }}>
-                            {images.slice(2).map((img, index) => (
+                            {imageFiles.slice(2).map((img, index) => (
                                 <Box
                                     key={index + 2}
                                     sx={{
                                         height: '200px',
-                                        position: 'relative'
+                                        position: 'relative',
+                                        '&:hover': {
+                                            border: '1px solid var(--button-color)'
+                                        },
+                                        border: '1px solid var(--border-color)'
                                     }}
                                     onClick={() => handleImageClick(index + 2)}
                                 >
@@ -173,12 +262,16 @@ export default function ImageGrid({ images }: ImageGridProps) {
                 return (
                     <Box sx={{ display: 'grid', gap: 0.5, gridTemplateRows: 'auto 1fr' }}>
                         <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 0.5 }}>
-                            {images.slice(0, 2).map((img, index) => (
+                            {imageFiles.slice(0, 2).map((img, index) => (
                                 <Box
                                     key={index}
                                     sx={{
                                         height: '200px',
-                                        position: 'relative'
+                                        '&:hover': {
+                                            border: '1px solid var(--button-color)'
+                                        },
+                                        position: 'relative',
+                                        border: '1px solid var(--border-color)'
                                     }}
                                     onClick={() => handleImageClick(index)}
                                 >
@@ -196,12 +289,16 @@ export default function ImageGrid({ images }: ImageGridProps) {
                             ))}
                         </Box>
                         <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 0.5 }}>
-                            {images.slice(2, 5).map((img, index) => (
+                            {imageFiles.slice(2, 5).map((img, index) => (
                                 <Box
                                     key={index + 2}
                                     sx={{
                                         height: '150px',
-                                        position: 'relative'
+                                        '&:hover': {
+                                            border: '1px solid var(--button-color)'
+                                        },
+                                        position: 'relative',
+                                        border: '1px solid var(--border-color)'
                                     }}
                                     onClick={() => handleImageClick(index + 2)}
                                 >
@@ -215,7 +312,7 @@ export default function ImageGrid({ images }: ImageGridProps) {
                                             cursor: 'pointer'
                                         }}
                                     />
-                                    {index === 2 && images.length > 5 && (
+                                    {index === 2 && imageFiles.length > 5 && (
                                         <Box
                                             sx={{
                                                 position: 'absolute',
@@ -234,7 +331,7 @@ export default function ImageGrid({ images }: ImageGridProps) {
                                                 userSelect: 'none'
                                             }}
                                         >
-                                            +{images.length - 5}
+                                            +{imageFiles.length - 5}
                                         </Box>
                                     )}
                                 </Box>
@@ -251,17 +348,16 @@ export default function ImageGrid({ images }: ImageGridProps) {
                 width: 'auto',
                 height: 'auto',
                 marginTop: 1,
-                marginBottom: 1.1,
-                marginLeft: -1,
-                marginRight: -2
+                marginBottom: 1.1
             }}
         >
-            {renderImages()}
+            {documentFiles.length > 0 && renderDocuments()}
+            {imageFiles.length > 0 && renderImages()}
 
             <Lightbox
                 open={openLightbox}
                 close={() => setOpenLightbox(false)}
-                slides={images.map(src => ({ src }))}
+                slides={imageFiles.map(src => ({ src }))}
                 plugins={[Zoom]}
                 zoom={{
                     maxZoomPixelRatio: 5, // Giảm từ 5 xuống 2

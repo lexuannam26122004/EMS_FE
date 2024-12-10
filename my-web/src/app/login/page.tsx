@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react'
-import { Box, TextField, Button } from '@mui/material'
+import { Box, TextField, Button , CircularProgress} from '@mui/material'
 import { useToast } from '@/hooks/useToast'
 import { IAspNetUserGetAll } from '@/models/AspNetUser'
 import { useGetAllUsersQuery } from '@/services/AspNetUserService'
@@ -13,7 +13,7 @@ const LoginForm: React.FC = () => {
     const [userId, setUserId] = useState<string | null>(null)
     const toast = useToast()
 
-    const { data: userResponse } = useGetAllUsersQuery()
+    const { data: userResponse, isLoading: isLoading } = useGetAllUsersQuery()
     const employee = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -41,7 +41,7 @@ const LoginForm: React.FC = () => {
                 localStorage.setItem('auth_token', data.Data.auth_token)
 
                 setUserId(data.Data.id)
-                const users = employee.find(ep => ep.Id === userId)
+                const users = employee.find(ep => ep.Id === data.Data.id)
                 toast(`Đăng nhập thành công! Chào mừng ${users?.FullName}`, 'success')
             } else {
                 toast('Đăng nhập thất bại!', 'error')
@@ -52,6 +52,23 @@ const LoginForm: React.FC = () => {
         } finally {
             setLoading(false)
         }
+    }
+
+
+    if (isLoading) {
+        return (
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100vh',
+                    backgroundColor: '#f5f5f5',
+                }}
+            >
+                <CircularProgress />
+            </Box>
+        )
     }
 
     return (
@@ -107,7 +124,7 @@ const LoginForm: React.FC = () => {
                     }}
                     disabled={loading}
                 >
-                    {loading ? 'Đang xử lý...' : 'Đăng nhập'}
+                    {loading || isLoading ? 'Đang xử lý...' : 'Đăng nhập'}
                 </Button>
                 <a
                     href='#'

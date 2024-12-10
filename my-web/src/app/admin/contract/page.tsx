@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import {
     Box,
     Select,
@@ -28,13 +29,18 @@ import {
 import { IAspNetUserGetAll } from '@/models/AspNetUser'
 import { useGetAllUsersQuery } from '@/services/AspNetUserService'
 import { IEmploymentContractSearch } from '@/models/EmploymentContract'
-import { useSearchEmploymentContractsQuery } from '@/services/EmploymentContractService'
+import {
+    useSearchEmploymentContractsQuery,
+    useChangeStatusEmploymentContractsMutation
+} from '@/services/EmploymentContractService'
 
 import { CirclePlus, EyeIcon, Pencil, Trash2 } from 'lucide-react'
 import SearchIcon from '@mui/icons-material/Search'
 import { useTranslation } from 'react-i18next'
+import AlertDialog from '@/components/AlertDialog'
 
 const EmployeeTable: React.FC = () => {
+    const [selectedRow, setSelectedRow] = useState<string | null>(null)
     const [openDialog, setOpenDialog] = useState(false)
     const [isChangeMany, setIsChangeMany] = useState(false)
     const [selected, setSelected] = useState<string[]>([])
@@ -46,8 +52,11 @@ const EmployeeTable: React.FC = () => {
         direction: 'asc' | 'desc'
     }>({ key: 'Id', direction: 'asc' })
     const { t } = useTranslation('common')
+    const router = useRouter()
 
-    const { data: contractResponse, isLoading: isContractsLoading } = useSearchEmploymentContractsQuery()
+    const [changeEmploymentContract] = useChangeStatusEmploymentContractsMutation()
+
+    const { data: contractResponse, isLoading: isContractsLoading, refetch } = useSearchEmploymentContractsQuery()
     const { data: userResponse, isLoading: isUsersLoading } = useGetAllUsersQuery()
 
     const contract = (contractResponse?.Data?.Records as IEmploymentContractSearch[]) || []
@@ -84,9 +93,16 @@ const EmployeeTable: React.FC = () => {
     }
 
     const sortedUsers = filteredUsers.sort((a, b) => {
-        const aValue = a[sortConfig.key]?.toString().toLowerCase() || ''
-        const bValue = b[sortConfig.key]?.toString().toLowerCase() || ''
-        return sortConfig.direction === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue)
+        const aValue = a[sortConfig.key]
+        const bValue = b[sortConfig.key]
+
+        if (typeof aValue === 'number' && typeof bValue === 'number') {
+            return sortConfig.direction === 'asc' ? aValue - bValue : bValue - aValue
+        } else {
+            const aString = aValue?.toString().toLowerCase() || ''
+            const bString = bValue?.toString().toLowerCase() || ''
+            return sortConfig.direction === 'asc' ? aString.localeCompare(bString) : bString.localeCompare(aString)
+        }
     })
 
     const totalRecords = sortedUsers.length
@@ -123,6 +139,35 @@ const EmployeeTable: React.FC = () => {
     const to = Math.min(currentPage * Number(rowsPerPage), totalRecords)
 
     const countRows = selected.length
+
+    const handleDeleteClick = async (id: string) => {
+        setOpenDialog(true)
+        setSelectedRow(id)
+    }
+
+    const handleDeleteEmploymentContract = async () => {
+        if (selectedRow) {
+            await changeEmploymentContract(selectedRow)
+            if (isSelected(selectedRow)) {
+                setSelected(prev => prev.filter(item => item !== selectedRow))
+            }
+            setOpenDialog(false)
+            setSelectedRow(null)
+            refetch()
+        }
+    }
+
+    const handleDeleteManyEmploymentContract = async () => {
+        if (selected.length > 0) {
+            for (const id of selected) {
+                await changeEmploymentContract(id)
+            }
+            setIsChangeMany(false)
+            setSelected([])
+            setOpenDialog(false)
+            refetch()
+        }
+    }
 
     return (
         <Box>
@@ -238,7 +283,7 @@ const EmployeeTable: React.FC = () => {
                                 whiteSpace: 'nowrap',
                                 textTransform: 'none'
                             }}
-                            //onClick={() => router.push('/admin/configuration/create-configuration')}
+                            onClick={() => router.push('/admin/contract/create-contract')}
                         >
                             {t('COMMON.BUTTON.CREATE')}
                         </Button>
@@ -302,22 +347,6 @@ const EmployeeTable: React.FC = () => {
                                             ID
                                         </Typography>
                                     </TableSortLabel>
-                                </TableCell>
-
-                                <TableCell sx={{ borderColor: 'var(--border-color)' }}>
-                                    <Typography
-                                        sx={{
-                                            fontWeight: 'bold',
-                                            color: 'var(--text-color)',
-                                            fontSize: '16px',
-                                            overflow: 'hidden',
-                                            maxWidth: '260px',
-                                            textOverflow: 'ellipsis',
-                                            whiteSpace: 'nowrap'
-                                        }}
-                                    >
-                                        Avatar
-                                    </Typography>
                                 </TableCell>
 
                                 {['FullName', 'UserId', 'ContractName', 'StartDate', 'BasicSalary'].map(
@@ -407,9 +436,6 @@ const EmployeeTable: React.FC = () => {
                                     </TableCell>
 
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
-                                        <Avatar src={user.AvatarPath} alt='Avatar' />
-                                    </TableCell>
-                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                         <Typography
                                             sx={{
                                                 fontWeight: 'bold',
@@ -418,10 +444,21 @@ const EmployeeTable: React.FC = () => {
                                                 overflow: 'hidden',
                                                 maxWidth: '260px',
                                                 textOverflow: 'ellipsis',
-                                                whiteSpace: 'nowrap'
+                                                whiteSpace: 'nowrap',
+                                                display: 'flex',
+                                                alignItems: 'center'
                                             }}
+                                            component='div'
                                         >
-                                            {user.FullName}
+                                            <Avatar
+                                                src={
+                                                    user.AvatarPath ||
+                                                    'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'
+                                                }
+                                                alt='Avatar'
+                                                sx={{ marginRight: '20px' }}
+                                            />
+                                            {user.FullName || 'N/A'}
                                         </Typography>
                                     </TableCell>
 
@@ -536,7 +573,9 @@ const EmployeeTable: React.FC = () => {
                                                             backgroundColor: 'var(--hover-color)'
                                                         }
                                                     }}
-                                                    //onClick={() => handleButtonUpdateClick(row.Id)}
+                                                    onClick={() =>
+                                                        router.push(`/admin/contract/update-contract?id=${user.Id}`)
+                                                    }
                                                 >
                                                     <Pencil />
                                                 </Box>
@@ -556,7 +595,7 @@ const EmployeeTable: React.FC = () => {
                                                             backgroundColor: 'var(--hover-color)'
                                                         }
                                                     }}
-                                                    //onClick={() => handleDeleteClick(row.Id)}
+                                                    onClick={() => handleDeleteClick(user.Id)}
                                                 >
                                                     <Trash2 />
                                                 </Box>
@@ -668,6 +707,19 @@ const EmployeeTable: React.FC = () => {
                     />
                 </Box>
             </Paper>
+
+            <AlertDialog
+                title={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.TITLE')}
+                content={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.CONTENT')}
+                type='warning'
+                open={openDialog}
+                setOpen={setOpenDialog}
+                buttonCancel={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.CANCEL')}
+                buttonConfirm={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.DELETE')}
+                onConfirm={() =>
+                    isChangeMany ? handleDeleteManyEmploymentContract() : handleDeleteEmploymentContract()
+                }
+            />
         </Box>
     )
 }

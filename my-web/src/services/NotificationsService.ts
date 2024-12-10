@@ -1,5 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { IFilterNotificationsForUserVModel } from '@/models/Notifications'
+import {
+    IFilterNotificationsForUserVModel,
+    INotificationCreateVModel,
+    INotificationUpdateVModel
+} from '@/models/Notifications'
 import axios from './axios'
 
 interface NotificationsResponse {
@@ -58,6 +62,20 @@ export const notificationsApi = createApi({
                 body: { UserId: userId }
             })
         }),
+        createNotification: builder.mutation<void, INotificationCreateVModel>({
+            query: body => ({
+                url: 'Create',
+                method: 'POST',
+                body: body
+            })
+        }),
+        updateNotification: builder.mutation<void, INotificationUpdateVModel>({
+            query: body => ({
+                url: 'Update',
+                method: 'PUT',
+                body: body
+            })
+        }),
         changeNotificationRead: builder.mutation<NotificationsResponse, number>({
             query: id => ({
                 url: `ChangeRead`,
@@ -82,5 +100,7 @@ export const {
     useDeleteNotificationMutation,
     useGetNotificationByIdQuery,
     useGetCountIsNewQuery,
-    useUpdateIsNewMutation
+    useUpdateIsNewMutation,
+    useCreateNotificationMutation,
+    useUpdateNotificationMutation
 } = notificationsApi

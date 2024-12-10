@@ -9,6 +9,22 @@ export interface INotificationsForUser {
     NotificationId: number
 }
 
+export interface INotificationCreateVModel {
+    Title: string
+    Content: string
+    ListUser: string[]
+    ListFile?: number[]
+    ListRole: string[]
+    ListDept: number[]
+    Type: string
+    UserId: string
+    TypeToNotify: number
+}
+
+export interface INotificationUpdateVModel extends INotificationCreateVModel {
+    Id: number
+}
+
 export interface IFilterNotificationsForUserVModel {
     userId: string
     type?: string

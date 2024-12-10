@@ -59,12 +59,26 @@
             "EDIT": "Cập nhật",
             "UPDATING": "Đang cập nhật",
             "DELETE": "Xóa",
+            "AFTER": "Sau",
+            "BEFORE": "Trước",
             "VIEW_DETAIL": "Xem chi tiết",
-            "CLOSE": "Đóng"
+            "CLOSE": "Đóng",
+            "SELECT": "Chọn hết",
+            "UNSELECT": "Bỏ hết"
         },
         "TEXTFIELD": {
             "SEARCH": "Tìm kiếm",
-            "REQUIRED": "Trường này không được để trống*"
+            "REQUIRED": "Không được trống*"
+        },
+        "NOTIFICATION_TYPE": {
+            "PUBLIC": "Chung",
+            "BENEFIT": "Lợi ích",
+            "SALARY": "Lương",
+            "REWARD": "Thưởng",
+            "INSURANCE": "Bảo hiểm",
+            "DISCIPLINE": "Kỉ luật",
+            "HOLIDAY": "Nghỉ lễ",
+            "TIMEKEEPING": "Bảng công"
         },
         "NOTIFICATION": {
             "TITLE": "Thông báo",
@@ -216,6 +230,35 @@
             "NOTE": "Mô tả ngày lễ",
             "ACTION": "Hành động",
             "TITLE": "Tạo một ngày nghỉ lễ"
+            },
+            "VIEW_DETAIL": "Xem chi tiết Cấu hình"
+        },
+        "CREATE_NOTIFICATION": {
+            "TITLE_PAGE": "Tạo thông báo mới",
+            "TITLE*": "Tiêu đề*",
+            "CONTENT*": "Nội dung*",
+            "TYPE": "Loại*",
+            "TITLE": "Tiêu đề",
+            "CONTENT": "Nội dung",
+            "BY_ROLE": "Theo vai trò",
+            "EMPTY": "Trống",
+            "BY_DEPARTMENT": "Theo phòng ban",
+            "ALL_USERS": "Tất cả",
+            "NOT_FOUND": "Không tìm thấy kết quả nào",
+            "SEARCH_USERS": "Tìm kiếm người dùng",
+            "ADD_IMAGES_OR_FILES": "Thêm ảnh hoặc tệp tin",
+            "BY_DEPARTMENT_H": "Theo phòng ban: ",
+            "BY_ROLE_H:": "Theo vai trò: ",
+            "DEPARTMENT_AND_ROLE": "Theo Phòng ban và Vai trò",
+            "SPECIFIC_USERS": "Người dùng cụ thể",
+            "USERS_WILL_SEE_THE_POST": "Những người sẽ thấy bài viết",
+            "USERS_TO_NOTIFY": "Người nhận thông báo",
+            "CREATE_SUCCESS": "Tạo thông báo thành công",
+            "UPDATE_SUCCESS": "Cập nhật thông báo thành công",
+            "DELETE_SUCCESS": "Xóa thông báo thành công",
+            "CREATE_ERROR": "Tạo thông báo thất bại",
+            "UPDATE_ERROR": "Cập nhật thông báo thất bại",
+            "DELETE_ERROR": "Xóa thông báo thất bại"
         }
     }
 }
