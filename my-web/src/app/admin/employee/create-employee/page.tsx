@@ -306,10 +306,22 @@ const CreateEmployeePage = () => {
                                 label='Phòng ban*'
                                 MenuProps={{
                                     PaperProps: {
+                                        elevation: 0,
                                         sx: {
                                             backgroundColor: 'var(--background-color)',
                                             color: 'var(--text-color)',
-                                            boxShadow: '0px 2px 6px var(--text-color)'
+                                            border: '1px solid var(--border-color)',
+                                            '& .MuiMenuItem-root': {
+                                                '&:hover': {
+                                                    backgroundColor: 'var(--hover-color)'
+                                                },
+                                                '&.Mui-selected': {
+                                                    backgroundColor: 'var(--selected-color)',
+                                                    '&:hover': {
+                                                        backgroundColor: 'var(--hover-color)'
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }}
@@ -499,10 +511,22 @@ const CreateEmployeePage = () => {
                             renderValue={selected => (selected as string[]).join(', ')}
                             MenuProps={{
                                 PaperProps: {
+                                    elevation: 0,
                                     sx: {
                                         backgroundColor: 'var(--background-color)',
                                         color: 'var(--text-color)',
-                                        boxShadow: '0px 2px 6px var(--text-color)'
+                                        border: '1px solid var(--border-color)',
+                                        '& .MuiMenuItem-root': {
+                                            '&:hover': {
+                                                backgroundColor: 'var(--hover-color)'
+                                            },
+                                            '&.Mui-selected': {
+                                                backgroundColor: 'var(--selected-color)',
+                                                '&:hover': {
+                                                    backgroundColor: 'var(--hover-color)'
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }}
@@ -589,10 +613,22 @@ const CreateEmployeePage = () => {
                                 onChange={e => setSex(e.target.value)}
                                 MenuProps={{
                                     PaperProps: {
+                                        elevation: 0,
                                         sx: {
                                             backgroundColor: 'var(--background-color)',
                                             color: 'var(--text-color)',
-                                            boxShadow: '0px 2px 6px var(--text-color)'
+                                            border: '1px solid var(--border-color)',
+                                            '& .MuiMenuItem-root': {
+                                                '&:hover': {
+                                                    backgroundColor: 'var(--hover-color)'
+                                                },
+                                                '&.Mui-selected': {
+                                                    backgroundColor: 'var(--selected-color)',
+                                                    '&:hover': {
+                                                        backgroundColor: 'var(--hover-color)'
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }}
@@ -946,7 +982,7 @@ const CreateEmployeePage = () => {
                             textTransform: 'none'
                         }}
                         onClick={() => {
-                            window.location.reload();
+                            window.location.reload()
                         }}
                     >
                         {t('Làm mới')}
