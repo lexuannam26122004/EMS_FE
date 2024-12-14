@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Box, TextField, Button, CircularProgress } from '@mui/material'
 import { useToast } from '@/hooks/useToast'
 import { IAspNetUserGetAll } from '@/models/AspNetUser'
@@ -322,20 +322,135 @@ const LoginForm: React.FC = () => {
     )
 }
 
+const ImageLayout: React.FC = () => {
+    return (
+        <div
+            style={{
+                position: 'relative',
+                width: '100%',
+                height: '100vh',
+                background: 'linear-gradient(to right, #ffffff 50%, #00ddff 50%)'
+            }}
+        >
+            <div className='image-container' style={{ paddingTop: '50px', paddingLeft: '50px' }}>
+                <img
+                    src='https://static.wixstatic.com/media/84770f_4753af9912144e469acb7dac3bdbba0e~mv2.png/v1/fill/w_583,h_395,al_c,lg_1,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/back2%20-%20top%20-%20UPDATE.png'
+                    alt='Image 1'
+                    style={{
+                        width: '500px',
+                        height: '300px',
+                        objectFit: 'cover'
+                    }}
+                />
+            </div>
+            <div className='image-container' style={{ paddingTop: '350px', paddingLeft: '550px' }}>
+                <img
+                    src='https://static.wixstatic.com/media/c837a6_fbd50d9a9dac48068f4c34b5934d6404~mv2.png/v1/fill/w_583,h_395,al_c,lg_1,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/back1%20-%20buttom.png'
+                    alt='Image 2'
+                    style={{
+                        width: '500px',
+                        height: '300px',
+                        objectFit: 'cover'
+                    }}
+                />
+            </div>
+            <div className='image-container' style={{ paddingTop: '200px', paddingLeft: '300px' }}>
+                <img
+                    src='https://static.wixstatic.com/media/c837a6_ee52c320bae548ea9f1f3730d7f6ff39~mv2.png/v1/crop/x_0,y_0,w_486,h_330/fill/w_583,h_395,al_c,lg_1,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Group%2028.png'
+                    alt='Image 3'
+                    style={{
+                        width: '500px',
+                        height: '300px',
+                        objectFit: 'cover'
+                    }}
+                />
+            </div>
+
+            {/* Top-right content */}
+            <div
+                className='top-right-content'
+                style={{
+                    position: 'absolute',
+                    top: '20px',
+                    right: '20px',
+                    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                    padding: '15px',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                    zIndex: 2,
+                    animation: ' slideFromRight 1.5s ease-out forwards'
+                }}
+            >
+                <h3>Content Title</h3>
+                <p>This is some content displayed in the top-right corner of the screen.</p>
+                <p>This is some content displayed in the top-right corner of the screen.</p>
+                <p>This is some content displayed in the top-right corner of the screen.</p>
+                <p>This is some content displayed in the top-right corner of the screen.</p>
+                <p>This is some content displayed in the top-right corner of the screen.</p>
+                <p>This is some content displayed in the top-right corner of the screen.</p>
+            </div>
+
+            <style>{`
+        .image-container {
+          flex: 1;
+          position: absolute;
+          max-width: 100%;
+          overflow: hidden;
+          border-radius: 10px;
+          opacity: 0;
+          z-index: 1;
+          animation: slideFromRight 1.5s ease-out forwards;
+        }
+
+        @keyframes slideFromRight {
+          0% {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          100% {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+
+        .image-container:nth-child(1) {
+          animation-delay: 0s;
+        }
+
+        .image-container:nth-child(2) {
+          animation-delay: 0.5s;
+        }
+
+        .image-container:nth-child(3) {
+          animation-delay: 1s;
+        }
+
+        .image-container:hover {
+          opacity: 0.8;
+        }
+      `}</style>
+        </div>
+    )
+}
+
 const Page: React.FC = () => {
     return (
         <div>
             <Navbar />
             <header>
                 <section
-                    className='content'
-                    style={{ display: 'flex', justifyContent: 'space-between', marginTop: '100px', padding: '0 20px' }}
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        marginTop: '100px',
+                        padding: '0 20px',
+                        width: '100%'
+                    }}
                 >
                     <div
-                        className='image-container'
                         style={{
                             position: 'relative',
-                            width: '60%',
+                            flex: 1, // Đảm bảo div này chiếm 50% không gian
                             height: '600px',
                             borderRadius: '10px',
                             overflow: 'hidden'
@@ -354,11 +469,15 @@ const Page: React.FC = () => {
                         />
                     </div>
                     <div
-                        className='text-container'
-                        style={{ textAlign: 'left', paddingRight: '40px', height: '600px' }}
+                        style={{
+                            textAlign: 'left',
+                            paddingRight: '40px',
+                            height: '600px',
+                            flex: 1 // Đảm bảo div này chiếm 50% không gian
+                        }}
                     >
-                        <div className='intro' style={{ marginBottom: '40px',padding:'60px' }}>
-                            <h2 style={{ fontSize: '28px', color: '#1877f2'}}>Đăng nhập vào hệ thống</h2>
+                        <div className='intro' style={{ marginBottom: '40px', paddingLeft: '60px' }}>
+                            <h2 style={{ fontSize: '28px', color: '#1877f2' }}>Đăng nhập vào hệ thống</h2>
                             <p style={{ fontSize: '16px', color: '#666' }}>
                                 Để truy cập và quản lý thông tin nhân viên, theo dõi công việc, và tối ưu hóa quy trình
                                 làm việc, vui lòng đăng nhập vào hệ thống.
@@ -366,6 +485,13 @@ const Page: React.FC = () => {
                             <LoginForm />
                         </div>
                     </div>
+                </section>
+
+                <section
+                    className='content'
+                    style={{ display: 'flex', justifyContent: 'space-between', marginTop: '100px', padding: '0 20px' }}
+                >
+                    <ImageLayout />
                 </section>
             </header>
 
