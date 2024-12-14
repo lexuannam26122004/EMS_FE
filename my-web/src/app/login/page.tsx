@@ -34,11 +34,11 @@ const Navbar: React.FC = () => {
                 <Image
                     src='/images/logo.png'
                     alt='Logo'
-                    width={100} 
-                    height={100} 
+                    width={100}
+                    height={100}
                     style={{
-                        marginRight: '10px', 
-                        objectFit: 'contain' 
+                        marginRight: '10px',
+                        objectFit: 'contain'
                     }}
                 />
                 <span>NPM SYSTEM</span>
@@ -191,7 +191,7 @@ const LoginForm: React.FC = () => {
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    height: '500px',
+                    height: '400px',
                     backgroundColor: '#f5f5f5'
                 }}
             >
@@ -206,7 +206,7 @@ const LoginForm: React.FC = () => {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                marginTop: '80px'
+                marginTop: '50px'
             }}
         >
             <form
@@ -357,17 +357,28 @@ const Page: React.FC = () => {
                         className='text-container'
                         style={{ textAlign: 'left', paddingRight: '40px', height: '600px' }}
                     >
-                        <div className='intro' style={{ marginBottom: '40px' }}>
-                            <h2 style={{ fontSize: '28px', color: '#1877f2' }}>Giới thiệu về hệ thống</h2>
+                        <div className='intro' style={{ marginBottom: '40px',padding:'60px' }}>
+                            <h2 style={{ fontSize: '28px', color: '#1877f2'}}>Đăng nhập vào hệ thống</h2>
                             <p style={{ fontSize: '16px', color: '#666' }}>
-                                Ứng dụng giúp bạn quản lý các thông tin nhân viên, theo dõi công việc, và tối ưu hóa quy
-                                trình làm việc.
+                                Để truy cập và quản lý thông tin nhân viên, theo dõi công việc, và tối ưu hóa quy trình
+                                làm việc, vui lòng đăng nhập vào hệ thống.
                             </p>
                             <LoginForm />
                         </div>
                     </div>
                 </section>
             </header>
+
+            <style jsx>{`
+                @keyframes slideFromLeft {
+                    0% {
+                        transform: translate(-100%, 0);
+                    }
+                    100% {
+                        transform: translate(0, 0);
+                    }
+                }
+            `}</style>
         </div>
     )
 }
