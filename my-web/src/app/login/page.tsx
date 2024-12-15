@@ -11,16 +11,17 @@ const Navbar: React.FC = () => {
         <div
             style={{
                 position: 'fixed',
-                top: 0,
-                left: 0,
-                width: '100%',
+                top: 30,
+                left: 700,
+                width: '50%',
                 backgroundColor: 'white',
                 padding: '20px 40px',
-                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
                 zIndex: 1000,
                 display: 'flex',
                 justifyContent: 'space-between',
-                alignItems: 'center'
+                alignItems: 'center',
+                borderRadius: '100px',
+                background: '#d3d3d3'
             }}
         >
             <div
@@ -59,56 +60,26 @@ const Navbar: React.FC = () => {
                             color: '#333',
                             fontSize: '16px',
                             fontWeight: '500',
-                            padding: '10px 20px',
+
                             borderRadius: '8px'
                         }}
                     >
-                        Product
+                        Trang chủ
                     </a>
                 </li>
                 <li>
                     <a
-                        href='#'
+                        href='#gioithieu'
                         style={{
                             textDecoration: 'none',
                             color: '#333',
                             fontSize: '16px',
                             fontWeight: '500',
-                            padding: '10px 20px',
+
                             borderRadius: '8px'
                         }}
                     >
-                        Solutions
-                    </a>
-                </li>
-                <li>
-                    <a
-                        href='#'
-                        style={{
-                            textDecoration: 'none',
-                            color: '#333',
-                            fontSize: '16px',
-                            fontWeight: '500',
-                            padding: '10px 20px',
-                            borderRadius: '8px'
-                        }}
-                    >
-                        Pricing
-                    </a>
-                </li>
-                <li>
-                    <a
-                        href='#'
-                        style={{
-                            textDecoration: 'none',
-                            color: '#333',
-                            fontSize: '16px',
-                            fontWeight: '500',
-                            padding: '10px 20px',
-                            borderRadius: '8px'
-                        }}
-                    >
-                        Resources
+                        Giới thiệu
                     </a>
                 </li>
             </ul>
@@ -218,7 +189,6 @@ const LoginForm: React.FC = () => {
                     boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.2)',
                     maxWidth: '400px',
                     textAlign: 'center'
-                    
                 }}
             >
                 <TextField
@@ -341,9 +311,9 @@ const Layout_1: React.FC = () => {
                     height: '100vh',
                     borderRadius: '10px',
                     overflow: 'hidden',
-                    display: 'flex', 
-                    justifyContent: 'center',  
-                    alignItems: 'center',  
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center'
                 }}
             >
                 <Image
@@ -365,7 +335,7 @@ const Layout_1: React.FC = () => {
                     paddingRight: '40px',
                     height: '100vh',
                     flex: 1,
-                    marginTop:'130px'
+                    marginTop: '130px'
                 }}
             >
                 <div className='intro' style={{ marginBottom: '40px', paddingLeft: '60px' }}>
@@ -579,7 +549,11 @@ const Page: React.FC = () => {
                     <Layout_1 />
                 </section>
 
-                <section className='content' style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <section
+                    id='gioithieu'
+                    className='content'
+                    style={{ display: 'flex', justifyContent: 'space-between' }}
+                >
                     <Layout_2 />
                 </section>
 
