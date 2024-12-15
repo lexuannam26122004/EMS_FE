@@ -1,5 +1,5 @@
 import { MessageCircleMore } from 'lucide-react'
-import { Box, Fab, Tooltip } from '@mui/material'
+import { Box, Fab, Tooltip, Typography } from '@mui/material'
 import { useState } from 'react'
 
 export default function ChatButton() {
@@ -15,28 +15,35 @@ export default function ChatButton() {
             <Box
                 sx={{
                     position: 'fixed',
-                    bottom: '2rem',
-                    right: '2rem',
+                    bottom: '0rem',
+                    right: '0.5rem',
                     zIndex: 1000
                 }}
             >
                 <Tooltip title='Chat với chúng tôi' placement='left'>
-                    <Fab
+                    <Box
                         color='primary'
                         onClick={handleToggleChat}
                         sx={{
-                            width: '60px',
-                            height: '60px',
+                            width: '400px',
+                            position: 'relative',
+                            gap: '10px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            //height: '30px',
                             backgroundColor: 'var(--button-color)',
                             '&:hover': {
                                 backgroundColor: 'var(--hover-button-color)'
                             },
                             boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-                            transition: 'all 0.3s ease'
+                            transition: 'all 0.3s ease',
+                            borderTopLeftRadius: '8px',
+                            borderTopRightRadius: '8px'
                         }}
                     >
-                        <MessageCircleMore size={28} color='white' />
-                    </Fab>
+                        <MessageCircleMore style={{ marginLeft: '10px' }} size={28} color='white' />
+                        <Typography sx={{ padding: '5px', fontSize: '20px', color: 'white' }}>Chat</Typography>
+                    </Box>
                 </Tooltip>
             </Box>
 
@@ -45,9 +52,9 @@ export default function ChatButton() {
                 <Box
                     sx={{
                         position: 'fixed',
-                        bottom: '6rem',
-                        right: '2rem',
-                        width: '350px',
+                        bottom: '2rem',
+                        right: '0.5rem',
+                        width: '400px',
                         height: '500px',
                         backgroundColor: 'white',
                         borderRadius: '12px',

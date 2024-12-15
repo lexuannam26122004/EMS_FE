@@ -36,7 +36,10 @@ import { useTranslation } from 'react-i18next'
 import SearchIcon from '@mui/icons-material/Search'
 import { CirclePlus, EyeIcon, Pencil, Trash2 } from 'lucide-react'
 import AlertDialog from '@/components/AlertDialog'
+import { userSentNotificationId } from '@/utils/globalVariables'
 import { useRouter } from 'next/navigation'
+import { useCreateNotificationMutation } from '@/services/NotificationsService'
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 
 function HolidayPage() {
     const { t } = useTranslation('common')
@@ -46,11 +49,16 @@ function HolidayPage() {
     const [from, setFrom] = useState(1)
     const [to, setTo] = useState(10)
     const [keyword, setKeyword] = useState('')
+    const [isSubmit, setIsSubmit] = useState(false)
     const [isChangeMany, setIsChangeMany] = useState(false)
     const [openDialog, setOpenDialog] = useState(false)
     const [selectedRow, setSelectedRow] = useState<number | null>(null)
     const [order, setOrder] = useState<'asc' | 'desc'>('asc')
     const [orderBy, setOrderBy] = useState<string>('')
+    const [name, setName] = useState('')
+    const [startDate, setStartDate] = useState('')
+    const [endDate, setEndDate] = useState('')
+    const [note, setNote] = useState('')
     const [filter, setFilter] = useState<IFilterSysConfiguration>({
         pageSize: 10,
         pageNumber: 1
@@ -64,6 +72,8 @@ function HolidayPage() {
         deleteManyHoliday,
         { isError: isErrorDeleteMany, isSuccess: isSuccessDeleteMany, isLoading: isLoadingDeleteMany }
     ] = useDeleteManyHolidayMutation()
+    const [createNotification, { isError: isErrorCreate, isLoading: isLoadingNotify, isSuccess: isSuccessCreate }] =
+        useCreateNotificationMutation()
 
     const holidayData = responseData?.Data.Records as IHolidayGetAll[]
     const totalRecords = responseData?.Data.TotalRecords as number
@@ -75,43 +85,73 @@ function HolidayPage() {
     }
 
     const handleSave = async () => {
-        if (!holidayForm.name || !holidayForm.startDate || !holidayForm.endDate) {
+        setIsSubmit(true)
+        if (name === '' || startDate === '' || endDate === '' || new Date(endDate) < new Date(startDate)) {
+            alert('Ngày kết thúc phải lớn hơn hoặc bằng ngày bắt đầu.')
             return
         }
 
         try {
-            const startDate = new Date(holidayForm.startDate)
-            const endDate = new Date(holidayForm.endDate)
+            const StartDate = new Date(startDate)
+            const EndDate = new Date(endDate)
+            const formattedStartDate = StartDate.toLocaleDateString() // Định dạng ngày
+            const formattedEndDate = EndDate.toLocaleDateString() // Định dạng ngày
+            const Note =
+                StartDate > EndDate
+                    ? String(note) +
+                      ' ' +
+                      t('COMMON.HOLIDAY.FROM') +
+                      formattedStartDate +
+                      ' ' +
+                      t('COMMON.HOLIDAY.TO') +
+                      formattedEndDate
+                    : String(note) + ' ' + t('COMMON.HOLIDAY.LEAVE') + formattedStartDate
 
             if (selectedRow) {
                 await updateHoliday({
                     Id: selectedRow, // ID của bản ghi cần cập nhật
-                    Name: holidayForm.name,
-                    StartDate: startDate,
-                    EndDate: endDate,
-                    Note: holidayForm.note || ''
+                    Name: name,
+                    StartDate: StartDate,
+                    EndDate: EndDate,
+                    Note: note || ''
                 }).unwrap() // unwrap để xử lý lỗi nếu có
             } else {
                 // Nếu không có selectedRow, tức là đang tạo mới
                 await createHoliday({
-                    Name: holidayForm.name,
-                    StartDate: startDate,
-                    EndDate: endDate,
-                    Note: holidayForm.note || ''
+                    Name: name,
+                    StartDate: StartDate,
+                    EndDate: EndDate,
+                    Note: note || ''
                 }).unwrap()
+                const data = {
+                    Type: 'Holiday',
+                    Content: Note,
+                    Title: name,
+                    ListUser: [],
+                    ListFile: [],
+                    UserId: userSentNotificationId,
+                    ListDept: [],
+                    ListRole: [],
+                    TypeToNotify: 1
+                }
+
+                await createNotification(data).unwrap()
             }
 
             handleCloseCreateDialog()
-            setHolidayForm({
-                name: '',
-                startDate: '',
-                endDate: '',
-                note: ''
-            })
+            setDialog()
             setSelectedRow(null) // Reset selectedRow
+            setIsSubmit(false)
         } catch (error) {
             console.error('Failed to save holiday:', error)
         }
+    }
+
+    const setDialog = () => {
+        setName('')
+        setStartDate('')
+        setEndDate('')
+        setNote('')
     }
 
     useEffect(() => {
@@ -123,12 +163,10 @@ function HolidayPage() {
     const handleUpdate = async (holiday: IHolidayGetAll) => {
         const startDate = typeof holiday.StartDate === 'string' ? new Date(holiday.StartDate) : holiday.StartDate
         const endDate = typeof holiday.EndDate === 'string' ? new Date(holiday.EndDate) : holiday.EndDate
-        setHolidayForm({
-            name: holiday.Name,
-            startDate: startDate.toISOString().split('T')[0], // Chuyển đổi sang định dạng YYYY-MM-DD
-            endDate: endDate.toISOString().split('T')[0], // Chuyển đổi sang định dạng YYYY-MM-DD
-            note: holiday.Note || '' // Ghi chú có thể null
-        })
+        setName(holiday.Name)
+        setStartDate(startDate.toISOString().split('T')[0]) // Chuyển đổi sang định dạng YYYY-MM-DD
+        setEndDate(endDate.toISOString().split('T')[0]) // Chuyển đổi sang định dạng YYYY-MM-DD
+        setNote(holiday.Note || '') // Ghi chú có thể null
         setSelectedRow(holiday.Id) // Lưu ID của bản ghi đang chỉnh sửa
         setIsOpen(true) // Mở dialog
     }
@@ -139,23 +177,6 @@ function HolidayPage() {
         } else {
             setSelected([])
         }
-    }
-
-    // Thêm state ở đầu component
-    const [holidayForm, setHolidayForm] = useState({
-        name: '',
-        startDate: '',
-        endDate: '',
-        note: ''
-    })
-
-    // Thêm handler
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target
-        setHolidayForm(prev => ({
-            ...prev,
-            [name]: value
-        }))
     }
 
     const handleChangePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
@@ -245,13 +266,9 @@ function HolidayPage() {
     }
     const handleCloseCreateDialog = () => {
         setIsOpen(false)
-        setHolidayForm({
-            name: '',
-            startDate: '',
-            endDate: '',
-            note: ''
-        })
+        setDialog()
         setSelectedRow(null)
+        setIsSubmit(false)
     }
 
     useEffect(() => {
@@ -801,130 +818,156 @@ function HolidayPage() {
                             }}
                         >
                             {/* Name Field - Required */}
+                            <Box>
+                                <TextField
+                                    variant='outlined'
+                                    label={t('COMMON.HOLIDAY.NAME')}
+                                    name='name'
+                                    fullWidth
+                                    {...(isSubmit && name === '' && { error: true })}
+                                    sx={{
+                                        color: 'var(--text-color)',
+                                        '& fieldset': {
+                                            borderRadius: '8px',
+                                            color: 'var(--text-color)',
+                                            borderColor: 'var(--border-color)'
+                                        },
+                                        '& .MuiInputBase-root': { paddingRight: '0px' },
+                                        '& .MuiInputBase-input': {
+                                            color: 'var(--text-color)',
+                                            fontSize: '16px'
+                                        },
+                                        '& .MuiOutlinedInput-root:hover fieldset': {
+                                            borderColor: 'var(--hover-color)'
+                                        },
+                                        '& .MuiOutlinedInput-root.Mui-focused fieldset': {
+                                            borderColor: 'var(--selected-color)'
+                                        },
+                                        '& .MuiInputLabel-root': {
+                                            color: 'var(--text-label-color)'
+                                        },
+                                        '& .MuiInputLabel-root.Mui-focused': {
+                                            color: 'var(--selected-color)'
+                                        }
+                                    }}
+                                    value={name}
+                                    onChange={e => setName(e.target.value)}
+                                />
+                                <Typography
+                                    sx={{
+                                        color: 'red',
+                                        margin: '1px 0 0 10px',
+                                        fontSize: '12px',
+                                        visibility: isSubmit && name === '' ? 'visible' : 'hidden'
+                                    }}
+                                >
+                                    {t('COMMON.TEXTFIELD.REQUIRED')}
+                                </Typography>
+                            </Box>
+                            <Box>
+                                <TextField
+                                    variant='outlined'
+                                    label={t('COMMON.HOLIDAY.START_DATE')}
+                                    fullWidth
+                                    type='date'
+                                    InputLabelProps={{ shrink: true }}
+                                    {...(isSubmit && startDate === '' && { error: true })}
+                                    sx={{
+                                        color: 'var(--text-color)',
+                                        '& fieldset': {
+                                            borderRadius: '8px',
+                                            color: 'var(--text-color)',
+                                            borderColor: 'var(--border-color)'
+                                        },
+                                        '& .MuiInputBase-root': { paddingRight: '0px' },
+                                        '& .MuiInputBase-input': {
+                                            color: 'var(--text-color)',
+                                            fontSize: '16px'
+                                        },
+                                        '& .MuiOutlinedInput-root:hover fieldset': {
+                                            borderColor: 'var(--hover-color)'
+                                        },
+                                        '& .MuiOutlinedInput-root.Mui-focused fieldset': {
+                                            borderColor: 'var(--selected-color)'
+                                        },
+                                        '& .MuiInputLabel-root': {
+                                            color: 'var(--text-label-color)'
+                                        },
+                                        '& .MuiInputLabel-root.Mui-focused': {
+                                            color: 'var(--selected-color)'
+                                        }
+                                    }}
+                                    value={startDate}
+                                    onChange={e => setStartDate(e.target.value)}
+                                />
+                                <Typography
+                                    sx={{
+                                        color: 'red',
+                                        margin: '1px 0 0 10px',
+                                        fontSize: '12px',
+                                        visibility: isSubmit && startDate === '' ? 'visible' : 'hidden'
+                                    }}
+                                >
+                                    {t('COMMON.TEXTFIELD.REQUIRED')}
+                                </Typography>
+                            </Box>
+                            <Box>
+                                <TextField
+                                    variant='outlined'
+                                    label={t('COMMON.HOLIDAY.START_DATE')}
+                                    fullWidth
+                                    type='date'
+                                    InputLabelProps={{ shrink: true }}
+                                    {...(isSubmit && endDate === '' && { error: true })}
+                                    sx={{
+                                        color: 'var(--text-color)',
+                                        '& fieldset': {
+                                            borderRadius: '8px',
+                                            color: 'var(--text-color)',
+                                            borderColor: 'var(--border-color)'
+                                        },
+                                        '& .MuiInputBase-root': { paddingRight: '0px' },
+                                        '& .MuiInputBase-input': {
+                                            color: 'var(--text-color)',
+                                            fontSize: '16px'
+                                        },
+                                        '& .MuiOutlinedInput-root:hover fieldset': {
+                                            borderColor: 'var(--hover-color)'
+                                        },
+                                        '& .MuiOutlinedInput-root.Mui-focused fieldset': {
+                                            borderColor: 'var(--selected-color)'
+                                        },
+                                        '& .MuiInputLabel-root': {
+                                            color: 'var(--text-label-color)'
+                                        },
+                                        '& .MuiInputLabel-root.Mui-focused': {
+                                            color: 'var(--selected-color)'
+                                        }
+                                    }}
+                                    value={endDate}
+                                    onChange={e => setEndDate(e.target.value)}
+                                />
+                                <Typography
+                                    sx={{
+                                        color: 'red',
+                                        margin: '1px 0 0 10px',
+                                        fontSize: '12px',
+                                        visibility: isSubmit && endDate === '' ? 'visible' : 'hidden'
+                                    }}
+                                >
+                                    {t('COMMON.TEXTFIELD.REQUIRED')}
+                                </Typography>
+                            </Box>
                             <TextField
-                                fullWidth
-                                required
-                                name='name'
-                                label={t('COMMON.HOLIDAY.NAME')}
-                                value={holidayForm.name}
-                                onChange={handleInputChange}
-                                error={!holidayForm.name}
-                                helperText={!holidayForm.name ? t('COMMON.TEXTFIELD.REQUIRED') : ''}
-                                sx={{
-                                    color: 'var(--text-color)',
-                                    '& fieldset': {
-                                        borderRadius: '8px',
-                                        color: 'var(--text-color)',
-                                        borderColor: 'var(--border-color)'
-                                    },
-                                    '& .MuiInputBase-root': { paddingRight: '0px' },
-                                    '& .MuiInputBase-input': {
-                                        color: 'var(--text-color)',
-                                        fontSize: '16px'
-                                    },
-                                    '& .MuiOutlinedInput-root:hover fieldset': {
-                                        borderColor: 'var(--hover-color)'
-                                    },
-                                    '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                        borderColor: 'var(--selected-color)'
-                                    },
-                                    '& .MuiInputLabel-root': {
-                                        color: 'var(--text-label-color)'
-                                    },
-                                    '& .MuiInputLabel-root.Mui-focused': {
-                                        color: 'var(--selected-color)'
-                                    }
-                                }}
-                            />
-
-                            {/* Start Date Field - Required */}
-                            <TextField
-                                fullWidth
-                                required
-                                name='startDate'
-                                label={t('COMMON.HOLIDAY.START_DATE')}
-                                type='date'
-                                value={holidayForm.startDate}
-                                onChange={handleInputChange}
-                                error={!holidayForm.startDate}
-                                helperText={!holidayForm.startDate ? t('COMMON.TEXTFIELD.REQUIRED') : ''}
-                                InputLabelProps={{ shrink: true }}
-                                sx={{
-                                    color: 'var(--text-color)',
-                                    '& fieldset': {
-                                        borderRadius: '8px',
-                                        color: 'var(--text-color)',
-                                        borderColor: 'var(--border-color)'
-                                    },
-                                    '& .MuiInputBase-root': { paddingRight: '0px' },
-                                    '& .MuiInputBase-input': {
-                                        color: 'var(--text-color)',
-                                        fontSize: '16px'
-                                    },
-                                    '& .MuiOutlinedInput-root:hover fieldset': {
-                                        borderColor: 'var(--hover-color)'
-                                    },
-                                    '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                        borderColor: 'var(--selected-color)'
-                                    },
-                                    '& .MuiInputLabel-root': {
-                                        color: 'var(--text-label-color)'
-                                    },
-                                    '& .MuiInputLabel-root.Mui-focused': {
-                                        color: 'var(--selected-color)'
-                                    }
-                                }}
-                            />
-
-                            {/* End Date Field - Required */}
-                            <TextField
-                                fullWidth
-                                required
-                                name='endDate'
-                                label={t('COMMON.HOLIDAY.END_DATE')}
-                                type='date'
-                                value={holidayForm.endDate}
-                                onChange={handleInputChange}
-                                error={!holidayForm.endDate}
-                                helperText={!holidayForm.endDate ? t('COMMON.TEXTFIELD.REQUIRED') : ''}
-                                InputLabelProps={{ shrink: true }}
-                                sx={{
-                                    color: 'var(--text-color)',
-                                    '& fieldset': {
-                                        borderRadius: '8px',
-                                        color: 'var(--text-color)',
-                                        borderColor: 'var(--border-color)'
-                                    },
-                                    '& .MuiInputBase-root': { paddingRight: '0px' },
-                                    '& .MuiInputBase-input': {
-                                        color: 'var(--text-color)',
-                                        fontSize: '16px'
-                                    },
-                                    '& .MuiOutlinedInput-root:hover fieldset': {
-                                        borderColor: 'var(--hover-color)'
-                                    },
-                                    '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                        borderColor: 'var(--selected-color)'
-                                    },
-                                    '& .MuiInputLabel-root': {
-                                        color: 'var(--text-label-color)'
-                                    },
-                                    '& .MuiInputLabel-root.Mui-focused': {
-                                        color: 'var(--selected-color)'
-                                    }
-                                }}
-                            />
-
-                            {/* Note Field - Optional */}
-                            <TextField
-                                fullWidth
-                                name='note'
+                                variant='outlined'
                                 label={t('COMMON.HOLIDAY.NOTE')}
-                                value={holidayForm.note}
-                                onChange={handleInputChange}
+                                id='fullWidth'
+                                fullWidth
                                 multiline
-                                rows={4}
+                                minRows={4}
+                                maxRows={12}
                                 sx={{
+                                    mt: '7px',
                                     color: 'var(--text-color)',
                                     '& fieldset': {
                                         borderRadius: '8px',
@@ -949,6 +992,8 @@ function HolidayPage() {
                                         color: 'var(--selected-color)'
                                     }
                                 }}
+                                value={note}
+                                onChange={e => setNote(e.target.value)}
                             />
                         </Box>
                         <Box
