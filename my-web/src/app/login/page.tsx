@@ -322,13 +322,83 @@ const LoginForm: React.FC = () => {
     )
 }
 
-const ImageLayout: React.FC = () => {
+const Layout_1: React.FC = () => {
+    return (
+        <div
+            style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                padding: '0 20px',
+                width: '100%',
+                height: '100vh',
+                background: 'linear-gradient(to right, #00ddff 50%, #ffffff 50%)'
+            }}
+        >
+            <div
+                style={{
+                    position: 'relative',
+                    flex: 1,
+                    height: '100vh',
+                    borderRadius: '10px',
+                    overflow: 'hidden',
+                    display: 'flex', 
+                    justifyContent: 'center',  
+                    alignItems: 'center',  
+                }}
+            >
+                <Image
+                    src='/images/download.jpg'
+                    alt='Teamwork Image'
+                    objectFit='cover'
+                    width={1000}
+                    height={500}
+                    style={{
+                        borderRadius: '10px',
+                        animation: 'slideFromLeft 1.5s ease-out',
+                        objectFit: 'cover'
+                    }}
+                />
+            </div>
+            <div
+                style={{
+                    textAlign: 'left',
+                    paddingRight: '40px',
+                    height: '100vh',
+                    flex: 1,
+                    marginTop:'130px'
+                }}
+            >
+                <div className='intro' style={{ marginBottom: '40px', paddingLeft: '60px' }}>
+                    <h2 style={{ fontSize: '28px', color: '#1877f2' }}>Đăng nhập vào hệ thống</h2>
+                    <p style={{ fontSize: '16px', color: '#666' }}>
+                        Để truy cập và quản lý thông tin nhân viên, theo dõi công việc, và tối ưu hóa quy trình làm
+                        việc, vui lòng đăng nhập vào hệ thống.
+                    </p>
+                    <LoginForm />
+                </div>
+            </div>
+
+            <style jsx>{`
+                @keyframes slideFromLeft {
+                    0% {
+                        transform: translate(-100%, 0);
+                    }
+                    100% {
+                        transform: translate(0, 0);
+                    }
+                }
+            `}</style>
+        </div>
+    )
+}
+
+const Layout_2: React.FC = () => {
     return (
         <div
             style={{
                 position: 'relative',
                 width: '100%',
-                height: '100vh',
+                height: '200vh',
                 background: 'linear-gradient(to right, #ffffff 50%, #00ddff 50%)'
             }}
         >
@@ -337,8 +407,8 @@ const ImageLayout: React.FC = () => {
                     src='https://static.wixstatic.com/media/84770f_4753af9912144e469acb7dac3bdbba0e~mv2.png/v1/fill/w_583,h_395,al_c,lg_1,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/back2%20-%20top%20-%20UPDATE.png'
                     alt='Image 1'
                     style={{
-                        width: '500px',
-                        height: '300px',
+                        width: '400px',
+                        height: 'auto',
                         objectFit: 'cover'
                     }}
                 />
@@ -348,8 +418,8 @@ const ImageLayout: React.FC = () => {
                     src='https://static.wixstatic.com/media/c837a6_fbd50d9a9dac48068f4c34b5934d6404~mv2.png/v1/fill/w_583,h_395,al_c,lg_1,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/back1%20-%20buttom.png'
                     alt='Image 2'
                     style={{
-                        width: '500px',
-                        height: '300px',
+                        width: '400px',
+                        height: 'auto',
                         objectFit: 'cover'
                     }}
                 />
@@ -359,8 +429,8 @@ const ImageLayout: React.FC = () => {
                     src='https://static.wixstatic.com/media/c837a6_ee52c320bae548ea9f1f3730d7f6ff39~mv2.png/v1/crop/x_0,y_0,w_486,h_330/fill/w_583,h_395,al_c,lg_1,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Group%2028.png'
                     alt='Image 3'
                     style={{
-                        width: '500px',
-                        height: '300px',
+                        width: '400px',
+                        height: 'auto',
                         objectFit: 'cover'
                     }}
                 />
@@ -388,6 +458,69 @@ const ImageLayout: React.FC = () => {
                 <p>This is some content displayed in the top-right corner of the screen.</p>
                 <p>This is some content displayed in the top-right corner of the screen.</p>
                 <p>This is some content displayed in the top-right corner of the screen.</p>
+            </div>
+
+            <div
+                style={{
+                    position: 'absolute',
+                    bottom: '0',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: '120vw',
+                    height: '130vh',
+                    backgroundColor: 'rgb(3, 0, 40)',
+                    borderTopLeftRadius: '50%',
+                    borderTopRightRadius: '50%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    color: 'white',
+                    padding: '20px'
+                }}
+            >
+                <h2 style={{ fontSize: '40px', textAlign: 'center', marginTop: '200px' }}>
+                    Welcome to Our Amazing Team
+                </h2>
+                <p style={{ fontSize: '20px', lineHeight: '1.5em', textAlign: 'center' }}>
+                    We are excited to have you here. Let is work together to achieve great things and become the best
+                    team.
+                </p>
+                <p style={{ fontSize: '20px', lineHeight: '1.5em', textAlign: 'center' }}>
+                    We are excited to have you here. Let is work together to achieve great things and become the best
+                    team.
+                </p>
+                <p style={{ fontSize: '20px', lineHeight: '1.5em', textAlign: 'center' }}>
+                    We are excited to have you here. Let is work together to achieve great things and become the best
+                    team.
+                </p>
+
+                <img
+                    src='https://static.wixstatic.com/media/c837a6_7ec5a1cc9c44437b8bd302c800e892eb~mv2.png/v1/fill/w_854,h_424,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/Group%2019.png'
+                    alt='Placeholder Image'
+                    style={{
+                        width: '800px',
+                        height: 'auto',
+                        objectFit: 'cover',
+                        borderRadius: '10px',
+                        marginTop: '80px'
+                    }}
+                />
+
+                <Image
+                    src='/images/logo.png'
+                    alt='Overlay Image'
+                    width={200}
+                    height={200}
+                    style={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        borderRadius: '50%',
+                        marginTop: '210px'
+                    }}
+                />
             </div>
 
             <style>{`
@@ -433,78 +566,27 @@ const ImageLayout: React.FC = () => {
     )
 }
 
+const Layout_3: React.FC = () => {
+    return <div></div>
+}
+
 const Page: React.FC = () => {
     return (
         <div>
             <Navbar />
             <header>
-                <section
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        marginTop: '100px',
-                        padding: '0 20px',
-                        width: '100%'
-                    }}
-                >
-                    <div
-                        style={{
-                            position: 'relative',
-                            flex: 1, // Đảm bảo div này chiếm 50% không gian
-                            height: '600px',
-                            borderRadius: '10px',
-                            overflow: 'hidden'
-                        }}
-                    >
-                        <Image
-                            src='/images/download.jpg'
-                            alt='Teamwork Image'
-                            layout='fill'
-                            objectFit='cover'
-                            style={{
-                                borderRadius: '10px',
-                                animation: 'slideFromLeft 1.5s ease-out',
-                                objectFit: 'cover'
-                            }}
-                        />
-                    </div>
-                    <div
-                        style={{
-                            textAlign: 'left',
-                            paddingRight: '40px',
-                            height: '600px',
-                            flex: 1 // Đảm bảo div này chiếm 50% không gian
-                        }}
-                    >
-                        <div className='intro' style={{ marginBottom: '40px', paddingLeft: '60px' }}>
-                            <h2 style={{ fontSize: '28px', color: '#1877f2' }}>Đăng nhập vào hệ thống</h2>
-                            <p style={{ fontSize: '16px', color: '#666' }}>
-                                Để truy cập và quản lý thông tin nhân viên, theo dõi công việc, và tối ưu hóa quy trình
-                                làm việc, vui lòng đăng nhập vào hệ thống.
-                            </p>
-                            <LoginForm />
-                        </div>
-                    </div>
+                <section className='content' style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Layout_1 />
                 </section>
 
-                <section
-                    className='content'
-                    style={{ display: 'flex', justifyContent: 'space-between', marginTop: '100px', padding: '0 20px' }}
-                >
-                    <ImageLayout />
+                <section className='content' style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Layout_2 />
+                </section>
+
+                <section className='content' style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Layout_3 />
                 </section>
             </header>
-
-            <style jsx>{`
-                @keyframes slideFromLeft {
-                    0% {
-                        transform: translate(-100%, 0);
-                    }
-                    100% {
-                        transform: translate(0, 0);
-                    }
-                }
-            `}</style>
         </div>
     )
 }
