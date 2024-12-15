@@ -226,12 +226,32 @@
             }
         },
         "HOLIDAY": {
-            "NAME": "Name",
-            "START_DATE": "Start Date",
-            "END_DATE": "End Date",
+            "NAME": "Name*",
+            "START_DATE": "Start Date*",
+            "END_DATE": "End Date*",
             "NOTE": "Note",
             "ACTION": "Action",
-            "TITLE": "Create a New Holiday"
+            "TITLE": "Create a New Holiday",
+            "FROM": "leave starts from ",
+            "TO": "to ",
+            "LEAVE": "leave on "
+        },
+        "SALARY": {
+            "NAME": "Name",
+            "EMPLOYEE_ID": "Employee ID",
+            "DATE": "Payroll Creation Date",
+            "BASIC_SALARY": "Basic Salary",
+            "TIME_KEEPING": "Number of Working Days",
+            "INSURANCE": "Insurance Contribution",
+            "BENEFIT": "Total Benefit",
+            "REWARD": "Reward",
+            "DISCIPLINE": "Discipline",
+            "PI_TAX": "Personal Income Tax",
+            "TOTAL_SALARY": "Total Salary",
+            "PAYROLL_PERIOD": "Payroll Period",
+            "PAYROLL_SCHEDULE": "Payroll schedule",
+            "OVERVIEW": "Overview",
+            "PAYROLL_CYCLE": "Payroll Cycle List"
         },
         "WORK_SHIFT": {
             "SHIFT_NAME": "Shift name",

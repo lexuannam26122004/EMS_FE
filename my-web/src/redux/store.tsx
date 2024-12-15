@@ -18,6 +18,7 @@ import { selectedUsersToNotifySlice } from './slices/selectedUsersToNotifySlice'
 import { selectedRolesToNotifySlice } from './slices/selectedRolesToNotifySlice'
 import { selectedDepartmentsToNotifySlice } from './slices/selectedDepartmentsToNotifySlice'
 import { workShiftApis } from '@/services/WorkShiftService'
+import { salaryApi } from '@/services/SalaryService'
 
 export const store = configureStore({
     reducer: {
@@ -38,7 +39,8 @@ export const store = configureStore({
         [selectedUsersToNotifySlice.name]: selectedUsersToNotifySlice.reducer,
         [selectedRolesToNotifySlice.name]: selectedRolesToNotifySlice.reducer,
         [selectedDepartmentsToNotifySlice.name]: selectedDepartmentsToNotifySlice.reducer,
-        [workShiftApis.reducerPath]: workShiftApis.reducer
+        [workShiftApis.reducerPath]: workShiftApis.reducer,
+        [salaryApi.reducerPath]: salaryApi.reducer
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware().concat(
@@ -52,7 +54,8 @@ export const store = configureStore({
             holidayApi.middleware,
             EmploymentContractApi.middleware,
             TimeOffApi.middleware,
-            workShiftApis.middleware
+            workShiftApis.middleware,
+            salaryApi.middleware
         )
 })
 

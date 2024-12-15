@@ -95,12 +95,6 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                     active={pathname === '/admin/time-off'}
                 />
                 <SidebarItem
-                    icon={<CalendarHeart />}
-                    text={t('COMMON.SIDEBAR.HOLIDAY')}
-                    route='/admin/holiday'
-                    active={pathname === '/admin/holiday'}
-                />
-                <SidebarItem
                     icon={<ShieldCheck />}
                     text={t('COMMON.SIDEBAR.PERMISSION')}
                     route='/admin/permission'
