@@ -225,14 +225,31 @@
             }
         },
         "HOLIDAY": {
-            "NAME": "Tên ngày lễ ",
-            "START_DATE": "Ngày bắt đầu",
-            "END_DATE": "Ngày kết thúc",
+            "NAME": "Tên ngày lễ*",
+            "START_DATE": "Ngày bắt đầu*",
+            "END_DATE": "Ngày kết thúc*",
             "NOTE": "Mô tả ngày lễ",
             "ACTION": "Hành động",
-            "TITLE": "Tạo một ngày nghỉ lễ"
+            "TITLE": "Tạo một ngày nghỉ lễ",
+            "FROM": "bắt đầu nghỉ từ ngày ",
+            "TO": "đến ngày ",
+            "LEAVE": "leave on "
         },
-
+        "SALARY": {
+            "NAME": "Tên nhân viên",
+            "EMPLOYEE_ID": "Mã nhân viên",
+            "DATE": "Ngày tạo",
+            "BASIC_SALARY": "Lương cơ bản",
+            "TIME_KEEPING": "Số ngày công",
+            "INSURANCE": "Mức đóng bảo hiểm",
+            "BENEFIT": "Tổng phúc lợi",
+            "REWARD": "Tiền thưởng",
+            "DISCIPLINE": "Tiền phạt",
+            "PI_TAX": "Thuế thu nhập cá nhân",
+            "TOTAL_SALARY": "Tổng lương",
+            "PAYROLL_PERIOD": "Kỳ hạn trả",
+            "PAYROLL_SCHEDULE": "Bảng lương định kỳ"
+        },
         "CREATE_NOTIFICATION": {
             "TITLE_PAGE": "Tạo thông báo mới",
             "TITLE*": "Tiêu đề*",
