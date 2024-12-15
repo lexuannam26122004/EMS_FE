@@ -212,13 +212,13 @@ const LoginForm: React.FC = () => {
             <form
                 onSubmit={handleSubmit}
                 style={{
-                    backgroundColor: '#fff',
+                    backgroundColor: 'white',
                     padding: '40px',
                     borderRadius: '12px',
                     boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.2)',
-                    width: '100%',
                     maxWidth: '400px',
                     textAlign: 'center'
+                    
                 }}
             >
                 <TextField
