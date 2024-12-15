@@ -248,7 +248,9 @@
             "PI_TAX": "Thuế thu nhập cá nhân",
             "TOTAL_SALARY": "Tổng lương",
             "PAYROLL_PERIOD": "Kỳ hạn trả",
-            "PAYROLL_SCHEDULE": "Bảng lương định kỳ"
+            "PAYROLL_SCHEDULE": "Bảng lương định kỳ",
+            "OVERVIEW": "Tổng quan",
+            "PAYROLL_CYCLE": "Danh sách chu kì lương"
         },
         "CREATE_NOTIFICATION": {
             "TITLE_PAGE": "Tạo thông báo mới",
