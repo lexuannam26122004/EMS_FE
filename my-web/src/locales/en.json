@@ -249,7 +249,9 @@
             "PI_TAX": "Personal Income Tax",
             "TOTAL_SALARY": "Total Salary",
             "PAYROLL_PERIOD": "Payroll Period",
-            "PAYROLL_SCHEDULE": "Payroll schedule"
+            "PAYROLL_SCHEDULE": "Payroll schedule",
+            "OVERVIEW": "Overview",
+            "PAYROLL_CYCLE": "Payroll Cycle List"
         },
         "BENEFIT": {
             "NAME": "Name",
