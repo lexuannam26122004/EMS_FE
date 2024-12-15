@@ -251,6 +251,17 @@
             "PAYROLL_PERIOD": "Payroll Period",
             "PAYROLL_SCHEDULE": "Payroll schedule"
         },
+        "BENEFIT": {
+            "NAME": "Name",
+            "CONTRIBUTION": "Contribution",
+            "TYPE": "Type",
+            "DESCRIPTION": "Description",
+            "CREATED_DATE": "Created Date",
+            "CREATED_BY": "Created By",
+            "ACTION": "Action",
+            "TYPE_ID": "Type ID",
+            "TYPE_NAME": "Type Name"
+        },
         "WORK_SHIFT": {
             "SHIFT_NAME": "Shift name",
             "START_TIME": "Start time",
