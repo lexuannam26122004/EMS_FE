@@ -1,5 +1,5 @@
 'use client'
-import React, { useState} from 'react'
+import React, { useState, useEffect } from 'react'
 import { Box, TextField, Button, CircularProgress } from '@mui/material'
 import { useToast } from '@/hooks/useToast'
 import { IAspNetUserGetAll } from '@/models/AspNetUser'
@@ -7,11 +7,35 @@ import { useGetAllUsersQuery } from '@/services/AspNetUserService'
 import Image from 'next/image'
 
 const Navbar: React.FC = () => {
+    const [isVisible, setIsVisible] = useState(true)
+    const [prevScrollPos, setPrevScrollPos] = useState(0)
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollPos = window.pageYOffset
+            if (currentScrollPos > prevScrollPos) {
+                setIsVisible(false)
+            } else {
+                setIsVisible(true)
+            }
+            setPrevScrollPos(currentScrollPos)
+        }
+        window.addEventListener('scroll', handleScroll)
+        return () => {
+            window.removeEventListener('scroll', handleScroll)
+        }
+    }, [prevScrollPos])
+
+    const handleScrollToSection = (sectionId: string) => {
+        window.location.href = `/login#${sectionId}`;
+        window.location.reload() 
+    }
+
     return (
         <div
             style={{
                 position: 'fixed',
-                top: 30,
+                top: isVisible ? '30px' : '-100px',
                 left: 700,
                 width: '50%',
                 backgroundColor: 'white',
@@ -21,7 +45,9 @@ const Navbar: React.FC = () => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 borderRadius: '100px',
-                background: 'white'
+                background: 'white',
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                transition: 'top 0.3s ease-in-out'
             }}
         >
             <div
@@ -42,7 +68,6 @@ const Navbar: React.FC = () => {
                         objectFit: 'contain'
                     }}
                 />
-                <span>NPM SYSTEM</span>
             </div>
 
             <ul
@@ -54,13 +79,12 @@ const Navbar: React.FC = () => {
             >
                 <li>
                     <a
-                        href='#'
+                        href=''
                         style={{
                             textDecoration: 'none',
                             color: '#333',
                             fontSize: '16px',
                             fontWeight: '500',
-
                             borderRadius: '8px'
                         }}
                     >
@@ -69,17 +93,32 @@ const Navbar: React.FC = () => {
                 </li>
                 <li>
                     <a
-                        href='#gioithieu'
+                        onClick={() => handleScrollToSection('gioithieu')}
                         style={{
                             textDecoration: 'none',
                             color: '#333',
                             fontSize: '16px',
                             fontWeight: '500',
-
-                            borderRadius: '8px'
+                            borderRadius: '8px',
+                            cursor: 'pointer'
                         }}
                     >
                         Giới thiệu
+                    </a>
+                </li>
+
+                <li>
+                    <a
+                        href='/login#loiich'
+                        style={{
+                            textDecoration: 'none',
+                            color: '#333',
+                            fontSize: '16px',
+                            fontWeight: '500',
+                            borderRadius: '8px'
+                        }}
+                    >
+                        Lợi ích
                     </a>
                 </li>
             </ul>
@@ -98,7 +137,7 @@ const Navbar: React.FC = () => {
                         border: 'none',
                         borderRadius: '8px',
                         cursor: 'pointer',
-                        backgroundColor: '#1877f2',
+                        backgroundColor: '#00b049',
                         color: 'white'
                     }}
                 >
@@ -266,7 +305,7 @@ const LoginForm: React.FC = () => {
                     fullWidth
                     sx={{
                         padding: '15px',
-                        backgroundColor: loading ? '#bbb' : '#1877f2',
+                        backgroundColor: loading ? '#bbb' : '#00b049',
                         color: 'white',
                         borderRadius: '8px',
                         fontSize: '18px'
@@ -279,7 +318,7 @@ const LoginForm: React.FC = () => {
                     href='#'
                     style={{
                         textDecoration: 'none',
-                        color: '#1877f2',
+                        color: '#00b049',
                         marginTop: '10px',
                         display: 'block',
                         fontSize: '16px'
@@ -301,7 +340,7 @@ const Layout_1: React.FC = () => {
                 padding: '0 20px',
                 width: '100%',
                 height: '100vh',
-                background: 'linear-gradient(to right, #00ddff 50%, #d3d3d3 50%)'
+                background: 'linear-gradient(to right, #03d794 50%, #d3d3d3 50%)'
             }}
         >
             <div
@@ -339,7 +378,7 @@ const Layout_1: React.FC = () => {
                 }}
             >
                 <div className='intro' style={{ marginBottom: '40px', paddingLeft: '60px' }}>
-                    <h2 style={{ fontSize: '28px', color: '#1877f2' }}>Đăng nhập vào hệ thống</h2>
+                    <h2 style={{ fontSize: '28px', color: '#00b049' }}>Đăng nhập vào hệ thống</h2>
                     <p style={{ fontSize: '16px', color: '#666' }}>
                         Để truy cập và quản lý thông tin nhân viên, theo dõi công việc, và tối ưu hóa quy trình làm
                         việc, vui lòng đăng nhập vào hệ thống.
@@ -369,7 +408,7 @@ const Layout_2: React.FC = () => {
                 position: 'relative',
                 width: '100%',
                 height: '200vh',
-                background: 'linear-gradient(to right, #d3d3d3 50%, #00ddff 50%)'
+                background: 'linear-gradient(to right, #d3d3d3 50%, #03d794 50%)'
             }}
         >
             <div className='image-container' style={{ paddingTop: '50px', paddingLeft: '50px' }}>
@@ -410,9 +449,10 @@ const Layout_2: React.FC = () => {
             <div
                 className='top-right-content'
                 style={{
+                    width: '600px',
                     position: 'absolute',
-                    top: '20px',
-                    right: '20px',
+                    top: '80px',
+                    right: '50px',
                     backgroundColor: 'rgba(255, 255, 255, 0.8)',
                     padding: '15px',
                     borderRadius: '8px',
@@ -421,13 +461,12 @@ const Layout_2: React.FC = () => {
                     animation: ' slideFromRight 1.5s ease-out forwards'
                 }}
             >
-                <h3>Content Title</h3>
-                <p>This is some content displayed in the top-right corner of the screen.</p>
-                <p>This is some content displayed in the top-right corner of the screen.</p>
-                <p>This is some content displayed in the top-right corner of the screen.</p>
-                <p>This is some content displayed in the top-right corner of the screen.</p>
-                <p>This is some content displayed in the top-right corner of the screen.</p>
-                <p>This is some content displayed in the top-right corner of the screen.</p>
+                <h1 style={{ fontSize: '30px', color: '#00b049' }}>Giới thiệu tổng quan</h1>
+                <p>
+                    Ứng dụng quản lý nhân viên là giải pháp hiện đại giúp doanh nghiệp tối ưu hóa quy trình quản lý nhân
+                    sự. Công cụ này tích hợp các chức năng như lưu trữ thông tin, theo dõi chấm công, quản lý lương
+                    thưởng, và đánh giá hiệu suất, mang đến sự tiện lợi và hiệu quả trong công việc.
+                </p>
             </div>
 
             <div
@@ -436,8 +475,9 @@ const Layout_2: React.FC = () => {
                     bottom: '0',
                     left: '50%',
                     transform: 'translateX(-50%)',
-                    width: '120vw',
+                    width: '100vw',
                     height: '130vh',
+                    maxWidth: '100%',
                     backgroundColor: 'rgb(3, 0, 40)',
                     borderTopLeftRadius: '50%',
                     borderTopRightRadius: '50%',
@@ -446,23 +486,17 @@ const Layout_2: React.FC = () => {
                     justifyContent: 'center',
                     alignItems: 'center',
                     color: 'white',
-                    padding: '20px'
+                    padding: '20px',
                 }}
             >
-                <h2 style={{ fontSize: '40px', textAlign: 'center', marginTop: '200px' }}>
-                    Welcome to Our Amazing Team
+                <h2 id='loiich' style={{ fontSize: '40px', textAlign: 'center', marginTop: '200px' }}>
+                    Lợi ích chính
                 </h2>
-                <p style={{ fontSize: '20px', lineHeight: '1.5em', textAlign: 'center' }}>
-                    We are excited to have you here. Let is work together to achieve great things and become the best
-                    team.
-                </p>
-                <p style={{ fontSize: '20px', lineHeight: '1.5em', textAlign: 'center' }}>
-                    We are excited to have you here. Let is work together to achieve great things and become the best
-                    team.
-                </p>
-                <p style={{ fontSize: '20px', lineHeight: '1.5em', textAlign: 'center' }}>
-                    We are excited to have you here. Let is work together to achieve great things and become the best
-                    team.
+
+                <p style={{ fontSize: '20px', lineHeight: '1.5em', textAlign: 'center', width: '70%' }}>
+                    Ứng dụng giúp tiết kiệm thời gian và giảm sai sót trong quản lý nhân sự nhờ khả năng tự động hóa.
+                    Giao diện trực quan, dễ sử dụng cùng khả năng tùy chỉnh linh hoạt phù hợp với mọi quy mô doanh
+                    nghiệp, hỗ trợ nâng cao hiệu suất và tăng tính minh bạch trong tổ chức.
                 </p>
 
                 <img
@@ -505,6 +539,7 @@ const Layout_2: React.FC = () => {
           animation: slideFromRight 1.5s ease-out forwards;
         }
 
+
         @keyframes slideFromRight {
           0% {
             transform: translateX(100%);
@@ -515,6 +550,18 @@ const Layout_2: React.FC = () => {
             opacity: 1;
           }
         }
+
+       @keyframes slideFromBottom {
+    0% {
+        transform: translateY(100%); 
+        opacity: 0; 
+    }
+    100% {
+        transform: translateY(0); 
+        opacity: 1;
+    }
+}
+
 
         .image-container:nth-child(1) {
           animation-delay: 0s;
@@ -536,10 +583,6 @@ const Layout_2: React.FC = () => {
     )
 }
 
-const Layout_3: React.FC = () => {
-    return <div></div>
-}
-
 const Page: React.FC = () => {
     return (
         <div>
@@ -555,10 +598,6 @@ const Page: React.FC = () => {
                     style={{ display: 'flex', justifyContent: 'space-between' }}
                 >
                     <Layout_2 />
-                </section>
-
-                <section className='content' style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Layout_3 />
                 </section>
             </header>
         </div>
