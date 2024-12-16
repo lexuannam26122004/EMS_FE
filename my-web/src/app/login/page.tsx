@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React, { useState} from 'react'
 import { Box, TextField, Button, CircularProgress } from '@mui/material'
 import { useToast } from '@/hooks/useToast'
 import { IAspNetUserGetAll } from '@/models/AspNetUser'
@@ -21,7 +21,7 @@ const Navbar: React.FC = () => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 borderRadius: '100px',
-                background: '#d3d3d3'
+                background: 'white'
             }}
         >
             <div
@@ -301,7 +301,7 @@ const Layout_1: React.FC = () => {
                 padding: '0 20px',
                 width: '100%',
                 height: '100vh',
-                background: 'linear-gradient(to right, #00ddff 50%, #ffffff 50%)'
+                background: 'linear-gradient(to right, #00ddff 50%, #d3d3d3 50%)'
             }}
         >
             <div
@@ -369,7 +369,7 @@ const Layout_2: React.FC = () => {
                 position: 'relative',
                 width: '100%',
                 height: '200vh',
-                background: 'linear-gradient(to right, #ffffff 50%, #00ddff 50%)'
+                background: 'linear-gradient(to right, #d3d3d3 50%, #00ddff 50%)'
             }}
         >
             <div className='image-container' style={{ paddingTop: '50px', paddingLeft: '50px' }}>
@@ -377,7 +377,7 @@ const Layout_2: React.FC = () => {
                     src='https://static.wixstatic.com/media/84770f_4753af9912144e469acb7dac3bdbba0e~mv2.png/v1/fill/w_583,h_395,al_c,lg_1,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/back2%20-%20top%20-%20UPDATE.png'
                     alt='Image 1'
                     style={{
-                        width: '400px',
+                        width: '500px',
                         height: 'auto',
                         objectFit: 'cover'
                     }}
@@ -388,7 +388,7 @@ const Layout_2: React.FC = () => {
                     src='https://static.wixstatic.com/media/c837a6_fbd50d9a9dac48068f4c34b5934d6404~mv2.png/v1/fill/w_583,h_395,al_c,lg_1,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/back1%20-%20buttom.png'
                     alt='Image 2'
                     style={{
-                        width: '400px',
+                        width: '500px',
                         height: 'auto',
                         objectFit: 'cover'
                     }}
@@ -399,7 +399,7 @@ const Layout_2: React.FC = () => {
                     src='https://static.wixstatic.com/media/c837a6_ee52c320bae548ea9f1f3730d7f6ff39~mv2.png/v1/crop/x_0,y_0,w_486,h_330/fill/w_583,h_395,al_c,lg_1,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Group%2028.png'
                     alt='Image 3'
                     style={{
-                        width: '400px',
+                        width: '500px',
                         height: 'auto',
                         objectFit: 'cover'
                     }}
