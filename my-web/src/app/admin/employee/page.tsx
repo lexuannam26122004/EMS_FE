@@ -34,6 +34,7 @@ import { CirclePlus, EyeIcon, Pencil, Trash2 } from 'lucide-react'
 import SearchIcon from '@mui/icons-material/Search'
 import { useTranslation } from 'react-i18next'
 import AlertDialog from '@/components/AlertDialog'
+import DetailModal from './DetailModal'
 
 const EmployeeTable: React.FC = () => {
     const [selectedRow, setSelectedRow] = useState<string | null>(null)
@@ -66,6 +67,14 @@ const EmployeeTable: React.FC = () => {
             StartDate: matchedEmployee?.StartDate || 'N/A'
         }
     })
+
+    const [selectedUser, setSelectedUser] = useState<IAspNetUserGetAll | null>(null)
+    const [openModal, setOpenModal] = useState(false)
+
+    const handleClickDetail = (employ: IAspNetUserGetAll) => {
+        setSelectedUser(employ)
+        setOpenModal(true)
+    }
 
     if (isContractsLoading || isUsersLoading) return <div>Loading...</div>
 
@@ -449,10 +458,10 @@ const EmployeeTable: React.FC = () => {
                                                 maxWidth: '260px',
                                                 textOverflow: 'ellipsis',
                                                 whiteSpace: 'nowrap',
-                                                display: 'flex',     
-                                                alignItems: 'center',
+                                                display: 'flex',
+                                                alignItems: 'center'
                                             }}
-                                            component="div"
+                                            component='div'
                                         >
                                             <Avatar
                                                 src={
@@ -460,7 +469,7 @@ const EmployeeTable: React.FC = () => {
                                                     'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'
                                                 }
                                                 alt='Avatar'
-                                                sx={{ marginRight: '20px' }} 
+                                                sx={{ marginRight: '20px' }}
                                             />
                                             {user.FullName || 'N/A'}
                                         </Typography>
@@ -651,6 +660,7 @@ const EmployeeTable: React.FC = () => {
                                                             backgroundColor: 'var(--hover-color)'
                                                         }
                                                     }}
+                                                    onClick={() => handleClickDetail(user)}
                                                 >
                                                     <EyeIcon />
                                                 </Box>
@@ -815,6 +825,10 @@ const EmployeeTable: React.FC = () => {
                 buttonConfirm={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.DELETE')}
                 onConfirm={() => (isChangeMany ? handleDeleteManyEmployee() : handleDeleteEmployee())}
             />
+
+            {selectedUser && (
+                <DetailModal handleToggle={() => setOpenModal(false)} open={openModal} aspnetuser={selectedUser} />
+            )}
         </Box>
     )
 }
