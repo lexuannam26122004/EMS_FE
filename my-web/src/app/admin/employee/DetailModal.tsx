@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+
 import { IAspNetUserGetAll } from '@/models/AspNetUser'
 import { formatDate } from '@/utils/formatDate'
 import {
@@ -13,21 +13,48 @@ import {
     TableRow,
     TableBody,
     TableCell,
+    Tooltip,
     Avatar
 } from '@mui/material'
 import { X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { Pencil, Trash2 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import AlertDialog from '@/components/AlertDialog'
+import React, { useState } from 'react'
+import { useGetAllUsersQuery, useChangeStatusUsersMutation } from '@/services/AspNetUserService'
 
 interface Props {
     open: boolean
     handleToggle: () => void
     aspnetuser: IAspNetUserGetAll
+    randomIndex: number
 }
 
-function DetailModal({ open, handleToggle, aspnetuser }: Props) {
+function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
     const { t } = useTranslation('common')
-    const randomIndex = Math.floor(Math.random() * 10) + 1
+    const router = useRouter()
+    const [openDialog, setOpenDialog] = useState(false)
+    const { refetch } = useGetAllUsersQuery()
+    const [changeEmployee] = useChangeStatusUsersMutation()
+    const [selectedEmployeeId, setSelectedEmployeeId] = useState<string | null>(null)
     const backgroundImageUrl = `/background/${randomIndex}.jpg`
+
+    const handleDeleteClick = (id: string) => {
+        setSelectedEmployeeId(id)
+        setOpenDialog(true)
+    }
+
+    const handleDeleteEmployee = async () => {
+        if (selectedEmployeeId) {
+            await changeEmployee(selectedEmployeeId)
+            setOpenDialog(false)
+            setSelectedEmployeeId(null)
+            refetch()
+            window.location.reload()
+        }
+    }
+
     return (
         <Modal open={open} onClose={handleToggle}>
             <Paper
@@ -178,35 +205,47 @@ function DetailModal({ open, handleToggle, aspnetuser }: Props) {
                             </p>
                         </Box>
 
-                        <Box>
-                            <button
-                                style={{
-                                    padding: '10px 15px',
-                                    marginTop: '15px',
-                                    borderRadius: '5px',
-                                    cursor: 'pointer',
-                                    fontSize: '14px',
-                                    border: 'none',
-                                    backgroundColor: '#1877f2',
-                                    color: 'white'
-                                }}
-                            >
-                                Chỉnh sửa
-                            </button>
-                            <button
-                                style={{
-                                    padding: '10px 15px',
-                                    marginTop: '15px',
-                                    borderRadius: '5px',
-                                    cursor: 'pointer',
-                                    fontSize: '14px',
-                                    border: 'none',
-                                    backgroundColor: '#ff4d4d',
-                                    color: 'white'
-                                }}
-                            >
-                                Xóa
-                            </button>
+                        <Box display='flex' alignItems='center' justifyContent='space-between' gap='10px'>
+                            <Tooltip title={t('COMMON.BUTTON.EDIT')}>
+                                <Box
+                                    display='flex'
+                                    alignItems='center'
+                                    justifyContent='center'
+                                    sx={{
+                                        cursor: 'pointer',
+                                        color: '#00d4ff',
+                                        borderRadius: '50%',
+                                        width: '42px',
+                                        height: '42px',
+                                        '&:hover': {
+                                            backgroundColor: 'var(--hover-color)'
+                                        }
+                                    }}
+                                    onClick={() => router.push(`/admin/employee/update-employee?id=${aspnetuser.Id}`)}
+                                >
+                                    <Pencil />
+                                </Box>
+                            </Tooltip>
+                            <Tooltip title={t('COMMON.BUTTON.DELETE')}>
+                                <Box
+                                    display='flex'
+                                    alignItems='center'
+                                    justifyContent='center'
+                                    sx={{
+                                        cursor: 'pointer',
+                                        color: 'red',
+                                        borderRadius: '50%',
+                                        width: '42px',
+                                        height: '42px',
+                                        '&:hover': {
+                                            backgroundColor: 'var(--hover-color)'
+                                        }
+                                    }}
+                                    onClick={() => handleDeleteClick(aspnetuser.Id)}
+                                >
+                                    <Trash2 />
+                                </Box>
+                            </Tooltip>
                         </Box>
                     </Box>
 
@@ -283,6 +322,17 @@ function DetailModal({ open, handleToggle, aspnetuser }: Props) {
                         </TableBody>
                     </Table>
                 </TableContainer>
+
+                <AlertDialog
+                    title={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.TITLE')}
+                    content={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.CONTENT')}
+                    type='warning'
+                    open={openDialog}
+                    setOpen={setOpenDialog}
+                    buttonCancel={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.CANCEL')}
+                    buttonConfirm={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.DELETE')}
+                    onConfirm={() => handleDeleteEmployee()}
+                />
             </Paper>
         </Modal>
     )
