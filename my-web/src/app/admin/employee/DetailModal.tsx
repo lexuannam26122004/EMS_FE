@@ -318,7 +318,8 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
                                             whiteSpace: 'nowrap',
                                             color: 'var(--text-color)',
                                             borderBottom: 'none',
-                                            paddingLeft: '100px'
+                                            paddingLeft: '100px',
+                                            width:'40%'
                                         }}
                                     >
                                         {item.label}:
