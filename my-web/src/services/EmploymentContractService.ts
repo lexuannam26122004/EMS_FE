@@ -1,8 +1,18 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { IEmploymentContractCreate, IEmploymentContractUpdate } from '@/models/EmploymentContract'
+import {
+    IEmploymentContractCreate,
+    IFilterEmploymentContract,
+    IEmploymentContractUpdate
+} from '@/models/EmploymentContract'
+import { use } from 'i18next'
 interface EmploymentContractResponse {
     Success: boolean
     Data: any
+}
+
+interface IMonthAndYear {
+    Month: number
+    Year: number
 }
 
 const apiPath = 'https://localhost:44381/api/admin/EmploymentContract'
@@ -31,8 +41,33 @@ export const EmploymentContractApi = createApi({
             })
         }),
 
+        getEmployeeStatsByMonthAndYear: builder.query<EmploymentContractResponse, IMonthAndYear>({
+            query: params => `GetEmployeeStatsByMonthAndYear/monthly-stats?year=${params.Year}&month=${params.Month}`
+        }),
+
         getByIdEmploymentContracts: builder.query<EmploymentContractResponse, string>({
             query: id => `GetById/${id}`
+        }),
+
+        getContractsExpiringSoon: builder.query<EmploymentContractResponse, IFilterEmploymentContract>({
+            query: filter => {
+                const params = new URLSearchParams()
+
+                if (filter) {
+                    if (filter.createdBy) params.append('CreatedBy', filter.createdBy)
+                    if (filter.createdDate) params.append('CreatedDate', filter.createdDate.toDateString())
+                    if (filter.pageSize) params.append('PageSize', filter.pageSize.toString())
+                    if (filter.pageNumber) params.append('PageNumber', filter.pageNumber.toString())
+                    if (filter.isActive !== undefined) params.append('IsActive', filter.isActive.toString())
+                    if (filter.keyword) params.append('Keyword', filter.keyword)
+                    if (filter.isDescending !== undefined) params.append('IsDescending', filter.isDescending.toString())
+                    if (filter.sortBy) params.append('SortBy', filter.sortBy)
+                    if (filter.daysUntilExpiration)
+                        params.append('daysUntilExpiration', filter.daysUntilExpiration.toString())
+                }
+
+                return `GetContractsExpiringSoon/expiring-soon?${params.toString()}`
+            }
         }),
 
         changeStatusEmploymentContracts: builder.mutation<void, string>({
@@ -49,5 +84,7 @@ export const {
     useCreateEmploymentContractsMutation,
     useGetByIdEmploymentContractsQuery,
     useUpdateEmploymentContractsMutation,
-    useChangeStatusEmploymentContractsMutation
+    useChangeStatusEmploymentContractsMutation,
+    useGetEmployeeStatsByMonthAndYearQuery,
+    useGetContractsExpiringSoonQuery
 } = EmploymentContractApi

@@ -8,3 +8,8 @@ export interface IDepartmentCreate {
     Name: string
     DepartmentHeadId : string | null
 }
+
+export interface IDepartmentGetAllDashboard {
+    Department: string
+    Count: number
+}

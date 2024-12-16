@@ -14,6 +14,15 @@ export interface IAspNetUserGetAll {
     DepartmentName: string
 }
 
+export interface IUserByAgeGetAllDashboard {
+    LessThan32: number
+    Between32And45: number
+    GreaterThan45: number
+    LessThan32Percentage: number
+    Between32And45Percentage: number
+    GreaterThan45Percentage: number
+}
+
 export interface IAspNetUserCreate {
     FullName: string
     UserName: string
@@ -31,7 +40,6 @@ export interface IAspNetUserCreate {
     IsActive: boolean
 }
 
-
 export interface IAspNetUserUpdate {
     Id: string
     FullName: string | null
@@ -44,8 +52,7 @@ export interface IAspNetUserUpdate {
     Note: string
     Birthday: Date | null
     Roles?: string[] | null
-    StartDateWork: Date 
-    DepartmentId: number 
+    StartDateWork: Date
+    DepartmentId: number
     IsActive: boolean
 }
-

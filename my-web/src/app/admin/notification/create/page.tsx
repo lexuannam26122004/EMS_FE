@@ -164,12 +164,11 @@ function createNotification() {
             <Paper
                 elevation={0}
                 sx={{
-                    background: 'var(--background-color)',
+                    background: 'var(--background-item)',
                     width: '100%',
-                    padding: '20px 20px 21px',
-                    border: '1px solid var(--border-color)',
+                    padding: '24px',
                     overflow: 'hidden',
-                    borderRadius: '6px'
+                    borderRadius: '15px'
                 }}
             >
                 <Typography
@@ -192,27 +191,43 @@ function createNotification() {
                             {...(isSubmit === true && title === '' && { error: true })}
                             sx={{
                                 width: '100%',
-                                color: 'var(--text-color)',
                                 '& fieldset': {
                                     borderRadius: '8px',
                                     color: 'var(--text-color)',
                                     borderColor: 'var(--border-color)'
                                 },
+                                '& .MuiInputBase-root': {
+                                    paddingRight: '0px'
+                                },
                                 '& .MuiInputBase-input': {
+                                    paddingRight: '12px',
                                     color: 'var(--text-color)',
-                                    fontSize: '16px'
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1
+                                    }
                                 },
                                 '& .MuiOutlinedInput-root:hover fieldset': {
-                                    borderColor: 'var(--hover-color)'
+                                    borderColor: 'var(--hover-field-color)'
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                                 },
                                 '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                    borderColor: 'var(--selected-color)'
+                                    borderColor: 'var(--selected-field-color)'
                                 },
                                 '& .MuiInputLabel-root': {
                                     color: 'var(--text-label-color)'
                                 },
                                 '& .MuiInputLabel-root.Mui-focused': {
-                                    color: 'var(--selected-color)'
+                                    color: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-error': {
+                                    color: 'var(--error-color)'
                                 }
                             }}
                             value={title}
@@ -221,7 +236,7 @@ function createNotification() {
                         <Typography
                             sx={{
                                 visibility: isSubmit === true && title === '' ? 'visible' : 'hidden',
-                                color: 'red',
+                                color: 'var(--error-color)',
                                 margin: '1px 0 0 10px',
                                 fontSize: '12px'
                             }}
@@ -231,15 +246,51 @@ function createNotification() {
                     </Box>
                     <Box>
                         <FormControl
-                            sx={{ width: '140px' }}
+                            sx={{
+                                width: '140px',
+                                '& fieldset': {
+                                    borderRadius: '8px',
+                                    borderColor: 'var(--border-color)' // Viền mặc định
+                                },
+                                '& .MuiOutlinedInput-root:hover fieldset': {
+                                    borderColor: 'var(--hover-field-color)' // Màu hover khi không lỗi
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                    borderColor: 'var(--error-color)' // Màu hover khi lỗi
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                    borderColor: 'var(--error-color)' // Màu viền khi lỗi
+                                },
+                                '& .MuiOutlinedInput-root.Mui-focused fieldset': {
+                                    borderColor: 'var(--selected-field-color)' // Màu viền khi focus
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error.Mui-focused fieldset': {
+                                    borderColor: 'var(--error-color)' // Màu viền khi lỗi và focus
+                                },
+                                '& .MuiInputLabel-root': {
+                                    color: 'var(--text-label-color)' // Label mặc định
+                                },
+                                '& .MuiInputLabel-root.Mui-focused': {
+                                    color: 'var(--selected-field-color)' // Label khi focus
+                                },
+                                '& .MuiInputLabel-root.Mui-error': {
+                                    color: 'var(--error-color)' // Label khi lỗi
+                                }
+                            }}
                             {...(isSubmit && typeNotification === '' && { error: true })}
                         >
                             <InputLabel
                                 id='select-label'
                                 sx={{
-                                    color: 'var(--text-label-color)',
+                                    color:
+                                        isSubmit && typeNotification === ''
+                                            ? 'var(--error-color)'
+                                            : 'var(--text-label-color)',
                                     '&.Mui-focused': {
-                                        color: 'var(--selected-color)'
+                                        color:
+                                            isSubmit && typeNotification === ''
+                                                ? 'var(--error-color)'
+                                                : 'var(--selected-color)'
                                     }
                                 }}
                             >
@@ -253,33 +304,54 @@ function createNotification() {
                                 value={typeNotification}
                                 onChange={handleChange}
                                 label={t('COMMON.CREATE_NOTIFICATION.TYPE')}
+                                autoFocus={false}
                                 sx={{
                                     '&:hover .MuiOutlinedInput-notchedOutline': {
-                                        borderColor: 'var(--hover-color)'
+                                        borderColor:
+                                            isSubmit && typeNotification === ''
+                                                ? 'var(--error-color)'
+                                                : 'var(--hover-color)' // Khi hover
                                     },
                                     '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                        borderColor: 'var(--selected-color)',
-                                        color: 'var(--text-color)'
+                                        borderColor:
+                                            isSubmit && typeNotification === ''
+                                                ? 'var(--error-color)'
+                                                : 'var(--selected-color)' // Khi focus
                                     },
                                     '& fieldset': {
                                         borderRadius: '8px',
-                                        borderColor: 'var(--border-color)'
+                                        borderColor:
+                                            isSubmit && typeNotification === ''
+                                                ? 'var(--error-color)'
+                                                : 'var(--border-color)' // Viền khi không focus
                                     },
                                     '& .MuiSelect-icon': {
-                                        color: 'var(--text-color)'
+                                        color:
+                                            isSubmit && typeNotification === ''
+                                                ? 'var(--error-color)'
+                                                : 'var(--text-color)' // Màu icon dropdown
                                     },
                                     '& .MuiInputBase-input': {
-                                        color: 'var(--text-color)'
+                                        color: 'var(--text-color)' // Màu text
                                     }
                                 }}
                                 MenuProps={{
                                     PaperProps: {
                                         elevation: 0,
                                         sx: {
-                                            backgroundColor: 'var(--background-color)',
+                                            backgroundImage:
+                                                'url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSJ1cmwoI3BhaW50MF9yYWRpYWxfMjc0OV8xNDUxODYpIiBmaWxsLW9wYWNpdHk9IjAuMTIiLz4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0icGFpbnQwX3JhZGlhbF8yNzQ5XzE0NTE4NiIgY3g9IjAiIGN5PSIwIiByPSIxIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgZ3JhZGllbnRUcmFuc2Zvcm09InRyYW5zbGF0ZSgxMjAgMS44MTgxMmUtMDUpIHJvdGF0ZSgtNDUpIHNjYWxlKDEyMy4yNSkiPgo8c3RvcCBzdG9wLWNvbG9yPSIjMDBCOEQ5Ii8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzAwQjhEOSIgc3RvcC1vcGFjaXR5PSIwIi8+CjwvcmFkaWFsR3JhZGllbnQ+CjwvZGVmcz4KPC9zdmc+Cg==), url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSJ1cmwoI3BhaW50MF9yYWRpYWxfMjc0OV8xNDUxODcpIiBmaWxsLW9wYWNpdHk9IjAuMTIiLz4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0icGFpbnQwX3JhZGlhbF8yNzQ5XzE0NTE4NyIgY3g9IjAiIGN5PSIwIiByPSIxIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgZ3JhZGllbnRUcmFuc2Zvcm09InRyYW5zbGF0ZSgwIDEyMCkgcm90YXRlKDEzNSkgc2NhbGUoMTIzLjI1KSI+CjxzdG9wIHN0b3AtY29sb3I9IiNGRjU2MzAiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRkY1NjMwIiBzdG9wLW9wYWNpdHk9IjAiLz4KPC9yYWRpYWxHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K)',
+                                            backgroundPosition: 'top right, bottom left',
+                                            backgroundSize: '50%, 50%',
+                                            backgroundRepeat: 'no-repeat',
+                                            padding: '0 8px',
+                                            backdropFilter: 'blur(20px)',
+                                            borderRadius: '8px',
+                                            backgroundColor: 'var(--background-item)',
                                             color: 'var(--text-color)',
                                             border: '1px solid var(--border-color)',
                                             '& .MuiMenuItem-root': {
+                                                borderRadius: '6px',
                                                 '&:hover': {
                                                     backgroundColor: 'var(--hover-color)'
                                                 },
@@ -290,7 +362,8 @@ function createNotification() {
                                                     }
                                                 }
                                             }
-                                        }
+                                        },
+                                        autoFocus: false
                                     }
                                 }}
                             >
@@ -307,7 +380,7 @@ function createNotification() {
                         <Typography
                             sx={{
                                 visibility: isSubmit === true && typeNotification === '' ? 'visible' : 'hidden',
-                                color: 'red',
+                                color: 'var(--error-color)',
                                 margin: '1px 0 0 10px',
                                 fontSize: '12px'
                             }}
@@ -330,27 +403,43 @@ function createNotification() {
                         minRows={4}
                         sx={{
                             width: '100%',
-                            color: 'var(--text-color)',
                             '& fieldset': {
                                 borderRadius: '8px',
                                 color: 'var(--text-color)',
                                 borderColor: 'var(--border-color)'
                             },
+                            '& .MuiInputBase-root': {
+                                paddingRight: '0px'
+                            },
                             '& .MuiInputBase-input': {
+                                paddingRight: '12px',
                                 color: 'var(--text-color)',
-                                fontSize: '16px'
+                                fontSize: '16px',
+                                '&::placeholder': {
+                                    color: 'var(--placeholder-color)',
+                                    opacity: 1
+                                }
                             },
                             '& .MuiOutlinedInput-root:hover fieldset': {
-                                borderColor: 'var(--hover-color)'
+                                borderColor: 'var(--hover-field-color)'
+                            },
+                            '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                            },
+                            '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                             },
                             '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                borderColor: 'var(--selected-color)'
+                                borderColor: 'var(--selected-field-color)'
                             },
                             '& .MuiInputLabel-root': {
                                 color: 'var(--text-label-color)'
                             },
                             '& .MuiInputLabel-root.Mui-focused': {
-                                color: 'var(--selected-color)'
+                                color: 'var(--selected-field-color)'
+                            },
+                            '& .MuiInputLabel-root.Mui-error': {
+                                color: 'var(--error-color)'
                             }
                         }}
                         value={content}
@@ -359,7 +448,7 @@ function createNotification() {
                     <Typography
                         sx={{
                             visibility: isSubmit === true && content === '' ? 'visible' : 'hidden',
-                            color: 'red',
+                            color: 'var(--error-color)',
                             margin: '1px 0 0 10px',
                             fontSize: '12px'
                         }}
@@ -455,10 +544,12 @@ function createNotification() {
                             display={typeReceiveNotify === 'All' ? 'none' : 'block'}
                             sx={{
                                 border:
-                                    (typeReceiveNotify === 'Specific_Users' && selectedUsers.length === 0) ||
+                                    (typeReceiveNotify === 'Specific_Users' &&
+                                        selectedUsers.length === 0 &&
+                                        isSubmit) ||
                                     (typeReceiveNotify === 'Department_And_Role' &&
-                                        (selectedDepartment.length === 0 || selectedRole.length === 0))
-                                        ? '1px solid #d32f2f'
+                                        (selectedDepartment.length === 0 || (selectedRole.length === 0 && isSubmit)))
+                                        ? '1px solid var(--error-color)'
                                         : '1px solid var(--border-color)',
                                 height: '100%',
                                 borderRadius: '6px',
@@ -599,7 +690,7 @@ function createNotification() {
                                             (selectedDepartment.length === 0 || selectedRole.length === 0)))
                                         ? 'visible'
                                         : 'hidden',
-                                color: 'red',
+                                color: 'var(--error-color)',
                                 margin: '1px 0 0 10px',
                                 fontSize: '12px'
                             }}
@@ -620,10 +711,10 @@ function createNotification() {
                         loadingPosition='start'
                         startIcon={<SaveIcon />}
                         sx={{
-                            height: '44px',
+                            height: '53px',
                             backgroundColor: 'var(--button-color)',
                             width: 'auto',
-                            padding: '0px 20px',
+                            padding: '0px 30px',
                             fontSize: '16px',
                             '&:hover': {
                                 backgroundColor: 'var(--hover-button-color)'
@@ -643,10 +734,10 @@ function createNotification() {
                         loadingPosition='start'
                         startIcon={<SaveIcon />}
                         sx={{
-                            height: '44px',
+                            height: '53px',
                             backgroundColor: 'var(--button-color)',
                             width: 'auto',
-                            padding: '0px 20px',
+                            padding: '0px 30px',
                             '&:hover': {
                                 backgroundColor: 'var(--hover-button-color)'
                             },
@@ -664,14 +755,14 @@ function createNotification() {
                         variant='contained'
                         startIcon={<XIcon />}
                         sx={{
-                            height: '44px',
+                            height: '53px',
                             backgroundColor: 'var(--button-color)',
                             width: 'auto',
                             fontSize: '16px',
                             '&:hover': {
                                 backgroundColor: 'var(--hover-button-color)'
                             },
-                            padding: '0px 20px',
+                            padding: '0px 30px',
                             fontWeight: 'bold',
                             whiteSpace: 'nowrap',
                             textTransform: 'none'

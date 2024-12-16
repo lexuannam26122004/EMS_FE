@@ -27,12 +27,14 @@ body {
 }
 
 .dark {
-    --background-color: #09090b;
+    --background-color: #141a21;
     --text-color: #fafafa;
-    --border-color: #27272a;
+    --border-color: #333e47;
     --text-gray-color: #4b5563;
-    --hover-color: #012b31;
+    --hover-color: rgba(145, 158, 171, 0.08);
+    --selected-menu-left-color: #122527;
     --selected-color: #005e6c;
+    --selected-menu-text-color: #5be49b;
     --menu-color: #272727;
     --text-role-color: #cf0202;
     --filter-color: drop-shadow(0px 2px 8px rgba(255, 255, 255, 0.12));
@@ -46,16 +48,40 @@ body {
     --button-alert-color: #6b6b6b;
     --button-alert-hover-color: #909090;
     --text-header-color: #d07e7e;
-    --background-after-color: #161616;
+    --background-after-color: #141a21;
     --button-color: #005e6c;
     --filter-color: #03d794;
-    --text-label-color: #494949;
+    --text-label-color: #919eab;
     --hover-button-color: #03d794;
     --border-alert-color: #3e3e3e;
     --selected-tab: #00b7ff;
     --icon-delete-chip-color: #e5e7eb;
     --hover-icon-delete-chip-color: #8f8f8f;
-    --search-color: #1c1c1c;
+    --search-color: #272e36;
+    --color-text-dashboard: #dadada;
+    --header-table-dashboard: #28323d;
+    --background-item: #1c252e;
+    --background-selected-item: rgba(145, 158, 171, 0.16);
+    --bg-danger-color: rgba(255, 22, 22, 0.356);
+    --bg-warning-color: rgba(255, 255, 0, 0.586);
+    --bg-success-color: rgba(0, 200, 77, 0.404);
+    --text-danger-color: #ff7650;
+    --text-warning-color: #fced43;
+    --text-success-color: #00ff77;
+    --placeholder-color: #a5bed4;
+    --hover-field-color: #c9c9c9;
+    --selected-field-color: #d4d4d4;
+    --divider-color: #333e47;
+    --created-date-color: #637381;
+    --sub-title-color: #919eab;
+    --chip-bg-color: rgba(145, 158, 171, 0.16);
+    --text-button-reject: #f9a87f;
+    --bg-button-reject: #402d2f;
+    --text-button-accept: #1c252e;
+    --bg-button-accept: #ffffff;
+    --bg-button-accept-hover: #c4cdd5;
+    --bg-button-reject-hover: #65352e;
+    --error-color: #ff5630;
 }
 
 .light {
@@ -63,7 +89,9 @@ body {
     --text-color: #09090b;
     --border-color: #e4e4e7;
     --text-gray-color: #4b5563;
-    --hover-color: #e4e4e7;
+    --hover-color: rgba(117, 126, 136, 0.08);
+    --selected-menu-text-color: #00a76f;
+    --selected-menu-left-color: #ebf8f4;
     --selected-color: #bcd7ff;
     --menu-color: #fff;
     --text-role-color: #ed0000;
@@ -82,12 +110,36 @@ body {
     --background-after-color: #f6f6f6;
     --button-color: #03d794;
     --filter-color: #03d794;
-    --text-label-color: #c6c6c6;
+    --text-label-color: #637381;
     --hover-button-color: #02b97f;
     --border-alert-color: #e5e5e5;
     --icon-delete-chip-color: #bdbdbd;
     --hover-icon-delete-chip-color: #888888;
     --search-color: #f0f2f5;
+    --color-text-dashboard: #606060;
+    --header-table-dashboard: #f1f4f9;
+    --background-item: #fff;
+    --background-selected-item: rgba(145, 158, 171, 0.16);
+    --bg-danger-color: rgba(255, 86, 48, 0.277);
+    --bg-warning-color: rgba(255, 170, 0, 0.219);
+    --bg-success-color: rgba(34, 197, 94, 0.236);
+    --text-danger-color: #d41610;
+    --text-warning-color: #d68101;
+    --text-success-color: #118d57;
+    --placeholder-color: #a5bed4;
+    --hover-field-color: #1c252e;
+    --selected-field-color: #1c252e;
+    --divider-color: #e4e4e7;
+    --created-date-color: #919eab;
+    --sub-title-color: #637381;
+    --chip-bg-color: rgba(145, 158, 171, 0.16);
+    --text-button-reject: #b71d18;
+    --bg-button-reject: #ffe4de;
+    --text-button-accept: #ffffff;
+    --bg-button-accept: #1c252e;
+    --bg-button-accept-hover: #454f5b;
+    --bg-button-reject-hover: #ffc9bc;
+    --error-color: #ff5630;
 }
 
 body {

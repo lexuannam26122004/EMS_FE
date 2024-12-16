@@ -32,8 +32,7 @@ export default function Header() {
                 top: 0,
                 zIndex: 1000,
                 backgroundColor: 'var(--background-color)',
-                borderBottom: '1px solid var(--border-color)',
-                padding: '0 15px'
+                padding: '0 24px'
             }}
             spacing={2}
         >
@@ -51,8 +50,8 @@ export default function Header() {
                             alignItems: 'center'
                         }}
                     >
-                        {parentPath}
-                        <MoveRight style={{ margin: '0 8px' }} />
+                        {/* {parentPath}
+                        <MoveRight style={{ margin: '0 8px' }} /> */}
                         {path}
                     </Typography>
                 ) : (

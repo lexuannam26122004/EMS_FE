@@ -1,10 +1,5 @@
 'use client'
-import { IFilterSysConfiguration, IGetAllSysConfiguration } from '@/models/SysConfiguration'
-import {
-    useSearchSysConfigurationQuery,
-    useChangeStatusSysConfigurationMutation,
-    useChangeStatusManySysConfigurationMutation
-} from '@/services/SysConfigurationService'
+import { IFilterEmploymentContract } from '@/models/EmploymentContract'
 import { formatDate } from '@/utils/formatDate'
 import {
     Box,
@@ -14,78 +9,98 @@ import {
     MenuItem,
     SelectChangeEvent,
     Paper,
-    Checkbox,
     TableRow,
     TableBody,
     Table,
     TableCell,
     TableHead,
     TableContainer,
-    Button,
     TextField,
     InputAdornment,
-    IconButton,
-    Tooltip,
-    TableSortLabel
+    TableSortLabel,
+    Avatar
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import SearchIcon from '@mui/icons-material/Search'
 import { useRouter } from 'next/navigation'
-import { CirclePlus, EyeIcon, Pencil, Trash2 } from 'lucide-react'
-import AlertDialog from '@/components/AlertDialog'
-import DetailModal from './DetailModal'
+import { IContractExp } from '@/models/EmploymentContract'
+import { useGetContractsExpiringSoonQuery } from '@/services/EmploymentContractService'
 
-function ConfigurationPage() {
+function getContractBgColor(contractEnd: string): string {
+    const today = new Date()
+    const endDate = new Date(contractEnd)
+
+    const diffInMilliseconds = endDate.getTime() - today.getTime()
+    const diffInMonths = diffInMilliseconds / (1000 * 60 * 60 * 24 * 30)
+
+    if (diffInMonths <= 2) {
+        return 'var(--bg-danger-color)'
+    } else if (diffInMonths <= 4) {
+        return 'var(--bg-warning-color)'
+    } else {
+        return 'var(--bg-success-color)'
+    }
+}
+
+function getContractTextColor(contractEnd: string): string {
+    const today = new Date()
+    const endDate = new Date(contractEnd)
+
+    const diffInMilliseconds = endDate.getTime() - today.getTime()
+    const diffInMonths = diffInMilliseconds / (1000 * 60 * 60 * 24 * 30)
+
+    if (diffInMonths <= 2) {
+        return 'var(--text-danger-color)'
+    } else if (diffInMonths <= 4) {
+        return 'var(--text-warning-color)'
+    } else {
+        return 'var(--text-success-color)'
+    }
+}
+
+function ContractExpPage() {
     const { t } = useTranslation('common')
     const router = useRouter()
     const [selected, setSelected] = useState<number[]>([])
     const [page, setPage] = useState(1)
-    const [rowsPerPage, setRowsPerPage] = useState('10')
+    const [rowsPerPage, setRowsPerPage] = useState('5')
     const [from, setFrom] = useState(1)
-    const [to, setTo] = useState(10)
-    const [filter, setFilter] = useState<IFilterSysConfiguration>({
+    const [to, setTo] = useState(5)
+    const [filter, setFilter] = useState<IFilterEmploymentContract>({
         pageSize: 10,
-        pageNumber: 1
+        pageNumber: 1,
+        daysUntilExpiration: 60
     })
     const [keyword, setKeyword] = useState('')
     const [openDialog, setOpenDialog] = useState(false)
-    const [isChangeMany, setIsChangeMany] = useState(false)
     const [selectedRow, setSelectedRow] = useState<number | null>(null)
     const [order, setOrder] = useState<'asc' | 'desc'>('asc')
     const [orderBy, setOrderBy] = useState<string>('')
-    const [selectedConfig, setSelectedConfig] = useState<IGetAllSysConfiguration | null>(null)
+    // const [selectedConfig, setSelectedConfig] = useState<IGetAllSysConfiguration | null>(null)
     const [openModal, setOpenModal] = useState(false)
 
-    const { data: responseData, isFetching, refetch } = useSearchSysConfigurationQuery(filter)
-    const [changeSysConfiguration, { isError: isErrorChange, isSuccess: isSuccessChange, isLoading: isLoadingChange }] =
-        useChangeStatusSysConfigurationMutation()
-    const [
-        changeManySysConfiguration,
-        { isError: isErrorChangeMany, isSuccess: isSuccessChangeMany, isLoading: isLoadingChangeMany }
-    ] = useChangeStatusManySysConfigurationMutation()
+    const { data: responseData, isFetching, refetch } = useGetContractsExpiringSoonQuery(filter)
 
-    const handleClickDetail = (config: IGetAllSysConfiguration) => {
-        setSelectedConfig(config)
-        setOpenModal(true)
-    }
+    // const handleClickDetail = (config: IGetAllSysConfiguration) => {
+    //     setSelectedConfig(config)
+    //     setOpenModal(true)
+    // }
 
-    const sysConfigurationData = responseData?.Data.Records as IGetAllSysConfiguration[]
-    const totalRecords = responseData?.Data.TotalRecords as number
+    const contractData = responseData?.Data.Records
 
-    const isSelected = (id: number) => selected.includes(id)
-
-    const handleCheckboxClick = (id: number) => {
-        setSelected(prev => (prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]))
-    }
-
-    const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.checked) {
-            setSelected(sysConfigurationData.map(row => row.Id))
-        } else {
-            setSelected([])
+    const contracts = contractData?.map((item: any) => {
+        return {
+            FullName: item.User.FullName,
+            ContractType: item.Contract.TypeContract,
+            ContractName: item.Contract.ContractName,
+            ContractStart: item.Contract.StartDate,
+            ContractEnd: item.Contract.EndDate,
+            AvatarPath: item.User.AvatarPath
         }
-    }
+    })
+
+    const totalRecords = (responseData?.Data.TotalRecords as number) || 0
 
     const handleChangePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
         setPage(newPage)
@@ -122,10 +137,10 @@ function ConfigurationPage() {
 
     useEffect(() => {
         if (!isFetching && responseData?.Data) {
-            const from = (page - 1) * Number(rowsPerPage) + Math.min(1, sysConfigurationData.length)
+            const from = (page - 1) * Number(rowsPerPage) + Math.min(1, contractData.length)
             setFrom(from)
 
-            const to = Math.min(sysConfigurationData.length + (page - 1) * Number(rowsPerPage), totalRecords)
+            const to = Math.min(contractData.length + (page - 1) * Number(rowsPerPage), totalRecords)
             setTo(to)
         }
     }, [isFetching, responseData, page, rowsPerPage])
@@ -133,46 +148,6 @@ function ConfigurationPage() {
     useEffect(() => {
         refetch()
     }, [filter])
-
-    const handleButtonUpdateClick = (id: number) => {
-        router.push(`/admin/configuration/update-configuration?id=${id}`)
-    }
-
-    const handleDeleteClick = async (id: number) => {
-        setOpenDialog(true)
-        setSelectedRow(id)
-    }
-
-    const handleDeleteSysConfiguration = async () => {
-        if (selectedRow) {
-            await changeSysConfiguration(selectedRow)
-            if (isSelected(selectedRow)) {
-                setSelected(prev => prev.filter(item => item !== selectedRow))
-            }
-            setOpenDialog(false)
-            setSelectedRow(null)
-        }
-    }
-
-    const handleDeleteManyClick = async () => {
-        setIsChangeMany(true)
-        setOpenDialog(true)
-    }
-
-    const handleDeleteManySysConfiguration = async () => {
-        if (selected.length > 0) {
-            await changeManySysConfiguration(selected)
-            setIsChangeMany(false)
-            setSelected([])
-            setOpenDialog(false)
-        }
-    }
-
-    useEffect(() => {
-        if (isSuccessChange || isSuccessChangeMany) {
-            refetch()
-        }
-    }, [isSuccessChange, isSuccessChangeMany])
 
     const handleSort = (property: string) => {
         setFilter(prev => ({
@@ -188,24 +163,36 @@ function ConfigurationPage() {
         setOrderBy(property)
     }
 
-    const countRows = selected.length
-
     return (
         <Box>
             <Paper
+                elevation={0}
                 sx={{
                     width: '100%',
                     overflow: 'hidden',
-                    borderRadius: '15px',
+                    borderRadius: '10px',
                     backgroundColor: 'var(--background-item)'
                 }}
             >
-                <Box display='flex' alignItems='center' justifyContent='space-between' margin='24px'>
+                <Typography
+                    sx={{
+                        userSelect: 'none',
+                        color: 'var(--text-color)',
+                        fontWeight: 'bold',
+                        fontSize: '18px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        padding: '24px 24px 20px'
+                    }}
+                >
+                    {t('COMMON.DASHBOARD.CONTRACT_EXPIRING_SOON')}
+                </Typography>
+                <Box display='flex' alignItems='center' justifyContent='space-between' margin='0 0 20px 24px'>
                     <Box sx={{ position: 'relative', width: '100%', height: '55px' }}>
                         <TextField
                             id='location-search'
                             type='search'
-                            placeholder={t('COMMON.SYS_CONFIGURATION.PLACEHOLDER_SEARCH')}
+                            placeholder={t('COMMON.DASHBOARD.SEARCH_CONTRACT')}
                             variant='outlined'
                             required
                             value={keyword}
@@ -225,7 +212,7 @@ function ConfigurationPage() {
                                     fontSize: '16px',
                                     '&::placeholder': {
                                         color: 'var(--placeholder-color)',
-                                        opacity: 1 // Đảm bảo opacity của placeholder không bị giảm
+                                        opacity: 1
                                     }
                                 },
                                 '& .MuiOutlinedInput-root:hover fieldset': {
@@ -263,64 +250,9 @@ function ConfigurationPage() {
                             }}
                         />
                     </Box>
-                    <Box display='flex' alignItems='center' justifyContent='center' gap='20px'>
-                        <Typography
-                            sx={{
-                                color: 'red',
-                                whiteSpace: 'nowrap',
-                                visibility: countRows > 0 ? 'visible' : 'hidden'
-                            }}
-                        >
-                            {t('COMMON.COUNT_ROWS_SELECTED', { countRows })}
-                        </Typography>
-                        <Button
-                            variant='contained'
-                            startIcon={<Trash2 />}
-                            sx={{
-                                mr: '5px',
-                                height: '53px',
-                                visibility: countRows > 0 ? 'visible' : 'hidden',
-                                backgroundColor: 'var(--button-color)',
-                                width: 'auto',
-                                padding: '0px 30px',
-                                '&:hover': {
-                                    backgroundColor: 'var(--hover-button-color)'
-                                },
-                                fontSize: '16px',
-                                fontWeight: 'bold',
-                                whiteSpace: 'nowrap',
-                                textTransform: 'none'
-                            }}
-                            onClick={() => handleDeleteManyClick()}
-                        >
-                            {t('COMMON.BUTTON.DELETE')}
-                        </Button>
-
-                        <Button
-                            variant='contained'
-                            startIcon={<CirclePlus />}
-                            sx={{
-                                height: '53px',
-                                backgroundColor: 'var(--button-color)',
-                                width: 'auto',
-                                padding: '0px 30px',
-                                '&:hover': {
-                                    backgroundColor: 'var(--hover-button-color)'
-                                },
-                                fontSize: '16px',
-                                fontWeight: 'bold',
-                                whiteSpace: 'nowrap',
-                                textTransform: 'none'
-                            }}
-                            onClick={() => router.push('/admin/configuration/create-configuration')}
-                        >
-                            {t('COMMON.BUTTON.CREATE')}
-                        </Button>
-                    </Box>
                 </Box>
                 <TableContainer
                     sx={{
-                        textAlign: 'center',
                         '&::-webkit-scrollbar': {
                             width: '7px',
                             height: '7px'
@@ -333,58 +265,19 @@ function ConfigurationPage() {
                 >
                     <Table>
                         <TableHead>
-                            <TableRow sx={{ backgroundColor: 'var(--header-color-table)' }}>
-                                <TableCell
-                                    padding='checkbox'
-                                    sx={{ borderColor: 'var(--border-color)', paddingLeft: '12px' }}
-                                >
-                                    <Checkbox
-                                        indeterminate={
-                                            selected.length > 0 && selected.length < sysConfigurationData.length
-                                        }
-                                        checked={
-                                            sysConfigurationData && selected.length > 0
-                                                ? selected.length === sysConfigurationData.length
-                                                : false
-                                        }
-                                        onChange={handleSelectAllClick}
-                                        sx={{
-                                            color: 'var(--text-color)'
-                                        }}
-                                    />
-                                </TableCell>
-                                <TableCell
-                                    sx={{ borderColor: 'var(--border-color)', minWidth: '49px', maxWidth: '60px' }}
-                                >
-                                    <TableSortLabel
-                                        active={'Id' === orderBy}
-                                        direction={orderBy === 'Id' ? order : 'asc'}
-                                        onClick={() => handleSort('Id')}
-                                        sx={{
-                                            '& .MuiTableSortLabel-icon': {
-                                                color: 'var(--text-color) !important'
-                                            }
-                                        }}
-                                    >
-                                        <Typography
-                                            sx={{
-                                                fontWeight: 'bold',
-                                                color: 'var(--text-color)',
-                                                fontSize: '16px',
-                                                overflow: 'hidden',
-                                                textOverflow: 'ellipsis',
-                                                whiteSpace: 'nowrap'
-                                            }}
-                                        >
-                                            ID
-                                        </Typography>
-                                    </TableSortLabel>
-                                </TableCell>
+                            <TableRow
+                                sx={{
+                                    backgroundColor: 'var(--header-table-dashboard)',
+                                    '&:last-child td, &:last-child th': {
+                                        border: 'none'
+                                    }
+                                }}
+                            >
                                 <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                     <TableSortLabel
-                                        active={'Key' === orderBy}
-                                        direction={orderBy === 'Key' ? order : 'asc'}
-                                        onClick={() => handleSort('Key')}
+                                        active={'FullName' === orderBy}
+                                        direction={orderBy === 'FullName' ? order : 'asc'}
+                                        onClick={() => handleSort('FullName')}
                                         sx={{
                                             '& .MuiTableSortLabel-icon': {
                                                 color: 'var(--text-color) !important'
@@ -402,15 +295,15 @@ function ConfigurationPage() {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {t('COMMON.SYS_CONFIGURATION.KEY')}
+                                            {t('COMMON.DASHBOARD.FULLNAME')}
                                         </Typography>
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                     <TableSortLabel
-                                        active={'Type' === orderBy}
-                                        direction={orderBy === 'Type' ? order : 'asc'}
-                                        onClick={() => handleSort('Type')}
+                                        active={'ContractType' === orderBy}
+                                        direction={orderBy === 'ContractType' ? order : 'asc'}
+                                        onClick={() => handleSort('ContractType')}
                                         sx={{
                                             '& .MuiTableSortLabel-icon': {
                                                 color: 'var(--text-color) !important'
@@ -428,15 +321,15 @@ function ConfigurationPage() {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {t('COMMON.SYS_CONFIGURATION.TYPE')}
+                                            {t('COMMON.DASHBOARD.CONTRACT_TYPE')}
                                         </Typography>
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                     <TableSortLabel
-                                        active={'Value' === orderBy}
-                                        direction={orderBy === 'Value' ? order : 'asc'}
-                                        onClick={() => handleSort('Value')}
+                                        active={'ContractName' === orderBy}
+                                        direction={orderBy === 'ContractName' ? order : 'asc'}
+                                        onClick={() => handleSort('ContractName')}
                                         sx={{
                                             '& .MuiTableSortLabel-icon': {
                                                 color: 'var(--text-color) !important'
@@ -454,15 +347,15 @@ function ConfigurationPage() {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {t('COMMON.SYS_CONFIGURATION.VALUE')}
+                                            {t('COMMON.DASHBOARD.CONTRACT_NAME')}
                                         </Typography>
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                     <TableSortLabel
-                                        active={'Description' === orderBy}
-                                        direction={orderBy === 'Description' ? order : 'asc'}
-                                        onClick={() => handleSort('Description')}
+                                        active={'ContractStart' === orderBy}
+                                        direction={orderBy === 'CibtractStart' ? order : 'asc'}
+                                        onClick={() => handleSort('CibtractStart')}
                                         sx={{
                                             '& .MuiTableSortLabel-icon': {
                                                 color: 'var(--text-color) !important'
@@ -480,15 +373,15 @@ function ConfigurationPage() {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {t('COMMON.SYS_CONFIGURATION.DESCRIPTION')}
+                                            {t('COMMON.DASHBOARD.CONTRACT_START')}
                                         </Typography>
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                     <TableSortLabel
-                                        active={'CreatedDate' === orderBy}
-                                        direction={orderBy === 'CreatedDate' ? order : 'asc'}
-                                        onClick={() => handleSort('CreatedDate')}
+                                        active={'ContractEnd' === orderBy}
+                                        direction={orderBy === 'ContractEnd' ? order : 'asc'}
+                                        onClick={() => handleSort('ContractEnd')}
                                         sx={{
                                             '& .MuiTableSortLabel-icon': {
                                                 color: 'var(--text-color) !important'
@@ -505,44 +398,11 @@ function ConfigurationPage() {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {t('COMMON.SYS_CONFIGURATION.CREATED_DATE')}
+                                            {t('COMMON.DASHBOARD.CONTRACT_END')}
                                         </Typography>
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell sx={{ borderColor: 'var(--border-color)' }}>
-                                    <TableSortLabel
-                                        active={'CreatedBy' === orderBy}
-                                        direction={orderBy === 'CreatedBy' ? order : 'asc'}
-                                        onClick={() => handleSort('CreatedBy')}
-                                        sx={{
-                                            '& .MuiTableSortLabel-icon': {
-                                                color: 'var(--text-color) !important'
-                                            }
-                                        }}
-                                    >
-                                        <Typography
-                                            sx={{
-                                                fontWeight: 'bold',
-                                                color: 'var(--text-color)',
-                                                fontSize: '16px',
-                                                overflow: 'hidden',
-                                                maxWidth: '280px',
-                                                textOverflow: 'ellipsis',
-                                                whiteSpace: 'nowrap'
-                                            }}
-                                        >
-                                            {t('COMMON.SYS_CONFIGURATION.CREATED_BY')}
-                                        </Typography>
-                                    </TableSortLabel>
-                                </TableCell>
-
-                                <TableCell
-                                    sx={{
-                                        borderColor: 'var(--border-color)',
-                                        padding: '0px 11px 0px 0px',
-                                        width: '146px'
-                                    }}
-                                >
                                     <Typography
                                         sx={{
                                             fontWeight: 'bold',
@@ -550,63 +410,54 @@ function ConfigurationPage() {
                                             fontSize: '16px',
                                             overflow: 'hidden',
                                             textAlign: 'center',
+                                            maxWidth: '280px',
                                             textOverflow: 'ellipsis',
                                             whiteSpace: 'nowrap'
                                         }}
                                     >
-                                        {t('COMMON.SYS_CONFIGURATION.ACTION')}
+                                        {t('COMMON.DASHBOARD.CONTRACT_STATUS')}
                                     </Typography>
                                 </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {sysConfigurationData &&
-                                sysConfigurationData.map(row => (
-                                    <TableRow key={row.Id} selected={isSelected(row.Id)}>
-                                        <TableCell
-                                            padding='checkbox'
-                                            sx={{ borderColor: 'var(--border-color)', paddingLeft: '12px' }}
-                                        >
-                                            <Checkbox
-                                                checked={isSelected(row.Id)}
-                                                onChange={() => handleCheckboxClick(row.Id)}
+                            {contracts &&
+                                contracts.map((row: IContractExp, index: number) => (
+                                    <TableRow
+                                        key={index}
+                                        sx={{
+                                            '&:last-child td, &:last-child th': {
+                                                border: 'none'
+                                            }
+                                        }}
+                                    >
+                                        <TableCell sx={{ borderColor: 'var(--border-color)', padding: '0 16px' }}>
+                                            <Box
                                                 sx={{
-                                                    color: 'var(--text-color)'
-                                                }}
-                                            />
-                                        </TableCell>
-                                        <TableCell
-                                            sx={{
-                                                minWidth: '49px',
-                                                maxWidth: '60px',
-                                                borderColor: 'var(--border-color)'
-                                            }}
-                                        >
-                                            <Typography
-                                                sx={{
-                                                    color: 'var(--text-color)',
-                                                    fontSize: '16px',
-                                                    overflow: 'hidden',
-                                                    textOverflow: 'ellipsis',
-                                                    whiteSpace: 'nowrap'
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: '14px'
                                                 }}
                                             >
-                                                {row.Id}
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell sx={{ borderColor: 'var(--border-color)' }}>
-                                            <Typography
-                                                sx={{
-                                                    color: 'var(--text-color)',
-                                                    fontSize: '16px',
-                                                    maxWidth: '260px',
-                                                    overflow: 'hidden',
-                                                    textOverflow: 'ellipsis',
-                                                    whiteSpace: 'nowrap'
-                                                }}
-                                            >
-                                                {row.Key}
-                                            </Typography>
+                                                <Avatar
+                                                    src={
+                                                        row.AvatarPath ||
+                                                        'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'
+                                                    }
+                                                />
+                                                <Typography
+                                                    sx={{
+                                                        color: 'var(--text-color)',
+                                                        fontSize: '16px',
+                                                        maxWidth: '260px',
+                                                        overflow: 'hidden',
+                                                        textOverflow: 'ellipsis',
+                                                        whiteSpace: 'nowrap'
+                                                    }}
+                                                >
+                                                    {row.FullName}
+                                                </Typography>
+                                            </Box>
                                         </TableCell>
                                         <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                             <Typography
@@ -619,7 +470,7 @@ function ConfigurationPage() {
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                {row.Type}
+                                                {row.ContractType}
                                             </Typography>
                                         </TableCell>
                                         <TableCell sx={{ borderColor: 'var(--border-color)' }}>
@@ -633,7 +484,7 @@ function ConfigurationPage() {
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                {row.Value}
+                                                {row.ContractName}
                                             </Typography>
                                         </TableCell>
                                         <TableCell sx={{ borderColor: 'var(--border-color)' }}>
@@ -647,7 +498,7 @@ function ConfigurationPage() {
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                {row.Description}
+                                                {formatDate(row.ContractStart)}
                                             </Typography>
                                         </TableCell>
                                         <TableCell sx={{ borderColor: 'var(--border-color)' }}>
@@ -660,97 +511,39 @@ function ConfigurationPage() {
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                {formatDate(row.CreatedDate)}
+                                                {formatDate(row.ContractEnd)}
                                             </Typography>
                                         </TableCell>
-                                        <TableCell sx={{ borderColor: 'var(--border-color)' }}>
-                                            <Typography
-                                                sx={{
-                                                    color: 'var(--text-color)',
-                                                    fontSize: '16px',
-                                                    overflow: 'hidden',
-                                                    maxWidth: '280px',
-                                                    textOverflow: 'ellipsis',
-                                                    whiteSpace: 'nowrap'
-                                                }}
-                                            >
-                                                {row.CreateBy}
-                                            </Typography>
-                                        </TableCell>
-
-                                        <TableCell
-                                            sx={{
-                                                padding: '0px 12px 0px 0px',
-                                                borderColor: 'var(--border-color)',
-                                                width: '146px'
-                                            }}
-                                        >
+                                        <TableCell sx={{ borderColor: 'var(--border-color)', padding: '11px' }}>
                                             <Box
-                                                display='flex'
-                                                alignItems='center'
-                                                justifyContent='space-between'
-                                                gap='10px'
+                                                sx={{
+                                                    borderRadius: '8px',
+                                                    padding: '5px',
+                                                    display: 'flex',
+                                                    minWidth: '100px',
+                                                    justifyContent: 'center',
+                                                    backgroundColor: getContractBgColor(row.ContractEnd)
+                                                }}
                                             >
-                                                <Tooltip title={t('COMMON.BUTTON.VIEW_DETAIL')}>
-                                                    <Box
-                                                        display='flex'
-                                                        alignItems='center'
-                                                        justifyContent='center'
-                                                        sx={{
-                                                            cursor: 'pointer',
-                                                            color: '#00d100',
-                                                            borderRadius: '50%',
-                                                            width: '42px',
-                                                            height: '42px',
-                                                            '&:hover': {
-                                                                backgroundColor: 'var(--hover-color)'
-                                                            }
-                                                        }}
-                                                        onClick={() => handleClickDetail(row)}
-                                                    >
-                                                        <EyeIcon />
-                                                    </Box>
-                                                </Tooltip>
-                                                <Tooltip title={t('COMMON.BUTTON.EDIT')}>
-                                                    <Box
-                                                        display='flex'
-                                                        alignItems='center'
-                                                        justifyContent='center'
-                                                        sx={{
-                                                            cursor: 'pointer',
-                                                            color: '#00d4ff',
-                                                            borderRadius: '50%',
-                                                            width: '42px',
-                                                            height: '42px',
-                                                            '&:hover': {
-                                                                backgroundColor: 'var(--hover-color)'
-                                                            }
-                                                        }}
-                                                        onClick={() => handleButtonUpdateClick(row.Id)}
-                                                    >
-                                                        <Pencil />
-                                                    </Box>
-                                                </Tooltip>
-                                                <Tooltip title={t('COMMON.BUTTON.DELETE')}>
-                                                    <Box
-                                                        display='flex'
-                                                        alignItems='center'
-                                                        justifyContent='center'
-                                                        sx={{
-                                                            cursor: 'pointer',
-                                                            color: 'red',
-                                                            borderRadius: '50%',
-                                                            width: '42px',
-                                                            height: '42px',
-                                                            '&:hover': {
-                                                                backgroundColor: 'var(--hover-color)'
-                                                            }
-                                                        }}
-                                                        onClick={() => handleDeleteClick(row.Id)}
-                                                    >
-                                                        <Trash2 />
-                                                    </Box>
-                                                </Tooltip>
+                                                <Typography
+                                                    sx={{
+                                                        fontSize: '15px',
+                                                        overflow: 'hidden',
+                                                        color: getContractTextColor(row.ContractEnd),
+                                                        width: 'auto',
+                                                        fontWeight: 'bold',
+                                                        display: 'inline-block',
+                                                        textOverflow: 'ellipsis',
+                                                        whiteSpace: 'nowrap'
+                                                    }}
+                                                >
+                                                    {getContractBgColor(row.ContractEnd) === 'var(--bg-danger-color)'
+                                                        ? `<= 2 ${t('COMMON.DASHBOARD.MONTHS')}`
+                                                        : getContractBgColor(row.ContractEnd) ===
+                                                            'var(--bg-warning-color)'
+                                                          ? `<= 4  ${t('COMMON.DASHBOARD.MONTHS')}`
+                                                          : `<= 6  ${t('COMMON.DASHBOARD.MONTHS')}`}
+                                                </Typography>
                                             </Box>
                                         </TableCell>
                                     </TableRow>
@@ -758,7 +551,7 @@ function ConfigurationPage() {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <Box display='flex' alignItems='center' justifyContent='space-between' padding='20px 24px'>
+                <Box display='flex' alignItems='center' justifyContent='space-between' padding='24px'>
                     <Box display='flex' alignItems='center'>
                         <Typography sx={{ mr: '10px', color: 'var(--text-color)' }}>
                             {t('COMMON.PAGINATION.ROWS_PER_PAGE')}
@@ -867,23 +660,8 @@ function ConfigurationPage() {
                     />
                 </Box>
             </Paper>
-
-            <AlertDialog
-                title={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.TITLE')}
-                content={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.CONTENT')}
-                type='warning'
-                open={openDialog}
-                setOpen={setOpenDialog}
-                buttonCancel={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.CANCEL')}
-                buttonConfirm={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.DELETE')}
-                onConfirm={() => (isChangeMany ? handleDeleteManySysConfiguration() : handleDeleteSysConfiguration())}
-            />
-
-            {selectedConfig && (
-                <DetailModal handleToggle={() => setOpenModal(false)} open={openModal} configuration={selectedConfig} />
-            )}
         </Box>
     )
 }
 
-export default ConfigurationPage
+export default ContractExpPage

@@ -203,7 +203,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 >
                     <Box
                         sx={{
-                            padding: '15px 8px',
+                            padding: '24px 17px',
                             minHeight: '100%'
                         }}
                     >

@@ -101,7 +101,7 @@ function ListRole({ handleBefore, handleClose, handleSave, tempSelectedRole, set
 
     return (
         <Box>
-            <Box padding='10px 16px' sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+            <Box padding='16px 16px' sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                 <TextField
                     variant='outlined'
                     inputRef={input => input && input.focus()}
@@ -113,7 +113,7 @@ function ListRole({ handleBefore, handleClose, handleSave, tempSelectedRole, set
                         justifyContent: 'center',
                         width: '100%',
                         borderRadius: '50px',
-                        height: '36px',
+                        height: '45px',
                         backgroundColor: 'var(--search-color)',
                         '& .MuiOutlinedInput-root': {
                             borderRadius: '20px',
@@ -180,8 +180,8 @@ function ListRole({ handleBefore, handleClose, handleSave, tempSelectedRole, set
                 }}
             >
                 {showSkeleton ? (
-                    <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 1.6, height: '100%' }}>
-                        {Array.from({ length: 15 }).map((_, index) => (
+                    <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 1.9, height: '100%' }}>
+                        {Array.from({ length: 10 }).map((_, index) => (
                             <Box
                                 key={index}
                                 sx={{
@@ -193,9 +193,9 @@ function ListRole({ handleBefore, handleClose, handleSave, tempSelectedRole, set
                             >
                                 <Skeleton
                                     variant='text'
-                                    width='90%'
-                                    height='20px'
-                                    sx={{ borderRadius: '13px', bgcolor: 'var(--skeleton-color)' }}
+                                    width='85%'
+                                    height='22px'
+                                    sx={{ borderRadius: '10px', bgcolor: 'var(--skeleton-color)' }}
                                 />
                             </Box>
                         ))}
@@ -265,14 +265,14 @@ function ListRole({ handleBefore, handleClose, handleSave, tempSelectedRole, set
                         variant='contained'
                         endIcon={<ArrowLeft />}
                         sx={{
-                            height: '36px',
+                            height: '40px',
                             backgroundColor: 'var(--button-color)',
                             width: 'auto',
                             fontSize: '15px',
                             '&:hover': {
                                 backgroundColor: 'var(--hover-button-color)'
                             },
-                            padding: '0px 20px',
+                            padding: '0px 24px',
                             fontWeight: 'bold',
                             whiteSpace: 'nowrap',
                             textTransform: 'none'
@@ -308,14 +308,14 @@ function ListRole({ handleBefore, handleClose, handleSave, tempSelectedRole, set
                             variant='contained'
                             startIcon={<Save />}
                             sx={{
-                                height: '36px',
+                                height: '40px',
                                 backgroundColor: 'var(--button-color)',
                                 width: 'auto',
                                 fontSize: '15px',
                                 '&:hover': {
                                     backgroundColor: 'var(--hover-button-color)'
                                 },
-                                padding: '0px 20px',
+                                padding: '0px 24px',
                                 fontWeight: 'bold',
                                 whiteSpace: 'nowrap',
                                 textTransform: 'none'

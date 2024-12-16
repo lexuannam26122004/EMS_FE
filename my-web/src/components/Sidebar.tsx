@@ -127,7 +127,6 @@ export const TypographyItem: FC<TypographyItemProps> = ({ text }) => {
     )
 }
 
-// SidebarItem component
 interface SidebarItemProps {
     icon: ReactNode
     text: string
@@ -197,11 +196,16 @@ export const SidebarItem: FC<SidebarItemProps> = ({ icon, text, route, alert, ac
             onMouseLeave={handleMouseLeave}
             className={`group relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors ${
                 active
-                    ? 'bg-[var(--selected-color)] hover:bg-[var(--hover-color)]'
+                    ? 'bg-[var(--selected-menu-left-color)] hover:bg-[var(--hover-color)]'
                     : 'hover:bg-[var(--hover-color)] text-[var(--text-color)]'
             }`}
         >
-            <div className='w-6 h-6 flex items-center justify-center flex-shrink-0'>{icon}</div>
+            <div
+                className='w-6 h-6 flex items-center justify-center flex-shrink-0'
+                style={{ ...(active ? { color: 'var(--selected-menu-text-color)' } : { color: 'var(--text-color)' }) }}
+            >
+                {icon}
+            </div>
 
             <span
                 className={`
@@ -209,7 +213,7 @@ export const SidebarItem: FC<SidebarItemProps> = ({ icon, text, route, alert, ac
                     transition-all duration-300 ease-in-out
                     ${expanded ? 'w-48 ml-3 opacity-100' : 'w-0 opacity-0'}
                 `}
-                style={{ color: 'var(--text-color)' }}
+                style={{ ...(active ? { color: 'var(--selected-menu-text-color)' } : { color: 'var(--text-color)' }) }}
             >
                 {text}
             </span>

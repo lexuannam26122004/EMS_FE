@@ -97,7 +97,7 @@ const NotificationsPage = ({ menu }: INotificationsPageProps) => {
         sx: {
             width: menu === undefined ? '700px' : '400px',
             borderRadius: '12px',
-            backgroundColor: 'var(--background-color)',
+            backgroundColor: menu === false ? 'var(--background-color)' : 'transparent',
             ...(menu === undefined ? { border: '1px solid var(--border-color)' } : {})
         }
     }
@@ -170,7 +170,6 @@ const NotificationsPage = ({ menu }: INotificationsPageProps) => {
                                 elevation: 0,
                                 sx: {
                                     mt: 0.5,
-                                    backgroundColor: 'var(--background-color)',
                                     border: '1px solid var(--border-color)',
                                     borderRadius: '6px',
                                     padding: '0 8px'

@@ -13,6 +13,27 @@ export interface IEmploymentContractSearch {
     Clause?: string
 }
 
+export interface IContractExp {
+    FullName: string // Họ tên nhân viên
+    ContractType: string // Loại hợp đồng
+    ContractName: string // Tên hợp đồng
+    ContractStart: string // Ngày bắt đầu hợp đồng
+    ContractEnd: string
+    AvatarPath: string | null
+}
+
+export interface IFilterEmploymentContract {
+    isActive?: boolean
+    createdDate?: Date
+    createdBy?: string
+    pageSize?: number
+    pageNumber?: number
+    sortBy?: string
+    isDescending?: boolean
+    keyword?: string
+    daysUntilExpiration: number
+}
+
 export interface IEmploymentContractCreate {
     UserId: string
     ContractName: string

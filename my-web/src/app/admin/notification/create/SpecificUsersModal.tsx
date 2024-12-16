@@ -167,7 +167,7 @@ function SpecificUsersModal({ open, handleClose }: NotificationModalProps) {
                     </Box>
                 </Box>
                 <Divider sx={{ zIndex: '1', borderColor: 'var(--border-color)' }} />
-                <Box padding='10px 16px' sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                <Box padding='16px 16px' sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                     <TextField
                         variant='outlined'
                         inputRef={input => input && input.focus()}
@@ -180,7 +180,7 @@ function SpecificUsersModal({ open, handleClose }: NotificationModalProps) {
                             backgroundColor: 'var(--search-color)',
                             justifyContent: 'center',
                             borderRadius: '50px',
-                            height: '36px',
+                            height: '45px',
                             '& .MuiOutlinedInput-root': {
                                 borderRadius: '20px',
                                 '& fieldset': {
@@ -280,7 +280,7 @@ function SpecificUsersModal({ open, handleClose }: NotificationModalProps) {
                         <img src='/images/Error.gif' alt='' />
                     ) : filteredUsers.length === 0 ? (
                         <Box sx={{ mt: '20px', width: '100%' }}>
-                            <Typography sx={{ width: '100%', textAlign: 'center' }}>
+                            <Typography sx={{ width: '100%', textAlign: 'center', color: 'var(--text-color)' }}>
                                 {t('COMMON.CREATE_NOTIFICATION.NOT_FOUND')}
                             </Typography>
                         </Box>
@@ -390,14 +390,14 @@ function SpecificUsersModal({ open, handleClose }: NotificationModalProps) {
                             variant='contained'
                             startIcon={<SaveIcon />}
                             sx={{
-                                height: '36px',
+                                height: '40px',
                                 backgroundColor: 'var(--button-color)',
                                 width: 'auto',
                                 fontSize: '15px',
                                 '&:hover': {
                                     backgroundColor: 'var(--hover-button-color)'
                                 },
-                                padding: '0px 20px',
+                                padding: '0px 24px',
                                 fontWeight: 'bold',
                                 whiteSpace: 'nowrap',
                                 textTransform: 'none'

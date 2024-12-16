@@ -20,7 +20,7 @@ export default function ColorModeIconDropdown(props: IconButtonOwnProps) {
                 onClick={handleClick}
                 sx={{
                     cursor: 'pointer',
-                    borderRadius: '6px',
+                    borderRadius: '8px',
                     width: 40,
                     height: 40,
                     display: 'flex',

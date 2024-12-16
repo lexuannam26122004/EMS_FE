@@ -61,15 +61,15 @@ function createConfigurationPage() {
     }
 
     return (
-        <Box sx={{ width: '100%' }}>
+        <Box sx={{ width: '720px', maxWidth: '100%', margin: '0 auto' }}>
             <Paper
                 elevation={0}
                 sx={{
                     width: '100%',
                     overflow: 'hidden',
-                    borderRadius: '6px',
-                    backgroundColor: 'var(--background-color)',
-                    padding: '20px'
+                    borderRadius: '15px',
+                    backgroundColor: 'var(--background-item)',
+                    padding: '24px'
                 }}
             >
                 <Typography sx={{ fontWeight: 'bold', fontSize: '22px', color: 'var(--text-color)' }}>
@@ -94,28 +94,43 @@ function createConfigurationPage() {
                             fullWidth
                             {...(isSubmit && key === '' && { error: true })}
                             sx={{
-                                color: 'var(--text-color)',
                                 '& fieldset': {
                                     borderRadius: '8px',
                                     color: 'var(--text-color)',
                                     borderColor: 'var(--border-color)'
                                 },
-                                '& .MuiInputBase-root': { paddingRight: '0px' },
+                                '& .MuiInputBase-root': {
+                                    paddingRight: '0px'
+                                },
                                 '& .MuiInputBase-input': {
+                                    paddingRight: '12px',
                                     color: 'var(--text-color)',
-                                    fontSize: '16px'
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1
+                                    }
                                 },
                                 '& .MuiOutlinedInput-root:hover fieldset': {
-                                    borderColor: 'var(--hover-color)'
+                                    borderColor: 'var(--hover-field-color)'
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                                 },
                                 '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                    borderColor: 'var(--selected-color)'
+                                    borderColor: 'var(--selected-field-color)'
                                 },
                                 '& .MuiInputLabel-root': {
                                     color: 'var(--text-label-color)'
                                 },
                                 '& .MuiInputLabel-root.Mui-focused': {
-                                    color: 'var(--selected-color)'
+                                    color: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-error': {
+                                    color: 'var(--error-color)'
                                 }
                             }}
                             value={key}
@@ -123,7 +138,7 @@ function createConfigurationPage() {
                         />
                         <Typography
                             sx={{
-                                color: 'red',
+                                color: 'var(--error-color)',
                                 margin: '1px 0 0 10px',
                                 fontSize: '12px',
                                 visibility: isSubmit && key === '' ? 'visible' : 'hidden'
@@ -144,28 +159,43 @@ function createConfigurationPage() {
                             fullWidth
                             {...(isSubmit && type === '' && { error: true })}
                             sx={{
-                                color: 'var(--text-color)',
                                 '& fieldset': {
                                     borderRadius: '8px',
                                     color: 'var(--text-color)',
                                     borderColor: 'var(--border-color)'
                                 },
-                                '& .MuiInputBase-root': { paddingRight: '0px' },
+                                '& .MuiInputBase-root': {
+                                    paddingRight: '0px'
+                                },
                                 '& .MuiInputBase-input': {
+                                    paddingRight: '12px',
                                     color: 'var(--text-color)',
-                                    fontSize: '16px'
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1
+                                    }
                                 },
                                 '& .MuiOutlinedInput-root:hover fieldset': {
-                                    borderColor: 'var(--hover-color)'
+                                    borderColor: 'var(--hover-field-color)'
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                                 },
                                 '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                    borderColor: 'var(--selected-color)'
+                                    borderColor: 'var(--selected-field-color)'
                                 },
                                 '& .MuiInputLabel-root': {
                                     color: 'var(--text-label-color)'
                                 },
                                 '& .MuiInputLabel-root.Mui-focused': {
-                                    color: 'var(--selected-color)'
+                                    color: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-error': {
+                                    color: 'var(--error-color)'
                                 }
                             }}
                             value={type}
@@ -173,7 +203,7 @@ function createConfigurationPage() {
                         />
                         <Typography
                             sx={{
-                                color: 'red',
+                                color: 'var(--error-color)',
                                 margin: '1px 0 0 10px',
                                 fontSize: '12px',
                                 visibility: isSubmit && type === '' ? 'visible' : 'hidden'
@@ -198,28 +228,52 @@ function createConfigurationPage() {
                         minRows={1}
                         maxRows={3}
                         sx={{
-                            color: 'var(--text-color)',
                             '& fieldset': {
                                 borderRadius: '8px',
                                 color: 'var(--text-color)',
                                 borderColor: 'var(--border-color)'
                             },
-                            '& .MuiInputBase-root': { paddingRight: '0px' },
+                            '& .MuiInputBase-root': {
+                                paddingRight: '3px'
+                            },
                             '& .MuiInputBase-input': {
+                                scrollbarGutter: 'stable',
+                                '&::-webkit-scrollbar': {
+                                    width: '7px',
+                                    height: '7px'
+                                },
+                                '&::-webkit-scrollbar-thumb': {
+                                    backgroundColor: 'var(--scrollbar-color)',
+                                    borderRadius: '10px'
+                                },
+                                paddingRight: '4px',
                                 color: 'var(--text-color)',
-                                fontSize: '16px'
+                                fontSize: '16px',
+                                '&::placeholder': {
+                                    color: 'var(--placeholder-color)',
+                                    opacity: 1
+                                }
                             },
                             '& .MuiOutlinedInput-root:hover fieldset': {
-                                borderColor: 'var(--hover-color)'
+                                borderColor: 'var(--hover-field-color)'
+                            },
+                            '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                            },
+                            '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                             },
                             '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                borderColor: 'var(--selected-color)'
+                                borderColor: 'var(--selected-field-color)'
                             },
                             '& .MuiInputLabel-root': {
                                 color: 'var(--text-label-color)'
                             },
                             '& .MuiInputLabel-root.Mui-focused': {
-                                color: 'var(--selected-color)'
+                                color: 'var(--selected-field-color)'
+                            },
+                            '& .MuiInputLabel-root.Mui-error': {
+                                color: 'var(--error-color)'
                             }
                         }}
                         value={value}
@@ -227,7 +281,7 @@ function createConfigurationPage() {
                     />
                     <Typography
                         sx={{
-                            color: 'red',
+                            color: 'var(--error-color)',
                             margin: '1px 0 0 10px',
                             fontSize: '12px',
                             visibility: isSubmit && value === '' ? 'visible' : 'hidden'
@@ -247,28 +301,52 @@ function createConfigurationPage() {
                     maxRows={12}
                     sx={{
                         mt: '7px',
-                        color: 'var(--text-color)',
                         '& fieldset': {
                             borderRadius: '8px',
                             color: 'var(--text-color)',
                             borderColor: 'var(--border-color)'
                         },
-                        '& .MuiInputBase-root': { paddingRight: '0px' },
+                        '& .MuiInputBase-root': {
+                            paddingRight: '3px'
+                        },
                         '& .MuiInputBase-input': {
+                            scrollbarGutter: 'stable',
+                            '&::-webkit-scrollbar': {
+                                width: '7px',
+                                height: '7px'
+                            },
+                            '&::-webkit-scrollbar-thumb': {
+                                backgroundColor: 'var(--scrollbar-color)',
+                                borderRadius: '10px'
+                            },
+                            paddingRight: '4px',
                             color: 'var(--text-color)',
-                            fontSize: '16px'
+                            fontSize: '16px',
+                            '&::placeholder': {
+                                color: 'var(--placeholder-color)',
+                                opacity: 1
+                            }
                         },
                         '& .MuiOutlinedInput-root:hover fieldset': {
-                            borderColor: 'var(--hover-color)'
+                            borderColor: 'var(--hover-field-color)'
+                        },
+                        '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                            borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                        },
+                        '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                            borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                         },
                         '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                            borderColor: 'var(--selected-color)'
+                            borderColor: 'var(--selected-field-color)'
                         },
                         '& .MuiInputLabel-root': {
                             color: 'var(--text-label-color)'
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'var(--selected-color)'
+                            color: 'var(--selected-field-color)'
+                        },
+                        '& .MuiInputLabel-root.Mui-error': {
+                            color: 'var(--error-color)'
                         }
                     }}
                     value={description}
@@ -282,10 +360,10 @@ function createConfigurationPage() {
                         loadingPosition='start'
                         startIcon={<SaveIcon />}
                         sx={{
-                            height: '44px',
+                            height: '50px',
                             backgroundColor: 'var(--button-color)',
                             width: 'auto',
-                            padding: '0px 20px',
+                            padding: '0px 30px',
                             fontSize: '16px',
                             '&:hover': {
                                 backgroundColor: 'var(--hover-button-color)'
@@ -305,10 +383,10 @@ function createConfigurationPage() {
                         loadingPosition='start'
                         startIcon={<SaveIcon />}
                         sx={{
-                            height: '44px',
+                            height: '50px',
                             backgroundColor: 'var(--button-color)',
                             width: 'auto',
-                            padding: '0px 20px',
+                            padding: '0px 30px',
                             '&:hover': {
                                 backgroundColor: 'var(--hover-button-color)'
                             },
@@ -326,14 +404,14 @@ function createConfigurationPage() {
                         variant='contained'
                         startIcon={<XIcon />}
                         sx={{
-                            height: '44px',
+                            height: '50px',
                             backgroundColor: 'var(--button-color)',
                             width: 'auto',
                             fontSize: '16px',
                             '&:hover': {
                                 backgroundColor: 'var(--hover-button-color)'
                             },
-                            padding: '0px 20px',
+                            padding: '0px 30px',
                             fontWeight: 'bold',
                             whiteSpace: 'nowrap',
                             textTransform: 'none'

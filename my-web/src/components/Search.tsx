@@ -12,7 +12,7 @@ export default function Search() {
             className='flex items-center justify-center cursor-pointer'
             sx={{
                 userSelect: 'none',
-                borderRadius: '6px',
+                borderRadius: '8px',
                 padding: '7px 15px',
                 border: '1px solid var(--border-color)',
                 '&:hover': {

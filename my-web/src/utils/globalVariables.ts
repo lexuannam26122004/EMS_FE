@@ -1,2 +1,5 @@
 export const userId: string = 'CC001'
 export const userSentNotificationId = 'CC013'
+export const fullName = 'Nam Lee'
+export const roles = 'Manager'
+export const avatarPath = 'https://localhost:44381//avatars/ee2b9783-2c7e-425f-9e72-428d12004c06.jfif'
