@@ -14,7 +14,7 @@ export const departmentApi = createApi({
     tagTypes: ['Department'],
     endpoints: builder => ({
         getAllDepartments: builder.query<DepartmentResponse, void>({
-            query: () => 'GetAll',
+            query: () => 'Search',
             providesTags: ['Department']
         }),
         createDepartment: builder.mutation<void, IDepartmentCreate>({
