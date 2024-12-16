@@ -1,7 +1,7 @@
 'use client'
 
 import { IAspNetUserGetAll } from '@/models/AspNetUser'
-import { formatDate } from '@/utils/formatDate'
+
 import {
     Box,
     Divider,
@@ -61,15 +61,18 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
                 elevation={0}
                 sx={{
                     width: '70%',
-                    height: 'auto',
+                    height: '90vh',
                     position: 'absolute',
+                    overflowY: 'auto',
                     top: '50%',
                     left: '50%',
                     backgroundColor: 'var(--background-color)',
                     border: '1px solid var(--border-color)',
                     borderRadius: '10px',
-                    overflow: 'hidden',
-                    transform: 'translate(-50%, -50%)'
+                    transform: 'translate(-50%, -50%)',
+                    '&::-webkit-scrollbar': {
+                        display: 'none'
+                    }
                 }}
             >
                 <Box
@@ -80,7 +83,10 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
                         alignItems: 'center',
                         justifyContent: 'center',
                         zIndex: '1',
-                        position: 'relative'
+                        position: 'sticky',
+                        top: 0,
+                        backgroundColor: 'var(--background-color)',
+                        borderBottom: '1px solid var(--border-color)'
                     }}
                 >
                     <Typography
@@ -96,7 +102,7 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
                             color: 'var(--text-color)'
                         }}
                     >
-                        {t('COMMON.SYS_CONFIGURATION.VIEW_DETAIL')}
+                        {t('Xem chi tiết thông tin ') + aspnetuser.FullName}
                     </Typography>
 
                     <Box
@@ -284,15 +290,25 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
                     <Table>
                         <TableBody>
                             {[
-                                { label: t('COMMON.SYS_CONFIGURATION.KEY'), value: aspnetuser.FullName },
-                                { label: t('COMMON.SYS_CONFIGURATION.TYPE'), value: aspnetuser.FullName },
-                                { label: t('COMMON.SYS_CONFIGURATION.VALUE'), value: aspnetuser.FullName },
-                                { label: t('COMMON.SYS_CONFIGURATION.DESCRIPTION'), value: aspnetuser.FullName },
+                                { label: t('Họ tên đầy đủ'), value: aspnetuser.FullName },
+                                { label: t('Tên phòng ban'), value: aspnetuser.DepartmentName },
+                                { label: t('Tên tài khoản'), value: aspnetuser.UserName },
                                 {
-                                    label: t('COMMON.SYS_CONFIGURATION.CREATED_DATE'),
-                                    value: formatDate(aspnetuser.FullName)
+                                    label: t('Chức vụ trong công ty'),
+                                    value: aspnetuser.Roles?.join(', ') || 'N/A'
                                 },
-                                { label: t('COMMON.SYS_CONFIGURATION.CREATED_BY'), value: aspnetuser.FullName }
+                                { label: t('Giới tính'), value: aspnetuser.Sex },
+                                { label: t('Địa chỉ thường trú'), value: aspnetuser.Address },
+                                {
+                                    label: t('Ngày sinh'),
+                                    value:
+                                        aspnetuser.Birthday && !isNaN(new Date(aspnetuser.Birthday).getTime())
+                                            ? new Date(aspnetuser.Birthday).toLocaleDateString()
+                                            : 'N/A'
+                                },
+                                { label: t('Email'), value: aspnetuser.Email },
+                                { label: t('Số điện thoại'), value: aspnetuser.PhoneNumber },
+                                { label: t('Ghi chú'), value: aspnetuser.Note }
                             ].map((item, index) => (
                                 <TableRow key={index}>
                                     <TableCell
@@ -302,7 +318,7 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
                                             whiteSpace: 'nowrap',
                                             color: 'var(--text-color)',
                                             borderBottom: 'none',
-                                            padding: '8px'
+                                            paddingLeft: '100px'
                                         }}
                                     >
                                         {item.label}:
@@ -311,8 +327,7 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
                                         sx={{
                                             color: 'var(--text-color)',
                                             fontSize: '16px',
-                                            borderBottom: 'none',
-                                            padding: '8px'
+                                            borderBottom: 'none'
                                         }}
                                     >
                                         {item.value}
