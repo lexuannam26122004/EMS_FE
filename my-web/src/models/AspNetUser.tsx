@@ -5,7 +5,7 @@ export interface IAspNetUserGetAll {
     Email: string
     PhoneNumber: string | null
     AvatarFileId: number | null
-    Sex: number | null
+    Gender?: boolean | null
     Address: string
     Note: string
     Birthday: Date | null
@@ -30,7 +30,7 @@ export interface IAspNetUserCreate {
     PhoneNumber: string
     StartDateWork: Date
     AvatarFileId: number
-    Sex: number
+    Gender?: boolean
     Address: string
     Note: string
     Birthday: Date
@@ -47,7 +47,7 @@ export interface IAspNetUserUpdate {
     Email: string
     PhoneNumber: string | null
     AvatarFileId: number | null
-    Sex: number | null
+    Gender?: boolean | null
     Address: string
     Note: string
     Birthday: Date | null

@@ -89,7 +89,7 @@ const EmployeeTable: React.FC = () => {
             user.Roles?.some(role => role.toLowerCase().includes(searchTerm.toLowerCase())) ||
             (user.Birthday &&
                 new Date(user.Birthday).toLocaleDateString().toLowerCase().includes(searchTerm.toLowerCase())) ||
-            user.Sex?.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.Gender?.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.Address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.ContractName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             (user.StartDate &&
@@ -360,7 +360,7 @@ const EmployeeTable: React.FC = () => {
                                     'UserName',
                                     'Roles',
                                     'Birthday',
-                                    'Sex',
+                                    'Gender',
                                     'Address',
                                     'ContractName',
                                     'StartDate'
@@ -581,7 +581,7 @@ const EmployeeTable: React.FC = () => {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {user.Sex || 'N/A'}
+                                            {user.Gender || 'N/A'}
                                         </Typography>
                                     </TableCell>
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>

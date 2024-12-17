@@ -37,7 +37,7 @@ const UpdateEmployeePage = () => {
     const [email, setEmail] = useState('')
     const [phoneNumber, setPhoneNumber] = useState('')
     const [startDateWork, setStartDateWork] = useState('')
-    const [sex, setSex] = useState('')
+    const [gender, setGender] = useState('')
     const [address, setAddress] = useState('')
     const [note, setNote] = useState('')
     const [birthday, setBirthday] = useState('')
@@ -74,7 +74,7 @@ const UpdateEmployeePage = () => {
             setEmail(data.Email)
             setPhoneNumber(data.PhoneNumber ?? '')
             setStartDateWork(formatDate(data.StartDateWork))
-            setSex(data.Sex === 1 ? 'nam' : 'nữ')
+            setGender(data.Gender === true ? 'nam' : data.Gender === false ? 'nữ' : 'khác')
             setAddress(data.Address)
             setNote(data.Note)
             setBirthday(formatDate(data.Birthday))
@@ -104,7 +104,7 @@ const UpdateEmployeePage = () => {
             email === '' ||
             phoneNumber === '' ||
             startDateWork === '' ||
-            sex === '' ||
+            gender === '' ||
             address === '' ||
             birthday === '' ||
             departmentId === '' ||
@@ -123,7 +123,7 @@ const UpdateEmployeePage = () => {
             Email: email,
             PhoneNumber: phoneNumber,
             StartDateWork: new Date(startDateWork),
-            Sex: sex === 'nam' ? 1 : sex === 'nữ' ? 2 : 0,
+            Gender: gender === 'nam' ? true : gender === 'nữ' ? false : undefined,
             Address: address,
             Note: note,
             Birthday: new Date(birthday),
@@ -161,7 +161,7 @@ const UpdateEmployeePage = () => {
             email === '' ||
             phoneNumber === '' ||
             startDateWork === '' ||
-            sex === '' ||
+            gender === '' ||
             address === '' ||
             birthday === '' ||
             departmentId === '' ||
@@ -180,7 +180,7 @@ const UpdateEmployeePage = () => {
             Email: email,
             PhoneNumber: phoneNumber,
             StartDateWork: new Date(startDateWork),
-            Sex: sex === 'nam' ? 1 : sex === 'nữ' ? 2 : 0,
+            Gender: gender === 'nam' ? true : gender === 'nữ' ? false : undefined,
             Address: address,
             Note: note,
             Birthday: new Date(birthday),
@@ -536,7 +536,7 @@ const UpdateEmployeePage = () => {
                     >
                         <FormControl
                             fullWidth
-                            error={isSubmit && sex === ''}
+                            error={isSubmit && gender === ''}
                             sx={{
                                 color: 'var(--text-color)',
                                 '& fieldset': {
@@ -571,9 +571,9 @@ const UpdateEmployeePage = () => {
                             <Select
                                 labelId='gender-label'
                                 id='gender'
-                                value={sex}
+                                value={gender}
                                 label='Giới tính*'
-                                onChange={e => setSex(e.target.value)}
+                                onChange={e => setGender(e.target.value)}
                                 MenuProps={{
                                     PaperProps: {
                                         elevation: 0,
@@ -598,8 +598,9 @@ const UpdateEmployeePage = () => {
                             >
                                 <MenuItem value='nam'>Nam</MenuItem>
                                 <MenuItem value='nữ'>Nữ</MenuItem>
+                                <MenuItem value='khác'>Khác</MenuItem>
                             </Select>
-                            {isSubmit && sex === '' && (
+                            {isSubmit && gender === '' && (
                                 <FormHelperText>{t('COMMON.TEXTFIELD.REQUIRED')}</FormHelperText>
                             )}
                         </FormControl>
