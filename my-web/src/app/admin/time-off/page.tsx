@@ -47,9 +47,9 @@ const EmployeeTable: React.FC = () => {
     const [rowsPerPage, setRowsPerPage] = useState('10')
     const [currentPage, setCurrentPage] = useState<number>(1)
     const [sortConfig, setSortConfig] = useState<{
-        key: keyof ITimeOffSearch | 'Id'
+        key: keyof ITimeOffSearch | 'EmployeeId'
         direction: 'asc' | 'desc'
-    }>({ key: 'Id', direction: 'asc' })
+    }>({ key: 'EmployeeId', direction: 'asc' })
     const { t } = useTranslation('common')
 
     const [changeTimeOff] = useChangeStatusTimeOffsMutation()
@@ -107,7 +107,7 @@ const EmployeeTable: React.FC = () => {
     const totalRecords = sortedUsers.length
     const paginatedUsers = sortedUsers.slice((currentPage - 1) * Number(rowsPerPage), currentPage * Number(rowsPerPage))
 
-    const handleSort = (key: keyof ITimeOffSearch | 'Id') => {
+    const handleSort = (key: keyof ITimeOffSearch | 'EmployeeId') => {
         setSortConfig(prev => ({
             key,
             direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc'
@@ -323,9 +323,9 @@ const EmployeeTable: React.FC = () => {
                                 </TableCell>
                                 <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                     <TableSortLabel
-                                        active={sortConfig.key === 'Id'}
-                                        direction={sortConfig.key === 'Id' ? sortConfig.direction : 'asc'}
-                                        onClick={() => handleSort('Id')}
+                                        active={sortConfig.key === 'EmployeeId'}
+                                        direction={sortConfig.key === 'EmployeeId' ? sortConfig.direction : 'asc'}
+                                        onClick={() => handleSort('EmployeeId')}
                                         sx={{
                                             '& .MuiTableSortLabel-icon': {
                                                 color: 'var(--text-color) !important'
