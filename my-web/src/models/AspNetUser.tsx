@@ -12,6 +12,7 @@ export interface IAspNetUserGetAll {
     Roles?: string[] | null
     AvatarPath: string | null
     DepartmentName: string
+    EmployeeId: string
 }
 
 export interface IUserByAgeGetAllDashboard {
@@ -38,6 +39,7 @@ export interface IAspNetUserCreate {
     Password: string
     Roles: string[]
     IsActive: boolean
+    EmployeeId: string
 }
 
 export interface IAspNetUserUpdate {
@@ -55,4 +57,5 @@ export interface IAspNetUserUpdate {
     StartDateWork: Date
     DepartmentId: number
     IsActive: boolean
+    EmployeeId: string
 }

@@ -69,7 +69,8 @@ const EmployeeTable: React.FC = () => {
             FullName: matchedEmployee?.FullName || 'N/A',
             AvatarPath:
                 matchedEmployee?.AvatarPath ||
-                'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'
+                'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif',
+            EmployeeId:matchedEmployee?.EmployeeId || 'N/A',
         }
     })
 
@@ -431,7 +432,7 @@ const EmployeeTable: React.FC = () => {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {user.Id}
+                                            {user.EmployeeId}
                                         </Typography>
                                     </TableCell>
 

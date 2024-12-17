@@ -444,7 +444,7 @@ const EmployeeTable: React.FC = () => {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {user.Id}
+                                            {user.EmployeeId}
                                         </Typography>
                                     </TableCell>
 
@@ -581,7 +581,7 @@ const EmployeeTable: React.FC = () => {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {user.Gender || 'N/A'}
+                                            {user.Gender === true ? 'Nam' : user.Gender === false ? 'Nữ' : 'Khác'}
                                         </Typography>
                                     </TableCell>
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
