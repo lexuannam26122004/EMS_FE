@@ -297,7 +297,7 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
                                     label: t('Chức vụ trong công ty'),
                                     value: aspnetuser.Roles?.join(', ') || 'N/A'
                                 },
-                                { label: t('Giới tính'), value: aspnetuser.Sex },
+                                { label: t('Giới tính'), value: aspnetuser.Gender === true ? t('Nam') : aspnetuser.Gender === false ? t('Nữ') : t('Khác') },
                                 { label: t('Địa chỉ thường trú'), value: aspnetuser.Address },
                                 {
                                     label: t('Ngày sinh'),
