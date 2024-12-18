@@ -277,8 +277,8 @@ const CreateEmployeePage = () => {
                             <Image
                                 src={previewSrc}
                                 alt='Avatar'
-                                layout='fill' // This makes the image cover the parent container
-                                objectFit='cover' // Ensure the image maintains the same aspect ratio
+                                layout='fill' 
+                                objectFit='cover' 
                             />
 
                             <Box
