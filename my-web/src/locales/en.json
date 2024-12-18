@@ -262,7 +262,20 @@
             "CREATED_BY": "Created By",
             "ACTION": "Action",
             "TYPE_ID": "Type ID",
-            "TYPE_NAME": "Type Name"
+            "TYPE_NAME": "Type Name",
+            "CREATE_TITLE": "Create a New Benefit",
+            "BENEFIT_TYPE": {
+                "CREATE_TITLE": "Create a New Benefit Type",
+                "UPDATE_TITLE": "Update a Benefit Type",
+                "NAME": "Name*",
+                "DESCRIPTION": "Description",
+                "CREATE_SUCCESS": "Create a Benefit Type successfully",
+                "UPDATE_SUCCESS": "Update Benefit Type successfully",
+                "DELETE_SUCCESS": "Delete Benefit Type successfully",
+                "CREATE_ERROR": "Create Benefit Type error",
+                "UPDATE_ERROR": "Update Benefit Type error",
+                "DELETE_ERROR": "Delete Benefit Type error"
+            }
         },
         "WORK_SHIFT": {
             "SHIFT_NAME": "Shift name",

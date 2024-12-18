@@ -1,9 +1,20 @@
 'use client'
-import { Box, Button, Paper, TextField, Typography, Autocomplete } from '@mui/material'
+import {
+    Box,
+    Button,
+    Paper,
+    TextField,
+    Typography,
+    Autocomplete,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions
+} from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { SaveIcon, XIcon } from 'lucide-react'
+import { Plus, SaveIcon, XIcon, Pencil } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useCreateBenefitMutation, useGetAllBenefitsTypeQuery } from '@/services/BenefitService'
+import { useCreateBenefitMutation, useCreateBenefitTypeMutation, useGetAllBenefitsTypeQuery } from '@/services/BenefitService'
 import { useEffect, useState } from 'react'
 import LoadingButton from '@mui/lab/LoadingButton'
 import { useToast } from '@/hooks/useToast'
@@ -15,12 +26,42 @@ function CreateBenefitPage() {
     const [name, setName] = useState('')
     const [contribution, setContribution] = useState<number | ''>('')
     const [benefitTypeId, setBenefitTypeId] = useState<number | null>()
-    const { data: benefitTypes, isLoading: isBenefitTypesLoading } = useGetAllBenefitsTypeQuery()
+    const [benefitTypeName, setBenefitTypeName] = useState('')
+    const [benefitTypeDescription, setBenefitTypeDescription] = useState('')
+    const { data: benefitTypes, isLoading: isBenefitTypesLoading, refetch } = useGetAllBenefitsTypeQuery()
     const benefitTypesData = (benefitTypes?.Data?.Records as IBenefitGetAllType[]) || []
     const toast = useToast()
     const [isSubmit, setIsSubmit] = useState(false)
+    const [openDialog, setOpenDialog] = useState(false)
 
     const [createBenefit, { isSuccess, isLoading, isError }] = useCreateBenefitMutation()
+    const [createBenefitType, { isSuccess: isSuccessCreateBenefitType, isLoading: isLoadingCreateBenefitType, isError: isErrorCreateBenefitType }] = useCreateBenefitTypeMutation()
+    const [isOpenCreateBenefitType, setIsOpenCreateBenefitType] = useState(false)
+
+    
+
+    const handleOpenCreateDialog = () => {
+        setIsOpenCreateBenefitType(true)
+    }
+    const handleCloseCreateDialog = () => {
+        setIsOpenCreateBenefitType(false)
+        setBenefitTypeName('')
+        setBenefitTypeDescription('')
+    }
+
+    const handleSaveBenefitType = async () => {
+        setIsSubmit(true)
+        if (benefitTypeName === '') {
+            return
+        }
+        const data = {
+            Name: benefitTypeName,
+            Description: benefitTypeDescription
+        }
+        await createBenefitType(data).unwrap()
+        refetch()
+        handleCloseCreateDialog()
+    }
 
     const handleSave = async () => {
         setIsSubmit(true)
@@ -45,12 +86,25 @@ function CreateBenefitPage() {
         }
     }, [isSuccess, isError])
 
+    useEffect(() => {
+        if (isSuccessCreateBenefitType) {
+            toast(t('COMMON.BENEFIT.BENEFIT_TYPE.CREATE_SUCCESS'), 'success')
+            
+        }
+        if (isErrorCreateBenefitType) {
+            toast(t('COMMON.BENEFIT.BENEFIT_TYPE.CREATE_ERROR'), 'error')
+        }
+    }, [isSuccessCreateBenefitType, isErrorCreateBenefitType])
+
     const handleSaveAndClose = async () => {
         await handleSave()
         if (isSuccess) {
             router.push('/admin/benefit')
         }
     }
+
+    const specialOption = { Id: -1, Name: 'lựa chọn' }
+    const optionsWithSpecial = [specialOption, ...benefitTypesData]
 
     return (
         <Box sx={{ width: '720px', maxWidth: '100%', margin: '0 auto' }}>
@@ -113,10 +167,11 @@ function CreateBenefitPage() {
                                 }
                             }
                         }}
-                        options={benefitTypesData} // Replace with actual benefit types data
-                        getOptionLabel={(option) => `${option.Id} - ${option.Name}`}
+                        options={optionsWithSpecial}
+                        getOptionLabel={option => `${option.Id} - ${option.Name}`}
                         renderOption={(props, option, { selected }) => {
                             const { key, ...otherProps } = props
+                            const isSpecialOption = option.Id === -1
                             return (
                                 <Box
                                     key={key}
@@ -125,20 +180,80 @@ function CreateBenefitPage() {
                                     sx={{
                                         display: 'flex',
                                         alignItems: 'center',
+                                        justifyContent: 'flex-end',
                                         gap: '10px',
                                         padding: '8px',
-                                        color: selected ? 'black' : 'var(--text-color)',
+                                        color: isSpecialOption ? 'gray' : selected ? 'black' : 'var(--text-color)',
                                         backgroundColor: 'var(--background-color)',
                                         '&:hover': {
-                                            color: 'black'
-                                        }
+                                            color: isSpecialOption ? 'gray' : 'black'
+                                        },
+                                        pointerEvents: isSpecialOption ? 'none' : 'auto'
                                     }}
                                 >
-                                    <Typography>{`${option.Id} - ${option.Name}`}</Typography>
+                                    <Typography
+                                        sx={{ flexGrow: 1 }}
+                                    >{`${option.Id === -1 ? option.Name : `${option.Id} - ${option.Name}`}`}</Typography>
+                                    {isSpecialOption ? (
+                                        <Button
+                                            variant='contained'
+                                            sx={{
+                                                //<Button><Plus/></Button>
+                                                minWidth: '25px', // Đảm bảo nút không có chiều rộng tối thiểu
+                                                padding: '0', // Loại bỏ padding
+                                                margin: '0', // Loại bỏ margin
+                                                height: '25px',
+                                                width: '25px', // Đặt chiều rộng và chiều cao bằng nhau để nút là hình vuông
+                                                display: 'flex', // Sử dụng flexbox để căn giữa
+                                                alignItems: 'center', // Căn giữa theo chiều dọc
+                                                justifyContent: 'center', // Căn giữa theo chiều ngang
+                                                backgroundColor: 'var(--button-color)',
+                                                '&:hover': {
+                                                    backgroundColor: 'var(--hover-button-color)'
+                                                },
+                                                fontSize: '16px',
+                                                fontWeight: 'bold',
+                                                whiteSpace: 'nowrap',
+                                                textTransform: 'none',
+                                                pointerEvents: 'auto'
+                                            }}
+                                            onClick={handleOpenCreateDialog}
+                                        >
+                                            <Plus size={15} />
+                                        </Button>
+                                    ) : (
+                                        <Button
+                                            variant='contained'
+                                            sx={{
+                                                //<Button><Plus/></Button>
+                                                minWidth: '25px', // Đảm bảo nút không có chiều rộng tối thiểu
+                                                padding: '0', // Loại bỏ padding
+                                                margin: '0', // Loại bỏ margin
+                                                height: '25px',
+                                                width: '25px', // Đặt chiều rộng và chiều cao bằng nhau để nút là hình vuông
+                                                display: 'flex', // Sử dụng flexbox để căn giữa
+                                                alignItems: 'center', // Căn giữa theo chiều dọc
+                                                justifyContent: 'center', // Căn giữa theo chiều ngang
+                                                backgroundColor: 'var(--background-color)',
+                                                '&:hover': {
+                                                    backgroundColor: 'var(--hover-button-color)'
+                                                },
+                                                fontSize: '16px',
+                                                fontWeight: 'bold',
+                                                whiteSpace: 'nowrap',
+                                                textTransform: 'none',
+                                                pointerEvents: 'auto',
+                                                color: '#00d4ff'
+                                            }}
+                                            onClick={handleOpenCreateDialog}
+                                        >
+                                            <Pencil size={15} />
+                                        </Button>
+                                    )}
                                 </Box>
                             )
                         }}
-                        renderInput={(params) => (
+                        renderInput={params => (
                             <TextField
                                 {...params}
                                 variant='outlined'
@@ -148,7 +263,11 @@ function CreateBenefitPage() {
                             />
                         )}
                         value={benefitTypesData.find(type => type.Id === benefitTypeId) || null}
-                        onChange={(event, newValue) => setBenefitTypeId(newValue?.Id || null)}
+                        onChange={(event, newValue) => {
+                            if (newValue?.Id !== -1) {
+                                setBenefitTypeId(newValue?.Id || null)
+                            }
+                        }}
                         isOptionEqualToValue={(option, value) => option.Id === value.Id}
                     />
                     <TextField
@@ -180,15 +299,194 @@ function CreateBenefitPage() {
                     >
                         {t('COMMON.BUTTON.SAVE_AND_CLOSE')}
                     </LoadingButton>
-                    <Button
-                        variant='contained'
-                        startIcon={<XIcon />}
-                        onClick={() => router.push('/admin/benefit')}
-                    >
+                    <Button variant='contained' startIcon={<XIcon />} onClick={() => router.push('/admin/benefit')}>
                         {t('COMMON.BUTTON.CLOSE')}
                     </Button>
                 </Box>
             </Paper>
+            
+
+            {isOpenCreateBenefitType && (
+                <Box
+                    sx={{
+                        position: 'fixed',
+                        top: 0,
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyItems: 'center',
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        zIndex: 1000
+                    }}
+                >
+                    <Box //box nội dung
+                        sx={{
+                            width: '500px',
+                            backgroundColor: 'white',
+                            borderRadius: '12px',
+                            boxShadow: '0 8px 16px rgba(0,0,0,0.1)',
+                            overflow: 'hidden', //ẩn nội dung khi bị tràn
+                            margin: 'auto'
+                        }}
+                    >
+                        <Box //header
+                            sx={{
+                                padding: '16px 24px',
+                                borderBottom: '1px solid var(--border-color)',
+                                fontSize: '24px',
+                                fontWeight: 'bold',
+                                backgroundColor: 'var(--background-color)' //màu nền
+                            }}
+                        >
+                            {t('COMMON.BENEFIT.BENEFIT_TYPE.CREATE_TITLE')}
+                        </Box>
+                        <Box
+                            sx={{
+                                padding: '24px',
+                                backgroundColor: 'var(--background-color)',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '20px'
+                            }}
+                        >
+                            {/* Name Field - Required */}
+                            <Box>
+                                <TextField
+                                    variant='outlined'
+                                    label={t('COMMON.BENEFIT.BENEFIT_TYPE.NAME')}
+                                    name='name'
+                                    fullWidth
+                                    {...(isSubmit && benefitTypeName === '' && { error: true })}
+                                    sx={{
+                                        color: 'var(--text-color)',
+                                        '& fieldset': {
+                                            borderRadius: '8px',
+                                            color: 'var(--text-color)',
+                                            borderColor: 'var(--border-color)'
+                                        },
+                                        '& .MuiInputBase-root': { paddingRight: '0px' },
+                                        '& .MuiInputBase-input': {
+                                            color: 'var(--text-color)',
+                                            fontSize: '16px'
+                                        },
+                                        '& .MuiOutlinedInput-root:hover fieldset': {
+                                            borderColor: 'var(--hover-color)'
+                                        },
+                                        '& .MuiOutlinedInput-root.Mui-focused fieldset': {
+                                            borderColor: 'var(--selected-color)'
+                                        },
+                                        '& .MuiInputLabel-root': {
+                                            color: 'var(--text-label-color)'
+                                        },
+                                        '& .MuiInputLabel-root.Mui-focused': {
+                                            color: 'var(--selected-color)'
+                                        }
+                                    }}
+                                    value={benefitTypeName}
+                                    onChange={e => setBenefitTypeName(e.target.value)}
+                                />
+                                <Typography
+                                    sx={{
+                                        color: 'red',
+                                        margin: '1px 0 0 10px',
+                                        fontSize: '12px',
+                                        visibility: isSubmit && name === '' ? 'visible' : 'hidden'
+                                    }}
+                                >
+                                    {t('COMMON.TEXTFIELD.REQUIRED')}
+                                </Typography>
+                            </Box>
+                            
+                            <TextField
+                                variant='outlined'
+                                label={t('COMMON.BENEFIT.BENEFIT_TYPE.DESCRIPTION')}
+                                id='fullWidth'
+                                fullWidth
+                                multiline
+                                minRows={4}
+                                maxRows={12}
+                                sx={{
+                                    mt: '7px',
+                                    color: 'var(--text-color)',
+                                    '& fieldset': {
+                                        borderRadius: '8px',
+                                        color: 'var(--text-color)',
+                                        borderColor: 'var(--border-color)'
+                                    },
+                                    '& .MuiInputBase-root': { paddingRight: '0px' },
+                                    '& .MuiInputBase-input': {
+                                        color: 'var(--text-color)',
+                                        fontSize: '16px'
+                                    },
+                                    '& .MuiOutlinedInput-root:hover fieldset': {
+                                        borderColor: 'var(--hover-color)'
+                                    },
+                                    '& .MuiOutlinedInput-root.Mui-focused fieldset': {
+                                        borderColor: 'var(--selected-color)'
+                                    },
+                                    '& .MuiInputLabel-root': {
+                                        color: 'var(--text-label-color)'
+                                    },
+                                    '& .MuiInputLabel-root.Mui-focused': {
+                                        color: 'var(--selected-color)'
+                                    }
+                                }}
+                                value={benefitTypeDescription}
+                                onChange={e => setBenefitTypeDescription(e.target.value)}
+                            />
+                        </Box>
+                        <Box
+                            sx={{
+                                //footer
+                                padding: '16px 24px',
+                                borderTop: '2px solid var(--border-color)',
+                                display: 'flex',
+                                justifyContent: 'flex-end',
+                                gap: '12px',
+                                backgroundColor: 'var(--background-color)'
+                            }}
+                        >
+                            <Button //nút lưu
+                                variant='contained'
+                                onClick={handleSaveBenefitType}
+                                sx={{
+                                    height: '44px',
+                                    backgroundColor: 'var(--button-color)',
+                                    padding: '0px 24px',
+                                    '&:hover': {
+                                        backgroundColor: 'var(--hover-button-color)'
+                                    },
+                                    fontSize: '16px',
+                                    fontWeight: 'bold',
+                                    textTransform: 'none'
+                                }}
+                            >
+                                Lưu
+                            </Button>
+
+                            <Button //nút hủy
+                                variant='contained'
+                                onClick={handleCloseCreateDialog}
+                                sx={{
+                                    height: '44px',
+                                    backgroundColor: 'var(--button-color)',
+                                    padding: '0px 24px',
+                                    '&:hover': {
+                                        backgroundColor: 'var(--hover-button-color)'
+                                    },
+                                    fontSize: '16px',
+                                    fontWeight: 'bold',
+                                    textTransform: 'none'
+                                }}
+                            >
+                                Hủy
+                            </Button>
+                        </Box>
+                    </Box>
+                </Box>
+            )}
         </Box>
     )
 }

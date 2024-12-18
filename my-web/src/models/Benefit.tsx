@@ -22,3 +22,8 @@ export interface IBenefitUpdate {
     BenefitContribution: number
     BenefitTypeId: number
 }
+
+export interface IBenefitTypeCreate {
+    Name: string
+    Description: string
+}
