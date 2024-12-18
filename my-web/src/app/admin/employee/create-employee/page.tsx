@@ -314,7 +314,6 @@ const CreateEmployeePage = () => {
                             </Box>
                         </Box>
                     </Box>
-                    {/* Instructions */}
                     <Box
                         sx={{
                             fontSize: '12px',
