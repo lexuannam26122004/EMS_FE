@@ -39,7 +39,7 @@ export interface IAspNetUserCreate {
     Password: string
     Roles: string[]
     IsActive: boolean
-    EmployeeId: string
+    EmployeeId?: string
 }
 
 export interface IAspNetUserUpdate {
@@ -57,5 +57,5 @@ export interface IAspNetUserUpdate {
     StartDateWork: Date
     DepartmentId: number
     IsActive: boolean
-    EmployeeId: string
+    EmployeeId?: string
 }
