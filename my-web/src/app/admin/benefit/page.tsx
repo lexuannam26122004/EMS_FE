@@ -16,9 +16,12 @@ import AlertDialog from '@/components/AlertDialog'
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
 
 import CreateBenefitPage from './create-benefit/page'
+import { useRouter } from 'next/navigation'
+import { formatDate } from '@/utils/formatDate'
 
 function BenefitPage() {
     const { t } = useTranslation('common')
+    const router = useRouter()
     const [selected, setSelected] = useState<string[]>([])
     const [page, setPage] = useState(1)
     const [rowsPerPage, setRowsPerPage] = useState('10')
@@ -63,13 +66,14 @@ function BenefitPage() {
         }
 
         try {
-            if (selectedRow) {
+            /* if (selectedRow) {
                 await updateBenefit({
                     Id: selectedRow,
                     Name: name,
                     BenefitContribution: benefitContribution,
                     BenefitTypeId: benefitTypeId,
-                    NameOfBenefitType: nameOfBenefitType
+                    NameOfBenefitType: nameOfBenefitType,
+                    CreatedDate: formatDate(new Date())
                 }).unwrap()
             } else {
                 await createBenefit({
@@ -77,7 +81,7 @@ function BenefitPage() {
                     BenefitContribution: benefitContribution,
                     BenefitTypeId: benefitTypeId
                 }).unwrap()
-            }
+            } */
 
             handleCloseCreateDialog()
             setDialog()
@@ -351,10 +355,11 @@ function BenefitPage() {
                                 whiteSpace: 'nowrap',
                                 textTransform: 'none'
                             }}
+                            onClick={() => router.push('/admin/benefit/create-benefit')}
                             //onClick={() => handleOpenCreateDialog()}
                         >
                             {t('COMMON.BUTTON.CREATE')}
-                            route
+                            
                         </Button>
                     </Box>
                 </Box>
@@ -416,7 +421,7 @@ function BenefitPage() {
                                            '& .MuiTableSortLabel-icon': {
                                                color: 'var(--text-color) !important'
                                            },
-                                           width: '100px'
+                                           width: '200px'
                                        }}
                                    >
                                        <Typography
@@ -485,6 +490,32 @@ function BenefitPage() {
                                         </Typography>
                                     </TableSortLabel>
                                 </TableCell>
+
+                                <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                    <TableSortLabel
+                                        active={'CreatedDate' === orderBy}
+                                        direction={orderBy === 'CreatedDate' ? order : 'asc'}
+                                        onClick={() => handleSort('CreatedDate')}
+                                        sx={{
+                                            '& .MuiTableSortLabel-icon': {
+                                                color: 'var(--text-color) !important'
+                                            }
+                                        }}
+                                    >
+                                        <Typography
+                                            sx={{
+                                                fontWeight: 'bold',
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            {t('COMMON.SYS_CONFIGURATION.CREATED_DATE')}
+                                        </Typography>
+                                    </TableSortLabel>
+                                </TableCell>
                                 <TableCell>
                                     <TableSortLabel
                                         active={orderBy === 'BenefitTypeId'}
@@ -539,9 +570,22 @@ function BenefitPage() {
                                         />
                                     </TableCell>
                                     <TableCell sx={{fontWeight:'bold'}}>{row.Id}</TableCell>
-                                    <TableCell sx={{width:'100px'}}>{row.NameOfBenefitType}</TableCell>
+                                    <TableCell sx={{width:'200px'}}>{row.NameOfBenefitType}</TableCell>
                                     <TableCell>{row.Name}</TableCell>
                                     <TableCell>{row.BenefitContribution}</TableCell>
+                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                            <Typography
+                                                sx={{
+                                                    color: 'var(--text-color)',
+                                                    fontSize: '16px',
+                                                    overflow: 'hidden',
+                                                    textOverflow: 'ellipsis',
+                                                    whiteSpace: 'nowrap'
+                                                }}
+                                            >
+                                                {formatDate(row.CreatedDate)}
+                                            </Typography>
+                                        </TableCell>
                                     <TableCell sx={{width:'100px'}}>{row.BenefitTypeId}</TableCell>
                                     <TableCell>
                                         <Box
