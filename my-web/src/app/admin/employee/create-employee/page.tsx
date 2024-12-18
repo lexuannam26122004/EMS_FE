@@ -11,11 +11,10 @@ import {
     InputLabel,
     FormHelperText,
     Checkbox,
-    ListItemText
+    ListItemText,
+    Avatar
 } from '@mui/material'
-import Image from 'next/image'
 import axios from 'axios'
-
 import { useTranslation } from 'react-i18next'
 import { SaveIcon, XIcon, RefreshCcwIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
@@ -54,11 +53,12 @@ const CreateEmployeePage = () => {
     const [departmentId, setDepartmentId] = useState('')
     const [password, setPassword] = useState('')
     const [roles, setRoles] = useState<string[]>([])
+
     const [isExistingUser, setIsExistingUser] = useState(false)
     const [isExistingEmail, setIsExistingEmail] = useState(false)
 
     const [previewSrc, setPreviewSrc] = useState<string>(
-        'https://assets.minimals.cc/public/assets/images/mock/avatar/avatar-2.webp'
+        'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'
     )
 
     const [file, setFile] = useState<File | null>(null)
@@ -91,6 +91,7 @@ const CreateEmployeePage = () => {
     const handleSave = async () => {
         setIsSaveLoading(true)
         setIsSubmit(true)
+
         if (
             fullName === '' ||
             userName === '' ||
@@ -111,9 +112,20 @@ const CreateEmployeePage = () => {
             setIsSaveLoading(false)
             return
         }
+
+        let avatarFileId = 0
+
         if (file !== null) {
-            uploadFileChunk(file)
+            try {
+                await fileChunk(file)
+                avatarFileId = await createFile(file)
+            } catch (error) {
+                console.error('Error during file upload:', error)
+                setIsSaveLoading(false)
+                return
+            }
         }
+
         const data = {
             FullName: fullName,
             UserName: userName,
@@ -128,13 +140,17 @@ const CreateEmployeePage = () => {
             Password: password,
             Roles: roles,
             IsActive: true,
-            AvatarFileId: 0
+            AvatarFileId: avatarFileId
         }
+
         try {
             await createUsers(data).unwrap()
+        } catch (error) {
+            console.error('Error creating user:', error)
         } finally {
             setIsSaveLoading(false)
         }
+
         setIsSubmit(false)
     }
 
@@ -175,6 +191,19 @@ const CreateEmployeePage = () => {
             setIsSaveAndCloseLoading(false)
             return
         }
+        let avatarFileId = 0
+
+        if (file !== null) {
+            try {
+                await fileChunk(file)
+                avatarFileId = await createFile(file)
+            } catch (error) {
+                console.error('Error during file upload:', error)
+                setIsSaveLoading(false)
+                return
+            }
+        }
+
         const data = {
             FullName: fullName,
             UserName: userName,
@@ -189,7 +218,7 @@ const CreateEmployeePage = () => {
             Password: password,
             Roles: roles,
             IsActive: true,
-            AvatarFileId: 0
+            AvatarFileId: avatarFileId
         }
         try {
             await createUsers(data).unwrap()
@@ -223,23 +252,45 @@ const CreateEmployeePage = () => {
             reader.readAsDataURL(file)
         }
     }
-
-    const uploadFileChunk = async (file: File) => {
+    const fileChunk = async (file: File) => {
         const url = 'https://localhost:44381/api/admin/SysFile/FileChunks'
         const formData = new FormData()
         formData.append('File', file)
         formData.append('FileName', file?.name)
         formData.append('UniqueFileName', file?.name)
-
+        formData.append('TotalChunks', '1')
         try {
             const response = await axios.post(url, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             })
+
             console.log('File chunk uploaded successfully:', response.data)
         } catch (error) {
             console.error('Error uploading file chunk:', error)
+        }
+    }
+
+    const createFile = async (file: File) => {
+        const url = 'https://localhost:44381/api/admin/SysFile/CreateFile'
+        const formData = new FormData()
+        formData.append('Name', file?.name)
+        formData.append('UniqueFileName', file?.name)
+        formData.append('Type', '')
+
+        try {
+            const response = await axios.post(url, formData, {
+                headers: {
+                    'Content-Type': 'application/json-patch+json'
+                }
+            })
+
+           
+            return response.data.Data 
+        } catch (error) {
+            console.error('Error creating file:', error)
+            throw error 
         }
     }
 
@@ -305,8 +356,17 @@ const CreateEmployeePage = () => {
                             onMouseEnter={() => (document.getElementById('updatePhoto')!.style.display = 'flex')}
                             onMouseLeave={() => (document.getElementById('updatePhoto')!.style.display = 'none')}
                         >
-                            <Image src={previewSrc} alt='Avatar' layout='fill' objectFit='cover' />
-
+                            <Avatar
+                                sx={{
+                                    width: '100%',
+                                    height: '100%'
+                                }}
+                                src={
+                                    previewSrc ||
+                                    'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'
+                                }
+                                alt='Avatar'
+                            />
                             <Box
                                 id='updatePhoto'
                                 sx={{
