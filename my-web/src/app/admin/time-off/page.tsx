@@ -20,7 +20,6 @@ import {
     Button,
     TextField,
     InputAdornment,
-    IconButton,
     Tooltip,
     TableSortLabel,
     Avatar
@@ -47,9 +46,9 @@ const EmployeeTable: React.FC = () => {
     const [rowsPerPage, setRowsPerPage] = useState('10')
     const [currentPage, setCurrentPage] = useState<number>(1)
     const [sortConfig, setSortConfig] = useState<{
-        key: keyof ITimeOffSearch | 'Id'
+        key: keyof ITimeOffSearch | 'EmployeeId'
         direction: 'asc' | 'desc'
-    }>({ key: 'Id', direction: 'asc' })
+    }>({ key: 'EmployeeId', direction: 'asc' })
     const { t } = useTranslation('common')
 
     const [changeTimeOff] = useChangeStatusTimeOffsMutation()
@@ -67,7 +66,8 @@ const EmployeeTable: React.FC = () => {
             FullName: matchedEmployee?.FullName || 'N/A',
             AvatarPath:
                 matchedEmployee?.AvatarPath ||
-                'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'
+                'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif',
+            EmployeeId: matchedEmployee?.EmployeeId || 'N/A'
         }
     })
 
@@ -106,7 +106,7 @@ const EmployeeTable: React.FC = () => {
     const totalRecords = sortedUsers.length
     const paginatedUsers = sortedUsers.slice((currentPage - 1) * Number(rowsPerPage), currentPage * Number(rowsPerPage))
 
-    const handleSort = (key: keyof ITimeOffSearch | 'Id') => {
+    const handleSort = (key: keyof ITimeOffSearch | 'EmployeeId') => {
         setSortConfig(prev => ({
             key,
             direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc'
@@ -173,12 +173,12 @@ const EmployeeTable: React.FC = () => {
                 sx={{
                     width: '100%',
                     overflow: 'hidden',
-                    borderRadius: '6px',
-                    backgroundColor: 'var(--background-color)'
+                    borderRadius: '15px',
+                    backgroundColor: 'var(--background-item)'
                 }}
             >
-                <Box display='flex' alignItems='center' justifyContent='space-between' margin='20px'>
-                    <Box sx={{ position: 'relative', width: '100%' }}>
+                <Box display='flex' alignItems='center' justifyContent='space-between' margin='24px'>
+                    <Box sx={{ position: 'relative', width: '100%', height: '55px' }}>
                         <TextField
                             fullWidth
                             variant='outlined'
@@ -189,43 +189,46 @@ const EmployeeTable: React.FC = () => {
                                 padding: '0px',
                                 width: '335px',
                                 '& fieldset': {
-                                    borderRadius: '8px',
+                                    borderRadius: '10px',
                                     borderColor: 'var(--border-color)'
                                 },
-                                '& .MuiInputBase-root': { paddingRight: '0px' },
+                                '& .MuiInputBase-root': { paddingLeft: '0px', paddingRight: '12px' },
                                 '& .MuiInputBase-input': {
-                                    padding: '11px 0 11px 14px',
+                                    padding: '15px 0px',
                                     color: 'var(--text-color)',
-                                    fontSize: '16px'
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1 // Đảm bảo opacity của placeholder không bị giảm
+                                    }
                                 },
                                 '& .MuiOutlinedInput-root:hover fieldset': {
-                                    borderColor: 'var(--hover-color)'
+                                    borderColor: 'var(--hover-field-color)'
                                 },
                                 '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                    borderColor: 'var(--selected-color)'
+                                    borderColor: 'var(--selected-field-color)'
                                 }
                             }}
                             onChange={e => setSearchTerm(e.target.value)}
                             slotProps={{
                                 input: {
-                                    endAdornment: (
-                                        <InputAdornment position='end'>
-                                            <IconButton
-                                                color='primary'
+                                    startAdornment: (
+                                        <InputAdornment
+                                            position='start'
+                                            sx={{
+                                                mr: 0
+                                            }}
+                                        >
+                                            <Box
                                                 sx={{
                                                     height: '100%',
-                                                    backgroundColor: 'var(--button-color)',
-                                                    color: 'white',
-                                                    borderRadius: '0 8px 8px 0',
+                                                    color: '#a5bed4',
                                                     padding: '10.5px',
-                                                    zIndex: 100,
-                                                    '&:hover': {
-                                                        backgroundColor: 'var(--hover-button-color)'
-                                                    }
+                                                    zIndex: 100
                                                 }}
                                             >
                                                 <SearchIcon />
-                                            </IconButton>
+                                            </Box>
                                         </InputAdornment>
                                     )
                                 }
@@ -247,11 +250,12 @@ const EmployeeTable: React.FC = () => {
                             variant='contained'
                             startIcon={<Trash2 />}
                             sx={{
-                                height: '44px',
+                                mr: '5px',
+                                height: '53px',
                                 visibility: countRows > 0 ? 'visible' : 'hidden',
                                 backgroundColor: 'var(--button-color)',
                                 width: 'auto',
-                                padding: '0px 24px',
+                                padding: '0px 30px',
                                 '&:hover': {
                                     backgroundColor: 'var(--hover-button-color)'
                                 },
@@ -269,10 +273,10 @@ const EmployeeTable: React.FC = () => {
                             variant='contained'
                             startIcon={<CirclePlus />}
                             sx={{
-                                height: '44px',
+                                height: '53px',
                                 backgroundColor: 'var(--button-color)',
                                 width: 'auto',
-                                padding: '0px 24px',
+                                padding: '0px 30px',
                                 '&:hover': {
                                     backgroundColor: 'var(--hover-button-color)'
                                 },
@@ -307,7 +311,7 @@ const EmployeeTable: React.FC = () => {
                             <TableRow sx={{ backgroundColor: 'var(--header-color-table)' }}>
                                 <TableCell
                                     padding='checkbox'
-                                    sx={{ borderColor: 'var(--border-color)', paddingLeft: '8.5px' }}
+                                    sx={{ borderColor: 'var(--border-color)', paddingLeft: '12px' }}
                                 >
                                     <Checkbox
                                         indeterminate={selected.length > 0 && selected.length < users.length}
@@ -322,9 +326,9 @@ const EmployeeTable: React.FC = () => {
                                 </TableCell>
                                 <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                     <TableSortLabel
-                                        active={sortConfig.key === 'Id'}
-                                        direction={sortConfig.key === 'Id' ? sortConfig.direction : 'asc'}
-                                        onClick={() => handleSort('Id')}
+                                        active={sortConfig.key === 'EmployeeId'}
+                                        direction={sortConfig.key === 'EmployeeId' ? sortConfig.direction : 'asc'}
+                                        onClick={() => handleSort('EmployeeId')}
                                         sx={{
                                             '& .MuiTableSortLabel-icon': {
                                                 color: 'var(--text-color) !important'
@@ -420,7 +424,7 @@ const EmployeeTable: React.FC = () => {
                                 <TableRow key={user.Id} selected={isSelected(user.Id)}>
                                     <TableCell
                                         padding='checkbox'
-                                        sx={{ borderColor: 'var(--border-color)', paddingLeft: '8.5px' }}
+                                        sx={{ borderColor: 'var(--border-color)', paddingLeft: '12px' }}
                                     >
                                         <Checkbox
                                             checked={isSelected(user.Id)}
@@ -434,46 +438,51 @@ const EmployeeTable: React.FC = () => {
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                         <Typography
                                             sx={{
-                                                fontWeight: 'bold',
                                                 color: 'var(--text-color)',
                                                 fontSize: '16px',
-                                                overflow: 'hidden',
                                                 maxWidth: '260px',
+                                                overflow: 'hidden',
                                                 textOverflow: 'ellipsis',
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {user.Id}
-                                        </Typography>
-                                    </TableCell>
-
-                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
-                                        <Avatar src={user.AvatarPath} alt='Avatar' />
-                                    </TableCell>
-                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
-                                        <Typography
-                                            sx={{
-                                                fontWeight: 'bold',
-                                                color: 'var(--text-color)',
-                                                fontSize: '16px',
-                                                overflow: 'hidden',
-                                                maxWidth: '260px',
-                                                textOverflow: 'ellipsis',
-                                                whiteSpace: 'nowrap'
-                                            }}
-                                        >
-                                            {user.FullName}
+                                            {user.EmployeeId}
                                         </Typography>
                                     </TableCell>
 
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                         <Typography
                                             sx={{
-                                                fontWeight: 'bold',
                                                 color: 'var(--text-color)',
                                                 fontSize: '16px',
-                                                overflow: 'hidden',
                                                 maxWidth: '260px',
+                                                overflow: 'hidden',
+                                                whiteSpace: 'nowrap',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                textOverflow: 'ellipsis'
+                                            }}
+                                            component='div'
+                                        >
+                                            <Avatar
+                                                src={
+                                                    user.AvatarPath ||
+                                                    'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'
+                                                }
+                                                alt='Avatar'
+                                                sx={{ marginRight: '20px' }}
+                                            />
+                                            {user.FullName || 'N/A'}
+                                        </Typography>
+                                    </TableCell>
+
+                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                        <Typography
+                                            sx={{
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                maxWidth: '260px',
+                                                overflow: 'hidden',
                                                 textOverflow: 'ellipsis',
                                                 whiteSpace: 'nowrap'
                                             }}
@@ -484,11 +493,10 @@ const EmployeeTable: React.FC = () => {
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                         <Typography
                                             sx={{
-                                                fontWeight: 'bold',
                                                 color: 'var(--text-color)',
                                                 fontSize: '16px',
-                                                overflow: 'hidden',
                                                 maxWidth: '260px',
+                                                overflow: 'hidden',
                                                 textOverflow: 'ellipsis',
                                                 whiteSpace: 'nowrap'
                                             }}
@@ -499,11 +507,10 @@ const EmployeeTable: React.FC = () => {
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                         <Typography
                                             sx={{
-                                                fontWeight: 'bold',
                                                 color: 'var(--text-color)',
                                                 fontSize: '16px',
-                                                overflow: 'hidden',
                                                 maxWidth: '260px',
+                                                overflow: 'hidden',
                                                 textOverflow: 'ellipsis',
                                                 whiteSpace: 'nowrap'
                                             }}
@@ -517,11 +524,10 @@ const EmployeeTable: React.FC = () => {
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                         <Typography
                                             sx={{
-                                                fontWeight: 'bold',
                                                 color: 'var(--text-color)',
                                                 fontSize: '16px',
-                                                overflow: 'hidden',
                                                 maxWidth: '260px',
+                                                overflow: 'hidden',
                                                 textOverflow: 'ellipsis',
                                                 whiteSpace: 'nowrap'
                                             }}

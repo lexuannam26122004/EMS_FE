@@ -267,7 +267,7 @@ const UpdateEmploymentContract = () => {
                                 }
                             }}
                             options={employee}
-                            getOptionLabel={option => `${option.Id} - ${option.FullName}`}
+                            getOptionLabel={option => `${option.EmployeeId} - ${option.FullName}`}
                             renderOption={(props, option, { selected }) => {
                                 const { key, ...otherProps } = props
                                 return (
@@ -294,7 +294,7 @@ const UpdateEmploymentContract = () => {
                                             }
                                             alt='Avatar'
                                         />
-                                        <Typography>{`${option.Id} - ${option.FullName}`}</Typography>
+                                        <Typography>{`${option.EmployeeId} - ${option.FullName}`}</Typography>
                                     </Box>
                                 )
                             }}
@@ -366,7 +366,7 @@ const UpdateEmploymentContract = () => {
                                 }
                             }}
                             options={employee}
-                            getOptionLabel={option => `${option.Id} - ${option.FullName}`}
+                            getOptionLabel={option => `${option.EmployeeId} - ${option.FullName}`}
                             renderOption={(props, option, { selected }) => {
                                 const { key, ...otherProps } = props
                                 return (
@@ -393,7 +393,7 @@ const UpdateEmploymentContract = () => {
                                             }
                                             alt='Avatar'
                                         />
-                                        <Typography>{`${option.Id} - ${option.FullName}`}</Typography>
+                                        <Typography>{`${option.EmployeeId} - ${option.FullName}`}</Typography>
                                     </Box>
                                 )
                             }}

@@ -5,13 +5,14 @@ export interface IAspNetUserGetAll {
     Email: string
     PhoneNumber: string | null
     AvatarFileId: number | null
-    Sex: number | null
+    Gender?: boolean | null
     Address: string
     Note: string
     Birthday: Date | null
     Roles?: string[] | null
     AvatarPath: string | null
     DepartmentName: string
+    EmployeeId: string
 }
 
 export interface IUserByAgeGetAllDashboard {
@@ -30,7 +31,7 @@ export interface IAspNetUserCreate {
     PhoneNumber: string
     StartDateWork: Date
     AvatarFileId: number
-    Sex: number
+    Gender?: boolean
     Address: string
     Note: string
     Birthday: Date
@@ -38,6 +39,7 @@ export interface IAspNetUserCreate {
     Password: string
     Roles: string[]
     IsActive: boolean
+    EmployeeId: string
 }
 
 export interface IAspNetUserUpdate {
@@ -47,7 +49,7 @@ export interface IAspNetUserUpdate {
     Email: string
     PhoneNumber: string | null
     AvatarFileId: number | null
-    Sex: number | null
+    Gender?: boolean | null
     Address: string
     Note: string
     Birthday: Date | null
@@ -55,4 +57,5 @@ export interface IAspNetUserUpdate {
     StartDateWork: Date
     DepartmentId: number
     IsActive: boolean
+    EmployeeId: string
 }
