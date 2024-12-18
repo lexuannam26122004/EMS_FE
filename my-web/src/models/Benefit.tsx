@@ -9,3 +9,7 @@ export interface IBenefitGetAll extends IBenefitCreate {
     NameOfBenefitType: string
 }
 
+export interface IBenefitGetAllType {
+    Id: number
+    Name: string
+}

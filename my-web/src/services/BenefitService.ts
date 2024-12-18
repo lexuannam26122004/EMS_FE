@@ -1,4 +1,4 @@
-import { IBenefitCreate, IBenefitGetAll } from '@/models/Benefit'
+import { IBenefitCreate, IBenefitGetAll, IBenefitGetAllType } from '@/models/Benefit'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
 
@@ -63,7 +63,14 @@ export const benefitApi = createApi({
                 return `GetAll?${params.toString()}`
             },
             providesTags: ['Benefit'] // Thêm providesTags để cập nhật cache
+        }),
+        getAllBenefitsType: builder.query<BenefitResponse, IBenefitGetAllType | void>({
+            query: filter => {
+
+                return `GetAllBenefitType?`
+            }
         })
+
     })
 })
 
@@ -72,5 +79,6 @@ export const {
     useCreateBenefitMutation,
     useChangeStatusBenefitMutation,
     useUpdateBenefitMutation,
-    useChangeStatusManyBenefitMutation
+    useChangeStatusManyBenefitMutation,
+    useGetAllBenefitsTypeQuery
 } = benefitApi
