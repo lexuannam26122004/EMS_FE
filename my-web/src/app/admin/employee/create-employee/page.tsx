@@ -13,7 +13,9 @@ import {
     Checkbox,
     ListItemText
 } from '@mui/material'
-import Image from 'next/image';
+import Image from 'next/image'
+import axios from 'axios'
+
 import { useTranslation } from 'react-i18next'
 import { SaveIcon, XIcon, RefreshCcwIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
@@ -109,6 +111,9 @@ const CreateEmployeePage = () => {
             setIsSaveLoading(false)
             return
         }
+        if (file !== null) {
+            uploadFileChunk(file)
+        }
         const data = {
             FullName: fullName,
             UserName: userName,
@@ -201,12 +206,10 @@ const CreateEmployeePage = () => {
         document.getElementById('fileInput')?.click()
     }
 
-    // Handle image preview
     const previewImage = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files ? event.target.files[0] : null
 
         if (file) {
-            // Check file size
             if (file.size > 3 * 1024 * 1024) {
                 alert('File size must not exceed 3MB!')
                 return
@@ -221,26 +224,55 @@ const CreateEmployeePage = () => {
         }
     }
 
+    const uploadFileChunk = async (file: File) => {
+        const url = 'https://localhost:44381/api/admin/SysFile/FileChunks'
+        const formData = new FormData()
+        formData.append('File', file)
+        formData.append('FileName', file?.name)
+        formData.append('UniqueFileName', file?.name)
+
+        try {
+            const response = await axios.post(url, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+            console.log('File chunk uploaded successfully:', response.data)
+        } catch (error) {
+            console.error('Error uploading file chunk:', error)
+        }
+    }
+
     return (
-        <Box sx={{ width: '100%' }}>
+        <Box sx={{ width: '100%', display: 'flex' }}>
             <Box
                 sx={{
-                    fontFamily: 'Arial, sans-serif',
-                    backgroundColor: '#f9f9f9',
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    margin: 0
+                    marginBottom: 'auto',
+                    width: '18%',
+                    position: 'sticky',
+                    top: '25px',
+                    color: 'var(--text-color)'
                 }}
             >
                 <Box
                     sx={{
                         textAlign: 'center',
                         background: '#fff',
-                        padding: '15px',
-                        borderRadius: '10px',
                         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                        maxWidth: '250px'
+                        maxWidth: '300px',
+                        marginRight: 'auto',
+                        borderRadius: '15px',
+                        backgroundColor: 'var(--background-item)',
+                        padding: '24px',
+
+                        backgroundImage:
+                            'url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSJ1cmwoI3BhaW50MF9yYWRpYWxfMjc0OV8xNDUxODYpIiBmaWxsLW9wYWNpdHk9IjAuMTIiLz4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0icGFpbnQwX3JhZGlhbF8yNzQ5XzE0NTE4NiIgY3g9IjAiIGN5PSIwIiByPSIxIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgZ3JhZGllbnRUcmFuc2Zvcm09InRyYW5zbGF0ZSgxMjAgMS44MTgxMmUtMDUpIHJvdGF0ZSgtNDUpIHNjYWxlKDEyMy4yNSkiPgo8c3RvcCBzdG9wLWNvbG9yPSIjMDBCOEQ5Ii8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzAwQjhEOSIgc3RvcC1vcGFjaXR5PSIwIi8+CjwvcmFkaWFsR3JhZGllbnQ+CjwvZGVmcz4KPC9zdmc+Cg==), url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSJ1cmwoI3BhaW50MF9yYWRpYWxfMjc0OV8xNDUxODcpIiBmaWxsLW9wYWNpdHk9IjAuMTIiLz4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0icGFpbnQwX3JhZGlhbF8yNzQ5XzE0NTE4NyIgY3g9IjAiIGN5PSIwIiByPSIxIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgZ3JhZGllbnRUcmFuc2Zvcm09InRyYW5zbGF0ZSgwIDEyMCkgcm90YXRlKDEzNSkgc2NhbGUoMTIzLjI1KSI+CjxzdG9wIHN0b3AtY29sb3I9IiNGRjU2MzAiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRkY1NjMwIiBzdG9wLW9wYWNpdHk9IjAiLz4KPC9yYWRpYWxHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K)',
+                        backgroundPosition: 'top right, bottom left',
+                        backgroundSize: '50%, 50%',
+                        backgroundRepeat: 'no-repeat'
                     }}
                 >
                     <Box
@@ -259,12 +291,11 @@ const CreateEmployeePage = () => {
 
                         <Box
                             sx={{
-                                width: '120px',
-                                height: '120px',
+                                width: '150px',
+                                height: '150px',
                                 borderRadius: '50%',
                                 overflow: 'hidden',
                                 margin: '0 auto 8px',
-                                backgroundColor: '#f0f0f0',
                                 display: 'flex',
                                 justifyContent: 'center',
                                 alignItems: 'center',
@@ -274,12 +305,7 @@ const CreateEmployeePage = () => {
                             onMouseEnter={() => (document.getElementById('updatePhoto')!.style.display = 'flex')}
                             onMouseLeave={() => (document.getElementById('updatePhoto')!.style.display = 'none')}
                         >
-                            <Image
-                                src={previewSrc}
-                                alt='Avatar'
-                                layout='fill' 
-                                objectFit='cover' 
-                            />
+                            <Image src={previewSrc} alt='Avatar' layout='fill' objectFit='cover' />
 
                             <Box
                                 id='updatePhoto'
@@ -316,25 +342,25 @@ const CreateEmployeePage = () => {
                     </Box>
                     <Box
                         sx={{
-                            fontSize: '12px',
-                            color: '#666',
-                            marginTop: '8px'
+                            marginTop: '15px'
                         }}
                     >
                         Allowed: *.jpeg, *.jpg, *.png, *.gif
                         <br />
-                        <small style={{ fontSize: '10px', color: '#999' }}>Max size: 3MB</small>
+                        <small>Max size: 3MB</small>
                     </Box>
                 </Box>
             </Box>
 
             <Paper
                 sx={{
-                    width: '100%',
+                    width: '80%',
                     overflow: 'hidden',
-                    borderRadius: '6px',
-                    backgroundColor: 'var(--background-color)',
-                    padding: '20px'
+                    marginLeft: 'auto',
+                    marginBottom: 'auto',
+                    borderRadius: '15px',
+                    backgroundColor: 'var(--background-item)',
+                    padding: '24px'
                 }}
             >
                 <Typography sx={{ fontWeight: 'bold', fontSize: '22px', color: 'var(--text-color)' }}>
@@ -359,28 +385,43 @@ const CreateEmployeePage = () => {
                             fullWidth
                             {...(isSubmit && fullName === '' && { error: true })}
                             sx={{
-                                color: 'var(--text-color)',
                                 '& fieldset': {
                                     borderRadius: '8px',
                                     color: 'var(--text-color)',
                                     borderColor: 'var(--border-color)'
                                 },
-                                '& .MuiInputBase-root': { paddingRight: '0px' },
+                                '& .MuiInputBase-root': {
+                                    paddingRight: '0px'
+                                },
                                 '& .MuiInputBase-input': {
+                                    paddingRight: '12px',
                                     color: 'var(--text-color)',
-                                    fontSize: '16px'
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1
+                                    }
                                 },
                                 '& .MuiOutlinedInput-root:hover fieldset': {
-                                    borderColor: 'var(--hover-color)'
+                                    borderColor: 'var(--hover-field-color)'
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                                 },
                                 '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                    borderColor: 'var(--selected-color)'
+                                    borderColor: 'var(--selected-field-color)'
                                 },
                                 '& .MuiInputLabel-root': {
                                     color: 'var(--text-label-color)'
                                 },
                                 '& .MuiInputLabel-root.Mui-focused': {
-                                    color: 'var(--selected-color)'
+                                    color: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-error': {
+                                    color: 'var(--error-color)'
                                 }
                             }}
                             value={fullName}
@@ -407,28 +448,43 @@ const CreateEmployeePage = () => {
                             fullWidth
                             error={isSubmit && departmentId === ''}
                             sx={{
-                                color: 'var(--text-color)',
                                 '& fieldset': {
                                     borderRadius: '8px',
                                     color: 'var(--text-color)',
                                     borderColor: 'var(--border-color)'
                                 },
-                                '& .MuiInputBase-root': { paddingRight: '0px' },
+                                '& .MuiInputBase-root': {
+                                    paddingRight: '0px'
+                                },
                                 '& .MuiInputBase-input': {
+                                    paddingRight: '12px',
                                     color: 'var(--text-color)',
-                                    fontSize: '16px'
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1
+                                    }
                                 },
                                 '& .MuiOutlinedInput-root:hover fieldset': {
-                                    borderColor: 'var(--hover-color)'
+                                    borderColor: 'var(--hover-field-color)'
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                                 },
                                 '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                    borderColor: 'var(--selected-color)'
+                                    borderColor: 'var(--selected-field-color)'
                                 },
                                 '& .MuiInputLabel-root': {
                                     color: 'var(--text-label-color)'
                                 },
                                 '& .MuiInputLabel-root.Mui-focused': {
-                                    color: 'var(--selected-color)'
+                                    color: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-error': {
+                                    color: 'var(--error-color)'
                                 },
                                 '& .MuiSelect-icon': {
                                     color: 'var(--text-color)'
@@ -444,10 +500,19 @@ const CreateEmployeePage = () => {
                                     PaperProps: {
                                         elevation: 0,
                                         sx: {
-                                            backgroundColor: 'var(--background-color)',
+                                            backgroundImage:
+                                                'url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSJ1cmwoI3BhaW50MF9yYWRpYWxfMjc0OV8xNDUxODYpIiBmaWxsLW9wYWNpdHk9IjAuMTIiLz4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0icGFpbnQwX3JhZGlhbF8yNzQ5XzE0NTE4NiIgY3g9IjAiIGN5PSIwIiByPSIxIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgZ3JhZGllbnRUcmFuc2Zvcm09InRyYW5zbGF0ZSgxMjAgMS44MTgxMmUtMDUpIHJvdGF0ZSgtNDUpIHNjYWxlKDEyMy4yNSkiPgo8c3RvcCBzdG9wLWNvbG9yPSIjMDBCOEQ5Ii8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzAwQjhEOSIgc3RvcC1vcGFjaXR5PSIwIi8+CjwvcmFkaWFsR3JhZGllbnQ+CjwvZGVmcz4KPC9zdmc+Cg==), url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSJ1cmwoI3BhaW50MF9yYWRpYWxfMjc0OV8xNDUxODcpIiBmaWxsLW9wYWNpdHk9IjAuMTIiLz4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0icGFpbnQwX3JhZGlhbF8yNzQ5XzE0NTE4NyIgY3g9IjAiIGN5PSIwIiByPSIxIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgZ3JhZGllbnRUcmFuc2Zvcm09InRyYW5zbGF0ZSgwIDEyMCkgcm90YXRlKDEzNSkgc2NhbGUoMTIzLjI1KSI+CjxzdG9wIHN0b3AtY29sb3I9IiNGRjU2MzAiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRkY1NjMwIiBzdG9wLW9wYWNpdHk9IjAiLz4KPC9yYWRpYWxHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K)',
+                                            backgroundPosition: 'top right, bottom left',
+                                            backgroundSize: '50%, 50%',
+                                            backgroundRepeat: 'no-repeat',
+                                            padding: '0 8px',
+                                            backdropFilter: 'blur(20px)',
+                                            borderRadius: '8px',
+                                            backgroundColor: 'var(--background-item)',
                                             color: 'var(--text-color)',
                                             border: '1px solid var(--border-color)',
                                             '& .MuiMenuItem-root': {
+                                                borderRadius: '6px',
                                                 '&:hover': {
                                                     backgroundColor: 'var(--hover-color)'
                                                 },
@@ -458,7 +523,8 @@ const CreateEmployeePage = () => {
                                                     }
                                                 }
                                             }
-                                        }
+                                        },
+                                        autoFocus: false
                                     }
                                 }}
                             >
@@ -500,28 +566,43 @@ const CreateEmployeePage = () => {
                             fullWidth
                             {...(isSubmit && (userName === '' || isExistingUser) && { error: true })}
                             sx={{
-                                color: 'var(--text-color)',
                                 '& fieldset': {
                                     borderRadius: '8px',
                                     color: 'var(--text-color)',
                                     borderColor: 'var(--border-color)'
                                 },
-                                '& .MuiInputBase-root': { paddingRight: '0px' },
+                                '& .MuiInputBase-root': {
+                                    paddingRight: '0px'
+                                },
                                 '& .MuiInputBase-input': {
+                                    paddingRight: '12px',
                                     color: 'var(--text-color)',
-                                    fontSize: '16px'
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1
+                                    }
                                 },
                                 '& .MuiOutlinedInput-root:hover fieldset': {
-                                    borderColor: 'var(--hover-color)'
+                                    borderColor: 'var(--hover-field-color)'
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                                 },
                                 '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                    borderColor: 'var(--selected-color)'
+                                    borderColor: 'var(--selected-field-color)'
                                 },
                                 '& .MuiInputLabel-root': {
                                     color: 'var(--text-label-color)'
                                 },
                                 '& .MuiInputLabel-root.Mui-focused': {
-                                    color: 'var(--selected-color)'
+                                    color: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-error': {
+                                    color: 'var(--error-color)'
                                 }
                             }}
                             value={userName}
@@ -559,28 +640,43 @@ const CreateEmployeePage = () => {
                             {...(isSubmit && (password === '' || !isPasswordValid) && { error: true })}
                             type='password'
                             sx={{
-                                color: 'var(--text-color)',
                                 '& fieldset': {
                                     borderRadius: '8px',
                                     color: 'var(--text-color)',
                                     borderColor: 'var(--border-color)'
                                 },
-                                '& .MuiInputBase-root': { paddingRight: '0px' },
+                                '& .MuiInputBase-root': {
+                                    paddingRight: '0px'
+                                },
                                 '& .MuiInputBase-input': {
+                                    paddingRight: '12px',
                                     color: 'var(--text-color)',
-                                    fontSize: '16px'
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1
+                                    }
                                 },
                                 '& .MuiOutlinedInput-root:hover fieldset': {
-                                    borderColor: 'var(--hover-color)'
+                                    borderColor: 'var(--hover-field-color)'
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                                 },
                                 '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                    borderColor: 'var(--selected-color)'
+                                    borderColor: 'var(--selected-field-color)'
                                 },
                                 '& .MuiInputLabel-root': {
                                     color: 'var(--text-label-color)'
                                 },
                                 '& .MuiInputLabel-root.Mui-focused': {
-                                    color: 'var(--selected-color)'
+                                    color: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-error': {
+                                    color: 'var(--error-color)'
                                 }
                             }}
                             value={password}
@@ -609,29 +705,43 @@ const CreateEmployeePage = () => {
                         fullWidth
                         {...(isSubmit && (!Array.isArray(roles) || roles.length === 0) && { error: true })}
                         sx={{
-                            backgroundColor: 'var(--background-color)',
-                            color: 'var(--text-color)',
                             '& fieldset': {
                                 borderRadius: '8px',
                                 color: 'var(--text-color)',
                                 borderColor: 'var(--border-color)'
                             },
-                            '& .MuiInputBase-root': { paddingRight: '0px' },
+                            '& .MuiInputBase-root': {
+                                paddingRight: '0px'
+                            },
                             '& .MuiInputBase-input': {
+                                paddingRight: '12px',
                                 color: 'var(--text-color)',
-                                fontSize: '16px'
+                                fontSize: '16px',
+                                '&::placeholder': {
+                                    color: 'var(--placeholder-color)',
+                                    opacity: 1
+                                }
                             },
                             '& .MuiOutlinedInput-root:hover fieldset': {
-                                borderColor: 'var(--hover-color)'
+                                borderColor: 'var(--hover-field-color)'
+                            },
+                            '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                            },
+                            '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                             },
                             '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                borderColor: 'var(--selected-color)'
+                                borderColor: 'var(--selected-field-color)'
                             },
                             '& .MuiInputLabel-root': {
                                 color: 'var(--text-label-color)'
                             },
                             '& .MuiInputLabel-root.Mui-focused': {
-                                color: 'var(--selected-color)'
+                                color: 'var(--selected-field-color)'
+                            },
+                            '& .MuiInputLabel-root.Mui-error': {
+                                color: 'var(--error-color)'
                             },
                             '& .MuiSelect-icon': {
                                 color: 'var(--text-color)'
@@ -649,10 +759,19 @@ const CreateEmployeePage = () => {
                                 PaperProps: {
                                     elevation: 0,
                                     sx: {
-                                        backgroundColor: 'var(--background-color)',
+                                        backgroundImage:
+                                            'url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSJ1cmwoI3BhaW50MF9yYWRpYWxfMjc0OV8xNDUxODYpIiBmaWxsLW9wYWNpdHk9IjAuMTIiLz4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0icGFpbnQwX3JhZGlhbF8yNzQ5XzE0NTE4NiIgY3g9IjAiIGN5PSIwIiByPSIxIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgZ3JhZGllbnRUcmFuc2Zvcm09InRyYW5zbGF0ZSgxMjAgMS44MTgxMmUtMDUpIHJvdGF0ZSgtNDUpIHNjYWxlKDEyMy4yNSkiPgo8c3RvcCBzdG9wLWNvbG9yPSIjMDBCOEQ5Ii8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzAwQjhEOSIgc3RvcC1vcGFjaXR5PSIwIi8+CjwvcmFkaWFsR3JhZGllbnQ+CjwvZGVmcz4KPC9zdmc+Cg==), url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSJ1cmwoI3BhaW50MF9yYWRpYWxfMjc0OV8xNDUxODcpIiBmaWxsLW9wYWNpdHk9IjAuMTIiLz4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0icGFpbnQwX3JhZGlhbF8yNzQ5XzE0NTE4NyIgY3g9IjAiIGN5PSIwIiByPSIxIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgZ3JhZGllbnRUcmFuc2Zvcm09InRyYW5zbGF0ZSgwIDEyMCkgcm90YXRlKDEzNSkgc2NhbGUoMTIzLjI1KSI+CjxzdG9wIHN0b3AtY29sb3I9IiNGRjU2MzAiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRkY1NjMwIiBzdG9wLW9wYWNpdHk9IjAiLz4KPC9yYWRpYWxHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K)',
+                                        backgroundPosition: 'top right, bottom left',
+                                        backgroundSize: '50%, 50%',
+                                        backgroundRepeat: 'no-repeat',
+                                        padding: '0 8px',
+                                        backdropFilter: 'blur(20px)',
+                                        borderRadius: '8px',
+                                        backgroundColor: 'var(--background-item)',
                                         color: 'var(--text-color)',
                                         border: '1px solid var(--border-color)',
                                         '& .MuiMenuItem-root': {
+                                            borderRadius: '6px',
                                             '&:hover': {
                                                 backgroundColor: 'var(--hover-color)'
                                             },
@@ -663,7 +782,8 @@ const CreateEmployeePage = () => {
                                                 }
                                             }
                                         }
-                                    }
+                                    },
+                                    autoFocus: false
                                 }
                             }}
                         >
@@ -711,28 +831,43 @@ const CreateEmployeePage = () => {
                             fullWidth
                             error={isSubmit && gender === ''}
                             sx={{
-                                color: 'var(--text-color)',
                                 '& fieldset': {
                                     borderRadius: '8px',
                                     color: 'var(--text-color)',
                                     borderColor: 'var(--border-color)'
                                 },
-                                '& .MuiInputBase-root': { paddingRight: '0px' },
+                                '& .MuiInputBase-root': {
+                                    paddingRight: '0px'
+                                },
                                 '& .MuiInputBase-input': {
+                                    paddingRight: '12px',
                                     color: 'var(--text-color)',
-                                    fontSize: '16px'
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1
+                                    }
                                 },
                                 '& .MuiOutlinedInput-root:hover fieldset': {
-                                    borderColor: 'var(--hover-color)'
+                                    borderColor: 'var(--hover-field-color)'
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                                 },
                                 '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                    borderColor: 'var(--selected-color)'
+                                    borderColor: 'var(--selected-field-color)'
                                 },
                                 '& .MuiInputLabel-root': {
                                     color: 'var(--text-label-color)'
                                 },
                                 '& .MuiInputLabel-root.Mui-focused': {
-                                    color: 'var(--selected-color)'
+                                    color: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-error': {
+                                    color: 'var(--error-color)'
                                 },
                                 '& .MuiSelect-icon': {
                                     color: 'var(--text-color)'
@@ -751,10 +886,19 @@ const CreateEmployeePage = () => {
                                     PaperProps: {
                                         elevation: 0,
                                         sx: {
-                                            backgroundColor: 'var(--background-color)',
+                                            backgroundImage:
+                                                'url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSJ1cmwoI3BhaW50MF9yYWRpYWxfMjc0OV8xNDUxODYpIiBmaWxsLW9wYWNpdHk9IjAuMTIiLz4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0icGFpbnQwX3JhZGlhbF8yNzQ5XzE0NTE4NiIgY3g9IjAiIGN5PSIwIiByPSIxIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgZ3JhZGllbnRUcmFuc2Zvcm09InRyYW5zbGF0ZSgxMjAgMS44MTgxMmUtMDUpIHJvdGF0ZSgtNDUpIHNjYWxlKDEyMy4yNSkiPgo8c3RvcCBzdG9wLWNvbG9yPSIjMDBCOEQ5Ii8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzAwQjhEOSIgc3RvcC1vcGFjaXR5PSIwIi8+CjwvcmFkaWFsR3JhZGllbnQ+CjwvZGVmcz4KPC9zdmc+Cg==), url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSJ1cmwoI3BhaW50MF9yYWRpYWxfMjc0OV8xNDUxODcpIiBmaWxsLW9wYWNpdHk9IjAuMTIiLz4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0icGFpbnQwX3JhZGlhbF8yNzQ5XzE0NTE4NyIgY3g9IjAiIGN5PSIwIiByPSIxIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgZ3JhZGllbnRUcmFuc2Zvcm09InRyYW5zbGF0ZSgwIDEyMCkgcm90YXRlKDEzNSkgc2NhbGUoMTIzLjI1KSI+CjxzdG9wIHN0b3AtY29sb3I9IiNGRjU2MzAiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRkY1NjMwIiBzdG9wLW9wYWNpdHk9IjAiLz4KPC9yYWRpYWxHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K)',
+                                            backgroundPosition: 'top right, bottom left',
+                                            backgroundSize: '50%, 50%',
+                                            backgroundRepeat: 'no-repeat',
+                                            padding: '0 8px',
+                                            backdropFilter: 'blur(20px)',
+                                            borderRadius: '8px',
+                                            backgroundColor: 'var(--background-item)',
                                             color: 'var(--text-color)',
                                             border: '1px solid var(--border-color)',
                                             '& .MuiMenuItem-root': {
+                                                borderRadius: '6px',
                                                 '&:hover': {
                                                     backgroundColor: 'var(--hover-color)'
                                                 },
@@ -765,7 +909,8 @@ const CreateEmployeePage = () => {
                                                     }
                                                 }
                                             }
-                                        }
+                                        },
+                                        autoFocus: false
                                     }
                                 }}
                             >
@@ -790,28 +935,43 @@ const CreateEmployeePage = () => {
                             fullWidth
                             {...(isSubmit && address === '' && { error: true })}
                             sx={{
-                                color: 'var(--text-color)',
                                 '& fieldset': {
                                     borderRadius: '8px',
                                     color: 'var(--text-color)',
                                     borderColor: 'var(--border-color)'
                                 },
-                                '& .MuiInputBase-root': { paddingRight: '0px' },
+                                '& .MuiInputBase-root': {
+                                    paddingRight: '0px'
+                                },
                                 '& .MuiInputBase-input': {
+                                    paddingRight: '12px',
                                     color: 'var(--text-color)',
-                                    fontSize: '16px'
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1
+                                    }
                                 },
                                 '& .MuiOutlinedInput-root:hover fieldset': {
-                                    borderColor: 'var(--hover-color)'
+                                    borderColor: 'var(--hover-field-color)'
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                                 },
                                 '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                    borderColor: 'var(--selected-color)'
+                                    borderColor: 'var(--selected-field-color)'
                                 },
                                 '& .MuiInputLabel-root': {
                                     color: 'var(--text-label-color)'
                                 },
                                 '& .MuiInputLabel-root.Mui-focused': {
-                                    color: 'var(--selected-color)'
+                                    color: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-error': {
+                                    color: 'var(--error-color)'
                                 }
                             }}
                             value={address}
@@ -849,28 +1009,43 @@ const CreateEmployeePage = () => {
                             fullWidth
                             {...(isSubmit && birthday === '' && { error: true })}
                             sx={{
-                                color: 'var(--text-color)',
                                 '& fieldset': {
                                     borderRadius: '8px',
                                     color: 'var(--text-color)',
                                     borderColor: 'var(--border-color)'
                                 },
-                                '& .MuiInputBase-root': { paddingRight: '0px' },
+                                '& .MuiInputBase-root': {
+                                    paddingRight: '0px'
+                                },
                                 '& .MuiInputBase-input': {
+                                    paddingRight: '12px',
                                     color: 'var(--text-color)',
-                                    fontSize: '16px'
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1
+                                    }
                                 },
                                 '& .MuiOutlinedInput-root:hover fieldset': {
-                                    borderColor: 'var(--hover-color)'
+                                    borderColor: 'var(--hover-field-color)'
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                                 },
                                 '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                    borderColor: 'var(--selected-color)'
+                                    borderColor: 'var(--selected-field-color)'
                                 },
                                 '& .MuiInputLabel-root': {
                                     color: 'var(--text-label-color)'
                                 },
                                 '& .MuiInputLabel-root.Mui-focused': {
-                                    color: 'var(--selected-color)'
+                                    color: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-error': {
+                                    color: 'var(--error-color)'
                                 }
                             }}
                             value={birthday}
@@ -900,28 +1075,43 @@ const CreateEmployeePage = () => {
                             {...(isSubmit && startDateWork === '' && { error: true })}
                             type='date'
                             sx={{
-                                color: 'var(--text-color)',
                                 '& fieldset': {
                                     borderRadius: '8px',
                                     color: 'var(--text-color)',
                                     borderColor: 'var(--border-color)'
                                 },
-                                '& .MuiInputBase-root': { paddingRight: '0px' },
+                                '& .MuiInputBase-root': {
+                                    paddingRight: '0px'
+                                },
                                 '& .MuiInputBase-input': {
+                                    paddingRight: '12px',
                                     color: 'var(--text-color)',
-                                    fontSize: '16px'
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1
+                                    }
                                 },
                                 '& .MuiOutlinedInput-root:hover fieldset': {
-                                    borderColor: 'var(--hover-color)'
+                                    borderColor: 'var(--hover-field-color)'
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                                 },
                                 '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                    borderColor: 'var(--selected-color)'
+                                    borderColor: 'var(--selected-field-color)'
                                 },
                                 '& .MuiInputLabel-root': {
                                     color: 'var(--text-label-color)'
                                 },
                                 '& .MuiInputLabel-root.Mui-focused': {
-                                    color: 'var(--selected-color)'
+                                    color: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-error': {
+                                    color: 'var(--error-color)'
                                 }
                             }}
                             value={startDateWork}
@@ -959,28 +1149,43 @@ const CreateEmployeePage = () => {
                             {...(isSubmit && (email === '' || isExistingEmail) && { error: true })}
                             type='email'
                             sx={{
-                                color: 'var(--text-color)',
                                 '& fieldset': {
                                     borderRadius: '8px',
                                     color: 'var(--text-color)',
                                     borderColor: 'var(--border-color)'
                                 },
-                                '& .MuiInputBase-root': { paddingRight: '0px' },
+                                '& .MuiInputBase-root': {
+                                    paddingRight: '0px'
+                                },
                                 '& .MuiInputBase-input': {
+                                    paddingRight: '12px',
                                     color: 'var(--text-color)',
-                                    fontSize: '16px'
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1
+                                    }
                                 },
                                 '& .MuiOutlinedInput-root:hover fieldset': {
-                                    borderColor: 'var(--hover-color)'
+                                    borderColor: 'var(--hover-field-color)'
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                                 },
                                 '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                    borderColor: 'var(--selected-color)'
+                                    borderColor: 'var(--selected-field-color)'
                                 },
                                 '& .MuiInputLabel-root': {
                                     color: 'var(--text-label-color)'
                                 },
                                 '& .MuiInputLabel-root.Mui-focused': {
-                                    color: 'var(--selected-color)'
+                                    color: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-error': {
+                                    color: 'var(--error-color)'
                                 }
                             }}
                             value={email}
@@ -1017,28 +1222,43 @@ const CreateEmployeePage = () => {
                             fullWidth
                             {...(isSubmit && phoneNumber === '' && { error: true })}
                             sx={{
-                                color: 'var(--text-color)',
                                 '& fieldset': {
                                     borderRadius: '8px',
                                     color: 'var(--text-color)',
                                     borderColor: 'var(--border-color)'
                                 },
-                                '& .MuiInputBase-root': { paddingRight: '0px' },
+                                '& .MuiInputBase-root': {
+                                    paddingRight: '0px'
+                                },
                                 '& .MuiInputBase-input': {
+                                    paddingRight: '12px',
                                     color: 'var(--text-color)',
-                                    fontSize: '16px'
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1
+                                    }
                                 },
                                 '& .MuiOutlinedInput-root:hover fieldset': {
-                                    borderColor: 'var(--hover-color)'
+                                    borderColor: 'var(--hover-field-color)'
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                                 },
                                 '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                    borderColor: 'var(--selected-color)'
+                                    borderColor: 'var(--selected-field-color)'
                                 },
                                 '& .MuiInputLabel-root': {
                                     color: 'var(--text-label-color)'
                                 },
                                 '& .MuiInputLabel-root.Mui-focused': {
-                                    color: 'var(--selected-color)'
+                                    color: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-error': {
+                                    color: 'var(--error-color)'
                                 }
                             }}
                             value={phoneNumber}
@@ -1073,28 +1293,43 @@ const CreateEmployeePage = () => {
                     maxRows={12}
                     sx={{
                         mt: '7px',
-                        color: 'var(--text-color)',
                         '& fieldset': {
                             borderRadius: '8px',
                             color: 'var(--text-color)',
                             borderColor: 'var(--border-color)'
                         },
-                        '& .MuiInputBase-root': { paddingRight: '0px' },
+                        '& .MuiInputBase-root': {
+                            paddingRight: '0px'
+                        },
                         '& .MuiInputBase-input': {
+                            paddingRight: '12px',
                             color: 'var(--text-color)',
-                            fontSize: '16px'
+                            fontSize: '16px',
+                            '&::placeholder': {
+                                color: 'var(--placeholder-color)',
+                                opacity: 1
+                            }
                         },
                         '& .MuiOutlinedInput-root:hover fieldset': {
-                            borderColor: 'var(--hover-color)'
+                            borderColor: 'var(--hover-field-color)'
+                        },
+                        '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                            borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                        },
+                        '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                            borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                         },
                         '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                            borderColor: 'var(--selected-color)'
+                            borderColor: 'var(--selected-field-color)'
                         },
                         '& .MuiInputLabel-root': {
                             color: 'var(--text-label-color)'
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'var(--selected-color)'
+                            color: 'var(--selected-field-color)'
+                        },
+                        '& .MuiInputLabel-root.Mui-error': {
+                            color: 'var(--error-color)'
                         }
                     }}
                     value={note}
