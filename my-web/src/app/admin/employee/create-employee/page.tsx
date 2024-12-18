@@ -15,7 +15,6 @@ import {
     Avatar
 } from '@mui/material'
 import axios from 'axios'
-
 import { useTranslation } from 'react-i18next'
 import { SaveIcon, XIcon, RefreshCcwIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
@@ -287,11 +286,11 @@ const CreateEmployeePage = () => {
                 }
             })
 
-            // Lấy giá trị AvatarFileId từ response
-            return response.data.Data // Trả về AvatarFileId
+           
+            return response.data.Data 
         } catch (error) {
             console.error('Error creating file:', error)
-            throw error // Throw error để catch ở nơi gọi hàm
+            throw error 
         }
     }
 
