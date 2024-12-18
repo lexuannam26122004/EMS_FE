@@ -7,7 +7,28 @@ import {
     useCreateBenefitMutation,
     useChangeStatusManyBenefitMutation
 } from '@/services/BenefitService'
-import { Box, Select, Pagination, Typography, MenuItem, SelectChangeEvent, Paper, Checkbox, TableRow, TableBody, Table, TableCell, TableHead, TableContainer, Button, TextField, InputAdornment, IconButton, Tooltip, TableSortLabel } from '@mui/material'
+import {
+    Box,
+    Select,
+    Pagination,
+    Typography,
+    MenuItem,
+    SelectChangeEvent,
+    Paper,
+    Checkbox,
+    TableRow,
+    TableBody,
+    Table,
+    TableCell,
+    TableHead,
+    TableContainer,
+    Button,
+    TextField,
+    InputAdornment,
+    IconButton,
+    Tooltip,
+    TableSortLabel
+} from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import SearchIcon from '@mui/icons-material/Search'
@@ -47,7 +68,10 @@ function BenefitPage() {
     const [deleteBenefit, { isSuccess: isSuccessDelete }] = useChangeStatusBenefitMutation()
     const [createBenefit, { isSuccess, isLoading, isError }] = useCreateBenefitMutation()
     const [updateBenefit] = useUpdateBenefitMutation()
-    const [changeManyBenefit, { isError: isErrorChangeMany, isSuccess: isSuccessChangeMany, isLoading: isLoadingChangeMany }] = useChangeStatusManyBenefitMutation()
+    const [
+        changeManyBenefit,
+        { isError: isErrorChangeMany, isSuccess: isSuccessChangeMany, isLoading: isLoadingChangeMany }
+    ] = useChangeStatusManyBenefitMutation()
 
     const benefitData = responseData?.Data.Records as IBenefitGetAll[]
     const totalRecords = responseData?.Data.TotalRecords as number
@@ -58,67 +82,15 @@ function BenefitPage() {
         setSelected(prev => (prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]))
     }
 
-    const handleSave = async () => {
-        setIsSubmit(true)
-        if (name === '' || benefitContribution <= 0 || benefitTypeId <= 0) {
-            alert('Vui lòng điền đầy đủ thông tin.')
-            return
-        }
-
-        try {
-            /* if (selectedRow) {
-                await updateBenefit({
-                    Id: selectedRow,
-                    Name: name,
-                    BenefitContribution: benefitContribution,
-                    BenefitTypeId: benefitTypeId,
-                    NameOfBenefitType: nameOfBenefitType,
-                    CreatedDate: formatDate(new Date())
-                }).unwrap()
-            } else {
-                await createBenefit({
-                    Name: name,
-                    BenefitContribution: benefitContribution,
-                    BenefitTypeId: benefitTypeId
-                }).unwrap()
-            } */
-
-            handleCloseCreateDialog()
-            setDialog()
-            setSelectedRow(null)
-            setIsSubmit(false)
-        } catch (error) {
-            console.error('Failed to save benefit:', error)
-        }
-    }
-
-    const setDialog = () => {
-        setName('')
-        setBenefitContribution(0)
-        setBenefitTypeId(0)
-        setNameOfBenefitType('')
-    }
-
-
-
     useEffect(() => {
         if (isSuccess) {
             refetch()
         }
     }, [isSuccess])
 
-    const handleUpdate = async (benefit: IBenefitGetAll) => {
-        setName(benefit.Name)
-        setBenefitContribution(benefit.BenefitContribution)
-        setBenefitTypeId(benefit.BenefitTypeId)
-        setNameOfBenefitType(benefit.NameOfBenefitType)
-        setSelectedRow(benefit.Id)
-        setIsOpen(true)
-    }
-
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
-            setSelected(benefitData.map(row => (row.Id)))
+            setSelected(benefitData.map(row => row.Id))
         } else {
             setSelected([])
         }
@@ -196,9 +168,9 @@ function BenefitPage() {
 
     const handleDeleteBenefit = async () => {
         if (selectedRow) {
-                await deleteBenefit(selectedRow)
-            if (isSelected((selectedRow))) {
-                setSelected(prev => prev.filter(item => item !== (selectedRow)))
+            await deleteBenefit(selectedRow)
+            if (isSelected(selectedRow)) {
+                setSelected(prev => prev.filter(item => item !== selectedRow))
             }
             setOpenDialog(false)
             setSelectedRow(null)
@@ -212,15 +184,6 @@ function BenefitPage() {
     }, [isSuccessDelete])
 
     const [isOpen, setIsOpen] = useState(false)
-    const handleOpenCreateDialog = () => {
-        setIsOpen(true)
-    }
-    const handleCloseCreateDialog = () => {
-        setIsOpen(false)
-        setDialog()
-        setSelectedRow(null)
-        setIsSubmit(false)
-    }
 
     const handleSort = (property: string) => {
         setFilter(prev => ({
@@ -359,7 +322,6 @@ function BenefitPage() {
                             //onClick={() => handleOpenCreateDialog()}
                         >
                             {t('COMMON.BUTTON.CREATE')}
-                            
                         </Button>
                     </Box>
                 </Box>
@@ -413,31 +375,31 @@ function BenefitPage() {
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell>
-                                   <TableSortLabel
-                                       active={orderBy === 'BenefitTypeName'}
-                                       direction={orderBy === 'BenefitTypeName' ? order : 'asc'}
-                                       onClick={() => handleSort('BenefitTypeName')}
-                                       sx={{
-                                           '& .MuiTableSortLabel-icon': {
-                                               color: 'var(--text-color) !important'
-                                           },
-                                           width: '200px'
-                                       }}
-                                   >
-                                       <Typography
-                                           sx={{
-                                               fontWeight: 'bold',
-                                               color: 'var(--text-color)',
-                                               fontSize: '16px',
-                                               overflow: 'hidden',
-                                               textOverflow: 'ellipsis',
-                                               whiteSpace: 'nowrap'
-                                           }}
-                                       >
-                                           {t('COMMON.BENEFIT.TYPE_NAME')} {/* Cập nhật khóa dịch này */}
-                                       </Typography>
-                                   </TableSortLabel>
-                               </TableCell>
+                                    <TableSortLabel
+                                        active={orderBy === 'BenefitTypeName'}
+                                        direction={orderBy === 'BenefitTypeName' ? order : 'asc'}
+                                        onClick={() => handleSort('BenefitTypeName')}
+                                        sx={{
+                                            '& .MuiTableSortLabel-icon': {
+                                                color: 'var(--text-color) !important'
+                                            },
+                                            width: '200px'
+                                        }}
+                                    >
+                                        <Typography
+                                            sx={{
+                                                fontWeight: 'bold',
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            {t('COMMON.BENEFIT.TYPE_NAME')} {/* Cập nhật khóa dịch này */}
+                                        </Typography>
+                                    </TableSortLabel>
+                                </TableCell>
                                 <TableCell
                                     sx={{ borderColor: 'var(--border-color)', minWidth: '49px', maxWidth: '60px' }}
                                 >
@@ -518,14 +480,14 @@ function BenefitPage() {
                                 </TableCell>
                                 <TableCell>
                                     <TableSortLabel
-                                        active={orderBy === 'BenefitTypeId'}
-                                        direction={orderBy === 'BenefitTypeId' ? order : 'asc'}
-                                        onClick={() => handleSort('BenefitTypeId')}
+                                        active={orderBy === 'CreatedBy'}
+                                        direction={orderBy === 'CreatedBy' ? order : 'asc'}
+                                        onClick={() => handleSort('CreatedBy')}
                                         sx={{
                                             '& .MuiTableSortLabel-icon': {
                                                 color: 'var(--text-color) !important'
                                             },
-                                            width: '100px'
+                                            width: '150px'
                                         }}
                                     >
                                         <Typography
@@ -538,7 +500,7 @@ function BenefitPage() {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {t('COMMON.BENEFIT.TYPE_ID')}
+                                            {t('Người tạo')}
                                         </Typography>
                                     </TableSortLabel>
                                 </TableCell>
@@ -562,31 +524,31 @@ function BenefitPage() {
                         </TableHead>
                         <TableBody>
                             {benefitData?.map(row => (
-                                <TableRow key={row.Id} selected={isSelected((row.Id))} >
+                                <TableRow key={row.Id} selected={isSelected(row.Id)}>
                                     <TableCell padding='checkbox'>
                                         <Checkbox
-                                            checked={isSelected((row.Id))}
-                                            onChange={() => handleCheckboxClick((row.Id))}
+                                            checked={isSelected(row.Id)}
+                                            onChange={() => handleCheckboxClick(row.Id)}
                                         />
                                     </TableCell>
-                                    <TableCell sx={{fontWeight:'bold'}}>{row.Id}</TableCell>
-                                    <TableCell sx={{width:'200px'}}>{row.NameOfBenefitType}</TableCell>
+                                    <TableCell sx={{ fontWeight: 'bold' }}>{row.Id}</TableCell>
+                                    <TableCell sx={{ width: '200px' }}>{row.NameOfBenefitType}</TableCell>
                                     <TableCell>{row.Name}</TableCell>
                                     <TableCell>{row.BenefitContribution}</TableCell>
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
-                                            <Typography
-                                                sx={{
-                                                    color: 'var(--text-color)',
-                                                    fontSize: '16px',
-                                                    overflow: 'hidden',
-                                                    textOverflow: 'ellipsis',
-                                                    whiteSpace: 'nowrap'
-                                                }}
-                                            >
-                                                {formatDate(row.CreatedDate)}
-                                            </Typography>
-                                        </TableCell>
-                                    <TableCell sx={{width:'100px'}}>{row.BenefitTypeId}</TableCell>
+                                        <Typography
+                                            sx={{
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            {formatDate(row.CreatedDate)}
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell sx={{ width: '100px' }}>{row.CreatedBy}</TableCell>
                                     <TableCell>
                                         <Box
                                             display='flex'
@@ -629,7 +591,7 @@ function BenefitPage() {
                                                             backgroundColor: 'var(--hover-color)'
                                                         }
                                                     }}
-                                                    onClick={() => handleUpdate(row)}
+                                                    //onClick={() => handleUpdate(row)}
                                                 >
                                                     <Pencil />
                                                 </Box>
@@ -761,240 +723,6 @@ function BenefitPage() {
                 buttonConfirm={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.DELETE')}
                 onConfirm={() => (isChangeMany ? handleConfirmChangeMany() : handleDeleteBenefit())}
             />
-
-            {isOpen && (
-                <Box
-                    sx={{
-                        position: 'fixed',
-                        top: 0,
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyItems: 'center',
-                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                        zIndex: 1000
-                    }}
-                >
-                    <Box
-                        sx={{
-                            width: '500px',
-                            backgroundColor: 'white',
-                            borderRadius: '12px',
-                            boxShadow: '0 8px 16px rgba(0,0,0,0.1)',
-                            overflow: 'hidden',
-                            margin: 'auto'
-                        }}
-                    >
-                        <Box
-                            sx={{
-                                padding: '16px 24px',
-                                borderBottom: '1px solid var(--border-color)',
-                                fontSize: '24px',
-                                fontWeight: 'bold',
-                                backgroundColor: 'var(--background-color)'
-                            }}
-                        >
-                            {t('COMMON.BENEFIT.TITLE')}
-                        </Box>
-                        <Box
-                            sx={{
-                                padding: '24px',
-                                backgroundColor: 'var(--background-color)',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: '20px'
-                            }}
-                        >
-                            <Box>
-                                <TextField
-                                    variant='outlined'
-                                    label={t('COMMON.BENEFIT.NAME')}
-                                    name='name'
-                                    fullWidth
-                                    {...(isSubmit && name === '' && { error: true })}
-                                    sx={{
-                                        color: 'var(--text-color)',
-                                        '& fieldset': {
-                                            borderRadius: '8px',
-                                            color: 'var(--text-color)',
-                                            borderColor: 'var(--border-color)'
-                                        },
-                                        '& .MuiInputBase-root': { paddingRight: '0px' },
-                                        '& .MuiInputBase-input': {
-                                            color: 'var(--text-color)',
-                                            fontSize: '16px'
-                                        },
-                                        '& .MuiOutlinedInput-root:hover fieldset': {
-                                            borderColor: 'var(--hover-color)'
-                                        },
-                                        '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                            borderColor: 'var(--selected-color)'
-                                        },
-                                        '& .MuiInputLabel-root': {
-                                            color: 'var(--text-label-color)'
-                                        },
-                                        '& .MuiInputLabel-root.Mui-focused': {
-                                            color: 'var(--selected-color)'
-                                        }
-                                    }}
-                                    value={name}
-                                    onChange={e => setName(e.target.value)}
-                                />
-                                <Typography
-                                    sx={{
-                                        color: 'red',
-                                        margin: '1px 0 0 10px',
-                                        fontSize: '12px',
-                                        visibility: isSubmit && name === '' ? 'visible' : 'hidden'
-                                    }}
-                                >
-                                    {t('COMMON.TEXTFIELD.REQUIRED')}
-                                </Typography>
-                            </Box>
-                            <Box>
-                                <TextField
-                                    variant='outlined'
-                                    label={t('COMMON.BENEFIT.CONTRIBUTION')}
-                                    fullWidth
-                                    type='number'
-                                    {...(isSubmit && benefitContribution <= 0 && { error: true })}
-                                    sx={{
-                                        color: 'var(--text-color)',
-                                        '& fieldset': {
-                                            borderRadius: '8px',
-                                            color: 'var(--text-color)',
-                                            borderColor: 'var(--border-color)'
-                                        },
-                                        '& .MuiInputBase-root': { paddingRight: '0px' },
-                                        '& .MuiInputBase-input': {
-                                            color: 'var(--text-color)',
-                                            fontSize: '16px'
-                                        },
-                                        '& .MuiOutlinedInput-root:hover fieldset': {
-                                            borderColor: 'var(--hover-color)'
-                                        },
-                                        '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                            borderColor: 'var(--selected-color)'
-                                        },
-                                        '& .MuiInputLabel-root': {
-                                            color: 'var(--text-label-color)'
-                                        },
-                                        '& .MuiInputLabel-root.Mui-focused': {
-                                            color: 'var(--selected-color)'
-                                        }
-                                    }}
-                                    value={benefitContribution}
-                                    onChange={e => setBenefitContribution(Number(e.target.value))}
-                                />
-                                <Typography
-                                    sx={{
-                                        color: 'red',
-                                        margin: '1px 0 0 10px',
-                                        fontSize: '12px',
-                                        visibility: isSubmit && benefitContribution <= 0 ? 'visible' : 'hidden'
-                                    }}
-                                >
-                                    {t('COMMON.TEXTFIELD.REQUIRED')}
-                                </Typography>
-                            </Box>
-                            <Box>
-                                <TextField
-                                    variant='outlined'
-                                    label={t('COMMON.BENEFIT.TYPE_ID')}
-                                    fullWidth
-                                    type='number'
-                                    {...(isSubmit && benefitTypeId <= 0 && { error: true })}
-                                    sx={{
-                                        color: 'var(--text-color)',
-                                        '& fieldset': {
-                                            borderRadius: '8px',
-                                            color: 'var(--text-color)',
-                                            borderColor: 'var(--border-color)'
-                                        },
-                                        '& .MuiInputBase-root': { paddingRight: '0px' },
-                                        '& .MuiInputBase-input': {
-                                            color: 'var(--text-color)',
-                                            fontSize: '16px'
-                                        },
-                                        '& .MuiOutlinedInput-root:hover fieldset': {
-                                            borderColor: 'var(--hover-color)'
-                                        },
-                                        '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                            borderColor: 'var(--selected-color)'
-                                        },
-                                        '& .MuiInputLabel-root': {
-                                            color: 'var(--text-label-color)'
-                                        },
-                                        '& .MuiInputLabel-root.Mui-focused': {
-                                            color: 'var(--selected-color)'
-                                        }
-                                    }}
-                                    value={benefitTypeId}
-                                    onChange={e => setBenefitTypeId(Number(e.target.value))}
-                                />
-                                <Typography
-                                    sx={{
-                                        color: 'red',
-                                        margin: '1px 0 0 10px',
-                                        fontSize: '12px',
-                                        visibility: isSubmit && benefitTypeId <= 0 ? 'visible' : 'hidden'
-                                    }}
-                                >
-                                    {t('COMMON.TEXTFIELD.REQUIRED')}
-                                </Typography>
-                            </Box>
-                        </Box>
-                        <Box
-                            sx={{
-                                padding: '16px 24px',
-                                borderTop: '2px solid var(--border-color)',
-                                display: 'flex',
-                                justifyContent: 'flex-end',
-                                gap: '12px',
-                                backgroundColor: 'var(--background-color)'
-                            }}
-                        >
-                            <Button
-                                variant='contained'
-                                onClick={handleSave}
-                                sx={{
-                                    height: '44px',
-                                    backgroundColor: 'var(--button-color)',
-                                    padding: '0px 24px',
-                                    '&:hover': {
-                                        backgroundColor: 'var(--hover-button-color)'
-                                    },
-                                    fontSize: '16px',
-                                    fontWeight: 'bold',
-                                    textTransform: 'none'
-                                }}
-                            >
-                                Lưu
-                            </Button>
-
-                            <Button
-                                variant='contained'
-                                onClick={handleCloseCreateDialog}
-                                sx={{
-                                    height: '44px',
-                                    backgroundColor: 'var(--button-color)',
-                                    padding: '0px 24px',
-                                    '&:hover': {
-                                        backgroundColor: 'var(--hover-button-color)'
-                                    },
-                                    fontSize: '16px',
-                                    fontWeight: 'bold',
-                                    textTransform: 'none'
-                                }}
-                            >
-                                Hủy
-                            </Button>
-                        </Box>
-                    </Box>
-                </Box>
-            )}
         </Box>
     )
 }
