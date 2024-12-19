@@ -1,6 +1,6 @@
 'use client'
 import CustomTabs from '@/components/tabs/tabs'
-import { Box, Divider, Typography } from '@mui/material'
+import { Box, Button, Divider, Typography } from '@mui/material'
 import React from 'react'
 import ReactECharts from 'echarts-for-react'
 import { useTranslation } from 'react-i18next'
@@ -9,10 +9,12 @@ import { ISalaryGetAll } from '@/models/Salary'
 import { ProgressClock } from 'mdi-material-ui'
 import { Heart, Users, WalletIcon } from 'lucide-react'
 import { ChartNoAxesColumn, ChartNoAxesCombined, Wallet } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 function SalaryPage() {
     const { t } = useTranslation('common')
     const { data: responseData, isFetching, refetch } = useGetAllSalariesQuery()
+    const router = useRouter()
 
     const salaryData = responseData?.Data as ISalaryGetAll[]
     const salaryCycles = [
@@ -254,7 +256,26 @@ function SalaryPage() {
                 }}
             >
                 {salaryCycles.map((cycle, index) => (
-                    <Box key={index} sx={{ padding: '10px 20px', border: '1px solid lightgray', borderRadius: '5px' }}>
+                    <Box
+                        key={index}
+                        sx={{
+                            padding: '10px 20px',
+                            border: '1px solid lightgray',
+                            borderRadius: '5px',
+                            cursor: 'pointer', // Thay đổi con trỏ khi hover
+                            backgroundColor: 'var(--background-color)',
+                            '&:hover': {
+                                backgroundColor: 'var(--hover-button-color)'
+                            },
+                            '&:active': {
+                                // Thêm hiệu ứng gợn sóng khi nhấn
+                                transform: 'scale(0.95)', // Giảm kích thước một chút
+                                transition: 'transform 0.1s ease' // Thêm hiệu ứng chuyển tiếp
+                            },
+                            boxShadow: '0 4px 8px rgba(0,0,0,0.2)'
+                        }}
+                        onClick={() => router.push('/admin/salary/getall-salary')}
+                    >
                         <Typography style={{ fontWeight: 'bold', fontSize: '20px', color: 'blue' }}>{cycle}</Typography>
                         <Typography style={{ fontSize: '16px', marginTop: '10px', color: 'var(--text-color)' }}>
                             {cycle}

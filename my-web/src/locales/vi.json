@@ -225,15 +225,20 @@
             }
         },
         "HOLIDAY": {
-            "NAME": "Tên ngày lễ*",
-            "START_DATE": "Ngày bắt đầu*",
-            "END_DATE": "Ngày kết thúc*",
+            "NAME": "Tên ngày lễ",
+            "START_DATE": "Ngày bắt đầu",
+            "END_DATE": "Ngày kết thúc",
             "NOTE": "Mô tả ngày lễ",
             "ACTION": "Hành động",
             "TITLE": "Tạo một ngày nghỉ lễ",
             "FROM": "bắt đầu nghỉ từ ngày ",
             "TO": "đến ngày ",
-            "LEAVE": "leave on "
+            "LEAVE": "leave on ",
+            "ACTION_HOLIDAY": {
+                "NAME": "Tên ngày lễ*",
+                "START_DATE": "Ngày bắt đầu*",
+                "END_DATE": "Ngày kết thúc*"
+            }
         },
         "SALARY": {
             "NAME": "Tên nhân viên",
