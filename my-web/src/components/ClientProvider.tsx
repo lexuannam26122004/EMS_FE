@@ -9,11 +9,12 @@ import { ThemeProvider } from '@/components/theme-provider'
 
 export default function ClientProviders({ children }: { children: React.ReactNode }) {
     const pathname = usePathname()
-    const isLoginPage = pathname === '/login' || '/user'
+    const isLoginPage = pathname === '/login'
+    const isUserPage = pathname === '/user'
     return (
         <Provider store={store}>
             <ThemeProvider enableSystem attribute='class' defaultTheme='system' disableTransitionOnChange>
-                {isLoginPage ? (
+                {isLoginPage || isUserPage ? (
                     <main>{children}</main>
                 ) : (
                     <Layout>
