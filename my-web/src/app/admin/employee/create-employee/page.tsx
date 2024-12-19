@@ -554,7 +554,7 @@ const CreateEmployeePage = () => {
                             <Select
                                 value={departmentId}
                                 onChange={e => setDepartmentId(e.target.value)}
-                                label='Phòng ban*'
+                                label={t('COMMON.EMPLOYEE.DEPARTMENTNAME') + '*'}
                                 MenuProps={{
                                     PaperProps: {
                                         elevation: 0,
@@ -809,7 +809,7 @@ const CreateEmployeePage = () => {
                     >
                         <InputLabel id='roles-label'>{t('COMMON.EMPLOYEE.ROLES') + '*'}</InputLabel>
                         <Select
-                            label={'Chức vụ*'}
+                            label={t('COMMON.EMPLOYEE.ROLES') + '*'}
                             multiple
                             value={roles}
                             onChange={event => setRoles(event.target.value as string[])}
@@ -939,7 +939,7 @@ const CreateEmployeePage = () => {
                                 labelId='gender-label'
                                 id='gender'
                                 value={gender}
-                                label='Giới tính*'
+                                label={t('COMMON.EMPLOYEE.GENDER') + '*'}
                                 onChange={e => setGender(e.target.value)}
                                 MenuProps={{
                                     PaperProps: {
