@@ -784,9 +784,13 @@ function HolidayPage() {
                         alignItems: 'center',
                         justifyItems: 'center',
                         backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                        zIndex: 1000
+                        zIndex: 1000,
+                        height: '100vh'
                     }}
                 >
+                    {/* <DateRangePicker>
+                        
+                    </DateRangePicker> */}
                     <Box //box nội dung
                         sx={{
                             width: '500px',
@@ -821,7 +825,7 @@ function HolidayPage() {
                             <Box>
                                 <TextField
                                     variant='outlined'
-                                    label={t('COMMON.HOLIDAY.NAME')}
+                                    label={t('COMMON.HOLIDAY.ACTION_HOLIDAY.NAME')}
                                     name='name'
                                     fullWidth
                                     {...(isSubmit && name === '' && { error: true })}
@@ -867,7 +871,7 @@ function HolidayPage() {
                             <Box>
                                 <TextField
                                     variant='outlined'
-                                    label={t('COMMON.HOLIDAY.START_DATE')}
+                                    label={t('COMMON.HOLIDAY.ACTION_HOLIDAY.START_DATE')}
                                     fullWidth
                                     type='date'
                                     InputLabelProps={{ shrink: true }}
@@ -914,7 +918,7 @@ function HolidayPage() {
                             <Box>
                                 <TextField
                                     variant='outlined'
-                                    label={t('COMMON.HOLIDAY.START_DATE')}
+                                    label={t('COMMON.HOLIDAY.ACTION_HOLIDAY.END_DATE')}
                                     fullWidth
                                     type='date'
                                     InputLabelProps={{ shrink: true }}

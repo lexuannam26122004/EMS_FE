@@ -226,15 +226,20 @@
             }
         },
         "HOLIDAY": {
-            "NAME": "Name*",
-            "START_DATE": "Start Date*",
-            "END_DATE": "End Date*",
+            "NAME": "Name",
+            "START_DATE": "Start Date",
+            "END_DATE": "End Date",
             "NOTE": "Note",
             "ACTION": "Action",
             "TITLE": "Create a New Holiday",
             "FROM": "leave starts from ",
             "TO": "to ",
-            "LEAVE": "leave on "
+            "LEAVE": "leave on ",
+            "ACTION_HOLIDAY": {
+                "NAME": "Name*",
+                "START_DATE": "Start Date*",
+                "END_DATE": "End Date*"
+            }
         },
         "SALARY": {
             "NAME": "Name",
