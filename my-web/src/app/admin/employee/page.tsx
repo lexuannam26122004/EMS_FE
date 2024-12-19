@@ -485,7 +485,9 @@ const EmployeeTable: React.FC = () => {
                                             position: 'sticky',
                                             left: 0,
                                             zIndex: 1,
-                                            backgroundColor: 'var(--background-item)'
+                                            clipPath: 'inset(0px 0px 1px 0px)',
+                                            backdropFilter: 'blur(250px)', 
+                                            WebkitBackdropFilter: 'blur(250px)',  
                                         }}
                                     >
                                         <Checkbox
@@ -504,7 +506,9 @@ const EmployeeTable: React.FC = () => {
                                             position: 'sticky',
                                             left: 60,
                                             zIndex: 1,
-                                            backgroundColor: 'var(--background-item)'
+                                            clipPath: 'inset(0px 0px 1px 0px)',
+                                            backdropFilter: 'blur(3000px)', 
+                                            WebkitBackdropFilter: 'blur(3000px)',    
                                         }}
                                     >
                                         <Typography
@@ -527,7 +531,9 @@ const EmployeeTable: React.FC = () => {
                                             position: 'sticky',
                                             left: 145,
                                             zIndex: 1,
-                                            backgroundColor: 'var(--background-item)'
+                                            clipPath: 'inset(0px 0px 1px 0px)',
+                                            backdropFilter: 'blur(3000px)', 
+                                            WebkitBackdropFilter: 'blur(3000px)',    
                                         }}
                                     >
                                         <Typography
@@ -710,7 +716,9 @@ const EmployeeTable: React.FC = () => {
                                             position: 'sticky',
                                             right: 0,
                                             zIndex: 1,
-                                            backgroundColor: 'var(--background-item)'
+                                            clipPath: 'inset(0px 0px 1px 0px)',
+                                            backdropFilter: 'blur(3000px)', 
+                                            WebkitBackdropFilter: 'blur(3000px)',    
                                         }}
                                     >
                                         <Box
