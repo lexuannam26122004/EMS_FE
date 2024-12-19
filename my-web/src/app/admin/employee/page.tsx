@@ -402,7 +402,7 @@ const EmployeeTable: React.FC = () => {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            FullName
+                                            {t('COMMON.EMPLOYEE.FULLNAME')}
                                         </Typography>
                                     </TableSortLabel>
                                 </TableCell>
@@ -441,7 +441,7 @@ const EmployeeTable: React.FC = () => {
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                {column}
+                                               {t(`COMMON.EMPLOYEE.${column.toUpperCase()}`)}
                                             </Typography>
                                         </TableSortLabel>
                                     </TableCell>
@@ -486,8 +486,8 @@ const EmployeeTable: React.FC = () => {
                                             left: 0,
                                             zIndex: 1,
                                             clipPath: 'inset(0px 0px 1px 0px)',
-                                            backdropFilter: 'blur(250px)', 
-                                            WebkitBackdropFilter: 'blur(250px)',  
+                                            backdropFilter: 'blur(250px)',
+                                            WebkitBackdropFilter: 'blur(250px)'
                                         }}
                                     >
                                         <Checkbox
@@ -507,8 +507,8 @@ const EmployeeTable: React.FC = () => {
                                             left: 60,
                                             zIndex: 1,
                                             clipPath: 'inset(0px 0px 1px 0px)',
-                                            backdropFilter: 'blur(3000px)', 
-                                            WebkitBackdropFilter: 'blur(3000px)',    
+                                            backdropFilter: 'blur(3000px)',
+                                            WebkitBackdropFilter: 'blur(3000px)'
                                         }}
                                     >
                                         <Typography
@@ -532,8 +532,8 @@ const EmployeeTable: React.FC = () => {
                                             left: 145,
                                             zIndex: 1,
                                             clipPath: 'inset(0px 0px 1px 0px)',
-                                            backdropFilter: 'blur(3000px)', 
-                                            WebkitBackdropFilter: 'blur(3000px)',    
+                                            backdropFilter: 'blur(3000px)',
+                                            WebkitBackdropFilter: 'blur(3000px)'
                                         }}
                                     >
                                         <Typography
@@ -717,8 +717,8 @@ const EmployeeTable: React.FC = () => {
                                             right: 0,
                                             zIndex: 1,
                                             clipPath: 'inset(0px 0px 1px 0px)',
-                                            backdropFilter: 'blur(3000px)', 
-                                            WebkitBackdropFilter: 'blur(3000px)',    
+                                            backdropFilter: 'blur(3000px)',
+                                            WebkitBackdropFilter: 'blur(3000px)'
                                         }}
                                     >
                                         <Box

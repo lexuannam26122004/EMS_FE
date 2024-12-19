@@ -168,13 +168,13 @@ const UpdateEmployeePage = () => {
 
     useEffect(() => {
         if (isSuccess === true) {
-            toast(t('Cập nhật nhân viên thành công'), 'success')
+            toast(t('COMMON.EMPLOYEE.UPDATE.SUCCESS.UPDATE_EMPLOYEE'), 'success')
             refetch()
             reset()
             fetchUserById()
         }
         if (isError === true) {
-            toast(t('Cập nhật nhân viên thất bại'), 'error')
+            toast(t('COMMON.EMPLOYEE.UPDATE.ERROR.UPDATE_EMPLOYEE'), 'error')
             reset()
             fetchUserById()
         }
@@ -431,7 +431,7 @@ const UpdateEmployeePage = () => {
                 }}
             >
                 <Typography sx={{ fontWeight: 'bold', fontSize: '22px', color: 'var(--text-color)' }}>
-                    {'Update a Employee'}
+                    {t('COMMON.EMPLOYEE.UPDATE.UPDATE_EMPLOYEE')}
                 </Typography>
                 <Box
                     sx={{
@@ -448,7 +448,7 @@ const UpdateEmployeePage = () => {
                     >
                         <TextField
                             variant='outlined'
-                            label={'Họ và tên*'}
+                            label={t('COMMON.EMPLOYEE.FULLNAME') + '*'}
                             fullWidth
                             {...(isSubmit && fullName === '' && { error: true })}
                             sx={{
@@ -558,7 +558,7 @@ const UpdateEmployeePage = () => {
                                 }
                             }}
                         >
-                            <InputLabel>Phòng ban*</InputLabel>
+                            <InputLabel>{t('COMMON.EMPLOYEE.DEPARTMENTNAME') + '*'}</InputLabel>
                             <Select
                                 value={departmentId}
                                 onChange={e => setDepartmentId(e.target.value)}
@@ -629,7 +629,7 @@ const UpdateEmployeePage = () => {
                     >
                         <TextField
                             variant='outlined'
-                            label={'Tên tài khoản*'}
+                            label={t('COMMON.EMPLOYEE.USERNAME') + '*'}
                             fullWidth
                             {...(isSubmit && (userName === '' || isExistingUser) && { error: true })}
                             sx={{
@@ -694,7 +694,7 @@ const UpdateEmployeePage = () => {
                             {isSubmit && userName === ''
                                 ? t('COMMON.TEXTFIELD.REQUIRED')
                                 : isExistingUser
-                                  ? t('Tên tài khoản này đã tồn tại')
+                                  ? t('COMMON.EMPLOYEE.CREATE.ERROR.ACCOUNT_EXISTS')
                                   : 'Hợp lệ'}
                         </Typography>
                     </Box>
@@ -752,7 +752,7 @@ const UpdateEmployeePage = () => {
                                 }
                             }}
                         >
-                            <InputLabel id='roles-label'>Chức vụ*</InputLabel>
+                            <InputLabel id='roles-label'>{t('COMMON.EMPLOYEE.ROLES') + '*'}</InputLabel>
                             <Select
                                 label={'Chức vụ*'}
                                 multiple
@@ -879,7 +879,7 @@ const UpdateEmployeePage = () => {
                                 }
                             }}
                         >
-                            <InputLabel>Giới tính*</InputLabel>
+                            <InputLabel>{t('COMMON.EMPLOYEE.GENDER') + '*'}</InputLabel>
 
                             <Select
                                 labelId='gender-label'
@@ -936,7 +936,7 @@ const UpdateEmployeePage = () => {
                     >
                         <TextField
                             variant='outlined'
-                            label={t('Địa chỉ*')}
+                            label={t('COMMON.EMPLOYEE.ADDRESS') + '*'}
                             fullWidth
                             {...(isSubmit && address === '' && { error: true })}
                             sx={{
@@ -1009,7 +1009,7 @@ const UpdateEmployeePage = () => {
                     >
                         <TextField
                             variant='outlined'
-                            label={'Ngày sinh*'}
+                            label={t('COMMON.EMPLOYEE.BIRTHDAY') + '*'}
                             type='date'
                             fullWidth
                             {...(isSubmit && birthday === '' && { error: true })}
@@ -1075,7 +1075,7 @@ const UpdateEmployeePage = () => {
                     >
                         <TextField
                             variant='outlined'
-                            label={'Ngày vào làm*'}
+                            label={t('COMMON.EMPLOYEE.STARTDATE') + '*'}
                             fullWidth
                             {...(isSubmit && startDateWork === '' && { error: true })}
                             type='date'
@@ -1149,7 +1149,7 @@ const UpdateEmployeePage = () => {
                     >
                         <TextField
                             variant='outlined'
-                            label={'Email*'}
+                            label={t('COMMON.EMPLOYEE.EMAIL') + '*'}
                             fullWidth
                             {...(isSubmit && (email === '' || isExistingEmail) && { error: true })}
                             type='email'
@@ -1215,7 +1215,7 @@ const UpdateEmployeePage = () => {
                             {isSubmit && email === ''
                                 ? t('COMMON.TEXTFIELD.REQUIRED')
                                 : isExistingEmail
-                                  ? t('Email đã tồn tại')
+                                  ? t('COMMON.EMPLOYEE.CREATE.ERROR.EMAIL_EXISTS')
                                   : 'Hợp lệ'}
                         </Typography>
                     </Box>
@@ -1227,7 +1227,7 @@ const UpdateEmployeePage = () => {
                     >
                         <TextField
                             variant='outlined'
-                            label={'Số điện thoại*'}
+                            label={t('COMMON.EMPLOYEE.PHONENUMBER') + '*'}
                             fullWidth
                             {...(isSubmit && phoneNumber === '' && { error: true })}
                             sx={{
@@ -1294,7 +1294,7 @@ const UpdateEmployeePage = () => {
 
                 <TextField
                     variant='outlined'
-                    label={t('Note')}
+                    label={t('COMMON.EMPLOYEE.NOTE')}
                     id='fullWidth'
                     fullWidth
                     multiline
@@ -1367,7 +1367,7 @@ const UpdateEmployeePage = () => {
                             window.location.reload()
                         }}
                     >
-                        {t('Làm mới')}
+                        {t('COMMON.BUTTON.REFRESH')}
                     </Button>
 
                     <LoadingButton
