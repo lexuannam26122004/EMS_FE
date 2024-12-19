@@ -315,7 +315,14 @@ const EmployeeTable: React.FC = () => {
                             <TableRow sx={{ backgroundColor: 'var(--header-color-table)' }}>
                                 <TableCell
                                     padding='checkbox'
-                                    sx={{ borderColor: 'var(--border-color)', paddingLeft: '12px' }}
+                                    sx={{
+                                        borderColor: 'var(--border-color)',
+                                        paddingLeft: '12px',
+                                        backgroundColor: 'var(--header-color-table)',
+                                        position: 'sticky',
+                                        left: 0,
+                                        zIndex: 2
+                                    }}
                                 >
                                     <Checkbox
                                         indeterminate={selected.length > 0 && selected.length < users.length}
@@ -324,11 +331,21 @@ const EmployeeTable: React.FC = () => {
                                         }
                                         onChange={handleSelectAllClick}
                                         sx={{
-                                            color: 'var(--text-color)'
+                                            color: 'var(--text-color)',
+                                            width: '48px'
                                         }}
                                     />
                                 </TableCell>
-                                <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+
+                                <TableCell
+                                    sx={{
+                                        borderColor: 'var(--border-color)',
+                                        backgroundColor: 'var(--header-color-table)',
+                                        position: 'sticky',
+                                        left: 60,
+                                        zIndex: 1
+                                    }}
+                                >
                                     <TableSortLabel
                                         active={sortConfig.key === 'EmployeeId'}
                                         direction={sortConfig.key === 'EmployeeId' ? sortConfig.direction : 'asc'}
@@ -355,8 +372,42 @@ const EmployeeTable: React.FC = () => {
                                     </TableSortLabel>
                                 </TableCell>
 
+                                <TableCell
+                                    sx={{
+                                        borderColor: 'var(--border-color)',
+                                        backgroundColor: 'var(--header-color-table)',
+                                        position: 'sticky',
+                                        left: 145,
+                                        zIndex: 1
+                                    }}
+                                >
+                                    <TableSortLabel
+                                        active={sortConfig.key === 'FullName'}
+                                        direction={sortConfig.key === 'FullName' ? sortConfig.direction : 'asc'}
+                                        onClick={() => handleSort('FullName' as keyof IAspNetUserGetAll)}
+                                        sx={{
+                                            '& .MuiTableSortLabel-icon': {
+                                                color: 'var(--text-color) !important'
+                                            }
+                                        }}
+                                    >
+                                        <Typography
+                                            sx={{
+                                                fontWeight: 'bold',
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                overflow: 'hidden',
+                                                maxWidth: '260px',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            FullName
+                                        </Typography>
+                                    </TableSortLabel>
+                                </TableCell>
+
                                 {[
-                                    'FullName',
                                     'Email',
                                     'PhoneNumber',
                                     'DepartmentName',
@@ -400,7 +451,11 @@ const EmployeeTable: React.FC = () => {
                                     sx={{
                                         borderColor: 'var(--border-color)',
                                         padding: '0px 9.5px 0px 0px',
-                                        width: '146px'
+                                        width: '146px',
+                                        position: 'sticky',
+                                        right: 0,
+                                        zIndex: 1,
+                                        backgroundColor: 'var(--header-color-table)'
                                     }}
                                 >
                                     <Typography
@@ -424,18 +479,34 @@ const EmployeeTable: React.FC = () => {
                                 <TableRow key={user.Id} selected={isSelected(user.Id)}>
                                     <TableCell
                                         padding='checkbox'
-                                        sx={{ borderColor: 'var(--border-color)', paddingLeft: '12px' }}
+                                        sx={{
+                                            borderColor: 'var(--border-color)',
+                                            paddingLeft: '12px',
+                                            position: 'sticky',
+                                            left: 0,
+                                            zIndex: 1,
+                                            backgroundColor: 'var(--background-item)'
+                                        }}
                                     >
                                         <Checkbox
                                             checked={isSelected(user.Id)}
                                             onChange={() => handleCheckboxClick(user.Id)}
                                             sx={{
-                                                color: 'var(--text-color)'
+                                                color: 'var(--text-color)',
+                                                width: '48px'
                                             }}
                                         />
                                     </TableCell>
 
-                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                    <TableCell
+                                        sx={{
+                                            borderColor: 'var(--border-color)',
+                                            position: 'sticky',
+                                            left: 60,
+                                            zIndex: 1,
+                                            backgroundColor: 'var(--background-item)'
+                                        }}
+                                    >
                                         <Typography
                                             sx={{
                                                 color: 'var(--text-color)',
@@ -450,7 +521,15 @@ const EmployeeTable: React.FC = () => {
                                         </Typography>
                                     </TableCell>
 
-                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                    <TableCell
+                                        sx={{
+                                            borderColor: 'var(--border-color)',
+                                            position: 'sticky',
+                                            left: 145,
+                                            zIndex: 1,
+                                            backgroundColor: 'var(--background-item)'
+                                        }}
+                                    >
                                         <Typography
                                             sx={{
                                                 color: 'var(--text-color)',
@@ -627,7 +706,11 @@ const EmployeeTable: React.FC = () => {
                                         sx={{
                                             padding: '0px 9.5px 0px 0px',
                                             borderColor: 'var(--border-color)',
-                                            width: '146px'
+                                            width: '146px',
+                                            position: 'sticky',
+                                            right: 0,
+                                            zIndex: 1,
+                                            backgroundColor: 'var(--background-item)'
                                         }}
                                     >
                                         <Box
