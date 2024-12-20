@@ -46,9 +46,9 @@ const EmployeeTable: React.FC = () => {
     const [rowsPerPage, setRowsPerPage] = useState('10')
     const [currentPage, setCurrentPage] = useState<number>(1)
     const [sortConfig, setSortConfig] = useState<{
-        key: keyof ITimeOffSearch | 'EmployeeId'
+        key: keyof ITimeOffSearch | 'Id'
         direction: 'asc' | 'desc'
-    }>({ key: 'EmployeeId', direction: 'asc' })
+    }>({ key: 'Id', direction: 'asc' })
     const { t } = useTranslation('common')
 
     const [changeTimeOff] = useChangeStatusTimeOffsMutation()
@@ -77,11 +77,12 @@ const EmployeeTable: React.FC = () => {
         user =>
             user.Id?.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.FullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.UserId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.EmployeeId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.Reason?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            (user.Date && new Date(user.Date).toLocaleDateString().toLowerCase().includes(searchTerm.toLowerCase())) ||
-            (user.CreatedDate &&
-                new Date(user.CreatedDate).toLocaleDateString().toLowerCase().includes(searchTerm.toLowerCase()))
+            (user.StartDate &&
+                new Date(user.StartDate).toLocaleDateString().toLowerCase().includes(searchTerm.toLowerCase())) ||
+            (user.EndDate &&
+                new Date(user.EndDate).toLocaleDateString().toLowerCase().includes(searchTerm.toLowerCase()))
     )
 
     const isSelected = (id: number) => selected.includes(id)
@@ -106,7 +107,7 @@ const EmployeeTable: React.FC = () => {
     const totalRecords = sortedUsers.length
     const paginatedUsers = sortedUsers.slice((currentPage - 1) * Number(rowsPerPage), currentPage * Number(rowsPerPage))
 
-    const handleSort = (key: keyof ITimeOffSearch | 'EmployeeId') => {
+    const handleSort = (key: keyof ITimeOffSearch | 'Id') => {
         setSortConfig(prev => ({
             key,
             direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc'
@@ -326,9 +327,9 @@ const EmployeeTable: React.FC = () => {
                                 </TableCell>
                                 <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                     <TableSortLabel
-                                        active={sortConfig.key === 'EmployeeId'}
-                                        direction={sortConfig.key === 'EmployeeId' ? sortConfig.direction : 'asc'}
-                                        onClick={() => handleSort('EmployeeId')}
+                                        active={sortConfig.key === 'Id'}
+                                        direction={sortConfig.key === 'Id' ? sortConfig.direction : 'asc'}
+                                        onClick={() => handleSort('Id')}
                                         sx={{
                                             '& .MuiTableSortLabel-icon': {
                                                 color: 'var(--text-color) !important'
@@ -351,50 +352,36 @@ const EmployeeTable: React.FC = () => {
                                     </TableSortLabel>
                                 </TableCell>
 
-                                <TableCell sx={{ borderColor: 'var(--border-color)' }}>
-                                    <Typography
-                                        sx={{
-                                            fontWeight: 'bold',
-                                            color: 'var(--text-color)',
-                                            fontSize: '16px',
-                                            overflow: 'hidden',
-                                            maxWidth: '260px',
-                                            textOverflow: 'ellipsis',
-                                            whiteSpace: 'nowrap'
-                                        }}
-                                    >
-                                        Avatar
-                                    </Typography>
-                                </TableCell>
-
-                                {['FullName', 'UserId', 'Reason', 'Date', 'CreatedDate'].map((column, index) => (
-                                    <TableCell key={index} sx={{ borderColor: 'var(--border-color)' }}>
-                                        <TableSortLabel
-                                            active={sortConfig.key === column}
-                                            direction={sortConfig.key === column ? sortConfig.direction : 'asc'}
-                                            onClick={() => handleSort(column as keyof ITimeOffSearch)}
-                                            sx={{
-                                                '& .MuiTableSortLabel-icon': {
-                                                    color: 'var(--text-color) !important'
-                                                }
-                                            }}
-                                        >
-                                            <Typography
+                                {['FullName', 'EmployeeId', 'Reason', 'StartDate', 'EndDate', 'Content'].map(
+                                    (column, index) => (
+                                        <TableCell key={index} sx={{ borderColor: 'var(--border-color)' }}>
+                                            <TableSortLabel
+                                                active={sortConfig.key === column}
+                                                direction={sortConfig.key === column ? sortConfig.direction : 'asc'}
+                                                onClick={() => handleSort(column as keyof ITimeOffSearch)}
                                                 sx={{
-                                                    fontWeight: 'bold',
-                                                    color: 'var(--text-color)',
-                                                    fontSize: '16px',
-                                                    overflow: 'hidden',
-                                                    maxWidth: '260px',
-                                                    textOverflow: 'ellipsis',
-                                                    whiteSpace: 'nowrap'
+                                                    '& .MuiTableSortLabel-icon': {
+                                                        color: 'var(--text-color) !important'
+                                                    }
                                                 }}
                                             >
-                                                {column}
-                                            </Typography>
-                                        </TableSortLabel>
-                                    </TableCell>
-                                ))}
+                                                <Typography
+                                                    sx={{
+                                                        fontWeight: 'bold',
+                                                        color: 'var(--text-color)',
+                                                        fontSize: '16px',
+                                                        overflow: 'hidden',
+                                                        maxWidth: '260px',
+                                                        textOverflow: 'ellipsis',
+                                                        whiteSpace: 'nowrap'
+                                                    }}
+                                                >
+                                                    {column}
+                                                </Typography>
+                                            </TableSortLabel>
+                                        </TableCell>
+                                    )
+                                )}
 
                                 <TableCell
                                     sx={{
@@ -446,7 +433,7 @@ const EmployeeTable: React.FC = () => {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {user.EmployeeId}
+                                            {user.Id}
                                         </Typography>
                                     </TableCell>
 
@@ -487,7 +474,7 @@ const EmployeeTable: React.FC = () => {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {user.UserId}
+                                            {user.EmployeeId}
                                         </Typography>
                                     </TableCell>
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
@@ -515,8 +502,8 @@ const EmployeeTable: React.FC = () => {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {user.Date && !isNaN(new Date(user.Date).getTime())
-                                                ? new Date(user.Date).toLocaleDateString()
+                                            {user.StartDate && !isNaN(new Date(user.StartDate).getTime())
+                                                ? new Date(user.StartDate).toLocaleDateString()
                                                 : 'N/A'}
                                         </Typography>
                                     </TableCell>
@@ -532,9 +519,24 @@ const EmployeeTable: React.FC = () => {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {user.CreatedDate && !isNaN(new Date(user.CreatedDate).getTime())
-                                                ? new Date(user.CreatedDate).toLocaleDateString()
+                                            {user.EndDate && !isNaN(new Date(user.EndDate).getTime())
+                                                ? new Date(user.EndDate).toLocaleDateString()
                                                 : 'N/A'}
+                                        </Typography>
+                                    </TableCell>
+
+                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                        <Typography
+                                            sx={{
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                maxWidth: '260px',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            {user.Content || 'N/A'}
                                         </Typography>
                                     </TableCell>
 
