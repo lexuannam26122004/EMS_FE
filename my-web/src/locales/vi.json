@@ -52,6 +52,7 @@
             }
         },
         "BUTTON": {
+            "REFRESH": "Làm mới" ,
             "SAVE": "Lưu",
             "SAVE_AND_CLOSE": "Lưu và Đóng",
             "CANCEL": "Hủy",
@@ -225,15 +226,20 @@
             }
         },
         "HOLIDAY": {
-            "NAME": "Tên ngày lễ*",
-            "START_DATE": "Ngày bắt đầu*",
-            "END_DATE": "Ngày kết thúc*",
+            "NAME": "Tên ngày lễ",
+            "START_DATE": "Ngày bắt đầu",
+            "END_DATE": "Ngày kết thúc",
             "NOTE": "Mô tả ngày lễ",
             "ACTION": "Hành động",
             "TITLE": "Tạo một ngày nghỉ lễ",
             "FROM": "bắt đầu nghỉ từ ngày ",
             "TO": "đến ngày ",
-            "LEAVE": "leave on "
+            "LEAVE": "leave on ",
+            "ACTION_HOLIDAY": {
+                "NAME": "Tên ngày lễ*",
+                "START_DATE": "Ngày bắt đầu*",
+                "END_DATE": "Ngày kết thúc*"
+            }
         },
         "SALARY": {
             "NAME": "Tên nhân viên",
@@ -320,6 +326,43 @@
             "EMPLOYEE_ID": "Mã nhân viên",
             "REJECT": "Từ chối",
             "ACCEPT": "Đồng ý"
+        },
+
+        "EMPLOYEE": {
+            "FULLNAME": "Họ và tên",
+            "EMAIL": "Email",
+            "PASSWORD": "Mật khẩu",
+            "NOTE": "Ghi chú",
+            "PHONENUMBER": "Số điện thoại",
+            "DEPARTMENTNAME": "Tên phòng ban",
+            "USERNAME": "Tên người dùng",
+            "ROLES": "Vai trò",
+            "BIRTHDAY": "Ngày sinh",
+            "GENDER": "Giới tính",
+            "ADDRESS": "Địa chỉ",
+            "CONTRACTNAME": "Tên hợp đồng",
+            "STARTDATE": "Ngày vào làm",
+            "CREATE": {
+                "CREATE_EMPLOYEE": "Thêm mới nhân viên",
+                "SUCCESS": {
+                    "CREATE_EMPLOYEE": "Tạo nhân viên thành công"
+                },
+                "ERROR": {
+                    "CREATE_EMPLOYEE": "Tạo nhân viên thất bại",
+                    "ACCOUNT_EXISTS": "Tên tài khoản này đã tồn tại",
+                    "PASSWORD_REQUIREMENTS": "Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ cái và số",
+                    "EMAIL_EXISTS": "Email đã tồn tại"
+                }
+            },
+            "UPDATE": {
+                "UPDATE_EMPLOYEE": "Cập nhật nhân viên",
+                "SUCCESS": {
+                    "UPDATE_EMPLOYEE": "Cập nhật nhân viên thành công"
+                },
+                "ERROR": {
+                    "UPDATE_EMPLOYEE": "Cập nhật nhân viên thất bại"
+                }
+            }
         }
     }
 }

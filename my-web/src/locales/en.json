@@ -52,6 +52,7 @@
             }
         },
         "BUTTON": {
+            "REFRESH": "Refresh", 
             "SAVE": "Save",
             "SAVE_AND_CLOSE": "Save and Close",
             "CANCEL": "Cancel",
@@ -226,15 +227,20 @@
             }
         },
         "HOLIDAY": {
-            "NAME": "Name*",
-            "START_DATE": "Start Date*",
-            "END_DATE": "End Date*",
+            "NAME": "Name",
+            "START_DATE": "Start Date",
+            "END_DATE": "End Date",
             "NOTE": "Note",
             "ACTION": "Action",
             "TITLE": "Create a New Holiday",
             "FROM": "leave starts from ",
             "TO": "to ",
-            "LEAVE": "leave on "
+            "LEAVE": "leave on ",
+            "ACTION_HOLIDAY": {
+                "NAME": "Name*",
+                "START_DATE": "Start Date*",
+                "END_DATE": "End Date*"
+            }
         },
         "SALARY": {
             "NAME": "Name",
@@ -369,6 +375,43 @@
             "EMPLOYEE_ID": "Employee ID",
             "REJECT": "Reject",
             "ACCEPT": "Accept"
+        },
+
+        "EMPLOYEE": {
+            "FULLNAME": "Full Name",
+            "EMAIL": "Email",
+            "PASSWORD": "Password",
+            "NOTE": "Note",
+            "PHONENUMBER": "Phone Number",
+            "DEPARTMENTNAME": "Department Name",
+            "USERNAME": "Username",
+            "ROLES": "Roles",
+            "BIRTHDAY": "Birthday",
+            "GENDER": "Gender",
+            "ADDRESS": "Address",
+            "CONTRACTNAME": "Contract Name",
+            "STARTDATE": "Start Date",
+            "CREATE": {
+                "CREATE_EMPLOYEE": "Add new employee",
+                "SUCCESS": {
+                    "CREATE_EMPLOYEE": "Employee created successfully"
+                },
+                "ERROR": {
+                    "CREATE_EMPLOYEE": "Employee creation failed",
+                    "ACCOUNT_EXISTS": "This username already exists",
+                    "PASSWORD_REQUIREMENTS": "Password must be at least 8 characters long, including letters and numbers",
+                    "EMAIL_EXISTS": "This email already exists"
+                }
+            },
+            "UPDATE": {
+                "UPDATE_EMPLOYEE": "Update employee",
+                "SUCCESS": {
+                    "UPDATE_EMPLOYEE": "Employee updated successfully"
+                },
+                "ERROR": {
+                    "UPDATE_EMPLOYEE": "Employee update failed"
+                }
+            }
         }
     }
 }

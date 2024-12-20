@@ -48,7 +48,7 @@ function GetAllSalaryPage() {
         pageNumber: 1
     })
 
-    const { data: responseData, isFetching, refetch } = useGetAllSalariesQuery()
+    const { data: responseData, isFetching, refetch } = useGetAllSalariesQuery(filter)
 
     const salaryData = responseData?.Data as ISalaryGetAll[]
     const totalRecords = responseData?.Data.TotalRecords as number

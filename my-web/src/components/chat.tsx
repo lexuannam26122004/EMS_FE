@@ -24,8 +24,8 @@ export default function ChatButton() {
                     onClick={() => handleToggleChat()}
                     sx={{
                         position: 'fixed',
-                        bottom: '1rem',
-                        right: '1rem',
+                        bottom: '0rem',
+                        right: '0.5rem',
                         zIndex: 1000,
                         animation: `${isAppear ? 'slideUp' : 'slideDown'} 0.5s ease forwards`
                     }}
