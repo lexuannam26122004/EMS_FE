@@ -14,6 +14,7 @@ export interface IBenefitGetAll extends IBenefitCreate {
 export interface IBenefitGetAllType {
     Id: number
     Name: string
+    Description: string | null
 }
 
 export interface IBenefitUpdate {
@@ -24,6 +25,12 @@ export interface IBenefitUpdate {
 }
 
 export interface IBenefitTypeCreate {
+    Name: string
+    Description: string
+}
+
+export interface IBenefitTypeUpdate {
+    Id: number
     Name: string
     Description: string
 }

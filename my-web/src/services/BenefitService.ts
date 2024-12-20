@@ -1,4 +1,4 @@
-import { IBenefitCreate, IBenefitGetAll, IBenefitGetAllType, IBenefitUpdate, IBenefitTypeCreate } from '@/models/Benefit'
+import { IBenefitCreate, IBenefitGetAll, IBenefitGetAllType, IBenefitUpdate, IBenefitTypeCreate, IBenefitTypeUpdate } from '@/models/Benefit'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
 
@@ -46,6 +46,14 @@ export const benefitApi = createApi({
             }),
             invalidatesTags: ['Benefit']
         }),
+        updateBenefitType: builder.mutation<void, IBenefitTypeUpdate>({
+            query: benefitType => ({
+                url: 'UpdateBenefitType',
+                method: 'PUT',
+                body: benefitType
+            }),
+            invalidatesTags: ['Benefit']
+        }),
         ChangeStatusManyBenefit: builder.mutation<void, string[]>({
             query: ids => ({
                 url: `ChangeStatusMany`,
@@ -77,6 +85,13 @@ export const benefitApi = createApi({
 
                 return `GetAllBenefitType?`
             }
+        }),
+        deleteBenefitType: builder.mutation<void, number>({
+            query: id => ({
+                url: `DeleteBenefitType/${id}`,
+                method: 'DELETE'
+            }),
+            invalidatesTags: ['Benefit']
         })
 
     })
@@ -89,5 +104,7 @@ export const {
     useUpdateBenefitMutation,
     useChangeStatusManyBenefitMutation,
     useGetAllBenefitsTypeQuery,
-    useCreateBenefitTypeMutation
+    useCreateBenefitTypeMutation,
+    useUpdateBenefitTypeMutation,
+    useDeleteBenefitTypeMutation
 } = benefitApi
