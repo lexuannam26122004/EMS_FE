@@ -82,6 +82,7 @@ body {
     --bg-button-accept-hover: #c4cdd5;
     --bg-button-reject-hover: #65352e;
     --error-color: #ff5630;
+    --hover-box-color: #03214772;
 }
 
 .light {
@@ -140,6 +141,7 @@ body {
     --bg-button-accept-hover: #454f5b;
     --bg-button-reject-hover: #ffc9bc;
     --error-color: #ff5630;
+    --hover-box-color: #57575709;
 }
 
 body {

@@ -303,14 +303,14 @@ function HolidayPage() {
                     backgroundColor: 'var(--background-color)'
                 }}
             >
-                <Box display='flex' alignItems='center' justifyContent='space-between' margin='20px'>
-                    <Box sx={{ position: 'relative', width: '100%' }}>
+                <Box display='flex' alignItems='center' justifyContent='space-between' margin='24px'>
+                    <Box sx={{ position: 'relative', width: '100%', height: '55px' }}>
                         <TextField
-                            fullWidth
                             id='location-search'
                             type='search'
                             placeholder={t('COMMON.SYS_CONFIGURATION.PLACEHOLDER_SEARCH')}
                             variant='outlined'
+                            required
                             value={keyword}
                             onChange={e => setKeyword(e.target.value)}
                             sx={{
@@ -318,46 +318,51 @@ function HolidayPage() {
                                 padding: '0px',
                                 width: '335px',
                                 '& fieldset': {
-                                    borderRadius: '8px',
+                                    borderRadius: '10px',
                                     borderColor: 'var(--border-color)'
                                 },
-                                '& .MuiInputBase-root': { paddingRight: '0px' },
+                                '& .MuiInputBase-root': { paddingLeft: '0px', paddingRight: '12px' },
                                 '& .MuiInputBase-input': {
-                                    padding: '11px 0 11px 14px',
+                                    padding: '15px 0px',
                                     color: 'var(--text-color)',
-                                    fontSize: '16px'
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1 // Đảm bảo opacity của placeholder không bị giảm
+                                    }
                                 },
                                 '& .MuiOutlinedInput-root:hover fieldset': {
-                                    borderColor: 'var(--hover-color)'
+                                    borderColor: 'var(--hover-field-color)'
                                 },
                                 '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                    borderColor: 'var(--selected-color)'
+                                    borderColor: 'var(--selected-field-color)'
                                 }
                             }}
                             onKeyDown={e => {
-                                if (e.key === 'Enter') {
-                                    e.preventDefault()
-                                    handleSearchKeyword()
-                                }
+                                handleSearchKeyword()
                             }}
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position='end'>
-                                        <IconButton
-                                            onClick={handleSearchKeyword}
+                            slotProps={{
+                                input: {
+                                    startAdornment: (
+                                        <InputAdornment
+                                            position='start'
                                             sx={{
-                                                backgroundColor: 'var(--button-color)',
-                                                borderRadius: '0 8px 8px 0',
-                                                padding: '10.5px',
-                                                '&:hover': {
-                                                    backgroundColor: 'var(--hover-button-color)'
-                                                }
+                                                mr: 0
                                             }}
                                         >
-                                            <SearchIcon sx={{ color: 'white' }} />
-                                        </IconButton>
-                                    </InputAdornment>
-                                )
+                                            <Box
+                                                sx={{
+                                                    height: '100%',
+                                                    color: '#a5bed4',
+                                                    padding: '10.5px',
+                                                    zIndex: 100
+                                                }}
+                                            >
+                                                <SearchIcon />
+                                            </Box>
+                                        </InputAdornment>
+                                    )
+                                }
                             }}
                         />
                     </Box>
@@ -375,11 +380,12 @@ function HolidayPage() {
                             variant='contained'
                             startIcon={<Trash2 />}
                             sx={{
-                                height: '44px',
+                                mr: '5px',
+                                height: '53px',
                                 visibility: countRows > 0 ? 'visible' : 'hidden',
                                 backgroundColor: 'var(--button-color)',
                                 width: 'auto',
-                                padding: '0px 24px',
+                                padding: '0px 30px',
                                 '&:hover': {
                                     backgroundColor: 'var(--hover-button-color)'
                                 },
@@ -397,10 +403,10 @@ function HolidayPage() {
                             variant='contained'
                             startIcon={<CirclePlus />}
                             sx={{
-                                height: '44px',
+                                height: '53px',
                                 backgroundColor: 'var(--button-color)',
                                 width: 'auto',
-                                padding: '0px 24px',
+                                padding: '0px 30px',
                                 '&:hover': {
                                     backgroundColor: 'var(--hover-button-color)'
                                 },
