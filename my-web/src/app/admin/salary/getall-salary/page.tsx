@@ -30,7 +30,7 @@ import { CirclePlus, EyeIcon, Pencil, SearchIcon, Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-function GetAllSalaryPage() {
+function GetAllSalaryPage(period: string) {
     const { t } = useTranslation('common')
     const [selected, setSelected] = useState<string[]>([])
     const [page, setPage] = useState(1)
@@ -48,7 +48,7 @@ function GetAllSalaryPage() {
         pageNumber: 1
     })
 
-    const { data: responseData, isFetching, refetch } = useGetAllSalariesQuery(filter)
+    const { data: responseData, isFetching, refetch } = useGetAllSalariesQuery(filter, period)
 
     const salaryData = responseData?.Data as ISalaryGetAll[]
     const totalRecords = responseData?.Data.TotalRecords as number
@@ -139,7 +139,7 @@ function GetAllSalaryPage() {
             sx={{
                 display: 'flex',
                 width: '100%',
-                height: '100vh',
+                height: '80vh',
                 overflow: 'hidden',
                 gap: '10px'
             }}
@@ -149,6 +149,7 @@ function GetAllSalaryPage() {
                     width: 'calc(100% / 5)',
                     scrollbarGutter: 'stable',
                     overflow: 'auto',
+                    backgroundColor: 'var(--background-color)',
                     '&::-webkit-scrollbar': {
                         width: '7px',
                         height: '7px',
@@ -160,14 +161,7 @@ function GetAllSalaryPage() {
                     }
                 }}
             >
-                <Paper
-                    sx={{
-                        width: '100%',
-                        overflow: 'hidden',
-                        borderRadius: '6px',
-                        backgroundColor: 'var(--background-color)'
-                    }}
-                ></Paper>
+                <Typography style={{ fontWeight: 'bold', fontSize: '20px', color: 'green' }}>cycle</Typography>
                 hello
             </Box>
             <Box

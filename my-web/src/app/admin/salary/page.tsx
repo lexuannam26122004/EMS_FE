@@ -13,10 +13,10 @@ import { useRouter } from 'next/navigation'
 
 function SalaryPage() {
     const { t } = useTranslation('common')
-    const { data: responseData, isFetching, refetch } = useGetAllSalariesQuery()
+    //const { data: responseData, isFetching, refetch } = useGetAllSalariesQuery()
     const router = useRouter()
 
-    const salaryData = responseData?.Data as ISalaryGetAll[]
+    //const salaryData = responseData?.Data as ISalaryGetAll[]
     const salaryCycles = [
         'Cycle 1',
         'Cycle 2',
@@ -98,7 +98,7 @@ function SalaryPage() {
                 <Box
                     sx={{
                         width: 'calc(100% / 9 * 5)',
-                        backgroundColor: 'var(--background-color)',
+                        backgroundColor: 'var(--background-item)',
                         border: '1px solid lightgray',
                         borderRadius: '5px',
                         gap: '10px'
@@ -115,7 +115,7 @@ function SalaryPage() {
                 <Box
                     sx={{
                         width: 'calc(100% / 9 * 4)',
-                        backgroundColor: 'var(--background-color)',
+                        backgroundColor: 'var(--background-item)',
                         border: '1px solid lightgray',
                         borderRadius: '5px',
                         gap: '10px',
@@ -248,6 +248,7 @@ function SalaryPage() {
                 <Typography sx={{ padding: '10px', fontSize: '16px' }}>{t('COMMON.SALARY.PAYROLL_CYCLE')}</Typography>
                 <Divider sx={{ flexGrow: 1, alignSelf: 'center', marginRight: '12px' }} />
             </Box>
+            <Button>hello</Button>
             <Box
                 sx={{
                     display: 'grid',
@@ -263,20 +264,22 @@ function SalaryPage() {
                             border: '1px solid lightgray',
                             borderRadius: '5px',
                             cursor: 'pointer', // Thay đổi con trỏ khi hover
-                            backgroundColor: 'var(--background-color)',
+                            backgroundColor: 'var(--background-item)',
                             '&:hover': {
-                                backgroundColor: 'var(--hover-button-color)'
+                                backgroundColor: 'var(--hover-box-color)'
                             },
                             '&:active': {
                                 // Thêm hiệu ứng gợn sóng khi nhấn
-                                transform: 'scale(0.95)', // Giảm kích thước một chút
+                                transform: 'scale(0.97)', // Giảm kích thước một chút
                                 transition: 'transform 0.1s ease' // Thêm hiệu ứng chuyển tiếp
                             },
                             boxShadow: '0 4px 8px rgba(0,0,0,0.2)'
                         }}
                         onClick={() => router.push('/admin/salary/getall-salary')}
                     >
-                        <Typography style={{ fontWeight: 'bold', fontSize: '20px', color: 'blue' }}>{cycle}</Typography>
+                        <Typography style={{ fontWeight: 'bold', fontSize: '20px', color: 'green' }}>
+                            {cycle}
+                        </Typography>
                         <Typography style={{ fontSize: '16px', marginTop: '10px', color: 'var(--text-color)' }}>
                             {cycle}
                         </Typography>
