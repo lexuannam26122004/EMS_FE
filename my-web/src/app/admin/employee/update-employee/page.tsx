@@ -44,6 +44,7 @@ const UpdateEmployeePage = () => {
     const [note, setNote] = useState('')
     const [birthday, setBirthday] = useState('')
     const [departmentId, setDepartmentId] = useState('')
+    const [employeeId, setEmployeeId] = useState('')
     const [roles, setRoles] = useState<string[]>([])
     const [AvatarFileId, setAvatarFileId] = useState(0)
     const [isExistingUser, setIsExistingUser] = useState(false)
@@ -75,6 +76,7 @@ const UpdateEmployeePage = () => {
     const data = responseData?.Data
     useEffect(() => {
         if (!isFetchingGetById && data) {
+            setEmployeeId(data.EmployeeId)
             setFullName(data.FullName ?? '')
             setUserName(data.UserName)
             setEmail(data.Email)
@@ -144,6 +146,7 @@ const UpdateEmployeePage = () => {
 
         const data = {
             Id: id,
+            EmployeeId: employeeId,
             FullName: fullName,
             UserName: userName,
             Email: email,
@@ -217,6 +220,7 @@ const UpdateEmployeePage = () => {
 
         const data = {
             Id: id,
+            EmployeeId: employeeId,
             FullName: fullName,
             UserName: userName,
             Email: email,

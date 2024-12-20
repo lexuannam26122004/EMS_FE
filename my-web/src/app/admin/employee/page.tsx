@@ -79,7 +79,7 @@ const EmployeeTable: React.FC = () => {
 
     const filteredUsers = users.filter(
         user =>
-            user.Id?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.EmployeeId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.FullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.Email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.PhoneNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -358,6 +358,7 @@ const EmployeeTable: React.FC = () => {
                                     >
                                         <Typography
                                             sx={{
+                                                width:'27px',
                                                 fontWeight: 'bold',
                                                 color: 'var(--text-color)',
                                                 fontSize: '16px',
@@ -453,7 +454,7 @@ const EmployeeTable: React.FC = () => {
                                         padding: '0px 9.5px 0px 0px',
                                         width: '146px',
                                         position: 'sticky',
-                                        right: 0,
+                                        right: -0.1,
                                         zIndex: 1,
                                         backgroundColor: 'var(--header-color-table)'
                                     }}
@@ -714,7 +715,7 @@ const EmployeeTable: React.FC = () => {
                                             borderColor: 'var(--border-color)',
                                             width: '146px',
                                             position: 'sticky',
-                                            right: 0,
+                                            right: -0.1,
                                             zIndex: 1,
                                             clipPath: 'inset(0px 0px 1px 0px)',
                                             backdropFilter: 'blur(3000px)',
