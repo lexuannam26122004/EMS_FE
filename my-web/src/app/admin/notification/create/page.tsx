@@ -548,7 +548,8 @@ function createNotification() {
                                         selectedUsers.length === 0 &&
                                         isSubmit) ||
                                     (typeReceiveNotify === 'Department_And_Role' &&
-                                        (selectedDepartment.length === 0 || (selectedRole.length === 0 && isSubmit)))
+                                        (selectedDepartment.length === 0 || selectedRole.length === 0) &&
+                                        isSubmit)
                                         ? '1px solid var(--error-color)'
                                         : '1px solid var(--border-color)',
                                 height: '100%',

@@ -233,10 +233,10 @@ export default function ChartSalary() {
                                     color: 'var(--text-color)',
                                     border: '1px solid var(--border-color)',
                                     '& .MuiMenuItem-root': {
-                                        '&:hover': { backgroundColor: '--hover-color' },
+                                        '&:hover': { backgroundColor: 'var(--hover-color)' },
                                         '&.Mui-selected': {
-                                            backgroundColor: '--background-selected-item',
-                                            '&:hover': { backgroundColor: '--hover-color' }
+                                            backgroundColor: 'var(--background-selected-item)',
+                                            '&:hover': { backgroundColor: 'var(--hover-color)' }
                                         }
                                     }
                                 }

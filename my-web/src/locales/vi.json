@@ -57,6 +57,7 @@
             "SAVE_AND_CLOSE": "Lưu và Đóng",
             "CANCEL": "Hủy",
             "CREATE": "Thêm mới",
+            "SAVE_CHANGES": "Lưu thay đổi",
             "EDIT": "Cập nhật",
             "UPDATING": "Đang cập nhật",
             "DELETE": "Xóa",
@@ -366,7 +367,7 @@
         },
 
         "TIMEOFF": {
-            "INFORMATION":"Thông tin nhân viên",
+            "INFORMATION": "Thông tin nhân viên",
             "FULLNAME": "Họ và tên",
             "EMPLOYEEID": "Mã nhân viên",
             "REASON": "Lý do nghỉ phép",
@@ -391,7 +392,49 @@
                 "ERROR": {
                     "UPDATE_TIMEOFF": "Cập nhật thông tin nghỉ phép thất bại"
                 }
-            }
+            },
+            "ACCEPT": "Đồng ý",
+            "REPORT_ERROR": "Báo cáo sai sót"
+        },
+        "ERROR_REPORT": {
+            "TITLE": "Danh sách báo cáo lỗi",
+            "ID": "ID",
+            "FULL_NAME_REPORTED": "Tên người báo cáo",
+            "AVATAR_REPORTED_PATH": "Đường dẫn ảnh đại diện người báo cáo",
+            "EMPLOYEE_ID_REPORTED": "Mã nhân viên người báo cáo",
+            "REPORTED_DATE": "Ngày báo cáo",
+            "TYPE": "Loại",
+            "TYPE_ID": "Mã loại",
+            "DESCRIPTION": "Mô tả",
+            "STATUS": "Trạng thái",
+            "AVATAR_RESOLVED_PATH": "Đường dẫn ảnh đại diện người xử lý",
+            "FULL_NAME_RESOLVED": "Tên người xử lý",
+            "RESOLVED_DATE": "Ngày xử lý",
+            "RESOLUTION_DETAILS": "Chi tiết xử lý",
+            "ACTION": "Hành động",
+            "SEARCH": "Tìm kiếm theo Tên",
+            "ALL": "Tất cả",
+            "PENDING": "Đang chờ",
+            "IN_PROGRESS": "Đang xử lý",
+            "RESOLVED": "Đã giải quyết",
+            "REJECTED": "Từ chối",
+            "CONSIDER": "Xem xét"
+        },
+        "CALENDAR": {
+            "CALENDAR": "Lịch làm việc",
+            "ADD_EVENT": "Thêm sự kiện",
+            "TITLE": "Tiêu đề",
+            "START_DATE": "Ngày bắt đầu",
+            "END_DATE": "Ngày kết thúc",
+            "DESCRIPTION": "Mô tả",
+            "ALL_DAY": "Cả ngày",
+            "MONTH": "Tháng",
+            "WEEK": "Tuần",
+            "DAY": "Ngày",
+            "TODAY": "Hôm nay",
+            "DELETE_EVENT": "Xóa sự kiện",
+            "NOTE": "Chú thích",
+            "HOLIDAY": "Ngày lễ"
         }
     }
 }

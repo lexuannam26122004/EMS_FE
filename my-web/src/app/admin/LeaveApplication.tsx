@@ -16,7 +16,7 @@ const leaveRequests = [
         EmployeeId: 'EMP001',
         Reason: 'Personal Reasons',
         Content:
-            'Need to take a short break to handle some personal matters.Need to take a short break to handle some personal matters.Need to take a short break to handle some personal matters.Need to take a short break to handle some personal matters.Need to take a short break to handle some personal matters.Need to take a short break to handle some personal matters.Need to take a short break to handle some personal matters.Need to take a short break to handle some personal matters.Need to take a short break to handle some personal matters.Need to take a short break to handle some personal matters.Need to take a short break to handle some personal matters.Need to take a short break to handle some personal matters.',
+            'Undergoing a minor surgery and need recovery time. Undergoing a minor surgery and need recovery time. Need to take a short break to handle some personal. Need to take a short break to handle some personal. Need to take a short break to handle some personal. Need to take a short break to handle some personal',
         StartDate: '20 Dec 2024',
         EndDate: '22 Dec 2024',
         AvatarPath: '/AvatarPath1.jpg'
@@ -61,6 +61,7 @@ export default function LeaveRequestCarousel() {
         swipeToSlide: true,
         waitForAnimate: false,
         slidesToShow: 1,
+        adaptiveHeight: true,
         slidesToScroll: 1,
         arrows: false,
         beforeChange: (current: number, next: number) => {
@@ -163,7 +164,7 @@ export default function LeaveRequestCarousel() {
 
             <Typography
                 variant='body2'
-                sx={{ color: 'var(--sub-title-color)', padding: '0 24px ', marginBottom: 3, mt: '0px' }}
+                sx={{ color: 'var(--sub-title-color)', padding: '0 24px', marginBottom: 3, mt: '0px' }}
             >
                 {leaveRequests.length} {t('COMMON.DASHBOARD.REQUESTS')}
             </Typography>
@@ -171,6 +172,7 @@ export default function LeaveRequestCarousel() {
             <Box
                 sx={{
                     flexGrow: 1,
+                    scrollbarGutter: 'stable',
                     '&::-webkit-scrollbar': {
                         width: '7px',
                         height: '7px'
@@ -189,14 +191,14 @@ export default function LeaveRequestCarousel() {
                             sx={{
                                 backgroundColor: 'transparent',
                                 boxShadow: 'none',
-                                height: 'auto', // Đảm bảo chiều cao linh hoạt
-                                scrollbarGutter: 'stable'
+                                height: 'auto',
+                                display: 'block'
                             }}
                         >
                             <CardContent
                                 sx={{
-                                    padding: '0 0px 0 24px',
-                                    paddingBottom: '16px!important',
+                                    padding: '0 17px 0 24px',
+                                    paddingBottom: '10px!important',
                                     overflow: 'auto'
                                 }}
                             >

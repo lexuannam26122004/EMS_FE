@@ -13,13 +13,14 @@ import { sysConfigurationApis } from '@/services/SysConfigurationService'
 import { holidayApi } from '@/services/HolidayService'
 import { EmploymentContractApi } from '@/services/EmploymentContractService'
 import { TimeOffApi } from '@/services/TimeOffService'
-
+import { sidebarSlice } from './slices/sidebarSlice'
 import { selectedUsersToNotifySlice } from './slices/selectedUsersToNotifySlice'
 import { selectedRolesToNotifySlice } from './slices/selectedRolesToNotifySlice'
 import { selectedDepartmentsToNotifySlice } from './slices/selectedDepartmentsToNotifySlice'
 import { workShiftApis } from '@/services/WorkShiftService'
 import { salaryApi } from '@/services/SalaryService'
 import { benefitApi } from '@/services/BenefitService'
+import { eventApi } from '@/services/EventService'
 
 export const store = configureStore({
     reducer: {
@@ -31,6 +32,7 @@ export const store = configureStore({
         [toastSlice.name]: toastSlice.reducer,
         [tablePermissionSlice.name]: tablePermissionSlice.reducer,
         [notificationsSlice.name]: notificationsSlice.reducer,
+        [sidebarSlice.name]: sidebarSlice.reducer,
         [notificationsApi.reducerPath]: notificationsApi.reducer,
         [countNewNotificationSlice.name]: countNewNotificationSlice.reducer,
         [sysConfigurationApis.reducerPath]: sysConfigurationApis.reducer,
@@ -42,7 +44,8 @@ export const store = configureStore({
         [selectedDepartmentsToNotifySlice.name]: selectedDepartmentsToNotifySlice.reducer,
         [workShiftApis.reducerPath]: workShiftApis.reducer,
         [salaryApi.reducerPath]: salaryApi.reducer,
-        [benefitApi.reducerPath]: benefitApi.reducer
+        [benefitApi.reducerPath]: benefitApi.reducer,
+        [eventApi.reducerPath]: eventApi.reducer
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware().concat(
@@ -58,7 +61,8 @@ export const store = configureStore({
             TimeOffApi.middleware,
             workShiftApis.middleware,
             salaryApi.middleware,
-            benefitApi.middleware
+            benefitApi.middleware,
+            eventApi.middleware
         )
 })
 
