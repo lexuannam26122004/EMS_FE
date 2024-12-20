@@ -88,12 +88,12 @@ const CreateTimeOff = () => {
 
     useEffect(() => {
         if (isSuccess === true) {
-            toast(t('Tạo nghỉ phép thành công'), 'success')
+            toast(t('COMMON.TIMEOFF.CREATE.SUCCESS.CREATE_TIMEOFF'), 'success')
             refetch()
             reset()
         }
         if (isError === true) {
-            toast(t('Tạo nghỉ phép thất bại'), 'error')
+            toast(t('COMMON.TIMEOFF.CREATE.ERROR.CREATE_TIMEOFF'), 'error')
             reset()
         }
     }, [isSuccess, isError, toast, t, reset, refetch])
@@ -138,7 +138,7 @@ const CreateTimeOff = () => {
                 }}
             >
                 <Typography sx={{ fontWeight: 'bold', fontSize: '22px', color: 'var(--text-color)' }}>
-                    {'Create a New TimeOff'}
+                    {t('COMMON.TIMEOFF.CREATE.CREATE_TIMEOFF')}
                 </Typography>
 
                 <Box
@@ -241,7 +241,7 @@ const CreateTimeOff = () => {
                                 <TextField
                                     {...params}
                                     variant='outlined'
-                                    label={t('Thông tin nhân viên*')}
+                                    label={t('COMMON.TIMEOFF.INFORMATION')}
                                     fullWidth
                                     error={isSubmit && userId === ''}
                                 />
@@ -259,7 +259,7 @@ const CreateTimeOff = () => {
                                 visibility: isSubmit && userId === '' ? 'visible' : 'hidden'
                             }}
                         >
-                            {t('COMMON.TEXTFIELD.REQUIRED')}
+                            {t('COMMON.TEXTFIELD.REQUIRED')+'*'}
                         </Typography>
                     </Box>
                     <Box
@@ -314,13 +314,13 @@ const CreateTimeOff = () => {
                                 }
                             }}
                         >
-                            <InputLabel>Trạng thái*</InputLabel>
+                            <InputLabel>{t('COMMON.TIMEOFF.ISACCEPTED')+'*'}</InputLabel>
 
                             <Select
                                 labelId='gender-label'
                                 id='gender'
                                 value={isAccepted}
-                                label='Trạng thái*'
+                                label={t('COMMON.TIMEOFF.ISACCEPTED')+'*'}
                                 onChange={e => setIsAccepted(e.target.value)}
                                 MenuProps={{
                                     PaperProps: {
@@ -386,7 +386,7 @@ const CreateTimeOff = () => {
                     >
                         <TextField
                             variant='outlined'
-                            label={'Ngày bắt đầu nghỉ phép*'}
+                            label={t('COMMON.TIMEOFF.STARTDATE')+'*'}
                             type='date'
                             fullWidth
                             {...(isSubmit && startDate === '' && { error: true })}
@@ -452,7 +452,7 @@ const CreateTimeOff = () => {
                     >
                         <TextField
                             variant='outlined'
-                            label={'Ngày kết thúc nghỉ phép*'}
+                            label={t('COMMON.TIMEOFF.ENDDATE')+'*'}
                             type='date'
                             fullWidth
                             {...(isSubmit && endDate === '' && { error: true })}
@@ -527,7 +527,7 @@ const CreateTimeOff = () => {
                     >
                         <TextField
                             variant='outlined'
-                            label={t('Lý do xin nghỉ phép*')}
+                            label={t('COMMON.TIMEOFF.REASON')+'*'}
                             id='fullWidth'
                             fullWidth
                             multiline
@@ -592,7 +592,7 @@ const CreateTimeOff = () => {
 
                 <TextField
                     variant='outlined'
-                    label={t('Nội dung')}
+                    label={t('COMMON.TIMEOFF.CONTENT')}
                     id='fullWidth'
                     fullWidth
                     multiline

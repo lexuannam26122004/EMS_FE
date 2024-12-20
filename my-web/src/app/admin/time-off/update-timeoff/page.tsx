@@ -39,7 +39,8 @@ const UpdateTimeOff = () => {
 
     const [userId, setUserId] = useState('')
     const [reason, setReason] = useState('')
-    const [date, setDate] = useState('')
+    const [startDate, setStartDate] = useState('')
+    const [endDate, setEndDate] = useState('')
     const [content, setContent] = useState('')
     const [isAccepted, setIsAccepted] = useState('')
 
@@ -76,20 +77,22 @@ const UpdateTimeOff = () => {
         if (!isFetchingGetById && data) {
             setUserId(data.UserId || '')
             setReason(data.Reason || '')
-            setDate(formatDate(data.Date))
+            setStartDate(formatDate(data.StartDate))
+            setEndDate(formatDate(data.EndDate))
             setContent(data.Content || '')
             setIsAccepted(data.IsAccepted === true ? 'da' : 'chua')
         }
     }, [data, isFetchingGetById])
 
     useEffect(() => {
-        setDate(getCurrentDateTime())
+        setStartDate(getCurrentDateTime())
+        setEndDate(getCurrentDateTime())
     }, [])
 
     const handleSave = async () => {
         setIsSaveLoading(true)
         setIsSubmit(true)
-        if (userId === '' || reason === '' || date === '' || isAccepted === '') {
+        if (userId === '' || reason === '' || startDate === '' || endDate === '' || isAccepted === '') {
             setIsSaveLoading(false)
             return
         }
@@ -97,7 +100,8 @@ const UpdateTimeOff = () => {
             Id: id,
             UserId: userId,
             Reason: reason,
-            Date: new Date(date),
+            StartDate: new Date(startDate),
+            EndDate: new Date(endDate),
             IsAccepted: isAccepted === 'da' ? true : false,
             Content: content,
             IsActive: true
@@ -112,12 +116,12 @@ const UpdateTimeOff = () => {
 
     useEffect(() => {
         if (isSuccess === true) {
-            toast(t('Tạo nghỉ phép thành công'), 'success')
+            toast(t('COMMON.TIMEOFF.UPDATE.SUCCESS.UPDATE_TIMEOFF'), 'success')
             refetch()
             reset()
         }
         if (isError === true) {
-            toast(t('Tạo nghỉ phép thất bại'), 'error')
+            toast(t('COMMON.TIMEOFF.UPDATE.ERROR.UPDATE_TIMEOFF'), 'error')
             reset()
         }
     }, [isSuccess, isError, toast, t, reset, refetch])
@@ -125,7 +129,7 @@ const UpdateTimeOff = () => {
     const handleSaveAndClose = async () => {
         setIsSaveAndCloseLoading(true)
         setIsSubmit(true)
-        if (userId === '' || reason === '' || date === '' || isAccepted === '') {
+        if (userId === '' || reason === '' || startDate === '' || endDate === '' || isAccepted === '') {
             setIsSaveAndCloseLoading(false)
             return
         }
@@ -133,7 +137,8 @@ const UpdateTimeOff = () => {
             Id: id,
             UserId: userId,
             Reason: reason,
-            Date: new Date(date),
+            StartDate: new Date(startDate),
+            EndDate: new Date(endDate),
             IsAccepted: isAccepted === 'da' ? true : false,
             Content: content,
             IsActive: true
@@ -150,18 +155,19 @@ const UpdateTimeOff = () => {
     if (isUsersLoading) return <div>Loading...</div>
 
     return (
-        <Box sx={{ width: '100%' }}>
+        <Box sx={{ width: '720px', maxWidth: '100%', margin: '0 auto' }}>
             <Paper
+                elevation={0}
                 sx={{
                     width: '100%',
                     overflow: 'hidden',
-                    borderRadius: '6px',
-                    backgroundColor: 'var(--background-color)',
-                    padding: '20px'
+                    borderRadius: '15px',
+                    backgroundColor: 'var(--background-item)',
+                    padding: '24px'
                 }}
             >
                 <Typography sx={{ fontWeight: 'bold', fontSize: '22px', color: 'var(--text-color)' }}>
-                    {'Update a New TimeOff'}
+                    {t('COMMON.TIMEOFF.UPDATE.UPDATE_TIMEOFF')}
                 </Typography>
 
                 <Box
@@ -179,33 +185,47 @@ const UpdateTimeOff = () => {
                     >
                         <Autocomplete
                             sx={{
-                                color: 'var(--text-color)',
-                                backgroundColor: 'var(--background-color)',
                                 '& fieldset': {
                                     borderRadius: '8px',
                                     color: 'var(--text-color)',
                                     borderColor: 'var(--border-color)'
                                 },
-                                '& .MuiInputBase-root': { paddingRight: '0px' },
+                                '& .MuiInputBase-root': {
+                                    paddingRight: '0px'
+                                },
                                 '& .MuiInputBase-input': {
+                                    paddingRight: '12px',
                                     color: 'var(--text-color)',
-                                    fontSize: '16px'
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1
+                                    }
                                 },
                                 '& .MuiOutlinedInput-root:hover fieldset': {
-                                    borderColor: 'var(--hover-color)'
+                                    borderColor: 'var(--hover-field-color)'
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                                 },
                                 '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                    borderColor: 'var(--selected-color)'
+                                    borderColor: 'var(--selected-field-color)'
                                 },
                                 '& .MuiInputLabel-root': {
                                     color: 'var(--text-label-color)'
                                 },
                                 '& .MuiInputLabel-root.Mui-focused': {
-                                    color: 'var(--selected-color)'
+                                    color: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-error': {
+                                    color: 'var(--error-color)'
                                 },
                                 '& .MuiAutocomplete-popupIndicator': {
                                     '& svg': {
-                                        fill: 'var(--text-color)'
+                                        fill: isSubmit && userId === '' ? 'var(--error-color)' : 'var(--text-color)'
                                     }
                                 },
                                 '& .MuiAutocomplete-clearIndicator': {
@@ -215,12 +235,12 @@ const UpdateTimeOff = () => {
                                 }
                             }}
                             options={employee}
-                            getOptionLabel={option => `${option.Id} - ${option.FullName}`}
+                            getOptionLabel={option => `${option.EmployeeId}  ${option.FullName}`}
                             renderOption={(props, option, { selected }) => {
                                 const { key, ...otherProps } = props
                                 return (
                                     <Box
-                                        key={key}
+                                        key={`${option.Id}`}
                                         component='li'
                                         {...otherProps}
                                         sx={{
@@ -242,7 +262,7 @@ const UpdateTimeOff = () => {
                                             }
                                             alt='Avatar'
                                         />
-                                        <Typography>{`${option.Id} - ${option.FullName}`}</Typography>
+                                        <Typography>{`${option.EmployeeId}  ${option.FullName}`}</Typography>
                                     </Box>
                                 )
                             }}
@@ -250,7 +270,7 @@ const UpdateTimeOff = () => {
                                 <TextField
                                     {...params}
                                     variant='outlined'
-                                    label={t('Thông tin nhân viên*')}
+                                    label={t('COMMON.TIMEOFF.INFORMATION')}
                                     fullWidth
                                     error={isSubmit && userId === ''}
                                 />
@@ -268,7 +288,7 @@ const UpdateTimeOff = () => {
                                 visibility: isSubmit && userId === '' ? 'visible' : 'hidden'
                             }}
                         >
-                            {t('COMMON.TEXTFIELD.REQUIRED')}
+                            {t('COMMON.TEXTFIELD.REQUIRED') + '*'}
                         </Typography>
                     </Box>
                     <Box
@@ -276,46 +296,103 @@ const UpdateTimeOff = () => {
                             width: 'calc(50% - 10px)'
                         }}
                     >
-                        <TextField
-                            variant='outlined'
-                            label={'Ngày xin nghỉ phép*'}
-                            type='date'
+                        <FormControl
                             fullWidth
-                            {...(isSubmit && date === '' && { error: true })}
+                            error={isSubmit && isAccepted === ''}
                             sx={{
-                                color: 'var(--text-color)',
                                 '& fieldset': {
                                     borderRadius: '8px',
                                     color: 'var(--text-color)',
                                     borderColor: 'var(--border-color)'
                                 },
-                                '& .MuiInputBase-root': { paddingRight: '0px' },
+                                '& .MuiInputBase-root': {
+                                    paddingRight: '0px'
+                                },
                                 '& .MuiInputBase-input': {
+                                    paddingRight: '12px',
                                     color: 'var(--text-color)',
-                                    fontSize: '16px'
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1
+                                    }
                                 },
                                 '& .MuiOutlinedInput-root:hover fieldset': {
-                                    borderColor: 'var(--hover-color)'
+                                    borderColor: 'var(--hover-field-color)'
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                                 },
                                 '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                    borderColor: 'var(--selected-color)'
+                                    borderColor: 'var(--selected-field-color)'
                                 },
                                 '& .MuiInputLabel-root': {
                                     color: 'var(--text-label-color)'
                                 },
                                 '& .MuiInputLabel-root.Mui-focused': {
-                                    color: 'var(--selected-color)'
+                                    color: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-error': {
+                                    color: 'var(--error-color)'
+                                },
+                                '& .MuiSelect-icon': {
+                                    color: isSubmit && isAccepted === '' ? 'var(--error-color)' : 'var(--text-color)'
                                 }
                             }}
-                            value={date}
-                            onChange={e => setDate(e.target.value)}
-                        />
+                        >
+                            <InputLabel>{t('COMMON.TIMEOFF.ISACCEPTED') + '*'}</InputLabel>
+
+                            <Select
+                                labelId='gender-label'
+                                id='gender'
+                                value={isAccepted}
+                                label={t('COMMON.TIMEOFF.ISACCEPTED') + '*'}
+                                onChange={e => setIsAccepted(e.target.value)}
+                                MenuProps={{
+                                    PaperProps: {
+                                        elevation: 0,
+                                        sx: {
+                                            backgroundImage:
+                                                'url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSJ1cmwoI3BhaW50MF9yYWRpYWxfMjc0OV8xNDUxODYpIiBmaWxsLW9wYWNpdHk9IjAuMTIiLz4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0icGFpbnQwX3JhZGlhbF8yNzQ5XzE0NTE4NiIgY3g9IjAiIGN5PSIwIiByPSIxIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgZ3JhZGllbnRUcmFuc2Zvcm09InRyYW5zbGF0ZSgxMjAgMS44MTgxMmUtMDUpIHJvdGF0ZSgtNDUpIHNjYWxlKDEyMy4yNSkiPgo8c3RvcCBzdG9wLWNvbG9yPSIjMDBCOEQ5Ii8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzAwQjhEOSIgc3RvcC1vcGFjaXR5PSIwIi8+CjwvcmFkaWFsR3JhZGllbnQ+CjwvZGVmcz4KPC9zdmc+Cg==), url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSJ1cmwoI3BhaW50MF9yYWRpYWxfMjc0OV8xNDUxODcpIiBmaWxsLW9wYWNpdHk9IjAuMTIiLz4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0icGFpbnQwX3JhZGlhbF8yNzQ5XzE0NTE4NyIgY3g9IjAiIGN5PSIwIiByPSIxIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgZ3JhZGllbnRUcmFuc2Zvcm09InRyYW5zbGF0ZSgwIDEyMCkgcm90YXRlKDEzNSkgc2NhbGUoMTIzLjI1KSI+CjxzdG9wIHN0b3AtY29sb3I9IiNGRjU2MzAiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRkY1NjMwIiBzdG9wLW9wYWNpdHk9IjAiLz4KPC9yYWRpYWxHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K)',
+                                            backgroundPosition: 'top right, bottom left',
+                                            backgroundSize: '50%, 50%',
+                                            backgroundRepeat: 'no-repeat',
+                                            padding: '0 8px',
+                                            backdropFilter: 'blur(20px)',
+                                            borderRadius: '8px',
+                                            backgroundColor: 'var(--background-item)',
+                                            color: 'var(--text-color)',
+                                            border: '1px solid var(--border-color)',
+                                            '& .MuiMenuItem-root': {
+                                                borderRadius: '6px',
+                                                '&:hover': {
+                                                    backgroundColor: 'var(--hover-color)'
+                                                },
+                                                '&.Mui-selected': {
+                                                    backgroundColor: 'var(--selected-color)',
+                                                    '&:hover': {
+                                                        backgroundColor: 'var(--hover-color)'
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        autoFocus: false
+                                    }
+                                }}
+                            >
+                                <MenuItem value='da'>Đã duyệt</MenuItem>
+                                <MenuItem value='chua'>Chưa duyệt</MenuItem>
+                            </Select>
+                        </FormControl>
                         <Typography
                             sx={{
                                 color: 'red',
                                 margin: '1px 0 0 10px',
                                 fontSize: '12px',
-                                visibility: isSubmit && date === '' ? 'visible' : 'hidden'
+                                visibility: isSubmit && isAccepted === '' ? 'visible' : 'hidden'
                             }}
                         >
                             {t('COMMON.TEXTFIELD.REQUIRED')}
@@ -338,7 +415,148 @@ const UpdateTimeOff = () => {
                     >
                         <TextField
                             variant='outlined'
-                            label={t('Lý do xin nghỉ phép*')}
+                            label={t('COMMON.TIMEOFF.STARTDATE') + '*'}
+                            type='date'
+                            fullWidth
+                            {...(isSubmit && startDate === '' && { error: true })}
+                            sx={{
+                                '& fieldset': {
+                                    borderRadius: '8px',
+                                    color: 'var(--text-color)',
+                                    borderColor: 'var(--border-color)'
+                                },
+                                '& .MuiInputBase-root': {
+                                    paddingRight: '0px'
+                                },
+                                '& .MuiInputBase-input': {
+                                    paddingRight: '12px',
+                                    color: 'var(--text-color)',
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1
+                                    }
+                                },
+                                '& .MuiOutlinedInput-root:hover fieldset': {
+                                    borderColor: 'var(--hover-field-color)'
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-focused fieldset': {
+                                    borderColor: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root': {
+                                    color: 'var(--text-label-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-focused': {
+                                    color: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-error': {
+                                    color: 'var(--error-color)'
+                                }
+                            }}
+                            value={startDate}
+                            onChange={e => setStartDate(e.target.value)}
+                        />
+                        <Typography
+                            sx={{
+                                color: 'red',
+                                margin: '1px 0 0 10px',
+                                fontSize: '12px',
+                                visibility: isSubmit && startDate === '' ? 'visible' : 'hidden'
+                            }}
+                        >
+                            {t('COMMON.TEXTFIELD.REQUIRED')}
+                        </Typography>
+                    </Box>
+
+                    <Box
+                        sx={{
+                            width: 'calc(50% - 10px)'
+                        }}
+                    >
+                        <TextField
+                            variant='outlined'
+                            label={t('COMMON.TIMEOFF.ENDDATE') + '*'}
+                            type='date'
+                            fullWidth
+                            {...(isSubmit && endDate === '' && { error: true })}
+                            sx={{
+                                '& fieldset': {
+                                    borderRadius: '8px',
+                                    color: 'var(--text-color)',
+                                    borderColor: 'var(--border-color)'
+                                },
+                                '& .MuiInputBase-root': {
+                                    paddingRight: '0px'
+                                },
+                                '& .MuiInputBase-input': {
+                                    paddingRight: '12px',
+                                    color: 'var(--text-color)',
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1
+                                    }
+                                },
+                                '& .MuiOutlinedInput-root:hover fieldset': {
+                                    borderColor: 'var(--hover-field-color)'
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-focused fieldset': {
+                                    borderColor: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root': {
+                                    color: 'var(--text-label-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-focused': {
+                                    color: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-error': {
+                                    color: 'var(--error-color)'
+                                }
+                            }}
+                            value={endDate}
+                            onChange={e => setEndDate(e.target.value)}
+                        />
+                        <Typography
+                            sx={{
+                                color: 'red',
+                                margin: '1px 0 0 10px',
+                                fontSize: '12px',
+                                visibility: isSubmit && endDate === '' ? 'visible' : 'hidden'
+                            }}
+                        >
+                            {t('COMMON.TEXTFIELD.REQUIRED')}
+                        </Typography>
+                    </Box>
+                </Box>
+
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        gap: '20px',
+                        mt: '7px'
+                    }}
+                >
+                    <Box
+                        sx={{
+                            width: '100%'
+                        }}
+                    >
+                        <TextField
+                            variant='outlined'
+                            label={t('COMMON.TIMEOFF.REASON') + '*'}
                             id='fullWidth'
                             fullWidth
                             multiline
@@ -346,28 +564,43 @@ const UpdateTimeOff = () => {
                             minRows={1}
                             maxRows={12}
                             sx={{
-                                color: 'var(--text-color)',
                                 '& fieldset': {
                                     borderRadius: '8px',
                                     color: 'var(--text-color)',
                                     borderColor: 'var(--border-color)'
                                 },
-                                '& .MuiInputBase-root': { paddingRight: '0px' },
+                                '& .MuiInputBase-root': {
+                                    paddingRight: '0px'
+                                },
                                 '& .MuiInputBase-input': {
+                                    paddingRight: '12px',
                                     color: 'var(--text-color)',
-                                    fontSize: '16px'
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1
+                                    }
                                 },
                                 '& .MuiOutlinedInput-root:hover fieldset': {
-                                    borderColor: 'var(--hover-color)'
+                                    borderColor: 'var(--hover-field-color)'
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                                 },
                                 '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                    borderColor: 'var(--selected-color)'
+                                    borderColor: 'var(--selected-field-color)'
                                 },
                                 '& .MuiInputLabel-root': {
                                     color: 'var(--text-label-color)'
                                 },
                                 '& .MuiInputLabel-root.Mui-focused': {
-                                    color: 'var(--selected-color)'
+                                    color: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-error': {
+                                    color: 'var(--error-color)'
                                 }
                             }}
                             value={reason}
@@ -384,93 +617,11 @@ const UpdateTimeOff = () => {
                             {t('COMMON.TEXTFIELD.REQUIRED')}
                         </Typography>
                     </Box>
-                    <Box
-                        sx={{
-                            width: 'calc(50% - 10px)'
-                        }}
-                    >
-                        <FormControl
-                            fullWidth
-                            error={isSubmit && isAccepted === ''}
-                            sx={{
-                                color: 'var(--text-color)',
-                                '& fieldset': {
-                                    borderRadius: '8px',
-                                    color: 'var(--text-color)',
-                                    borderColor: 'var(--border-color)'
-                                },
-                                '& .MuiInputBase-root': { paddingRight: '0px' },
-                                '& .MuiInputBase-input': {
-                                    color: 'var(--text-color)',
-                                    fontSize: '16px'
-                                },
-                                '& .MuiOutlinedInput-root:hover fieldset': {
-                                    borderColor: 'var(--hover-color)'
-                                },
-                                '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                    borderColor: 'var(--selected-color)'
-                                },
-                                '& .MuiInputLabel-root': {
-                                    color: 'var(--text-label-color)'
-                                },
-                                '& .MuiInputLabel-root.Mui-focused': {
-                                    color: 'var(--selected-color)'
-                                },
-                                '& .MuiSelect-icon': {
-                                    color: 'var(--text-color)'
-                                }
-                            }}
-                        >
-                            <InputLabel>Trạng thái*</InputLabel>
-
-                            <Select
-                                labelId='gender-label'
-                                id='gender'
-                                value={isAccepted}
-                                label='Trạng thái*'
-                                onChange={e => setIsAccepted(e.target.value)}
-                                MenuProps={{
-                                    PaperProps: {
-                                        elevation: 0,
-                                        sx: {
-                                            backgroundColor: 'var(--background-color)',
-                                            color: 'var(--text-color)',
-                                            border: '1px solid var(--border-color)',
-                                            '& .MuiMenuItem-root': {
-                                                '&:hover': {
-                                                    backgroundColor: 'var(--hover-color)'
-                                                },
-                                                '&.Mui-selected': {
-                                                    backgroundColor: 'var(--selected-color)',
-                                                    '&:hover': {
-                                                        backgroundColor: 'var(--hover-color)'
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }}
-                            >
-                                <MenuItem value='da'>Đã duyệt</MenuItem>
-                                <MenuItem value='chua'>Chưa duyệt</MenuItem>
-                            </Select>
-                        </FormControl>
-                        <Typography
-                            sx={{
-                                color: 'red',
-                                margin: '1px 0 0 10px',
-                                fontSize: '12px',
-                                visibility: isSubmit && isAccepted === '' ? 'visible' : 'hidden'
-                            }}
-                        >
-                            {t('COMMON.TEXTFIELD.REQUIRED')}
-                        </Typography>
-                    </Box>
                 </Box>
 
                 <TextField
                     variant='outlined'
-                    label={t('Nội dung')}
+                    label={t('COMMON.TIMEOFF.CONTENT')}
                     id='fullWidth'
                     fullWidth
                     multiline
@@ -478,28 +629,43 @@ const UpdateTimeOff = () => {
                     maxRows={12}
                     sx={{
                         mt: '7px',
-                        color: 'var(--text-color)',
                         '& fieldset': {
                             borderRadius: '8px',
                             color: 'var(--text-color)',
                             borderColor: 'var(--border-color)'
                         },
-                        '& .MuiInputBase-root': { paddingRight: '0px' },
+                        '& .MuiInputBase-root': {
+                            paddingRight: '0px'
+                        },
                         '& .MuiInputBase-input': {
+                            paddingRight: '12px',
                             color: 'var(--text-color)',
-                            fontSize: '16px'
+                            fontSize: '16px',
+                            '&::placeholder': {
+                                color: 'var(--placeholder-color)',
+                                opacity: 1
+                            }
                         },
                         '& .MuiOutlinedInput-root:hover fieldset': {
-                            borderColor: 'var(--hover-color)'
+                            borderColor: 'var(--hover-field-color)'
+                        },
+                        '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                            borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                        },
+                        '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                            borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                         },
                         '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                            borderColor: 'var(--selected-color)'
+                            borderColor: 'var(--selected-field-color)'
                         },
                         '& .MuiInputLabel-root': {
                             color: 'var(--text-label-color)'
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'var(--selected-color)'
+                            color: 'var(--selected-field-color)'
+                        },
+                        '& .MuiInputLabel-root.Mui-error': {
+                            color: 'var(--error-color)'
                         }
                     }}
                     value={content}
@@ -527,7 +693,7 @@ const UpdateTimeOff = () => {
                             window.location.reload()
                         }}
                     >
-                        {t('Làm mới')}
+                        {t('COMMON.BUTTON.REFRESH')}
                     </Button>
 
                     <LoadingButton

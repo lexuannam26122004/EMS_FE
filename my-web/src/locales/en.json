@@ -52,7 +52,7 @@
             }
         },
         "BUTTON": {
-            "REFRESH": "Refresh", 
+            "REFRESH": "Refresh",
             "SAVE": "Save",
             "SAVE_AND_CLOSE": "Save and Close",
             "CANCEL": "Cancel",
@@ -410,6 +410,35 @@
                 },
                 "ERROR": {
                     "UPDATE_EMPLOYEE": "Employee update failed"
+                }
+            }
+        },
+
+        "TIMEOFF": {
+            "INFORMATION": "Employee Information",
+            "FULLNAME": "Full Name",
+            "EMPLOYEEID": "Employee ID",
+            "REASON": "Reason for Leave",
+            "CONTENT": "Leave Details",
+            "ISACCEPTED": "Status",
+            "STARTDATE": "Start Date of Leave",
+            "ENDDATE": "End Date of Leave",
+            "CREATE": {
+                "CREATE_TIMEOFF": "Add New Leave Information",
+                "SUCCESS": {
+                    "CREATE_TIMEOFF": "Successfully Added New Leave Information"
+                },
+                "ERROR": {
+                    "CREATE_TIMEOFF": "Failed to Add New Leave Information"
+                }
+            },
+            "UPDATE": {
+                "UPDATE_TIMEOFF": "Update Leave Information",
+                "SUCCESS": {
+                    "UPDATE_TIMEOFF": "Successfully Updated Leave Information"
+                },
+                "ERROR": {
+                    "UPDATE_TIMEOFF": "Failed to Update Leave Information"
                 }
             }
         }

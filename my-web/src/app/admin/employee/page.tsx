@@ -358,7 +358,7 @@ const EmployeeTable: React.FC = () => {
                                     >
                                         <Typography
                                             sx={{
-                                                width:'27px',
+                                                width: '27px',
                                                 fontWeight: 'bold',
                                                 color: 'var(--text-color)',
                                                 fontSize: '16px',
@@ -442,7 +442,7 @@ const EmployeeTable: React.FC = () => {
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                               {t(`COMMON.EMPLOYEE.${column.toUpperCase()}`)}
+                                                {t(`COMMON.EMPLOYEE.${column.toUpperCase()}`)}
                                             </Typography>
                                         </TableSortLabel>
                                     </TableCell>

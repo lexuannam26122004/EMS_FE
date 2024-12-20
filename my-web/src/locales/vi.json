@@ -52,7 +52,7 @@
             }
         },
         "BUTTON": {
-            "REFRESH": "Làm mới" ,
+            "REFRESH": "Làm mới",
             "SAVE": "Lưu",
             "SAVE_AND_CLOSE": "Lưu và Đóng",
             "CANCEL": "Hủy",
@@ -361,6 +361,35 @@
                 },
                 "ERROR": {
                     "UPDATE_EMPLOYEE": "Cập nhật nhân viên thất bại"
+                }
+            }
+        },
+
+        "TIMEOFF": {
+            "INFORMATION":"Thông tin nhân viên",
+            "FULLNAME": "Họ và tên",
+            "EMPLOYEEID": "Mã nhân viên",
+            "REASON": "Lý do nghỉ phép",
+            "CONTENT": "Nội dung nghỉ phép",
+            "ISACCEPTED": "Trạng thái",
+            "STARTDATE": "Ngày bắt đầu nghỉ phép",
+            "ENDDATE": "Ngày kết thúc nghỉ phép",
+            "CREATE": {
+                "CREATE_TIMEOFF": "Thêm mới thông tin nghỉ phép",
+                "SUCCESS": {
+                    "CREATE_TIMEOFF": "Thêm mới thông tin nghỉ phép thành công"
+                },
+                "ERROR": {
+                    "CREATE_TIMEOFF": "Thêm mới thông tin nghỉ phép thất bại"
+                }
+            },
+            "UPDATE": {
+                "UPDATE_TIMEOFF": "Cập nhật thông tin nghỉ phép",
+                "SUCCESS": {
+                    "UPDATE_TIMEOFF": "Cập nhật thông tin nghỉ phép thành công"
+                },
+                "ERROR": {
+                    "UPDATE_TIMEOFF": "Cập nhật thông tin nghỉ phép thất bại"
                 }
             }
         }
