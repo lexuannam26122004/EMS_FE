@@ -1,5 +1,6 @@
 {
     "COMMON": {
+        "VIEW_DETAILS": "Xem chi tiết thông tin của ",
         "FILTER": "Bộ lọc",
         "FROM_DATE": "Từ ngày",
         "TO_DATE": "Đến ngày",
@@ -405,15 +406,15 @@
             "EMPLOYEEID": "Mã nhân viên",
             "STARTDATE": "Ngày bắt đầu",
             "ENDDATE": "Ngày kết thúc",
-            "CONTRACTNAME":"Tên hợp đồng",
-            "BASICSALARY":"Lương cơ bản",
-            "CLAUSE":"Điều khoản hợp đồng",
-            "PROBATIONPERIOD":"Số ngày thử việc",
-            "WORKINGHOURS":"Số giờ làm việc",
-            "TERMINATIONCLAUSE":"Điều khoản chấm dứt",
-            "TYPECONTRACT":"Chế độ làm việc",
-            "MANAGER":"Mã quản lí",
-            "APPENDIX":"Phụ lục của hợp đồng",
+            "CONTRACTNAME": "Tên hợp đồng",
+            "BASICSALARY": "Lương cơ bản",
+            "CLAUSE": "Điều khoản hợp đồng",
+            "PROBATIONPERIOD": "Số ngày thử việc",
+            "WORKINGHOURS": "Số giờ làm việc",
+            "TERMINATIONCLAUSE": "Điều khoản chấm dứt",
+            "TYPECONTRACT": "Chế độ làm việc",
+            "MANAGER": "Mã quản lí",
+            "APPENDIX": "Phụ lục của hợp đồng",
             "CREATE": {
                 "CREATE_CONTRACT": "Tạo mới hợp đồng",
                 "SUCCESS": {

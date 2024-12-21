@@ -240,7 +240,7 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
                             color: 'var(--text-color)'
                         }}
                     >
-                        {t('Xem chi tiết thông tin ') + aspnetuser.FullName}
+                        {t('COMMON.VIEW_DETAILS') + aspnetuser.FullName}
                     </Typography>
 
                     <Box
@@ -409,10 +409,10 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
                                 borderColor: 'divider'
                             }}
                         >
-                            <Tab label='Cá Nhân' />
-                            <Tab label='Hợp Đồng' />
-                            <Tab label='Phúc Lợi' />
-                            <Tab label='Kỉ Luật' />
+                            <Tab label={t('COMMON.SIDEBAR.EMPLOYEE')} />
+                            <Tab label={t('COMMON.SIDEBAR.CONTRACT')} />
+                            <Tab label={t('COMMON.SIDEBAR.BENEFIT')} />
+                            <Tab label={t('COMMON.SIDEBAR.DISCIPLINE')} />
                         </Tabs>
                     </Box>
                     <Box

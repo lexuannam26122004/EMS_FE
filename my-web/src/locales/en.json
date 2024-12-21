@@ -1,5 +1,6 @@
 {
     "COMMON": {
+        "VIEW_DETAILS": "View the details of information for ",
         "FILTER": "Filter",
         "FROM_DATE": "From Date",
         "TO_DATE": "To Date",
