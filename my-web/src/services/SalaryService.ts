@@ -47,8 +47,21 @@ export const salaryApi = createApi({
                 body: salary
             }),
             invalidatesTags: ['Salary']
+        }),
+        getInfoForDepartmentChart: builder.query<SalaryResponse, void>({
+            query: () => 'GetInfoForDepartmentChart',
+            providesTags: ['Salary']
+        }),
+        getSalaryByLevel: builder.query<SalaryResponse, void>({
+            query: () => 'GetSalaryByLevel',
+            providesTags: ['Salary']
         })
     })
 })
 
-export const { useGetAllSalariesQuery, useUpdateSalaryMutation } = salaryApi
+export const {
+    useGetAllSalariesQuery,
+    useUpdateSalaryMutation,
+    useGetInfoForDepartmentChartQuery,
+    useGetSalaryByLevelQuery
+} = salaryApi

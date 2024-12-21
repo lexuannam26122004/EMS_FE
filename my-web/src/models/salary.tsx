@@ -15,3 +15,12 @@ export interface ISalaryGetAll {
     IsPaid: number
     PayrollPeriod: string
 }
+
+export interface ISalaryByLevel {
+    period: string
+    under10: number
+    between10and20: number
+    between20and30: number
+    between30and40: number
+    greaterThan40: number
+}
