@@ -241,7 +241,7 @@ const CreateTimeOff = () => {
                                 <TextField
                                     {...params}
                                     variant='outlined'
-                                    label={t('COMMON.TIMEOFF.INFORMATION')}
+                                    label={t('COMMON.TIMEOFF.INFORMATION')+'*'}
                                     fullWidth
                                     error={isSubmit && userId === ''}
                                 />

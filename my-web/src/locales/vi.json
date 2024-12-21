@@ -396,6 +396,46 @@
             "ACCEPT": "Đồng ý",
             "REPORT_ERROR": "Báo cáo sai sót"
         },
+
+        "CONTRACT": {
+            "INFORMATION": "Thông tin nhân viên",
+            "INFORMATIONMANAGER": "Thông tin quản lí",
+            "FULLNAME": "Họ và tên",
+            "MANAGERFULLNAME": "Họ và tên quản lí",
+            "EMPLOYEEID": "Mã nhân viên",
+            "STARTDATE": "Ngày bắt đầu",
+            "ENDDATE": "Ngày kết thúc",
+            "CONTRACTNAME":"Tên hợp đồng",
+            "BASICSALARY":"Lương cơ bản",
+            "CLAUSE":"Điều khoản hợp đồng",
+            "PROBATIONPERIOD":"Số ngày thử việc",
+            "WORKINGHOURS":"Số giờ làm việc",
+            "TERMINATIONCLAUSE":"Điều khoản chấm dứt",
+            "TYPECONTRACT":"Chế độ làm việc",
+            "MANAGER":"Mã quản lí",
+            "APPENDIX":"Phụ lục của hợp đồng",
+            "CREATE": {
+                "CREATE_CONTRACT": "Tạo mới hợp đồng",
+                "SUCCESS": {
+                    "CREATE_CONTRACT": "Tạo mới hợp đồng thành công"
+                },
+                "ERROR": {
+                    "CREATE_CONTRACT": "Tạo mới hợp đồng thất bại"
+                }
+            },
+            "UPDATE": {
+                "UPDATE_CONTRACT": "Cập nhật hợp đồng",
+                "SUCCESS": {
+                    "UPDATE_CONTRACT": "Cập nhật hợp đồng thành công"
+                },
+                "ERROR": {
+                    "UPDATE_CONTRACT": "Cập nhật hợp đồng thất bại"
+                }
+            },
+            "ACCEPT": "Đồng ý",
+            "REPORT_ERROR": "Báo cáo sai sót"
+        },
+
         "ERROR_REPORT": {
             "TITLE": "Danh sách báo cáo lỗi",
             "ID": "ID",

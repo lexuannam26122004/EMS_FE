@@ -47,9 +47,9 @@ const EmployeeTable: React.FC = () => {
     const [rowsPerPage, setRowsPerPage] = useState('10')
     const [currentPage, setCurrentPage] = useState<number>(1)
     const [sortConfig, setSortConfig] = useState<{
-        key: keyof IEmploymentContractSearch | 'EmployeeId'
+        key: keyof IEmploymentContractSearch | 'Id'
         direction: 'asc' | 'desc'
-    }>({ key: 'EmployeeId', direction: 'asc' })
+    }>({ key: 'Id', direction: 'asc' })
     const { t } = useTranslation('common')
     const router = useRouter()
 
@@ -63,13 +63,19 @@ const EmployeeTable: React.FC = () => {
 
     const users = contract.map(contract => {
         const matchedEmployee = employee.find(emp => emp.Id === contract.UserId)
+        const matchedManager = employee.find(emp => emp.Id === contract.ManagerId)
         return {
             ...contract,
             FullName: matchedEmployee?.FullName || 'N/A',
             AvatarPath:
                 matchedEmployee?.AvatarPath ||
                 'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif',
-            EmployeeId: matchedEmployee?.EmployeeId || 'N/A'
+            EmployeeId: matchedEmployee?.EmployeeId || 'N/A',
+            ManagerFullName: matchedManager?.FullName || 'N/A',
+            ManagerAvatarPath:
+                matchedManager?.AvatarPath ||
+                'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif',
+            Manager: matchedManager?.EmployeeId || 'N/A'
         }
     })
 
@@ -108,7 +114,7 @@ const EmployeeTable: React.FC = () => {
     const totalRecords = sortedUsers.length
     const paginatedUsers = sortedUsers.slice((currentPage - 1) * Number(rowsPerPage), currentPage * Number(rowsPerPage))
 
-    const handleSort = (key: keyof IEmploymentContractSearch | 'EmployeeId') => {
+    const handleSort = (key: keyof IEmploymentContractSearch | 'Id') => {
         setSortConfig(prev => ({
             key,
             direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc'
@@ -328,9 +334,9 @@ const EmployeeTable: React.FC = () => {
                                 </TableCell>
                                 <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                     <TableSortLabel
-                                        active={sortConfig.key === 'EmployeeId'}
-                                        direction={sortConfig.key === 'EmployeeId' ? sortConfig.direction : 'asc'}
-                                        onClick={() => handleSort('EmployeeId')}
+                                        active={sortConfig.key === 'Id'}
+                                        direction={sortConfig.key === 'Id' ? sortConfig.direction : 'asc'}
+                                        onClick={() => handleSort('Id')}
                                         sx={{
                                             '& .MuiTableSortLabel-icon': {
                                                 color: 'var(--text-color) !important'
@@ -353,36 +359,77 @@ const EmployeeTable: React.FC = () => {
                                     </TableSortLabel>
                                 </TableCell>
 
-                                {['FullName', 'UserId', 'ContractName', 'StartDate', 'BasicSalary'].map(
-                                    (column, index) => (
-                                        <TableCell key={index} sx={{ borderColor: 'var(--border-color)' }}>
-                                            <TableSortLabel
-                                                active={sortConfig.key === column}
-                                                direction={sortConfig.key === column ? sortConfig.direction : 'asc'}
-                                                onClick={() => handleSort(column as keyof IEmploymentContractSearch)}
+                                {['FullName'].map((column, index) => (
+                                    <TableCell key={index} sx={{ borderColor: 'var(--border-color)' }}>
+                                        <TableSortLabel
+                                            active={sortConfig.key === column}
+                                            direction={sortConfig.key === column ? sortConfig.direction : 'asc'}
+                                            onClick={() => handleSort(column as keyof IEmploymentContractSearch)}
+                                            sx={{
+                                                '& .MuiTableSortLabel-icon': {
+                                                    color: 'var(--text-color) !important'
+                                                }
+                                            }}
+                                        >
+                                            <Typography
                                                 sx={{
-                                                    '& .MuiTableSortLabel-icon': {
-                                                        color: 'var(--text-color) !important'
-                                                    }
+                                                    fontWeight: 'bold',
+                                                    color: 'var(--text-color)',
+                                                    fontSize: '16px',
+                                                    overflow: 'hidden',
+                                                    maxWidth: '260px',
+                                                    textOverflow: 'ellipsis',
+                                                    whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                <Typography
-                                                    sx={{
-                                                        fontWeight: 'bold',
-                                                        color: 'var(--text-color)',
-                                                        fontSize: '16px',
-                                                        overflow: 'hidden',
-                                                        maxWidth: '260px',
-                                                        textOverflow: 'ellipsis',
-                                                        whiteSpace: 'nowrap'
-                                                    }}
-                                                >
-                                                    {column}
-                                                </Typography>
-                                            </TableSortLabel>
-                                        </TableCell>
-                                    )
-                                )}
+                                                {t(`COMMON.CONTRACT.${column.toUpperCase()}`)}
+                                            </Typography>
+                                        </TableSortLabel>
+                                    </TableCell>
+                                ))}
+
+                                {[
+                                    'EmployeeId',
+                                    'ContractName',
+                                    'Manager',
+                                    'ManagerFullName',
+                                    'StartDate',
+                                    'EndDate',
+                                    'BasicSalary',
+                                    'Clause',
+                                    'ProbationPeriod',
+                                    'WorkingHours',
+                                    'TerminationClause',
+                                    'TypeContract',
+                                    'Appendix'
+                                ].map((column, index) => (
+                                    <TableCell key={index} sx={{ borderColor: 'var(--border-color)' }}>
+                                        <TableSortLabel
+                                            active={sortConfig.key === column}
+                                            direction={sortConfig.key === column ? sortConfig.direction : 'asc'}
+                                            onClick={() => handleSort(column as keyof IEmploymentContractSearch)}
+                                            sx={{
+                                                '& .MuiTableSortLabel-icon': {
+                                                    color: 'var(--text-color) !important'
+                                                }
+                                            }}
+                                        >
+                                            <Typography
+                                                sx={{
+                                                    fontWeight: 'bold',
+                                                    color: 'var(--text-color)',
+                                                    fontSize: '16px',
+                                                    overflow: 'hidden',
+                                                    maxWidth: '260px',
+                                                    textOverflow: 'ellipsis',
+                                                    whiteSpace: 'nowrap'
+                                                }}
+                                            >
+                                                {t(`COMMON.CONTRACT.${column.toUpperCase()}`)}
+                                            </Typography>
+                                        </TableSortLabel>
+                                    </TableCell>
+                                ))}
 
                                 <TableCell
                                     sx={{
@@ -434,7 +481,7 @@ const EmployeeTable: React.FC = () => {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {user.EmployeeId}
+                                            {user.Id}
                                         </Typography>
                                     </TableCell>
 
@@ -475,7 +522,7 @@ const EmployeeTable: React.FC = () => {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {user.UserId}
+                                            {user.EmployeeId}
                                         </Typography>
                                     </TableCell>
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
@@ -492,6 +539,50 @@ const EmployeeTable: React.FC = () => {
                                             {user.ContractName || 'N/A'}
                                         </Typography>
                                     </TableCell>
+
+                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                        <Typography
+                                            sx={{
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                maxWidth: '260px',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            {user.Manager || 'N/A'}
+                                        </Typography>
+                                    </TableCell>
+
+                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                        <Typography
+                                            sx={{
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                maxWidth: '260px',
+                                                overflow: 'hidden',
+                                                whiteSpace: 'nowrap',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                textOverflow: 'ellipsis'
+                                            }}
+                                            component='div'
+                                        >
+                                            <Avatar
+                                                src={
+                                                    user.ManagerAvatarPath ||
+                                                    'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'
+                                                }
+                                                alt='Avatar'
+                                                sx={{ marginRight: '20px' }}
+                                            />
+                                            {user.ManagerFullName || 'N/A'}
+                                        </Typography>
+                                    </TableCell>
+
+
+
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                         <Typography
                                             sx={{
@@ -509,6 +600,24 @@ const EmployeeTable: React.FC = () => {
                                         </Typography>
                                     </TableCell>
 
+
+                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                        <Typography
+                                            sx={{
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                maxWidth: '260px',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            {user.EndDate && !isNaN(new Date(user.EndDate).getTime())
+                                                ? new Date(user.EndDate).toLocaleDateString()
+                                                : 'N/A'}
+                                        </Typography>
+                                    </TableCell>
+
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                         <Typography
                                             sx={{
@@ -521,6 +630,99 @@ const EmployeeTable: React.FC = () => {
                                             }}
                                         >
                                             {user.BasicSalary ? user.BasicSalary.toString().toLowerCase() : 'N/A'}
+                                        </Typography>
+                                    </TableCell>
+
+
+                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                        <Typography
+                                            sx={{
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                maxWidth: '260px',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            {user.Clause || 'N/A'}
+                                        </Typography>
+                                    </TableCell>
+
+
+                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                        <Typography
+                                            sx={{
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                maxWidth: '260px',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            {user.ProbationPeriod ? user.ProbationPeriod.toString().toLowerCase() : 'N/A'}
+                                        </Typography>
+                                    </TableCell>
+
+                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                        <Typography
+                                            sx={{
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                maxWidth: '260px',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            {user.WorkingHours ? user.WorkingHours.toString().toLowerCase() : 'N/A'}
+                                        </Typography>
+                                    </TableCell>
+
+
+                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                        <Typography
+                                            sx={{
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                maxWidth: '260px',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            {user.TerminationClause || 'N/A'}
+                                        </Typography>
+                                    </TableCell>
+
+                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                        <Typography
+                                            sx={{
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                maxWidth: '260px',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            {user.TypeContract || 'N/A'}
+                                        </Typography>
+                                    </TableCell>
+
+                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                        <Typography
+                                            sx={{
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                maxWidth: '260px',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            {user.Appendix || 'N/A'}
                                         </Typography>
                                     </TableCell>
 

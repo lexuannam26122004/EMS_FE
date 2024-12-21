@@ -53,6 +53,7 @@ const UpdateEmploymentContract = () => {
     const [terminationClause, setTerminationClause] = useState('')
     const [typeContract, setTypeContract] = useState('')
     const [managerId, setManagerId] = useState('')
+    const [appendix, setAppendix] = useState('')
 
     function formatDate(dateString: string): string {
         const date = new Date(dateString)
@@ -87,6 +88,7 @@ const UpdateEmploymentContract = () => {
             setTerminationClause(data.TerminationClause || '')
             setTypeContract(data.TypeContract || '')
             setManagerId(data.ManagerId || '')
+            setAppendix(data.Appendix || '')
         }
     }, [data, isFetchingGetById])
 
@@ -133,7 +135,8 @@ const UpdateEmploymentContract = () => {
             TerminationClause: terminationClause || '',
             ContractFileId: 0,
             TypeContract: typeContract,
-            ManagerId: managerId
+            ManagerId: managerId,
+            Appendix: appendix
         }
         try {
             await updateEmploymentContract(data).unwrap()
@@ -188,7 +191,8 @@ const UpdateEmploymentContract = () => {
             TerminationClause: terminationClause,
             ContractFileId: 0,
             TypeContract: typeContract,
-            ManagerId: managerId
+            ManagerId: managerId,
+            Appendix: appendix
         }
         try {
             await updateEmploymentContract(data).unwrap()
@@ -202,18 +206,19 @@ const UpdateEmploymentContract = () => {
     if (isUsersLoading) return <div>Loading...</div>
 
     return (
-        <Box sx={{ width: '100%' }}>
+        <Box sx={{ width: '720px', maxWidth: '100%', margin: '0 auto' }}>
             <Paper
+                elevation={0}
                 sx={{
                     width: '100%',
                     overflow: 'hidden',
-                    borderRadius: '6px',
-                    backgroundColor: 'var(--background-color)',
-                    padding: '20px'
+                    borderRadius: '15px',
+                    backgroundColor: 'var(--background-item)',
+                    padding: '24px'
                 }}
             >
                 <Typography sx={{ fontWeight: 'bold', fontSize: '22px', color: 'var(--text-color)' }}>
-                    {'Update a Contract'}
+                    {t('COMMON.CONTRACT.CREATE.CREATE_CONTRACT')}
                 </Typography>
 
                 <Box
@@ -231,33 +236,47 @@ const UpdateEmploymentContract = () => {
                     >
                         <Autocomplete
                             sx={{
-                                color: 'var(--text-color)',
-                                backgroundColor: 'var(--background-color)',
                                 '& fieldset': {
                                     borderRadius: '8px',
                                     color: 'var(--text-color)',
                                     borderColor: 'var(--border-color)'
                                 },
-                                '& .MuiInputBase-root': { paddingRight: '0px' },
+                                '& .MuiInputBase-root': {
+                                    paddingRight: '0px'
+                                },
                                 '& .MuiInputBase-input': {
+                                    paddingRight: '12px',
                                     color: 'var(--text-color)',
-                                    fontSize: '16px'
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1
+                                    }
                                 },
                                 '& .MuiOutlinedInput-root:hover fieldset': {
-                                    borderColor: 'var(--hover-color)'
+                                    borderColor: 'var(--hover-field-color)'
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                                 },
                                 '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                    borderColor: 'var(--selected-color)'
+                                    borderColor: 'var(--selected-field-color)'
                                 },
                                 '& .MuiInputLabel-root': {
                                     color: 'var(--text-label-color)'
                                 },
                                 '& .MuiInputLabel-root.Mui-focused': {
-                                    color: 'var(--selected-color)'
+                                    color: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-error': {
+                                    color: 'var(--error-color)'
                                 },
                                 '& .MuiAutocomplete-popupIndicator': {
                                     '& svg': {
-                                        fill: 'var(--text-color)'
+                                        fill: isSubmit && userId === '' ? 'var(--error-color)' : 'var(--text-color)'
                                     }
                                 },
                                 '& .MuiAutocomplete-clearIndicator': {
@@ -267,12 +286,12 @@ const UpdateEmploymentContract = () => {
                                 }
                             }}
                             options={employee}
-                            getOptionLabel={option => `${option.EmployeeId} - ${option.FullName}`}
+                            getOptionLabel={option => `${option.EmployeeId}  ${option.FullName}`}
                             renderOption={(props, option, { selected }) => {
                                 const { key, ...otherProps } = props
                                 return (
                                     <Box
-                                        key={key}
+                                        key={`${option.Id}`}
                                         component='li'
                                         {...otherProps}
                                         sx={{
@@ -294,7 +313,7 @@ const UpdateEmploymentContract = () => {
                                             }
                                             alt='Avatar'
                                         />
-                                        <Typography>{`${option.EmployeeId} - ${option.FullName}`}</Typography>
+                                        <Typography>{`${option.EmployeeId}  ${option.FullName}`}</Typography>
                                     </Box>
                                 )
                             }}
@@ -302,7 +321,7 @@ const UpdateEmploymentContract = () => {
                                 <TextField
                                     {...params}
                                     variant='outlined'
-                                    label={t('Thông tin nhân viên*')}
+                                    label={t('COMMON.CONTRACT.INFORMATION') + '*'}
                                     fullWidth
                                     error={isSubmit && userId === ''}
                                 />
@@ -330,33 +349,47 @@ const UpdateEmploymentContract = () => {
                     >
                         <Autocomplete
                             sx={{
-                                color: 'var(--text-color)',
-                                backgroundColor: 'var(--background-color)',
                                 '& fieldset': {
                                     borderRadius: '8px',
                                     color: 'var(--text-color)',
                                     borderColor: 'var(--border-color)'
                                 },
-                                '& .MuiInputBase-root': { paddingRight: '0px' },
+                                '& .MuiInputBase-root': {
+                                    paddingRight: '0px'
+                                },
                                 '& .MuiInputBase-input': {
+                                    paddingRight: '12px',
                                     color: 'var(--text-color)',
-                                    fontSize: '16px'
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1
+                                    }
                                 },
                                 '& .MuiOutlinedInput-root:hover fieldset': {
-                                    borderColor: 'var(--hover-color)'
+                                    borderColor: 'var(--hover-field-color)'
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                                 },
                                 '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                    borderColor: 'var(--selected-color)'
+                                    borderColor: 'var(--selected-field-color)'
                                 },
                                 '& .MuiInputLabel-root': {
                                     color: 'var(--text-label-color)'
                                 },
                                 '& .MuiInputLabel-root.Mui-focused': {
-                                    color: 'var(--selected-color)'
+                                    color: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-error': {
+                                    color: 'var(--error-color)'
                                 },
                                 '& .MuiAutocomplete-popupIndicator': {
                                     '& svg': {
-                                        fill: 'var(--text-color)'
+                                        fill: isSubmit && managerId === '' ? 'var(--error-color)' : 'var(--text-color)'
                                     }
                                 },
                                 '& .MuiAutocomplete-clearIndicator': {
@@ -366,12 +399,12 @@ const UpdateEmploymentContract = () => {
                                 }
                             }}
                             options={employee}
-                            getOptionLabel={option => `${option.EmployeeId} - ${option.FullName}`}
+                            getOptionLabel={option => `${option.EmployeeId}  ${option.FullName}`}
                             renderOption={(props, option, { selected }) => {
                                 const { key, ...otherProps } = props
                                 return (
                                     <Box
-                                        key={key}
+                                        key={`${option.Id}`}
                                         component='li'
                                         {...otherProps}
                                         sx={{
@@ -393,7 +426,7 @@ const UpdateEmploymentContract = () => {
                                             }
                                             alt='Avatar'
                                         />
-                                        <Typography>{`${option.EmployeeId} - ${option.FullName}`}</Typography>
+                                        <Typography>{`${option.EmployeeId}  ${option.FullName}`}</Typography>
                                     </Box>
                                 )
                             }}
@@ -401,7 +434,7 @@ const UpdateEmploymentContract = () => {
                                 <TextField
                                     {...params}
                                     variant='outlined'
-                                    label={t('Thông tin nhân viên*')}
+                                    label={t('COMMON.CONTRACT.INFORMATIONMANAGER') + '*'}
                                     fullWidth
                                     error={isSubmit && managerId === ''}
                                 />
@@ -431,7 +464,7 @@ const UpdateEmploymentContract = () => {
                 >
                     <TextField
                         variant='outlined'
-                        label={t('Tên hợp đồng*')}
+                        label={t('COMMON.CONTRACT.CONTRACTNAME') + '*'}
                         id='fullWidth'
                         fullWidth
                         multiline
@@ -439,28 +472,43 @@ const UpdateEmploymentContract = () => {
                         minRows={1}
                         maxRows={12}
                         sx={{
-                            color: 'var(--text-color)',
                             '& fieldset': {
                                 borderRadius: '8px',
                                 color: 'var(--text-color)',
                                 borderColor: 'var(--border-color)'
                             },
-                            '& .MuiInputBase-root': { paddingRight: '0px' },
+                            '& .MuiInputBase-root': {
+                                paddingRight: '0px'
+                            },
                             '& .MuiInputBase-input': {
+                                paddingRight: '12px',
                                 color: 'var(--text-color)',
-                                fontSize: '16px'
+                                fontSize: '16px',
+                                '&::placeholder': {
+                                    color: 'var(--placeholder-color)',
+                                    opacity: 1
+                                }
                             },
                             '& .MuiOutlinedInput-root:hover fieldset': {
-                                borderColor: 'var(--hover-color)'
+                                borderColor: 'var(--hover-field-color)'
+                            },
+                            '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                            },
+                            '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                             },
                             '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                borderColor: 'var(--selected-color)'
+                                borderColor: 'var(--selected-field-color)'
                             },
                             '& .MuiInputLabel-root': {
                                 color: 'var(--text-label-color)'
                             },
                             '& .MuiInputLabel-root.Mui-focused': {
-                                color: 'var(--selected-color)'
+                                color: 'var(--selected-field-color)'
+                            },
+                            '& .MuiInputLabel-root.Mui-error': {
+                                color: 'var(--error-color)'
                             }
                         }}
                         value={contractName}
@@ -480,7 +528,7 @@ const UpdateEmploymentContract = () => {
 
                 <TextField
                     variant='outlined'
-                    label={t('Điều khoản hợp đồng')}
+                    label={t('COMMON.CONTRACT.CLAUSE')}
                     id='fullWidth'
                     fullWidth
                     multiline
@@ -488,28 +536,43 @@ const UpdateEmploymentContract = () => {
                     maxRows={12}
                     sx={{
                         mt: '7px',
-                        color: 'var(--text-color)',
                         '& fieldset': {
                             borderRadius: '8px',
                             color: 'var(--text-color)',
                             borderColor: 'var(--border-color)'
                         },
-                        '& .MuiInputBase-root': { paddingRight: '0px' },
+                        '& .MuiInputBase-root': {
+                            paddingRight: '0px'
+                        },
                         '& .MuiInputBase-input': {
+                            paddingRight: '12px',
                             color: 'var(--text-color)',
-                            fontSize: '16px'
+                            fontSize: '16px',
+                            '&::placeholder': {
+                                color: 'var(--placeholder-color)',
+                                opacity: 1
+                            }
                         },
                         '& .MuiOutlinedInput-root:hover fieldset': {
-                            borderColor: 'var(--hover-color)'
+                            borderColor: 'var(--hover-field-color)'
+                        },
+                        '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                            borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                        },
+                        '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                            borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                         },
                         '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                            borderColor: 'var(--selected-color)'
+                            borderColor: 'var(--selected-field-color)'
                         },
                         '& .MuiInputLabel-root': {
                             color: 'var(--text-label-color)'
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'var(--selected-color)'
+                            color: 'var(--selected-field-color)'
+                        },
+                        '& .MuiInputLabel-root.Mui-error': {
+                            color: 'var(--error-color)'
                         }
                     }}
                     value={clause}
@@ -531,33 +594,48 @@ const UpdateEmploymentContract = () => {
                     >
                         <TextField
                             variant='outlined'
-                            label={'Ngày bắt đầu*'}
+                            label={t('COMMON.CONTRACT.STARTDATE') + '*'}
                             type='date'
                             fullWidth
                             {...(isSubmit && startDate === '' && { error: true })}
                             sx={{
-                                color: 'var(--text-color)',
                                 '& fieldset': {
                                     borderRadius: '8px',
                                     color: 'var(--text-color)',
                                     borderColor: 'var(--border-color)'
                                 },
-                                '& .MuiInputBase-root': { paddingRight: '0px' },
+                                '& .MuiInputBase-root': {
+                                    paddingRight: '0px'
+                                },
                                 '& .MuiInputBase-input': {
+                                    paddingRight: '12px',
                                     color: 'var(--text-color)',
-                                    fontSize: '16px'
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1
+                                    }
                                 },
                                 '& .MuiOutlinedInput-root:hover fieldset': {
-                                    borderColor: 'var(--hover-color)'
+                                    borderColor: 'var(--hover-field-color)'
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                                 },
                                 '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                    borderColor: 'var(--selected-color)'
+                                    borderColor: 'var(--selected-field-color)'
                                 },
                                 '& .MuiInputLabel-root': {
                                     color: 'var(--text-label-color)'
                                 },
                                 '& .MuiInputLabel-root.Mui-focused': {
-                                    color: 'var(--selected-color)'
+                                    color: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-error': {
+                                    color: 'var(--error-color)'
                                 }
                             }}
                             value={startDate}
@@ -582,33 +660,48 @@ const UpdateEmploymentContract = () => {
                     >
                         <TextField
                             variant='outlined'
-                            label={'Ngày kết thúc*'}
+                            label={t('COMMON.CONTRACT.ENDDATE') + '*'}
                             fullWidth
                             {...(isSubmit && endDate === '' && { error: true })}
                             type='date'
                             sx={{
-                                color: 'var(--text-color)',
                                 '& fieldset': {
                                     borderRadius: '8px',
                                     color: 'var(--text-color)',
                                     borderColor: 'var(--border-color)'
                                 },
-                                '& .MuiInputBase-root': { paddingRight: '0px' },
+                                '& .MuiInputBase-root': {
+                                    paddingRight: '0px'
+                                },
                                 '& .MuiInputBase-input': {
+                                    paddingRight: '12px',
                                     color: 'var(--text-color)',
-                                    fontSize: '16px'
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1
+                                    }
                                 },
                                 '& .MuiOutlinedInput-root:hover fieldset': {
-                                    borderColor: 'var(--hover-color)'
+                                    borderColor: 'var(--hover-field-color)'
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                                 },
                                 '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                    borderColor: 'var(--selected-color)'
+                                    borderColor: 'var(--selected-field-color)'
                                 },
                                 '& .MuiInputLabel-root': {
                                     color: 'var(--text-label-color)'
                                 },
                                 '& .MuiInputLabel-root.Mui-focused': {
-                                    color: 'var(--selected-color)'
+                                    color: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-error': {
+                                    color: 'var(--error-color)'
                                 }
                             }}
                             value={endDate}
@@ -642,32 +735,47 @@ const UpdateEmploymentContract = () => {
                     >
                         <TextField
                             variant='outlined'
-                            label={t('Lương cơ bản*')}
+                            label={t('COMMON.CONTRACT.BASICSALARY') + '*'}
                             fullWidth
                             {...(isSubmit && basicSalary === '' && { error: true })}
                             sx={{
-                                color: 'var(--text-color)',
                                 '& fieldset': {
                                     borderRadius: '8px',
                                     color: 'var(--text-color)',
                                     borderColor: 'var(--border-color)'
                                 },
-                                '& .MuiInputBase-root': { paddingRight: '0px' },
+                                '& .MuiInputBase-root': {
+                                    paddingRight: '0px'
+                                },
                                 '& .MuiInputBase-input': {
+                                    paddingRight: '12px',
                                     color: 'var(--text-color)',
-                                    fontSize: '16px'
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1
+                                    }
                                 },
                                 '& .MuiOutlinedInput-root:hover fieldset': {
-                                    borderColor: 'var(--hover-color)'
+                                    borderColor: 'var(--hover-field-color)'
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                                 },
                                 '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                    borderColor: 'var(--selected-color)'
+                                    borderColor: 'var(--selected-field-color)'
                                 },
                                 '& .MuiInputLabel-root': {
                                     color: 'var(--text-label-color)'
                                 },
                                 '& .MuiInputLabel-root.Mui-focused': {
-                                    color: 'var(--selected-color)'
+                                    color: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-error': {
+                                    color: 'var(--error-color)'
                                 }
                             }}
                             value={basicSalary}
@@ -692,32 +800,47 @@ const UpdateEmploymentContract = () => {
                     >
                         <TextField
                             variant='outlined'
-                            label={t('Số ngày thử việc*')}
+                            label={t('COMMON.CONTRACT.PROBATIONPERIOD') + '*'}
                             fullWidth
                             {...(isSubmit && probationPeriod === '' && { error: true })}
                             sx={{
-                                color: 'var(--text-color)',
                                 '& fieldset': {
                                     borderRadius: '8px',
                                     color: 'var(--text-color)',
                                     borderColor: 'var(--border-color)'
                                 },
-                                '& .MuiInputBase-root': { paddingRight: '0px' },
+                                '& .MuiInputBase-root': {
+                                    paddingRight: '0px'
+                                },
                                 '& .MuiInputBase-input': {
+                                    paddingRight: '12px',
                                     color: 'var(--text-color)',
-                                    fontSize: '16px'
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1
+                                    }
                                 },
                                 '& .MuiOutlinedInput-root:hover fieldset': {
-                                    borderColor: 'var(--hover-color)'
+                                    borderColor: 'var(--hover-field-color)'
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                                 },
                                 '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                    borderColor: 'var(--selected-color)'
+                                    borderColor: 'var(--selected-field-color)'
                                 },
                                 '& .MuiInputLabel-root': {
                                     color: 'var(--text-label-color)'
                                 },
                                 '& .MuiInputLabel-root.Mui-focused': {
-                                    color: 'var(--selected-color)'
+                                    color: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-error': {
+                                    color: 'var(--error-color)'
                                 }
                             }}
                             value={probationPeriod}
@@ -751,32 +874,47 @@ const UpdateEmploymentContract = () => {
                     >
                         <TextField
                             variant='outlined'
-                            label={t('Số giờ làm việc mỗi ngày*')}
+                            label={t('COMMON.CONTRACT.WORKINGHOURS') + '*'}
                             fullWidth
                             {...(isSubmit && workingHours === '' && { error: true })}
                             sx={{
-                                color: 'var(--text-color)',
                                 '& fieldset': {
                                     borderRadius: '8px',
                                     color: 'var(--text-color)',
                                     borderColor: 'var(--border-color)'
                                 },
-                                '& .MuiInputBase-root': { paddingRight: '0px' },
+                                '& .MuiInputBase-root': {
+                                    paddingRight: '0px'
+                                },
                                 '& .MuiInputBase-input': {
+                                    paddingRight: '12px',
                                     color: 'var(--text-color)',
-                                    fontSize: '16px'
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1
+                                    }
                                 },
                                 '& .MuiOutlinedInput-root:hover fieldset': {
-                                    borderColor: 'var(--hover-color)'
+                                    borderColor: 'var(--hover-field-color)'
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                                 },
                                 '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                    borderColor: 'var(--selected-color)'
+                                    borderColor: 'var(--selected-field-color)'
                                 },
                                 '& .MuiInputLabel-root': {
                                     color: 'var(--text-label-color)'
                                 },
                                 '& .MuiInputLabel-root.Mui-focused': {
-                                    color: 'var(--selected-color)'
+                                    color: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-error': {
+                                    color: 'var(--error-color)'
                                 }
                             }}
                             value={workingHours}
@@ -803,50 +941,74 @@ const UpdateEmploymentContract = () => {
                             fullWidth
                             error={isSubmit && typeContract === ''}
                             sx={{
-                                color: 'var(--text-color)',
                                 '& fieldset': {
                                     borderRadius: '8px',
                                     color: 'var(--text-color)',
                                     borderColor: 'var(--border-color)'
                                 },
-                                '& .MuiInputBase-root': { paddingRight: '0px' },
+                                '& .MuiInputBase-root': {
+                                    paddingRight: '0px'
+                                },
                                 '& .MuiInputBase-input': {
+                                    paddingRight: '12px',
                                     color: 'var(--text-color)',
-                                    fontSize: '16px'
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1
+                                    }
                                 },
                                 '& .MuiOutlinedInput-root:hover fieldset': {
-                                    borderColor: 'var(--hover-color)'
+                                    borderColor: 'var(--hover-field-color)'
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                                 },
                                 '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                    borderColor: 'var(--selected-color)'
+                                    borderColor: 'var(--selected-field-color)'
                                 },
                                 '& .MuiInputLabel-root': {
                                     color: 'var(--text-label-color)'
                                 },
                                 '& .MuiInputLabel-root.Mui-focused': {
-                                    color: 'var(--selected-color)'
+                                    color: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-error': {
+                                    color: 'var(--error-color)'
                                 },
                                 '& .MuiSelect-icon': {
-                                    color: 'var(--text-color)'
+                                    color: isSubmit && typeContract === '' ? 'var(--error-color)' : 'var(--text-color)'
                                 }
                             }}
                         >
-                            <InputLabel> Chế độ làm việc*</InputLabel>
+                            <InputLabel>{t('COMMON.CONTRACT.TYPECONTRACT') + '*'}</InputLabel>
 
                             <Select
                                 labelId='gender-label'
                                 id='gender'
                                 value={typeContract}
-                                label=' Chế độ làm việc*'
+                                label={t('COMMON.CONTRACT.TYPECONTRACT') + '*'}
                                 onChange={e => setTypeContract(e.target.value)}
                                 MenuProps={{
                                     PaperProps: {
                                         elevation: 0,
                                         sx: {
-                                            backgroundColor: 'var(--background-color)',
+                                            backgroundImage:
+                                                'url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSJ1cmwoI3BhaW50MF9yYWRpYWxfMjc0OV8xNDUxODYpIiBmaWxsLW9wYWNpdHk9IjAuMTIiLz4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0icGFpbnQwX3JhZGlhbF8yNzQ5XzE0NTE4NiIgY3g9IjAiIGN5PSIwIiByPSIxIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgZ3JhZGllbnRUcmFuc2Zvcm09InRyYW5zbGF0ZSgxMjAgMS44MTgxMmUtMDUpIHJvdGF0ZSgtNDUpIHNjYWxlKDEyMy4yNSkiPgo8c3RvcCBzdG9wLWNvbG9yPSIjMDBCOEQ5Ii8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzAwQjhEOSIgc3RvcC1vcGFjaXR5PSIwIi8+CjwvcmFkaWFsR3JhZGllbnQ+CjwvZGVmcz4KPC9zdmc+Cg==), url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSJ1cmwoI3BhaW50MF9yYWRpYWxfMjc0OV8xNDUxODcpIiBmaWxsLW9wYWNpdHk9IjAuMTIiLz4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0icGFpbnQwX3JhZGlhbF8yNzQ5XzE0NTE4NyIgY3g9IjAiIGN5PSIwIiByPSIxIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgZ3JhZGllbnRUcmFuc2Zvcm09InRyYW5zbGF0ZSgwIDEyMCkgcm90YXRlKDEzNSkgc2NhbGUoMTIzLjI1KSI+CjxzdG9wIHN0b3AtY29sb3I9IiNGRjU2MzAiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRkY1NjMwIiBzdG9wLW9wYWNpdHk9IjAiLz4KPC9yYWRpYWxHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K)',
+                                            backgroundPosition: 'top right, bottom left',
+                                            backgroundSize: '50%, 50%',
+                                            backgroundRepeat: 'no-repeat',
+                                            padding: '0 8px',
+                                            backdropFilter: 'blur(20px)',
+                                            borderRadius: '8px',
+                                            backgroundColor: 'var(--background-item)',
                                             color: 'var(--text-color)',
                                             border: '1px solid var(--border-color)',
                                             '& .MuiMenuItem-root': {
+                                                borderRadius: '6px',
                                                 '&:hover': {
                                                     backgroundColor: 'var(--hover-color)'
                                                 },
@@ -857,7 +1019,8 @@ const UpdateEmploymentContract = () => {
                                                     }
                                                 }
                                             }
-                                        }
+                                        },
+                                        autoFocus: false
                                     }
                                 }}
                             >
@@ -886,7 +1049,7 @@ const UpdateEmploymentContract = () => {
 
                 <TextField
                     variant='outlined'
-                    label={t('Điều khoản chấm dứt hợp đồng')}
+                    label={t('COMMON.CONTRACT.TERMINATIONCLAUSE')}
                     id='fullWidth'
                     fullWidth
                     multiline
@@ -894,32 +1057,100 @@ const UpdateEmploymentContract = () => {
                     maxRows={12}
                     sx={{
                         mt: '7px',
-                        color: 'var(--text-color)',
                         '& fieldset': {
                             borderRadius: '8px',
                             color: 'var(--text-color)',
                             borderColor: 'var(--border-color)'
                         },
-                        '& .MuiInputBase-root': { paddingRight: '0px' },
+                        '& .MuiInputBase-root': {
+                            paddingRight: '0px'
+                        },
                         '& .MuiInputBase-input': {
+                            paddingRight: '12px',
                             color: 'var(--text-color)',
-                            fontSize: '16px'
+                            fontSize: '16px',
+                            '&::placeholder': {
+                                color: 'var(--placeholder-color)',
+                                opacity: 1
+                            }
                         },
                         '& .MuiOutlinedInput-root:hover fieldset': {
-                            borderColor: 'var(--hover-color)'
+                            borderColor: 'var(--hover-field-color)'
+                        },
+                        '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                            borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                        },
+                        '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                            borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                         },
                         '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                            borderColor: 'var(--selected-color)'
+                            borderColor: 'var(--selected-field-color)'
                         },
                         '& .MuiInputLabel-root': {
                             color: 'var(--text-label-color)'
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'var(--selected-color)'
+                            color: 'var(--selected-field-color)'
+                        },
+                        '& .MuiInputLabel-root.Mui-error': {
+                            color: 'var(--error-color)'
                         }
                     }}
                     value={terminationClause}
                     onChange={e => setTerminationClause(e.target.value)}
+                />
+
+                <TextField
+                    variant='outlined'
+                    label={t('COMMON.CONTRACT.APPENDIX')}
+                    id='fullWidth'
+                    fullWidth
+                    multiline
+                    minRows={4}
+                    maxRows={12}
+                    sx={{
+                        mt: '25px',
+                        '& fieldset': {
+                            borderRadius: '8px',
+                            color: 'var(--text-color)',
+                            borderColor: 'var(--border-color)'
+                        },
+                        '& .MuiInputBase-root': {
+                            paddingRight: '0px'
+                        },
+                        '& .MuiInputBase-input': {
+                            paddingRight: '12px',
+                            color: 'var(--text-color)',
+                            fontSize: '16px',
+                            '&::placeholder': {
+                                color: 'var(--placeholder-color)',
+                                opacity: 1
+                            }
+                        },
+                        '& .MuiOutlinedInput-root:hover fieldset': {
+                            borderColor: 'var(--hover-field-color)'
+                        },
+                        '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                            borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                        },
+                        '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                            borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                        },
+                        '& .MuiOutlinedInput-root.Mui-focused fieldset': {
+                            borderColor: 'var(--selected-field-color)'
+                        },
+                        '& .MuiInputLabel-root': {
+                            color: 'var(--text-label-color)'
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'var(--selected-field-color)'
+                        },
+                        '& .MuiInputLabel-root.Mui-error': {
+                            color: 'var(--error-color)'
+                        }
+                    }}
+                    value={appendix}
+                    onChange={e => setAppendix(e.target.value)}
                 />
 
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px', mt: '20px' }}>
@@ -943,7 +1174,7 @@ const UpdateEmploymentContract = () => {
                             window.location.reload()
                         }}
                     >
-                        {t('Làm mới')}
+                        {t('COMMON.BUTTON.REFRESH')}
                     </Button>
 
                     <LoadingButton

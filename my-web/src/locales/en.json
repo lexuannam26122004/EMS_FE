@@ -484,6 +484,45 @@
                     "UPDATE_TIMEOFF": "Failed to Update Leave Information"
                 }
             }
+        },
+
+        "CONTRACT": {
+            "INFORMATION": "Employee Information",
+            "INFORMATIONMANAGER": "Manager Information",
+            "MANAGERFULLNAME": "Manager's Full Name",
+            "FULLNAME": "Full Name",
+            "EMPLOYEEID": "Employee ID",
+            "STARTDATE": "Start Date",
+            "ENDDATE": "End Date",
+            "CONTRACTNAME": "Contract Name",
+            "BASICSALARY": "Basic Salary",
+            "CLAUSE": "Contract Clause",
+            "PROBATIONPERIOD": "Probation Period",
+            "WORKINGHOURS": "Working Hours",
+            "TERMINATIONCLAUSE": "Termination Clause",
+            "TYPECONTRACT": "Working Mode",
+            "MANAGER": "Manager ID",
+            "APPENDIX": "Contract Appendix",
+            "CREATE": {
+                "CREATE_CONTRACT": "Create New Contract",
+                "SUCCESS": {
+                    "CREATE_CONTRACT": "Successfully Created New Contract"
+                },
+                "ERROR": {
+                    "CREATE_CONTRACT": "Failed to Create New Contract"
+                }
+            },
+            "UPDATE": {
+                "UPDATE_CONTRACT": "Update Contract",
+                "SUCCESS": {
+                    "UPDATE_CONTRACT": "Successfully Updated Contract"
+                },
+                "ERROR": {
+                    "UPDATE_CONTRACT": "Failed to Update Contract"
+                }
+            },
+            "ACCEPT": "Accept",
+            "REPORT_ERROR": "Report Error"
         }
     }
 }
