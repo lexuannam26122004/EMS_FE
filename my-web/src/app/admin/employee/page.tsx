@@ -454,7 +454,7 @@ const EmployeeTable: React.FC = () => {
                                         padding: '0px 9.5px 0px 0px',
                                         width: '146px',
                                         position: 'sticky',
-                                        right: -0.38,
+                                        right: -0.45,
                                         zIndex: 1,
                                         backgroundColor: 'var(--header-color-table)'
                                     }}
@@ -715,7 +715,7 @@ const EmployeeTable: React.FC = () => {
                                             borderColor: 'var(--border-color)',
                                             width: '146px',
                                             position: 'sticky',
-                                            right: -0.38,
+                                            right: -0.45,
                                             zIndex: 1,
                                             clipPath: 'inset(0px 0px 1px 0px)',
                                             backdropFilter: 'blur(3000px)',
