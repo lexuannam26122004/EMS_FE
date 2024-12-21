@@ -75,3 +75,10 @@ export interface IEmploymentContractUpdate {
     ManagerId: string
     Appendix: string
 }
+
+export interface IUserDetails extends IEmploymentContractSearch {
+    FullName: string
+    EmployeeId: string
+    ManagerFullName: string
+    Manager: string
+}
