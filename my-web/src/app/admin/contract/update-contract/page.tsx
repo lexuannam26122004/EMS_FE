@@ -152,13 +152,13 @@ const UpdateEmploymentContract = () => {
 
     useEffect(() => {
         if (isSuccess === true) {
-            toast(t('Cập nhật hợp đồng thành công'), 'success')
+            toast(t('COMMON.CONTRACT.UPDATE.SUCCESS.UPDATE_CONTRACT'), 'success')
             refetch()
             reset()
             fetchContract()
         }
         if (isError === true) {
-            toast(t('Cập nhật hợp đồng thất bại'), 'error')
+            toast(t('COMMON.CONTRACT.UPDATE.ERROR.UPDATE_CONTRACT'), 'error')
             reset()
             fetchContract()
         }
@@ -224,7 +224,7 @@ const UpdateEmploymentContract = () => {
                 }}
             >
                 <Typography sx={{ fontWeight: 'bold', fontSize: '22px', color: 'var(--text-color)' }}>
-                    {t('COMMON.CONTRACT.CREATE.CREATE_CONTRACT')}
+                    {t('COMMON.CONTRACT.UPDATE.UPDATE_CONTRACT')}
                 </Typography>
 
                 <Box

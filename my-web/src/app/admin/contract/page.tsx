@@ -85,11 +85,18 @@ const EmployeeTable: React.FC = () => {
         user =>
             user.Id?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.FullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.UserId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.EmployeeId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.ManagerFullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.Manager?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.ContractName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.BasicSalary?.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.ProbationPeriod?.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.WorkingHours?.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.TypeContract?.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
             (user.StartDate &&
-                new Date(user.StartDate).toLocaleDateString().toLowerCase().includes(searchTerm.toLowerCase()))
+                new Date(user.StartDate).toLocaleDateString().toLowerCase().includes(searchTerm.toLowerCase())) ||
+            (user.EndDate &&
+                new Date(user.EndDate).toLocaleDateString().toLowerCase().includes(searchTerm.toLowerCase()))
     )
 
     const isSelected = (id: string) => selected.includes(id)
