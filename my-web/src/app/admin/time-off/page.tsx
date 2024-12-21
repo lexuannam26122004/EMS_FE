@@ -463,7 +463,15 @@ const EmployeeTable: React.FC = () => {
                         </TableHead>
                         <TableBody>
                             {paginatedUsers.map(user => (
-                                <TableRow key={user.Id} selected={isSelected(user.Id)}>
+                                <TableRow
+                                    key={user.Id}
+                                    selected={isSelected(user.Id)}
+                                    sx={{
+                                        backgroundColor: user.IsAccepted
+                                            ? 'var(--bg-success-color1)'
+                                            : 'var(--bg-danger-color1)'
+                                    }}
+                                >
                                     <TableCell
                                         padding='checkbox'
                                         sx={{
