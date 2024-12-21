@@ -57,7 +57,7 @@ const UpdateTimeOff = () => {
 
     const searchParams = useSearchParams()
     const id = searchParams.get('id') ? parseInt(searchParams.get('id') as string) : 0
-    const { data: responseData, isFetching: isFetchingGetById } = useGetByIdTimeOffsQuery(id)
+    const { data: responseData, isFetching: isFetchingGetById, refetch: fetchTimeOff } = useGetByIdTimeOffsQuery(id)
     const [UpdateTimeOff, { isSuccess, isError, reset }] = useUpdateTimeOffsMutation()
 
     function formatDate(dateString: string): string {
@@ -119,12 +119,14 @@ const UpdateTimeOff = () => {
             toast(t('COMMON.TIMEOFF.UPDATE.SUCCESS.UPDATE_TIMEOFF'), 'success')
             refetch()
             reset()
+            fetchTimeOff()
         }
         if (isError === true) {
             toast(t('COMMON.TIMEOFF.UPDATE.ERROR.UPDATE_TIMEOFF'), 'error')
             reset()
+            fetchTimeOff()
         }
-    }, [isSuccess, isError, toast, t, reset, refetch])
+    }, [isSuccess, isError, toast, t, reset, refetch, fetchTimeOff])
 
     const handleSaveAndClose = async () => {
         setIsSaveAndCloseLoading(true)

@@ -319,7 +319,14 @@ const EmployeeTable: React.FC = () => {
                             <TableRow sx={{ backgroundColor: 'var(--header-color-table)' }}>
                                 <TableCell
                                     padding='checkbox'
-                                    sx={{ borderColor: 'var(--border-color)', paddingLeft: '12px' }}
+                                    sx={{
+                                        borderColor: 'var(--border-color)',
+                                        paddingLeft: '12px',
+                                        backgroundColor: 'var(--header-color-table)',
+                                        position: 'sticky',
+                                        left: 0,
+                                        zIndex: 2
+                                    }}
                                 >
                                     <Checkbox
                                         indeterminate={selected.length > 0 && selected.length < users.length}
@@ -332,7 +339,15 @@ const EmployeeTable: React.FC = () => {
                                         }}
                                     />
                                 </TableCell>
-                                <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                <TableCell
+                                    sx={{
+                                        borderColor: 'var(--border-color)',
+                                        backgroundColor: 'var(--header-color-table)',
+                                        position: 'sticky',
+                                        left: 54,
+                                        zIndex: 1
+                                    }}
+                                >
                                     <TableSortLabel
                                         active={sortConfig.key === 'Id'}
                                         direction={sortConfig.key === 'Id' ? sortConfig.direction : 'asc'}
@@ -360,7 +375,16 @@ const EmployeeTable: React.FC = () => {
                                 </TableCell>
 
                                 {['FullName'].map((column, index) => (
-                                    <TableCell key={index} sx={{ borderColor: 'var(--border-color)' }}>
+                                    <TableCell
+                                        key={index}
+                                        sx={{
+                                            borderColor: 'var(--border-color)',
+                                            backgroundColor: 'var(--header-color-table)',
+                                            position: 'sticky',
+                                            left: 138,
+                                            zIndex: 1
+                                        }}
+                                    >
                                         <TableSortLabel
                                             active={sortConfig.key === column}
                                             direction={sortConfig.key === column ? sortConfig.direction : 'asc'}
@@ -435,7 +459,11 @@ const EmployeeTable: React.FC = () => {
                                     sx={{
                                         borderColor: 'var(--border-color)',
                                         padding: '0px 9.5px 0px 0px',
-                                        width: '146px'
+                                        width: '146px',
+                                        position: 'sticky',
+                                        right: -0.38,
+                                        zIndex: 1,
+                                        backgroundColor: 'var(--header-color-table)'
                                     }}
                                 >
                                     <Typography
@@ -459,7 +487,16 @@ const EmployeeTable: React.FC = () => {
                                 <TableRow key={user.Id} selected={isSelected(user.Id)}>
                                     <TableCell
                                         padding='checkbox'
-                                        sx={{ borderColor: 'var(--border-color)', paddingLeft: '12px' }}
+                                        sx={{
+                                            borderColor: 'var(--border-color)',
+                                            paddingLeft: '12px',
+                                            position: 'sticky',
+                                            left: 0,
+                                            zIndex: 1,
+                                            clipPath: 'inset(0px 0px 1px 0px)',
+                                            backdropFilter: 'blur(250px)',
+                                            WebkitBackdropFilter: 'blur(250px)'
+                                        }}
                                     >
                                         <Checkbox
                                             checked={isSelected(user.Id)}
@@ -470,7 +507,17 @@ const EmployeeTable: React.FC = () => {
                                         />
                                     </TableCell>
 
-                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                    <TableCell
+                                        sx={{
+                                            borderColor: 'var(--border-color)',
+                                            position: 'sticky',
+                                            left: 54,
+                                            zIndex: 1,
+                                            clipPath: 'inset(0px 0px 1px 0px)',
+                                            backdropFilter: 'blur(3000px)',
+                                            WebkitBackdropFilter: 'blur(3000px)'
+                                        }}
+                                    >
                                         <Typography
                                             sx={{
                                                 color: 'var(--text-color)',
@@ -485,7 +532,17 @@ const EmployeeTable: React.FC = () => {
                                         </Typography>
                                     </TableCell>
 
-                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                    <TableCell
+                                        sx={{
+                                            borderColor: 'var(--border-color)',
+                                            position: 'sticky',
+                                            left: 138,
+                                            zIndex: 1,
+                                            clipPath: 'inset(0px 0px 1px 0px)',
+                                            backdropFilter: 'blur(3000px)',
+                                            WebkitBackdropFilter: 'blur(3000px)'
+                                        }}
+                                    >
                                         <Typography
                                             sx={{
                                                 color: 'var(--text-color)',
@@ -581,8 +638,6 @@ const EmployeeTable: React.FC = () => {
                                         </Typography>
                                     </TableCell>
 
-
-
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                         <Typography
                                             sx={{
@@ -599,7 +654,6 @@ const EmployeeTable: React.FC = () => {
                                                 : 'N/A'}
                                         </Typography>
                                     </TableCell>
-
 
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                         <Typography
@@ -633,7 +687,6 @@ const EmployeeTable: React.FC = () => {
                                         </Typography>
                                     </TableCell>
 
-
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                         <Typography
                                             sx={{
@@ -649,7 +702,6 @@ const EmployeeTable: React.FC = () => {
                                         </Typography>
                                     </TableCell>
 
-
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                         <Typography
                                             sx={{
@@ -661,7 +713,9 @@ const EmployeeTable: React.FC = () => {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {user.ProbationPeriod ? user.ProbationPeriod.toString().toLowerCase() : 'N/A'}
+                                            {user.ProbationPeriod
+                                                ? user.ProbationPeriod.toString().toLowerCase()
+                                                : 'N/A'}
                                         </Typography>
                                     </TableCell>
 
@@ -679,7 +733,6 @@ const EmployeeTable: React.FC = () => {
                                             {user.WorkingHours ? user.WorkingHours.toString().toLowerCase() : 'N/A'}
                                         </Typography>
                                     </TableCell>
-
 
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                         <Typography
@@ -730,7 +783,13 @@ const EmployeeTable: React.FC = () => {
                                         sx={{
                                             padding: '0px 9.5px 0px 0px',
                                             borderColor: 'var(--border-color)',
-                                            width: '146px'
+                                            width: '146px',
+                                            position: 'sticky',
+                                            right: -0.38,
+                                            zIndex: 1,
+                                            clipPath: 'inset(0px 0px 1px 0px)',
+                                            backdropFilter: 'blur(3000px)',
+                                            WebkitBackdropFilter: 'blur(3000px)'
                                         }}
                                     >
                                         <Box

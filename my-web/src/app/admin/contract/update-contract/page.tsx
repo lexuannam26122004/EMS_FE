@@ -72,7 +72,11 @@ const UpdateEmploymentContract = () => {
 
     const searchParams = useSearchParams()
     const id = searchParams.get('id') || ''
-    const { data: responseData, isFetching: isFetchingGetById } = useGetByIdEmploymentContractsQuery(id)
+    const {
+        data: responseData,
+        isFetching: isFetchingGetById,
+        refetch: fetchContract
+    } = useGetByIdEmploymentContractsQuery(id)
     const [updateEmploymentContract, { isSuccess, isError, reset }] = useUpdateEmploymentContractsMutation()
     const data = responseData?.Data
     useEffect(() => {
@@ -151,12 +155,14 @@ const UpdateEmploymentContract = () => {
             toast(t('Cập nhật hợp đồng thành công'), 'success')
             refetch()
             reset()
+            fetchContract()
         }
         if (isError === true) {
             toast(t('Cập nhật hợp đồng thất bại'), 'error')
             reset()
+            fetchContract()
         }
-    }, [isSuccess, isError, toast, t, reset, refetch])
+    }, [isSuccess, isError, toast, t, reset, refetch, fetchContract])
 
     const handleSaveAndClose = async () => {
         setIsSaveAndCloseLoading(true)
