@@ -35,6 +35,8 @@ import SearchIcon from '@mui/icons-material/Search'
 import { CirclePlus, Pencil, Trash2 } from 'lucide-react'
 import AlertDialog from '@/components/AlertDialog'
 import { useRouter } from 'next/navigation'
+import DisplayInfo from '../DisplayInfo'
+import DepartmentInfo from './DepartmentInfo'
 
 function DepartmentPage() {
     const { t } = useTranslation('common')
@@ -216,7 +218,8 @@ function DepartmentPage() {
     const countRows = selected.length
 
     return (
-        <Box>
+        <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            <DepartmentInfo />
             <Paper
                 sx={{
                     width: '100%',
