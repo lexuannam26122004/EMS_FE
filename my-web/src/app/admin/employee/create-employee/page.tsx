@@ -546,7 +546,7 @@ const CreateEmployeePage = () => {
                                     color: 'var(--error-color)'
                                 },
                                 '& .MuiSelect-icon': {
-                                    color: 'var(--text-color)'
+                                    color: isSubmit && departmentId === '' ? 'var(--error-color)' : 'var(--text-color)'
                                 }
                             }}
                         >
@@ -803,7 +803,10 @@ const CreateEmployeePage = () => {
                                 color: 'var(--error-color)'
                             },
                             '& .MuiSelect-icon': {
-                                color: 'var(--text-color)'
+                                color:
+                                    isSubmit && (!Array.isArray(roles) || roles.length === 0)
+                                        ? 'var(--error-color)'
+                                        : 'var(--text-color)'
                             }
                         }}
                     >
@@ -929,7 +932,7 @@ const CreateEmployeePage = () => {
                                     color: 'var(--error-color)'
                                 },
                                 '& .MuiSelect-icon': {
-                                    color: 'var(--text-color)'
+                                    color: isSubmit && gender === '' ? 'var(--error-color)' : 'var(--text-color)'
                                 }
                             }}
                         >

@@ -68,9 +68,9 @@ function ContractExpPage() {
     const [from, setFrom] = useState(1)
     const [to, setTo] = useState(5)
     const [filter, setFilter] = useState<IFilterEmploymentContract>({
-        pageSize: 10,
+        pageSize: 5,
         pageNumber: 1,
-        daysUntilExpiration: 60
+        daysUntilExpiration: 180
     })
     const [keyword, setKeyword] = useState('')
     const [openDialog, setOpenDialog] = useState(false)
@@ -170,7 +170,7 @@ function ContractExpPage() {
                 sx={{
                     width: '100%',
                     overflow: 'hidden',
-                    borderRadius: '10px',
+                    borderRadius: '15px',
                     backgroundColor: 'var(--background-item)'
                 }}
             >
@@ -354,8 +354,8 @@ function ContractExpPage() {
                                 <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                     <TableSortLabel
                                         active={'ContractStart' === orderBy}
-                                        direction={orderBy === 'CibtractStart' ? order : 'asc'}
-                                        onClick={() => handleSort('CibtractStart')}
+                                        direction={orderBy === 'ContractStart' ? order : 'asc'}
+                                        onClick={() => handleSort('ContractStart')}
                                         sx={{
                                             '& .MuiTableSortLabel-icon': {
                                                 color: 'var(--text-color) !important'
@@ -431,7 +431,7 @@ function ContractExpPage() {
                                             }
                                         }}
                                     >
-                                        <TableCell sx={{ borderColor: 'var(--border-color)', padding: '0 16px' }}>
+                                        <TableCell sx={{ borderColor: 'var(--border-color)', padding: '16px' }}>
                                             <Box
                                                 sx={{
                                                     display: 'flex',

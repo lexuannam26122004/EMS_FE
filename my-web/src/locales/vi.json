@@ -1,5 +1,6 @@
 {
     "COMMON": {
+        "VIEW_DETAILS": "Xem chi tiết thông tin của ",
         "FILTER": "Bộ lọc",
         "FROM_DATE": "Từ ngày",
         "TO_DATE": "Đến ngày",
@@ -52,11 +53,12 @@
             }
         },
         "BUTTON": {
-            "REFRESH": "Làm mới" ,
+            "REFRESH": "Làm mới",
             "SAVE": "Lưu",
             "SAVE_AND_CLOSE": "Lưu và Đóng",
             "CANCEL": "Hủy",
             "CREATE": "Thêm mới",
+            "SAVE_CHANGES": "Lưu thay đổi",
             "EDIT": "Cập nhật",
             "UPDATING": "Đang cập nhật",
             "DELETE": "Xóa",
@@ -363,6 +365,117 @@
                     "UPDATE_EMPLOYEE": "Cập nhật nhân viên thất bại"
                 }
             }
+        },
+
+        "TIMEOFF": {
+            "INFORMATION": "Thông tin nhân viên",
+            "FULLNAME": "Họ và tên",
+            "EMPLOYEEID": "Mã nhân viên",
+            "REASON": "Lý do nghỉ phép",
+            "CONTENT": "Nội dung nghỉ phép",
+            "ISACCEPTED": "Trạng thái",
+            "STARTDATE": "Ngày bắt đầu nghỉ phép",
+            "ENDDATE": "Ngày kết thúc nghỉ phép",
+            "CREATE": {
+                "CREATE_TIMEOFF": "Thêm mới thông tin nghỉ phép",
+                "SUCCESS": {
+                    "CREATE_TIMEOFF": "Thêm mới thông tin nghỉ phép thành công"
+                },
+                "ERROR": {
+                    "CREATE_TIMEOFF": "Thêm mới thông tin nghỉ phép thất bại"
+                }
+            },
+            "UPDATE": {
+                "UPDATE_TIMEOFF": "Cập nhật thông tin nghỉ phép",
+                "SUCCESS": {
+                    "UPDATE_TIMEOFF": "Cập nhật thông tin nghỉ phép thành công"
+                },
+                "ERROR": {
+                    "UPDATE_TIMEOFF": "Cập nhật thông tin nghỉ phép thất bại"
+                }
+            },
+            "ACCEPT": "Đồng ý",
+            "REPORT_ERROR": "Báo cáo sai sót"
+        },
+
+        "CONTRACT": {
+            "INFORMATION": "Thông tin nhân viên",
+            "INFORMATIONMANAGER": "Thông tin quản lí",
+            "FULLNAME": "Họ và tên",
+            "MANAGERFULLNAME": "Họ và tên quản lí",
+            "EMPLOYEEID": "Mã nhân viên",
+            "STARTDATE": "Ngày bắt đầu",
+            "ENDDATE": "Ngày kết thúc",
+            "CONTRACTNAME": "Tên hợp đồng",
+            "BASICSALARY": "Lương cơ bản",
+            "CLAUSE": "Điều khoản hợp đồng",
+            "PROBATIONPERIOD": "Số ngày thử việc",
+            "WORKINGHOURS": "Số giờ làm việc",
+            "TERMINATIONCLAUSE": "Điều khoản chấm dứt",
+            "TYPECONTRACT": "Chế độ làm việc",
+            "MANAGER": "Mã quản lí",
+            "APPENDIX": "Phụ lục của hợp đồng",
+            "CREATE": {
+                "CREATE_CONTRACT": "Tạo mới hợp đồng",
+                "SUCCESS": {
+                    "CREATE_CONTRACT": "Tạo mới hợp đồng thành công"
+                },
+                "ERROR": {
+                    "CREATE_CONTRACT": "Tạo mới hợp đồng thất bại"
+                }
+            },
+            "UPDATE": {
+                "UPDATE_CONTRACT": "Cập nhật hợp đồng",
+                "SUCCESS": {
+                    "UPDATE_CONTRACT": "Cập nhật hợp đồng thành công"
+                },
+                "ERROR": {
+                    "UPDATE_CONTRACT": "Cập nhật hợp đồng thất bại"
+                }
+            },
+            "ACCEPT": "Đồng ý",
+            "REPORT_ERROR": "Báo cáo sai sót"
+        },
+
+        "ERROR_REPORT": {
+            "TITLE": "Danh sách báo cáo lỗi",
+            "ID": "ID",
+            "FULL_NAME_REPORTED": "Tên người báo cáo",
+            "AVATAR_REPORTED_PATH": "Đường dẫn ảnh đại diện người báo cáo",
+            "EMPLOYEE_ID_REPORTED": "Mã nhân viên người báo cáo",
+            "REPORTED_DATE": "Ngày báo cáo",
+            "TYPE": "Loại",
+            "TYPE_ID": "Mã loại",
+            "DESCRIPTION": "Mô tả",
+            "STATUS": "Trạng thái",
+            "AVATAR_RESOLVED_PATH": "Đường dẫn ảnh đại diện người xử lý",
+            "FULL_NAME_RESOLVED": "Tên người xử lý",
+            "RESOLVED_DATE": "Ngày xử lý",
+            "RESOLUTION_DETAILS": "Chi tiết xử lý",
+            "ACTION": "Hành động",
+            "SEARCH": "Tìm kiếm theo Tên",
+            "ALL": "Tất cả",
+            "PENDING": "Đang chờ",
+            "IN_PROGRESS": "Đang xử lý",
+            "RESOLVED": "Đã giải quyết",
+            "REJECTED": "Từ chối",
+            "CONSIDER": "Xem xét"
+        },
+        "CALENDAR": {
+            "CALENDAR": "Lịch làm việc",
+            "ADD_EVENT": "Thêm sự kiện",
+            "TITLE": "Tiêu đề",
+            "START_DATE": "Ngày bắt đầu",
+            "END_DATE": "Ngày kết thúc",
+            "DESCRIPTION": "Mô tả",
+            "ALL_DAY": "Cả ngày",
+            "MONTH": "Tháng",
+            "WEEK": "Tuần",
+            "DAY": "Ngày",
+            "TODAY": "Hôm nay",
+            "DELETE_EVENT": "Xóa sự kiện",
+            "NOTE": "Chú thích",
+            "HOLIDAY": "Ngày lễ"
         }
     }
 }

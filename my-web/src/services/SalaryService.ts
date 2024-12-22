@@ -7,6 +7,11 @@ interface SalaryResponse {
     Data: any
 }
 
+interface SalaryGetAll {
+    filter: IFilterSysConfiguration
+    period: string
+}
+
 const apiPath = 'https://localhost:44381/api/admin/Salary'
 
 export const salaryApi = createApi({
@@ -14,13 +19,13 @@ export const salaryApi = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: apiPath }),
     tagTypes: ['Salary'],
     endpoints: builder => ({
-        getAllSalaries: builder.query<SalaryResponse, IFilterSysConfiguration>({
-            query: filter => {
+        getAllSalaries: builder.query<SalaryResponse, SalaryGetAll>({
+            query: ({ filter, period }) => {
                 const params = new URLSearchParams()
 
                 if (filter) {
                     if (filter.createdBy) params.append('CreatedBy', filter.createdBy)
-                    if (filter.createdDate) params.append('CreatedDate', filter.createdDate.toDateString())
+                    if (filter.createdDate) params.append('CreatedDate', filter.createdDate.toISOString())
                     if (filter.pageSize) params.append('PageSize', filter.pageSize.toString())
                     if (filter.pageNumber) params.append('PageNumber', filter.pageNumber.toString())
                     if (filter.isActive !== undefined) params.append('IsActive', filter.isActive.toString())
@@ -28,6 +33,8 @@ export const salaryApi = createApi({
                     if (filter.isDescending !== undefined) params.append('IsDescending', filter.isDescending.toString())
                     if (filter.sortBy) params.append('SortBy', filter.sortBy)
                 }
+
+                params.append('period', period)
 
                 return `GetAll?${params.toString()}`
             },
@@ -40,8 +47,21 @@ export const salaryApi = createApi({
                 body: salary
             }),
             invalidatesTags: ['Salary']
+        }),
+        getInfoForDepartmentChart: builder.query<SalaryResponse, void>({
+            query: () => 'GetInfoForDepartmentChart',
+            providesTags: ['Salary']
+        }),
+        getSalaryByLevel: builder.query<SalaryResponse, void>({
+            query: () => 'GetSalaryByLevel',
+            providesTags: ['Salary']
         })
     })
 })
 
-export const { useGetAllSalariesQuery, useUpdateSalaryMutation } = salaryApi
+export const {
+    useGetAllSalariesQuery,
+    useUpdateSalaryMutation,
+    useGetInfoForDepartmentChartQuery,
+    useGetSalaryByLevelQuery
+} = salaryApi

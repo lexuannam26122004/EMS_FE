@@ -8,6 +8,7 @@ import DepartmentChart from './DepartmentChart'
 import LeaveApplication from './LeaveApplication'
 import EmployeeCountChart from './EmployeeCountChart'
 import AgeDistributionChart from './AgeChart'
+import ErrorReport from './ErrorReport'
 
 const AdminPage = () => {
     return (
@@ -58,7 +59,7 @@ const AdminPage = () => {
                 }}
             >
                 <Box sx={{ width: 'calc(100% / 3 * 2 + 24px)', overflow: 'hidden' }}>
-                    <EmployeeCountChart />
+                    <ErrorReport />
                 </Box>
                 <Box sx={{ width: 'calc(100% / 3)', overflow: 'hidden' }}>
                     <LeaveApplication />

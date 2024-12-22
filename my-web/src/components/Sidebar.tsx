@@ -4,6 +4,9 @@ import { MoreVertical, ChevronLast, ChevronFirst } from 'lucide-react'
 import { useContext, createContext, useState, ReactNode, FC, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Box, Divider, Typography } from '@mui/material'
+import { useSelector, useDispatch } from 'react-redux'
+import { sidebarSlice, sidebarSliceSelector } from '@/redux/slices/sidebarSlice'
+import { RootState } from '@/redux/store'
 
 // Define a context type for the Sidebar context
 interface SidebarContextType {
@@ -15,11 +18,17 @@ const SidebarContext = createContext<SidebarContextType | undefined>(undefined)
 
 // Sidebar component
 const Sidebar: FC<{ children: ReactNode }> = ({ children }) => {
-    const [expanded, setExpanded] = useState<boolean>(true)
+    const dispatch = useDispatch()
+    const expanded = useSelector((state: RootState) => state.sidebar.expanded)
+
     const router = useRouter()
 
     const handleClick = () => {
         router.push('/')
+    }
+
+    const handleSidebarToggle = () => {
+        dispatch(sidebarSlice.actions.toggleSidebar())
     }
 
     return (
@@ -51,7 +60,7 @@ const Sidebar: FC<{ children: ReactNode }> = ({ children }) => {
                         </div>
 
                         <button
-                            onClick={() => setExpanded(curr => !curr)}
+                            onClick={handleSidebarToggle}
                             style={{
                                 borderRadius: '6px',
                                 padding: '5px'

@@ -13,6 +13,7 @@ export interface IAspNetUserGetAll {
     AvatarPath: string | null
     DepartmentName: string
     EmployeeId: string
+    StartDateWork: Date | null
 }
 
 export interface IUserByAgeGetAllDashboard {

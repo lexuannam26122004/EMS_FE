@@ -47,7 +47,7 @@ const leaveRequests = [
     }
 ]
 
-export default function LeaveRequestCarousel() {
+export default function ErrorSalary() {
     const sliderRef = useRef<Slider | null>(null)
     const [currentSlide, setCurrentSlide] = useState(0)
     const { t } = useTranslation('common')
@@ -111,7 +111,7 @@ export default function LeaveRequestCarousel() {
                         color: 'var(--text-color)'
                     }}
                 >
-                    {t('COMMON.DASHBOARD.LEAVE_REQUESTS')}
+                    Salary Report Errors List
                 </Typography>
                 <Box
                     sx={{

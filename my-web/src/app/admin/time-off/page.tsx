@@ -46,9 +46,9 @@ const EmployeeTable: React.FC = () => {
     const [rowsPerPage, setRowsPerPage] = useState('10')
     const [currentPage, setCurrentPage] = useState<number>(1)
     const [sortConfig, setSortConfig] = useState<{
-        key: keyof ITimeOffSearch | 'EmployeeId'
+        key: keyof ITimeOffSearch | 'Id'
         direction: 'asc' | 'desc'
-    }>({ key: 'EmployeeId', direction: 'asc' })
+    }>({ key: 'Id', direction: 'asc' })
     const { t } = useTranslation('common')
 
     const [changeTimeOff] = useChangeStatusTimeOffsMutation()
@@ -77,11 +77,12 @@ const EmployeeTable: React.FC = () => {
         user =>
             user.Id?.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.FullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.UserId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.EmployeeId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.Reason?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            (user.Date && new Date(user.Date).toLocaleDateString().toLowerCase().includes(searchTerm.toLowerCase())) ||
-            (user.CreatedDate &&
-                new Date(user.CreatedDate).toLocaleDateString().toLowerCase().includes(searchTerm.toLowerCase()))
+            (user.StartDate &&
+                new Date(user.StartDate).toLocaleDateString().toLowerCase().includes(searchTerm.toLowerCase())) ||
+            (user.EndDate &&
+                new Date(user.EndDate).toLocaleDateString().toLowerCase().includes(searchTerm.toLowerCase()))
     )
 
     const isSelected = (id: number) => selected.includes(id)
@@ -106,7 +107,7 @@ const EmployeeTable: React.FC = () => {
     const totalRecords = sortedUsers.length
     const paginatedUsers = sortedUsers.slice((currentPage - 1) * Number(rowsPerPage), currentPage * Number(rowsPerPage))
 
-    const handleSort = (key: keyof ITimeOffSearch | 'EmployeeId') => {
+    const handleSort = (key: keyof ITimeOffSearch | 'Id') => {
         setSortConfig(prev => ({
             key,
             direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc'
@@ -311,7 +312,14 @@ const EmployeeTable: React.FC = () => {
                             <TableRow sx={{ backgroundColor: 'var(--header-color-table)' }}>
                                 <TableCell
                                     padding='checkbox'
-                                    sx={{ borderColor: 'var(--border-color)', paddingLeft: '12px' }}
+                                    sx={{
+                                        borderColor: 'var(--border-color)',
+                                        paddingLeft: '12px',
+                                        backgroundColor: 'var(--header-color-table)',
+                                        position: 'sticky',
+                                        left: 0,
+                                        zIndex: 2
+                                    }}
                                 >
                                     <Checkbox
                                         indeterminate={selected.length > 0 && selected.length < users.length}
@@ -324,11 +332,19 @@ const EmployeeTable: React.FC = () => {
                                         }}
                                     />
                                 </TableCell>
-                                <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                <TableCell
+                                    sx={{
+                                        borderColor: 'var(--border-color)',
+                                        backgroundColor: 'var(--header-color-table)',
+                                        position: 'sticky',
+                                        left: 54,
+                                        zIndex: 1
+                                    }}
+                                >
                                     <TableSortLabel
-                                        active={sortConfig.key === 'EmployeeId'}
-                                        direction={sortConfig.key === 'EmployeeId' ? sortConfig.direction : 'asc'}
-                                        onClick={() => handleSort('EmployeeId')}
+                                        active={sortConfig.key === 'Id'}
+                                        direction={sortConfig.key === 'Id' ? sortConfig.direction : 'asc'}
+                                        onClick={() => handleSort('Id')}
                                         sx={{
                                             '& .MuiTableSortLabel-icon': {
                                                 color: 'var(--text-color) !important'
@@ -351,24 +367,17 @@ const EmployeeTable: React.FC = () => {
                                     </TableSortLabel>
                                 </TableCell>
 
-                                <TableCell sx={{ borderColor: 'var(--border-color)' }}>
-                                    <Typography
+                                {['FullName'].map((column, index) => (
+                                    <TableCell
+                                        key={index}
                                         sx={{
-                                            fontWeight: 'bold',
-                                            color: 'var(--text-color)',
-                                            fontSize: '16px',
-                                            overflow: 'hidden',
-                                            maxWidth: '260px',
-                                            textOverflow: 'ellipsis',
-                                            whiteSpace: 'nowrap'
+                                            borderColor: 'var(--border-color)',
+                                            backgroundColor: 'var(--header-color-table)',
+                                            position: 'sticky',
+                                            left: 127,
+                                            zIndex: 1
                                         }}
                                     >
-                                        Avatar
-                                    </Typography>
-                                </TableCell>
-
-                                {['FullName', 'UserId', 'Reason', 'Date', 'CreatedDate'].map((column, index) => (
-                                    <TableCell key={index} sx={{ borderColor: 'var(--border-color)' }}>
                                         <TableSortLabel
                                             active={sortConfig.key === column}
                                             direction={sortConfig.key === column ? sortConfig.direction : 'asc'}
@@ -390,17 +399,52 @@ const EmployeeTable: React.FC = () => {
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                {column}
+                                                {t(`COMMON.TIMEOFF.FULLNAME`)}
                                             </Typography>
                                         </TableSortLabel>
                                     </TableCell>
                                 ))}
 
+                                {['EmployeeId', 'IsAccepted', 'Reason', 'StartDate', 'EndDate', 'Content'].map(
+                                    (column, index) => (
+                                        <TableCell key={index} sx={{ borderColor: 'var(--border-color)' }}>
+                                            <TableSortLabel
+                                                active={sortConfig.key === column}
+                                                direction={sortConfig.key === column ? sortConfig.direction : 'asc'}
+                                                onClick={() => handleSort(column as keyof ITimeOffSearch)}
+                                                sx={{
+                                                    '& .MuiTableSortLabel-icon': {
+                                                        color: 'var(--text-color) !important'
+                                                    }
+                                                }}
+                                            >
+                                                <Typography
+                                                    sx={{
+                                                        fontWeight: 'bold',
+                                                        color: 'var(--text-color)',
+                                                        fontSize: '16px',
+                                                        overflow: 'hidden',
+                                                        maxWidth: '260px',
+                                                        textOverflow: 'ellipsis',
+                                                        whiteSpace: 'nowrap'
+                                                    }}
+                                                >
+                                                    {t(`COMMON.TIMEOFF.${column.toUpperCase()}`)}
+                                                </Typography>
+                                            </TableSortLabel>
+                                        </TableCell>
+                                    )
+                                )}
+
                                 <TableCell
                                     sx={{
                                         borderColor: 'var(--border-color)',
                                         padding: '0px 9.5px 0px 0px',
-                                        width: '146px'
+                                        width: '146px',
+                                        position: 'sticky',
+                                        right: -0.38,
+                                        zIndex: 1,
+                                        backgroundColor: 'var(--header-color-table)'
                                     }}
                                 >
                                     <Typography
@@ -421,10 +465,27 @@ const EmployeeTable: React.FC = () => {
                         </TableHead>
                         <TableBody>
                             {paginatedUsers.map(user => (
-                                <TableRow key={user.Id} selected={isSelected(user.Id)}>
+                                <TableRow
+                                    key={user.Id}
+                                    selected={isSelected(user.Id)}
+                                    sx={{
+                                        backgroundColor: user.IsAccepted
+                                            ? 'var(--bg-success-color1)'
+                                            : 'var(--bg-danger-color1)'
+                                    }}
+                                >
                                     <TableCell
                                         padding='checkbox'
-                                        sx={{ borderColor: 'var(--border-color)', paddingLeft: '12px' }}
+                                        sx={{
+                                            borderColor: 'var(--border-color)',
+                                            paddingLeft: '12px',
+                                            position: 'sticky',
+                                            left: 0,
+                                            zIndex: 1,
+                                            clipPath: 'inset(0px 0px 1px 0px)',
+                                            backdropFilter: 'blur(250px)',
+                                            WebkitBackdropFilter: 'blur(250px)'
+                                        }}
                                     >
                                         <Checkbox
                                             checked={isSelected(user.Id)}
@@ -435,7 +496,17 @@ const EmployeeTable: React.FC = () => {
                                         />
                                     </TableCell>
 
-                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                    <TableCell
+                                        sx={{
+                                            borderColor: 'var(--border-color)',
+                                            position: 'sticky',
+                                            left: 54,
+                                            zIndex: 1,
+                                            clipPath: 'inset(0px 0px 1px 0px)',
+                                            backdropFilter: 'blur(3000px)',
+                                            WebkitBackdropFilter: 'blur(3000px)'
+                                        }}
+                                    >
                                         <Typography
                                             sx={{
                                                 color: 'var(--text-color)',
@@ -446,11 +517,21 @@ const EmployeeTable: React.FC = () => {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {user.EmployeeId}
+                                            {user.Id}
                                         </Typography>
                                     </TableCell>
 
-                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                    <TableCell
+                                        sx={{
+                                            borderColor: 'var(--border-color)',
+                                            position: 'sticky',
+                                            left: 127,
+                                            zIndex: 1,
+                                            clipPath: 'inset(0px 0px 1px 0px)',
+                                            backdropFilter: 'blur(3000px)',
+                                            WebkitBackdropFilter: 'blur(3000px)'
+                                        }}
+                                    >
                                         <Typography
                                             sx={{
                                                 color: 'var(--text-color)',
@@ -487,9 +568,25 @@ const EmployeeTable: React.FC = () => {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {user.UserId}
+                                            {user.EmployeeId}
                                         </Typography>
                                     </TableCell>
+
+                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                        <Typography
+                                            sx={{
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                maxWidth: '260px',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            {user.IsAccepted ? 'Đã duyệt' : 'Chưa duyệt'}
+                                        </Typography>
+                                    </TableCell>
+
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                         <Typography
                                             sx={{
@@ -515,8 +612,8 @@ const EmployeeTable: React.FC = () => {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {user.Date && !isNaN(new Date(user.Date).getTime())
-                                                ? new Date(user.Date).toLocaleDateString()
+                                            {user.StartDate && !isNaN(new Date(user.StartDate).getTime())
+                                                ? new Date(user.StartDate).toLocaleDateString()
                                                 : 'N/A'}
                                         </Typography>
                                     </TableCell>
@@ -532,9 +629,24 @@ const EmployeeTable: React.FC = () => {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {user.CreatedDate && !isNaN(new Date(user.CreatedDate).getTime())
-                                                ? new Date(user.CreatedDate).toLocaleDateString()
+                                            {user.EndDate && !isNaN(new Date(user.EndDate).getTime())
+                                                ? new Date(user.EndDate).toLocaleDateString()
                                                 : 'N/A'}
+                                        </Typography>
+                                    </TableCell>
+
+                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                        <Typography
+                                            sx={{
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                maxWidth: '260px',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            {user.Content || 'N/A'}
                                         </Typography>
                                     </TableCell>
 
@@ -542,7 +654,13 @@ const EmployeeTable: React.FC = () => {
                                         sx={{
                                             padding: '0px 9.5px 0px 0px',
                                             borderColor: 'var(--border-color)',
-                                            width: '146px'
+                                            width: '146px',
+                                            position: 'sticky',
+                                            right: -0.38,
+                                            zIndex: 1,
+                                            clipPath: 'inset(0px 0px 1px 0px)',
+                                            backdropFilter: 'blur(3000px)',
+                                            WebkitBackdropFilter: 'blur(3000px)'
                                         }}
                                     >
                                         <Box

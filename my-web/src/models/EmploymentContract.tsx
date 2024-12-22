@@ -11,6 +11,13 @@ export interface IEmploymentContractSearch {
     EndDate: Date
     BasicSalary: number
     Clause?: string
+    Appendix?: string
+    ProbationPeriod: number
+    WorkingHours: number
+    TerminationClause: string
+    ContractFileId: number
+    TypeContract?: string
+    ManagerId?: string
 }
 
 export interface IContractExp {
@@ -48,6 +55,7 @@ export interface IEmploymentContractCreate {
     ContractFileId: number
     TypeContract: string
     ManagerId: string
+    Appendix: string
 }
 
 export interface IEmploymentContractUpdate {
@@ -65,4 +73,12 @@ export interface IEmploymentContractUpdate {
     ContractFileId: number
     TypeContract: string
     ManagerId: string
+    Appendix: string
+}
+
+export interface IUserDetails extends IEmploymentContractSearch {
+    FullName: string
+    EmployeeId: string
+    ManagerFullName: string
+    Manager: string
 }

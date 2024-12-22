@@ -1,7 +1,5 @@
 'use client'
 
-import { IAspNetUserGetAll } from '@/models/AspNetUser'
-
 import {
     Box,
     Divider,
@@ -14,7 +12,10 @@ import {
     TableBody,
     TableCell,
     Tooltip,
-    Avatar
+    Avatar,
+    Tab,
+    Tabs,
+    CircularProgress
 } from '@mui/material'
 import { X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -22,7 +23,10 @@ import { Pencil, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import AlertDialog from '@/components/AlertDialog'
 import React, { useState } from 'react'
+import { IAspNetUserGetAll } from '@/models/AspNetUser'
 import { useGetAllUsersQuery, useChangeStatusUsersMutation } from '@/services/AspNetUserService'
+import { IEmploymentContractSearch, IUserDetails } from '@/models/EmploymentContract'
+import { useSearchEmploymentContractsQuery } from '@/services/EmploymentContractService'
 
 interface Props {
     open: boolean
@@ -52,6 +56,140 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
             setSelectedEmployeeId(null)
             refetch()
             window.location.reload()
+        }
+    }
+
+    const [selectedTab, setSelectedTab] = useState(0)
+
+    const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+        setSelectedTab(newValue)
+        console.log('Selected Tab:', newValue)
+    }
+
+    const { data: contractResponse, isLoading: isContractsLoading } = useSearchEmploymentContractsQuery()
+    const { data: userResponse, isLoading: isUsersLoading } = useGetAllUsersQuery()
+
+    let users: IUserDetails[] = []
+
+    const contract = (contractResponse?.Data?.Records as IEmploymentContractSearch[]) || []
+    const employee = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
+
+    const foundContract = contract.find(contract => contract.UserId === aspnetuser.Id)
+
+    if (foundContract) {
+        const matchedEmployee = employee.find(emp => emp.Id === foundContract.UserId)
+        const matchedManager = employee.find(emp => emp.Id === foundContract.ManagerId)
+
+        users = [
+            {
+                ...foundContract,
+                FullName: matchedEmployee?.FullName || 'N/A',
+                EmployeeId: matchedEmployee?.EmployeeId || 'N/A',
+                ManagerFullName: matchedManager?.FullName || 'N/A',
+                Manager: matchedManager?.EmployeeId || 'N/A'
+            }
+        ]
+    } else {
+        users = []
+    }
+
+    if (isContractsLoading || isUsersLoading) {
+        return (
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '400px',
+                    backgroundColor: '#f5f5f5'
+                }}
+            >
+                <CircularProgress />
+            </Box>
+        )
+    }
+
+    const renderTableContent = () => {
+        switch (selectedTab) {
+            case 0:
+                return [
+                    { label: t('COMMON.EMPLOYEE.FULLNAME'), value: aspnetuser.FullName || 'N/A' },
+                    { label: t('COMMON.EMPLOYEE.DEPARTMENTNAME'), value: aspnetuser.DepartmentName || 'N/A' },
+                    { label: t('COMMON.EMPLOYEE.USERNAME'), value: aspnetuser.UserName || 'N/A' },
+                    {
+                        label: t('COMMON.EMPLOYEE.ROLES'),
+                        value: aspnetuser.Roles?.join(', ') || 'N/A'
+                    },
+                    {
+                        label: t('COMMON.EMPLOYEE.GENDER'),
+                        value: aspnetuser.Gender === true ? t('Nam') : aspnetuser.Gender === false ? t('Nữ') : t('Khác')
+                    },
+                    { label: t('COMMON.EMPLOYEE.ADDRESS'), value: aspnetuser.Address || 'N/A' },
+                    {
+                        label: t('COMMON.EMPLOYEE.BIRTHDAY'),
+                        value:
+                            aspnetuser.Birthday && !isNaN(new Date(aspnetuser.Birthday).getTime())
+                                ? new Date(aspnetuser.Birthday).toLocaleDateString()
+                                : 'N/A'
+                    },
+                    {
+                        label: t('COMMON.EMPLOYEE.STARTDATE'),
+                        value:
+                            aspnetuser.StartDateWork && !isNaN(new Date(aspnetuser.StartDateWork).getTime())
+                                ? new Date(aspnetuser.StartDateWork).toLocaleDateString()
+                                : 'N/A'
+                    },
+                    { label: t('COMMON.EMPLOYEE.EMAIL'), value: aspnetuser.Email || 'N/A' },
+                    { label: t('COMMON.EMPLOYEE.PHONENUMBER'), value: aspnetuser.PhoneNumber || 'N/A' },
+                    { label: t('COMMON.EMPLOYEE.NOTE'), value: aspnetuser.Note || 'N/A' }
+                ]
+
+            case 1:
+                if (users.length > 0) {
+                    return [
+                        { label: t('ID'), value: users[0]?.Id },
+                        {
+                            label: t('COMMON.CONTRACT.INFORMATION'),
+                            value: `${users[0].EmployeeId || 'N/A'} ${users[0].FullName || 'N/A'}`
+                        },
+
+                        {
+                            label: t('COMMON.CONTRACT.INFORMATIONMANAGER'),
+                            value: `${users[0].Manager || 'N/A'} ${users[0].ManagerFullName || 'N/A'}`
+                        },
+
+                        { label: t('COMMON.CONTRACT.CONTRACTNAME'), value: users[0].ContractName || 'N/A' },
+                        {
+                            label: t('COMMON.CONTRACT.STARTDATE'),
+                            value:
+                                users[0].StartDate && !isNaN(new Date(users[0].StartDate).getTime())
+                                    ? new Date(users[0].StartDate).toLocaleDateString()
+                                    : 'N/A'
+                        },
+                        {
+                            label: t('COMMON.CONTRACT.ENDDATE'),
+                            value:
+                                users[0].EndDate && !isNaN(new Date(users[0].EndDate).getTime())
+                                    ? new Date(users[0].EndDate).toLocaleDateString()
+                                    : 'N/A'
+                        },
+                        { label: t('COMMON.CONTRACT.CLAUSE'), value: users[0].Clause || 'N/A' },
+                        { label: t('COMMON.CONTRACT.BASICSALARY'), value: users[0].BasicSalary || 'N/A' },
+                        { label: t('COMMON.CONTRACT.PROBATIONPERIOD'), value: users[0].ProbationPeriod || 'N/A' },
+                        { label: t('COMMON.CONTRACT.WORKINGHOURS'), value: users[0].WorkingHours || 'N/A' },
+                        { label: t('COMMON.CONTRACT.TYPECONTRACT'), value: users[0].TypeContract || 'N/A' },
+                        { label: t('COMMON.CONTRACT.TERMINATIONCLAUSE'), value: users[0].TerminationClause || 'N/A' },
+                        { label: t('COMMON.CONTRACT.APPENDIX'), value: users[0].Appendix || 'N/A' }
+                    ]
+                } else {
+                    return []
+                }
+            case 2:
+                return []
+            case 3:
+                return []
+            default:
+                return null
         }
     }
 
@@ -102,7 +240,7 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
                             color: 'var(--text-color)'
                         }}
                     >
-                        {t('Xem chi tiết thông tin ') + aspnetuser.FullName}
+                        {t('COMMON.VIEW_DETAILS') + aspnetuser.FullName}
                     </Typography>
 
                     <Box
@@ -258,6 +396,28 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
                     <Box
                         sx={{
                             display: 'flex',
+                            justifyContent: 'flex-end',
+                            paddingRight: '30px'
+                        }}
+                    >
+                        <Tabs
+                            value={selectedTab}
+                            onChange={handleTabChange}
+                            aria-label='right-aligned tabs'
+                            sx={{
+                                borderBottom: 1,
+                                borderColor: 'divider'
+                            }}
+                        >
+                            <Tab label={t('COMMON.SIDEBAR.EMPLOYEE')} />
+                            <Tab label={t('COMMON.SIDEBAR.CONTRACT')} />
+                            <Tab label={t('COMMON.SIDEBAR.BENEFIT')} />
+                            <Tab label={t('COMMON.SIDEBAR.DISCIPLINE')} />
+                        </Tabs>
+                    </Box>
+                    <Box
+                        sx={{
+                            display: 'flex',
                             justifyContent: 'flex-start',
                             padding: '5px',
 
@@ -270,7 +430,6 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
                 <TableContainer
                     sx={{
                         padding: '10px 3px 10px 10px',
-                        maxHeight: '80vh',
                         scrollbarGutter: 'stable',
                         '&::-webkit-scrollbar': {
                             width: '7px',
@@ -289,27 +448,7 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
                 >
                     <Table>
                         <TableBody>
-                            {[
-                                { label: t('Họ tên đầy đủ'), value: aspnetuser.FullName },
-                                { label: t('Tên phòng ban'), value: aspnetuser.DepartmentName },
-                                { label: t('Tên tài khoản'), value: aspnetuser.UserName },
-                                {
-                                    label: t('Chức vụ trong công ty'),
-                                    value: aspnetuser.Roles?.join(', ') || 'N/A'
-                                },
-                                { label: t('Giới tính'), value: aspnetuser.Gender === true ? t('Nam') : aspnetuser.Gender === false ? t('Nữ') : t('Khác') },
-                                { label: t('Địa chỉ thường trú'), value: aspnetuser.Address },
-                                {
-                                    label: t('Ngày sinh'),
-                                    value:
-                                        aspnetuser.Birthday && !isNaN(new Date(aspnetuser.Birthday).getTime())
-                                            ? new Date(aspnetuser.Birthday).toLocaleDateString()
-                                            : 'N/A'
-                                },
-                                { label: t('Email'), value: aspnetuser.Email },
-                                { label: t('Số điện thoại'), value: aspnetuser.PhoneNumber },
-                                { label: t('Ghi chú'), value: aspnetuser.Note }
-                            ].map((item, index) => (
+                            {renderTableContent()?.map((item, index) => (
                                 <TableRow key={index}>
                                     <TableCell
                                         sx={{
@@ -319,7 +458,7 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
                                             color: 'var(--text-color)',
                                             borderBottom: 'none',
                                             paddingLeft: '100px',
-                                            width:'40%'
+                                            width: '40%'
                                         }}
                                     >
                                         {item.label}:
