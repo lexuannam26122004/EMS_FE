@@ -1,10 +1,9 @@
-import { TrendingUp } from '@mui/icons-material'
-import formatNumberWithUnit from '@/utils/formatNumberWithUnit'
 import { useTranslation } from 'react-i18next'
 import { Paper, Typography } from '@mui/material'
 import { Box } from '@mui/material'
 import { TrendingDown, UserRoundSearch, CircleUserRound, ExternalLink } from 'lucide-react'
-import { useGetEmployeeStatsByMonthAndYearQuery } from '@/services/EmploymentContractService'
+import { useGetAllDepartmentQuery } from '@/services/DepartmentService'
+import { IDepartmentGetAll } from '@/models/Department'
 
 interface IEmployeeStats {
     StartCount: number
@@ -16,74 +15,52 @@ interface IEmployeeStats {
 function DepartmentInfo() {
     const { t } = useTranslation('common')
 
-    const date = new Date()
-    const month = date.getMonth() + 1
-    const year = date.getFullYear()
-    const { data: response } = useGetEmployeeStatsByMonthAndYearQuery({ Month: month, Year: year })
+    const { data: department, isLoading: isBenefitTypesLoading, refetch } = useGetAllDepartmentQuery()
+    const departmentDataRecord = (department?.Data?.Records as IDepartmentGetAll[]) || []
+    const departmentDataTotalRecord = (department?.Data?.TotalRecords as IDepartmentGetAll[]) || []
 
-    const data = response?.Data as IEmployeeStats
-
-    const totalEmployee = 109
-    const employeePercent = 5.2
-    const timeOff = 56
-    const timeOffPercent = 10
-    const totalEmployeeLayoff = data?.EndCount
-    const layoffPercent = data?.EndPercentChange
-    const newEmployees = data?.StartCount
-    const newEmployeePercent = data?.StartPercentChange
-    const laborCosts = 1200000000
-    const laborCostsPercent = 14.47
-    const promotions = 12
-    const promotionPercent = 24
-    const isDown = 1
     const departmentStyles: { [key: number]: { backgroundImage: string; color: string } } = {
-        1: {
+        8: {
             backgroundImage: 'linear-gradient(135deg, rgb(147, 155, 163), #34495e)',
             color: '#FFFFFF'
         },
-        2: {
+        9: {
             backgroundImage: 'linear-gradient(135deg, rgb(255, 100, 100), rgb(255, 150, 150))',
             color: '#000000'
         },
-        3: {
+        10: {
             backgroundImage: 'linear-gradient(135deg, rgb(34, 193, 195), rgb(253, 187, 45))',
             color: '#FF6347'
         },
-        4: {
+        11: {
             backgroundImage: 'linear-gradient(135deg, rgb(100, 200, 255), rgb(50, 150, 255))',
             color: '#1E90FF'
         },
-        5: {
+        12: {
             backgroundImage: 'linear-gradient(135deg, rgb(255, 204, 255), rgb(255, 102, 204))',
             color: '#8A2BE2'
         },
-        6: {
+        13: {
             backgroundImage: 'linear-gradient(135deg, rgb(255, 223, 186), rgb(255, 165, 0))',
             color: '#FFD700'
         },
-        7: {
+        14: {
             backgroundImage: 'linear-gradient(135deg, rgb(93, 109, 126), rgb(48, 63, 77))',
             color: '#2F4F4F'
         },
-        8: {
+        15: {
             backgroundImage: 'linear-gradient(135deg, rgb(204, 255, 204), rgb(0, 204, 102))',
             color: '#32CD32'
         },
-        9: {
+        16: {
             backgroundImage: 'linear-gradient(135deg, rgb(252, 85, 85), rgb(255, 112, 67))',
             color: '#DC143C'
         },
-        10: {
+        17: {
             backgroundImage: 'linear-gradient(135deg, rgb(72, 61, 139), rgb(255, 99, 71))',
             color: '#800080'
         }
     }
-    const papers = Array.from({ length: 10 }, (_, index) => ({
-        id: index + 1,
-        memberId: `CC00${index + 1}`,
-        memberName: `Người dùng ${index + 1}`,
-        memberCount: 69
-    }))
     return (
         <Box
             sx={{
@@ -104,11 +81,11 @@ function DepartmentInfo() {
                 backgroundColor: 'var(--background-after-color)'
             }}
         >
-            {papers.map(paper => {
-                const departmentStyle = departmentStyles[paper.id] || {}
+            {departmentDataRecord.map(department => {
+                const departmentStyle = departmentStyles[department.Id] || {}
                 return (
                     <Paper
-                        key={paper.id}
+                        key={department.Id}
                         elevation={0}
                         sx={{
                             backgroundImage:
@@ -120,7 +97,7 @@ function DepartmentInfo() {
                             backgroundPosition: 'center',
                             borderRadius: '15px',
                             padding: '20px 22px',
-                            width: '450px'
+                            width: '500px'
                         }}
                     >
                         <Box
@@ -159,7 +136,7 @@ function DepartmentInfo() {
                                         fontSize: '30px'
                                     }}
                                 >
-                                    {t('Phòng nhân sự')}
+                                    {t(department.Name)}
                                 </Typography>
                                 <Box
                                     sx={{
@@ -191,7 +168,7 @@ function DepartmentInfo() {
                                                 fontSize: '10px'
                                             }}
                                         >
-                                            {t('CC001')}
+                                            {t(department.DepartmentHeadId || 'N/A')}
                                         </Typography>
                                     </Box>
                                     <Box
@@ -215,7 +192,7 @@ function DepartmentInfo() {
                                                 fontSize: '10px'
                                             }}
                                         >
-                                            {t('Trần Văn Minh')}
+                                            {t(department.DepartmentHeadName || 'N/A')}
                                         </Typography>
                                     </Box>
                                 </Box>
@@ -250,7 +227,7 @@ function DepartmentInfo() {
                                 gap: '1px'
                             }}
                         >
-                            {69}
+                            {department.CountDepartment}
                             <Typography
                                 sx={{
                                     ml: '6px',

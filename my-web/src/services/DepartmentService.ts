@@ -13,10 +13,6 @@ export const departmentApi = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: apiPath }),
     tagTypes: ['Department'],
     endpoints: builder => ({
-        getAllDepartments: builder.query<DepartmentResponse, void>({
-            query: () => 'Search',
-            providesTags: ['Department']
-        }),
         createDepartment: builder.mutation<void, IDepartmentCreate>({
             query: department => ({
                 url: 'Create',
@@ -47,14 +43,26 @@ export const departmentApi = createApi({
                 body: { Ids: ids }
             }),
             invalidatesTags: ['Department']
+        }),
+        changeStatus: builder.mutation<void, number>({
+            query: id => ({
+                url: `ChangeStatus/${id}`,
+                method: 'PUT'
+            })
+        }),
+        getAllDepartment: builder.query<DepartmentResponse, IDepartmentGetAll | void>({
+            query: filter => {
+                return `GetAllDepartments?`
+            }
         })
     })
 })
 
 export const {
-    useGetAllDepartmentsQuery,
+    useGetAllDepartmentQuery,
     useCreateDepartmentMutation,
     useUpdateDepartmentMutation,
     useDeleteDepartmentMutation,
-    useDeleteManyDepartmentsMutation
+    useDeleteManyDepartmentsMutation,
+    useChangeStatusMutation
 } = departmentApi
