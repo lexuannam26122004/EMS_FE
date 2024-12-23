@@ -7,8 +7,13 @@ import IncomeStructureChart from '../IncomeStructureChart'
 import TotalIncomeChart from '../TotalIncomeChart'
 import DepartmentChart from '../DepartmentChart'
 import ErrorSalary from '../ErrorSalary'
+import { useCreateSalaryMutation, useGetInfoForSalarySummaryQuery } from '@/services/SalaryService'
 
 function OverviewSalaryPage() {
+    const [createSalaries, { isSuccess, isError, isLoading }] = useCreateSalaryMutation()
+    const { data } = useGetInfoForSalarySummaryQuery()
+    const { total, PITax, totalInsurance } = data?.Data || {}
+
     return (
         <Box
             sx={{
@@ -50,6 +55,10 @@ function OverviewSalaryPage() {
                     </Typography>
                 </Box>
                 <Box
+                    // variant='contained'
+                    // color='primary'
+                    // //onClick={handleCreateSalaries}
+                    // disabled={isLoading}
                     sx={{
                         marginLeft: '20px',
                         width: 'calc(100% / 3)',
@@ -73,7 +82,7 @@ function OverviewSalaryPage() {
                             zIndex: 2
                         }}
                     >
-                        tạo bảng lương
+                        {isLoading ? 'Đang tạo...' : 'Tạo bảng lương'}
                     </Typography>
                 </Box>
                 <Box
@@ -197,10 +206,18 @@ function OverviewSalaryPage() {
                                         <Typography fontSize={'18px'}>Tổng lương</Typography>
                                         <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
                                             <Typography fontWeight={'bold'} fontSize={'24px'}>
-                                                1.250
+                                                {total > 1000000
+                                                    ? (total / 1000000).toFixed(2)
+                                                    : total > 1000
+                                                      ? (total / 1000).toFixed(2)
+                                                      : total}
                                             </Typography>
                                             <Typography fontSize={'16px'} style={{ marginLeft: '5px' }}>
-                                                Triệu đồng
+                                                {total > 1000000
+                                                    ? 'Nghìn tỷ đồng'
+                                                    : total > 1000
+                                                      ? 'Tỷ đồng'
+                                                      : 'Triệu đồng'}
                                             </Typography>
                                         </Box>
                                     </Box>
@@ -208,10 +225,18 @@ function OverviewSalaryPage() {
                                         <Typography fontSize={'18px'}>Thuế TNCN</Typography>
                                         <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
                                             <Typography fontWeight={'bold'} fontSize={'24px'}>
-                                                50
+                                                {PITax > 1000000
+                                                    ? (PITax / 1000000).toFixed(2)
+                                                    : PITax > 1000
+                                                      ? (PITax / 1000).toFixed(2)
+                                                      : PITax}
                                             </Typography>
                                             <Typography fontSize={'16px'} style={{ marginLeft: '5px' }}>
-                                                Triệu đồng
+                                                {PITax > 1000000
+                                                    ? 'Nghìn tỷ đồng'
+                                                    : PITax > 1000
+                                                      ? 'Tỷ đồng'
+                                                      : 'Triệu đồng'}
                                             </Typography>
                                         </Box>
                                     </Box>
@@ -219,10 +244,18 @@ function OverviewSalaryPage() {
                                         <Typography fontSize={'18px'}>Bảo hiểm</Typography>
                                         <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
                                             <Typography fontWeight={'bold'} fontSize={'24px'}>
-                                                50
+                                                {totalInsurance > 1000000
+                                                    ? (totalInsurance / 1000000).toFixed(2)
+                                                    : totalInsurance > 1000
+                                                      ? (totalInsurance / 1000).toFixed(2)
+                                                      : totalInsurance}
                                             </Typography>
                                             <Typography fontSize={'16px'} style={{ marginLeft: '5px' }}>
-                                                Triệu đồng
+                                                {totalInsurance > 1000000
+                                                    ? 'Nghìn tỷ đồng'
+                                                    : totalInsurance > 1000
+                                                      ? 'Tỷ đồng'
+                                                      : 'Triệu đồng'}
                                             </Typography>
                                         </Box>
                                     </Box>

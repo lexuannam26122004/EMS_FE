@@ -150,7 +150,7 @@ function TotalIncomeChart() {
             <Typography fontSize={'24px'} fontWeight={'bold'} color='var(--text-color)'>
                 Tổng thu nhập theo thời gian
             </Typography>
-            <ReactECharts option={option} style={{ width: '100%', height: '300px', marginTop: '10px' }}></ReactECharts>
+            <ReactECharts option={option} style={{ width: '100%', height: '314px', marginTop: '10px' }}></ReactECharts>
         </Paper>
     )
 }

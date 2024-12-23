@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactECharts from 'echarts-for-react'
-import { Paper, Typography } from '@mui/material'
+import { Box, Paper, Typography } from '@mui/material'
 import { useGetInfoForDepartmentChartQuery } from '@/services/SalaryService'
 import { useTheme } from 'next-themes'
 import { color } from 'echarts'
@@ -68,9 +68,23 @@ export default function DepartmentChart() {
                 height: '100%'
             }}
         >
-            <Typography fontSize={'24px'} fontWeight={'bold'} color='var(--text-color)'>
-                Tổng thu nhập theo phòng ban
-            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography fontSize={'24px'} fontWeight={'bold'} color='var(--text-color)'>
+                    Tổng thu nhập theo phòng ban
+                </Typography>
+                <Box
+                    sx={{
+                        marginLeft: 'auto',
+                        backgroundImage: 'url("/background_salary/department.png")',
+                        width: '50px',
+                        height: '50px',
+                        backgroundBlendMode: 'overlay',
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center'
+                    }}
+                ></Box>
+            </Box>
+
             <ReactECharts option={option} style={{ width: '100%', height: '300px', marginTop: '10px' }}></ReactECharts>
         </Paper>
     )
