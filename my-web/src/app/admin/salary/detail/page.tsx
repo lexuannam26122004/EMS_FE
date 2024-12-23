@@ -1,6 +1,6 @@
 'use client'
 import AlertDialog from '@/components/AlertDialog'
-import { ISalaryGetAll } from '@/models/Salary'
+import { ISalaryGetAll } from '@/models/salary'
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
 import { useGetAllSalariesQuery } from '@/services/SalaryService'
 import { formatDate } from '@/utils/formatDate'
@@ -48,7 +48,7 @@ function GetAllSalaryPage(period: string) {
         pageNumber: 1
     })
 
-    const { data: responseData, isFetching, refetch } = useGetAllSalariesQuery({filter, period})
+    const { data: responseData, isFetching, refetch } = useGetAllSalariesQuery({ filter, period })
 
     const salaryData = responseData?.Data as ISalaryGetAll[]
     const totalRecords = responseData?.Data.TotalRecords as number

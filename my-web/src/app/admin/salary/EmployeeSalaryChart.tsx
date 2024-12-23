@@ -3,7 +3,7 @@ import ReactECharts from 'echarts-for-react'
 import { Paper, Typography } from '@mui/material'
 import { useTheme } from 'next-themes'
 import { useGetSalaryByLevelQuery } from '@/services/SalaryService'
-import { ISalaryByLevel } from '@/models/Salary'
+import { ISalaryByLevel } from '@/models/salary'
 
 const EmployeeSalaryChart = () => {
     const { data, isLoading } = useGetSalaryByLevelQuery()
@@ -13,8 +13,6 @@ const EmployeeSalaryChart = () => {
     if (isLoading) {
         return <div>Loading...</div>
     }
-
-    const time = levels.period
 
     const option = {
         tooltip: {
@@ -36,19 +34,18 @@ const EmployeeSalaryChart = () => {
         },
         yAxis: {
             type: 'category',
-            data: ['under10', 'Indonesia', 'USA', 'India', 'China', 'World']
+            data: ['under10', 'Indonesia', 'USA', 'India', 'China']
         },
         series: [
             {
-                name: time,
+                name: `${levels?.period}`,
                 type: 'bar',
                 data: [
                     levels?.under10,
                     levels?.between10and20,
                     levels?.between20and30,
                     levels?.between30and40,
-                    levels?.greaterThan40,
-                    16
+                    levels?.greaterThan40
                 ],
                 itemStyle: {
                     color: function (params: { dataIndex: number; value: number; seriesIndex: number; name: string }) {

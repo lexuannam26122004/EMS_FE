@@ -1,6 +1,7 @@
-import { ISalaryGetAll } from '@/models/Salary'
+import { ISalaryGetAll } from '@/models/salary'
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { METHODS } from 'http'
 
 interface SalaryResponse {
     Success: boolean
@@ -55,6 +56,17 @@ export const salaryApi = createApi({
         getSalaryByLevel: builder.query<SalaryResponse, void>({
             query: () => 'GetSalaryByLevel',
             providesTags: ['Salary']
+        }),
+        createSalary: builder.mutation<void, void>({
+            query: () => ({
+                url: 'Create',
+                method: 'Post'
+            }),
+            invalidatesTags: ['Salary']
+        }),
+        getInfoForSalarySummary: builder.query<SalaryResponse, void>({
+            query: () => 'GetInfoForSalarySummary',
+            providesTags: ['Salary']
         })
     })
 })
@@ -63,5 +75,7 @@ export const {
     useGetAllSalariesQuery,
     useUpdateSalaryMutation,
     useGetInfoForDepartmentChartQuery,
-    useGetSalaryByLevelQuery
+    useGetSalaryByLevelQuery,
+    useCreateSalaryMutation,
+    useGetInfoForSalarySummaryQuery
 } = salaryApi
