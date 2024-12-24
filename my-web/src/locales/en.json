@@ -146,7 +146,13 @@
             "STATISTICS": "Statistics",
             "CONFIGURATION": "Configuration",
             "WORK_SHIFT": "Work shift",
-            "SCHEDULAR": "Schedular"
+            "SCHEDULAR": "Schedular",
+            "PERSONNEL": "Personnel",
+            "ATTENDANCE_SALARY": "Timekeeping - Salary",
+            "CONTRACT_BENEFITS": "Contracts - Benefits",
+            "REWARDS_DISCIPLINE": "Rewards - Disciplines",
+            "ACTIVITIES_EVENTS": "Activities - Events",
+            "REPORTS_SYSTEM": "Reports - System"
         },
         "MODE": {
             "LIGHT": "Light",
