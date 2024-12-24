@@ -28,7 +28,7 @@ import { IAspNetRoleGetAll } from '@/models/AspNetRole'
 import { useGetAllRolesQuery } from '@/services/AspNetRoleService'
 
 import { IDepartmentGetAll } from '@/models/Department'
-import { useGetAllDepartmentsQuery } from '@/services/DepartmentService'
+import { useGetAllDepartmentQuery } from '@/services/DepartmentService'
 
 const getCurrentDateTime = () => {
     const now = new Date()
@@ -74,7 +74,7 @@ const CreateEmployeePage = () => {
     const { data: roleResponse, isLoading: isRoleLoading } = useGetAllRolesQuery()
     const role = (roleResponse?.Data?.Records as IAspNetRoleGetAll[]) || []
 
-    const { data: departmentResponse, isLoading: isDepartmentLoading } = useGetAllDepartmentsQuery()
+    const { data: departmentResponse, isLoading: isDepartmentLoading } = useGetAllDepartmentQuery()
     const department = (departmentResponse?.Data?.Records as IDepartmentGetAll[]) || []
 
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
