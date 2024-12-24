@@ -980,9 +980,16 @@ const CreateEmployeePage = () => {
                                 <MenuItem value='nữ'>Nữ</MenuItem>
                                 <MenuItem value='khác'>Khác</MenuItem>
                             </Select>
-                            {isSubmit && gender === '' && (
-                                <FormHelperText>{t('COMMON.TEXTFIELD.REQUIRED')}</FormHelperText>
-                            )}
+                            <Typography
+                                sx={{
+                                    color: 'red',
+                                    margin: '1px 0 0 10px',
+                                    fontSize: '12px',
+                                    visibility: isSubmit && gender === '' ? 'visible' : 'hidden'
+                                }}
+                            >
+                                {t('COMMON.TEXTFIELD.REQUIRED')}
+                            </Typography>
                         </FormControl>
                     </Box>
 
