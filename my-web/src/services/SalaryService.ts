@@ -1,4 +1,4 @@
-import { ISalaryGetAll } from '@/models/salary'
+import { ISalaryGetAll, TotalIncome } from '@/models/salary'
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { METHODS } from 'http'
@@ -67,6 +67,10 @@ export const salaryApi = createApi({
         getInfoForSalarySummary: builder.query<SalaryResponse, void>({
             query: () => 'GetInfoForSalarySummary',
             providesTags: ['Salary']
+        }),
+        getTotalIncomeOverTime: builder.query<SalaryResponse, void>({
+            query: () => 'GetTotalIncomeOverTime',
+            providesTags: ['Salary']
         })
     })
 })
@@ -77,5 +81,6 @@ export const {
     useGetInfoForDepartmentChartQuery,
     useGetSalaryByLevelQuery,
     useCreateSalaryMutation,
-    useGetInfoForSalarySummaryQuery
+    useGetInfoForSalarySummaryQuery,
+    useGetTotalIncomeOverTimeQuery
 } = salaryApi

@@ -65,7 +65,7 @@ const IncomeStructureChart = () => {
             <Typography fontSize={'24px'} fontWeight={'bold'} color='var(--text-color)'>
                 Cơ cấu thu nhập
             </Typography>
-            <ReactECharts option={option} style={{ width: '100%', height: '300px', marginTop: '10px' }}></ReactECharts>
+            <ReactECharts option={option} style={{ width: '100%', height: '320px', marginTop: '10px' }}></ReactECharts>
         </Paper>
     )
 }

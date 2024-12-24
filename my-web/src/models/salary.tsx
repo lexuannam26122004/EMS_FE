@@ -24,3 +24,8 @@ export interface ISalaryByLevel {
     between30and40: number
     greaterThan40: number
 }
+export interface TotalIncome {
+    payrollPeriod: string
+    TotalIncome: number
+    TotalSalary: number
+}

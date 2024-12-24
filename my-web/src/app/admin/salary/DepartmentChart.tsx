@@ -1,19 +1,42 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactECharts from 'echarts-for-react'
-import { Box, Paper, Typography } from '@mui/material'
+import { Box, CircularProgress, Paper, Typography } from '@mui/material'
 import { useGetInfoForDepartmentChartQuery } from '@/services/SalaryService'
 import { useTheme } from 'next-themes'
 import { color } from 'echarts'
 
 export default function DepartmentChart() {
-    const { data, isLoading } = useGetInfoForDepartmentChartQuery()
-    const { theme } = useTheme()
-
-    if (isLoading) {
-        return <div>Loading...</div>
+    const [chartData, setChartData] = useState<{ [key: string]: number }>({})
+    const [loading, setLoading] = useState(true)
+    const { data, isLoading, error } = useGetInfoForDepartmentChartQuery()
+    useEffect(() => {
+        if (data) {
+            setChartData(data.Data) // Giả sử dữ liệu trả về có cấu trúc như bạn đã định nghĩa
+            setLoading(false)
+        }
+    }, [data])
+    if (isLoading || loading) {
+        return (
+            <Paper
+                elevation={0}
+                sx={{
+                    width: '100%',
+                    padding: '24px',
+                    backgroundColor: 'var(--background-item)',
+                    borderRadius: '15px',
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+            >
+                <CircularProgress /> {/* Hiển thị spinner khi đang tải */}
+            </Paper>
+        )
     }
-    const departmentNames = Object.keys(data?.Data || {})
-    const totalSalaries = Object.values(data?.Data || {})
+    if (error) {
+        return <Typography>Có lỗi xảy ra khi tải dữ liệu.</Typography> // Hiển thị thông báo lỗi
+    }
     const option = {
         tooltip: {
             trigger: 'axis',
@@ -23,7 +46,7 @@ export default function DepartmentChart() {
         },
         xAxis: {
             type: 'category',
-            data: departmentNames,
+            data: Object.keys(chartData),
             axisLabel: {
                 rotate: 45 // Xoay nhãn 45 độ
             }
@@ -46,7 +69,7 @@ export default function DepartmentChart() {
         },
         series: [
             {
-                data: totalSalaries,
+                data: Object.values(chartData),
                 type: 'bar',
                 itemStyle: {
                     color: function (params: { dataIndex: number; value: number; seriesIndex: number; name: string }) {
