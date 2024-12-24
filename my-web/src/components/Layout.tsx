@@ -51,9 +51,35 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 <SidebarItem
                     icon={<ChartNoAxesCombined />}
                     text={t('COMMON.SIDEBAR.STATISTICS')}
-                    route='/admin/statistics'
-                    active={pathname === '/admin/statistics'}
-                />
+                    // route='/statistics'
+                    // active={pathname === '/statistics'}
+                >
+                    <SidebarItem
+                        icon={<ChartNoAxesCombined />}
+                        text={t('COMMON.SIDEBAR.ATTENDANCE_SALARY')}
+                        route='/admin/statistics/attendance-salary'
+                    />
+                    <SidebarItem
+                        icon={<ChartNoAxesCombined />}
+                        text={t('COMMON.SIDEBAR.CONTRACT_BENEFITS')}
+                        route='/admin/statistics/contracts-benefits'
+                    />
+                    <SidebarItem
+                        icon={<ChartNoAxesCombined />}
+                        text={t('COMMON.SIDEBAR.REWARDS_DISCIPLINE')}
+                        route='/admin/statistics/rewards-disciplines'
+                    />
+                    <SidebarItem
+                        icon={<ChartNoAxesCombined />}
+                        text={t('COMMON.SIDEBAR.ACTIVITIES_EVENTS')}
+                        route='/admin/statistics/activities-event'
+                    />
+                    <SidebarItem
+                        icon={<ChartNoAxesCombined />}
+                        text={t('COMMON.SIDEBAR.REPORTS_SYSTEM')}
+                        route='/statistics/report-system'
+                    />
+                </SidebarItem>
                 <Divider sx={{ marginTop: '15px', marginBottom: '10px', borderColor: 'var(--border-color)' }} />
                 <TypographyItem text={t('COMMON.SIDEBAR.HUMAN_RESOURCES')} />
                 <SidebarItem

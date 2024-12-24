@@ -1,6 +1,9 @@
 'use client'
 import { IFilterEmploymentContract } from '@/models/EmploymentContract'
 import { formatDate } from '@/utils/formatDate'
+import ChartCount from './ChartCount'
+import ChartEvent from './ChartEvent'
+import ListEvent from './ListEvent'
 import {
     Box,
     Select,
@@ -20,15 +23,18 @@ import {
     TableSortLabel,
     Avatar
 } from '@mui/material'
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import SearchIcon from '@mui/icons-material/Search'
 import { useRouter } from 'next/navigation'
 import { useGetContractsExpiringSoonQuery } from '@/services/EmploymentContractService'
 import TableErrorReport from '@/components/TableErrorReport'
-
+import ListNotify from './ListNotify'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
+import { INotificationGetById } from '@/models/Notifications'
+import DisplayInfo from './DisplayInfo'
+import ListRead from './ListRead'
 
 function a11yProps(index: number) {
     return {
@@ -37,155 +43,119 @@ function a11yProps(index: number) {
     }
 }
 
-interface IGetAllErrorReport {
-    Id: number
-    FullNameReported: string
-    AvatarReportedPath: string
-    EmployeeIdReported: string
-    ReportedDate: string
-    Type: string
-    TypeId: string
-    Description: string
-    Status: string
-    AvatarResolvedPath: string
-    FullNameResolved: string | null
-    ResolvedDate: string | null
-    ResolutionDetails: string | null
-}
-
 const responseData = {
     Data: {
         TotalRecords: 10,
         Records: [
             {
                 Id: 1,
-                FullNameReported: 'Nguyen Van A',
-                EmployeeIdReported: 'CC001',
-                ReportedDate: '2024-11-27 00:00:00.0000000',
-                Type: 'Salary',
-                TypeId: 'S0001',
-                Description: 'Bảng lương sai',
-                Status: 'Rejected',
-                FullNameResolved: 'Nguyen Van D',
-                ResolvedDate: '2024-11-27',
-                ResolutionDetails: null
+                Title: 'Thông báo hệ thống',
+                Content:
+                    'Báo cáo công việc của bạn bị thiếu và cần được bổ sung đầy đủ trước ngày 2024-12-10. Vui lòng kiểm tra và gửi lại thông tin chính xác để hệ thống cập nhật.',
+                SentTime: '2024-12-01T08:00:00.000',
+                Type: 'System',
+                UserId: 'U001',
+                FullName: 'Nguyen Van A',
+                AvatarPath: null
             },
             {
                 Id: 2,
-                FullNameReported: 'Tran Thi B',
-                EmployeeIdReported: 'CC002',
-                ReportedDate: '2024-11-28 00:00:00.0000000',
-                Type: 'Benefit',
-                TypeId: 'L0001',
-                Description: 'Sai thông tin phép năm',
-                Status: 'Pending',
-                FullNameResolved: null,
-                ResolvedDate: null,
-                ResolutionDetails: null
+                Title: 'Cập nhật thông tin',
+                Content:
+                    'Hệ thống yêu cầu bạn cập nhật hồ sơ cá nhân để đảm bảo thông tin đầy đủ và chính xác. Vui lòng truy cập trang cá nhân để hoàn thành các mục còn thiếu.',
+                SentTime: '2024-12-01T09:00:00.000Z',
+                Type: 'Update',
+                UserId: 'U002',
+                FullName: 'Tran Thi B',
+                AvatarPath: null
             },
             {
                 Id: 3,
-                FullNameReported: 'Le Van C',
-                EmployeeIdReported: 'CC003',
-                ReportedDate: '2024-11-29 00:00:00.0000000',
-                Type: 'Discipline',
-                TypeId: 'O0001',
-                Description: 'Tăng ca không được tính',
-                Status: 'In Progress',
-                FullNameResolved: 'Nguyen Van D',
-                ResolvedDate: '2024-12-01 00:00:00.0000000',
-                ResolutionDetails: 'Đã cập nhật dữ liệu tăng ca'
+                Title: 'Phản hồi từ quản lý',
+                Content:
+                    'Quản lý đã phản hồi yêu cầu của bạn về báo cáo tuần. Vui lòng bổ sung thêm chi tiết về tiến độ công việc và gửi lại trước ngày 2024-12-07.',
+                SentTime: '2024-12-02T07:30:00.000Z',
+                Type: 'Feedback',
+                UserId: 'U003',
+                FullName: 'Pham Van C',
+                AvatarPath: '/images/workforce.png'
             },
             {
                 Id: 4,
-                FullNameReported: 'Pham Thi E',
-                EmployeeIdReported: 'CC004',
-                ReportedDate: '2024-11-30 00:00:00.0000000',
-                Type: 'Salary',
-                TypeId: 'S0002',
-                Description: 'Thưởng Tết không đúng',
-                Status: 'Pending',
-                FullNameResolved: null,
-                ResolvedDate: null,
-                ResolutionDetails: null
+                Title: 'Thông báo bảo mật',
+                Content:
+                    'Chúng tôi phát hiện hoạt động đăng nhập bất thường từ một thiết bị lạ. Vui lòng đổi mật khẩu ngay để đảm bảo an toàn tài khoản của bạn.',
+                SentTime: '2024-12-02T10:00:00.000Z',
+                Type: 'Security',
+                UserId: 'U004',
+                FullName: 'Nguyen Thi D',
+                AvatarPath: null
             },
             {
                 Id: 5,
-                FullNameReported: 'Hoang Van F',
-                EmployeeIdReported: 'CC005',
-                ReportedDate: '2024-12-01 00:00:00.0000000',
-                Type: 'Reward',
-                TypeId: 'L0002',
-                Description: 'Đăng ký nghỉ nhưng không được duyệt',
-                Status: 'Resolved',
-                FullNameResolved: 'Nguyen Van G',
-                ResolvedDate: '2024-12-03 00:00:00.0000000',
-                ResolutionDetails: 'Đã xử lý phê duyệt nghỉ'
+                Title: 'Cập nhật quy định',
+                Content:
+                    'Quy định mới về giờ làm việc sẽ có hiệu lực từ ngày 2024-12-15. Vui lòng đọc kỹ thông báo và chuẩn bị điều chỉnh lịch trình cá nhân nếu cần.',
+                SentTime: '2024-12-03T08:45:00.000Z',
+                Type: 'Policy',
+                UserId: 'U005',
+                FullName: 'Le Van E',
+                AvatarPath: '/images/avatar5.jpg'
             },
             {
                 Id: 6,
-                FullNameReported: 'Vo Thi H',
-                EmployeeIdReported: 'CC006',
-                ReportedDate: '2024-12-02 00:00:00.0000000',
-                Type: 'Timekeeping',
-                TypeId: 'O0002',
-                Description: 'Sai số giờ tăng ca',
-                Status: 'Pending',
-                FullNameResolved: null,
-                ResolvedDate: null,
-                ResolutionDetails: null
+                Title: 'Nhắc nhở công việc',
+                Content:
+                    'Hạn chót nộp báo cáo tháng 12 là ngày 2024-12-05. Hãy đảm bảo báo cáo được hoàn thành đúng thời hạn để tránh ảnh hưởng đến kết quả đánh giá.',
+                SentTime: '2024-12-04T09:00:00.000Z',
+                Type: 'Reminder',
+                UserId: 'U006',
+                FullName: 'Tran Van F',
+                AvatarPath: '/images/workforce.png'
             },
             {
                 Id: 7,
-                FullNameReported: 'Tran Van I',
-                EmployeeIdReported: 'CC007',
-                ReportedDate: '2024-12-03 00:00:00.0000000',
-                Type: 'Salary',
-                TypeId: 'S0003',
-                Description: 'Chưa nhận được lương tháng 11',
-                Status: 'In Progress',
-                FullNameResolved: null,
-                ResolvedDate: null,
-                ResolutionDetails: null
+                Title: 'Thông báo sự kiện',
+                Content:
+                    'Bạn được mời tham dự hội thảo công nghệ tổ chức vào ngày 2024-12-12 tại phòng họp chính. Đây là cơ hội để cập nhật kiến thức và mở rộng mối quan hệ chuyên môn.',
+                SentTime: '2024-12-04T11:30:00.000Z',
+                Type: 'Event',
+                UserId: 'U007',
+                FullName: 'Pham Thi G',
+                AvatarPath: null
             },
             {
                 Id: 8,
-                FullNameReported: 'Nguyen Thi K',
-                EmployeeIdReported: 'CC008',
-                ReportedDate: '2024-12-04 00:00:00.0000000',
-                Type: 'Insurance',
-                TypeId: 'L0003',
-                Description: 'Ngày phép bị trừ sai',
-                Status: 'Resolved',
-                FullNameResolved: 'Pham Van L',
-                ResolvedDate: '2024-12-05 00:00:00.0000000',
-                ResolutionDetails: 'Đã điều chỉnh ngày phép'
+                Title: 'Thông báo lương',
+                Content:
+                    'Lương tháng 12 đã được chuyển vào tài khoản của bạn vào ngày 2024-12-05. Vui lòng kiểm tra và thông báo nếu có bất kỳ sai sót nào.',
+                SentTime: '2024-12-05T08:15:00.000Z',
+                Type: 'Salary',
+                UserId: 'U008',
+                FullName: 'Nguyen Van H',
+                AvatarPath: '/images/avatar8.jpg'
             },
             {
                 Id: 9,
-                FullNameReported: 'Hoang Thi M',
-                EmployeeIdReported: 'CC009',
-                ReportedDate: '2024-12-05 00:00:00.0000000',
-                Type: 'Contract',
-                TypeId: 'O0003',
-                Description: 'Tăng ca bị thiếu tiền',
-                Status: 'Rejected',
-                FullNameResolved: 'Nguyen Van D',
-                ResolvedDate: '2024-11-27',
-                ResolutionDetails: null
+                Title: 'Thông báo kiểm tra',
+                Content:
+                    'Buổi kiểm tra định kỳ sẽ diễn ra vào ngày 2024-12-10. Vui lòng hoàn thành các mục chuẩn bị được gửi qua email để đạt kết quả tốt nhất.',
+                SentTime: '2024-12-05T14:00:00.000Z',
+                Type: 'Audit',
+                UserId: 'U009',
+                FullName: 'Le Thi I',
+                AvatarPath: null
             },
             {
                 Id: 10,
-                FullNameReported: 'Le Van N',
-                EmployeeIdReported: 'CC010',
-                ReportedDate: '2024-12-06 00:00:00.0000000',
-                Type: 'All',
-                TypeId: 'S0004',
-                Description: 'Sai bậc lương',
-                Status: 'Pending',
-                FullNameResolved: null,
-                ResolvedDate: null,
-                ResolutionDetails: null
+                Title: 'Thông báo hoàn tất',
+                Content:
+                    'Hệ thống đã ghi nhận và xử lý phản hồi của bạn thành công. Cảm ơn bạn đã hợp tác để cải thiện quy trình làm việc.',
+                SentTime: '2024-12-06T10:30:00.000Z',
+                Type: 'Confirmation',
+                UserId: 'U010',
+                FullName: 'Tran Van J',
+                AvatarPath: '/images/workforce.png'
             }
         ]
     }
@@ -219,7 +189,7 @@ function ContractExpPage() {
     //     setOpenModal(true)
     // }
 
-    const errorsData = responseData?.Data.Records as IGetAllErrorReport[]
+    const notifyData = responseData?.Data.Records as INotificationGetById[]
 
     const totalRecords = (responseData?.Data.TotalRecords as number) || 0
 
@@ -258,10 +228,10 @@ function ContractExpPage() {
 
     // useEffect(() => {
     //     if (!isFetching && responseData?.Data) {
-    //         const from = (page - 1) * Number(rowsPerPage) + Math.min(1, errorsData.length)
+    //         const from = (page - 1) * Number(rowsPerPage) + Math.min(1, notifyData.length)
     //         setFrom(from)
 
-    //         const to = Math.min(errorsData.length + (page - 1) * Number(rowsPerPage), totalRecords)
+    //         const to = Math.min(notifyData.length + (page - 1) * Number(rowsPerPage), totalRecords)
     //         setTo(to)
     //     }
     // }, [isFetching, responseData, page, rowsPerPage])
@@ -290,29 +260,29 @@ function ContractExpPage() {
     const filteredData = useMemo(() => {
         switch (currentTab) {
             case 0: // All
-                return errorsData
+                return notifyData
             case 1: // Pending
-                return errorsData.filter(item => item.Status === 'Pending')
+                return notifyData.filter(item => item.Type === 'Pending')
             case 2: // In Progress
-                return errorsData.filter(item => item.Status === 'In Progress')
+                return notifyData.filter(item => item.Type === 'In Progress')
             case 3: // Resolved
-                return errorsData.filter(item => item.Status === 'Resolved')
+                return notifyData.filter(item => item.Type === 'Resolved')
             case 4: // Rejected
-                return errorsData.filter(item => item.Status === 'Rejected')
+                return notifyData.filter(item => item.Type === 'Rejected')
             default:
-                return errorsData
+                return notifyData
         }
-    }, [errorsData, currentTab])
+    }, [notifyData, currentTab])
 
     const counts = useMemo(
         () => ({
-            0: errorsData.length,
-            1: errorsData.filter(item => item.Status === 'Pending').length,
-            2: errorsData.filter(item => item.Status === 'In Progress').length,
-            3: errorsData.filter(item => item.Status === 'Resolved').length,
-            4: errorsData.filter(item => item.Status === 'Rejected').length
+            0: notifyData.length,
+            1: notifyData.filter(item => item.Type === 'Pending').length,
+            2: notifyData.filter(item => item.Type === 'In Progress').length,
+            3: notifyData.filter(item => item.Type === 'Resolved').length,
+            4: notifyData.filter(item => item.Type === 'Rejected').length
         }),
-        [errorsData]
+        [notifyData]
     )
 
     const badgeStyle: React.CSSProperties = {
@@ -327,15 +297,88 @@ function ContractExpPage() {
         justifyContent: 'center'
     }
 
+    const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
+
+    const handleClick = useCallback(
+        (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            setAnchorEl(anchorEl ? null : event.currentTarget)
+            // setSelectedNotification(notification)
+        },
+        [anchorEl]
+    )
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (anchorEl && !anchorEl.contains(event.target as Node)) {
+                setAnchorEl(null)
+                //setSelectedNotification(null)
+            }
+        }
+
+        document.addEventListener('mousedown', handleClickOutside)
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside)
+        }
+    }, [anchorEl])
+
     return (
         <Box>
+            <DisplayInfo />
+            <Box
+                sx={{
+                    display: 'flex',
+                    width: '100%',
+                    gap: '24px',
+                    mt: '24px'
+                }}
+            >
+                <Box
+                    sx={{
+                        width: 'calc(100% / 3 * 2 - 8px)'
+                    }}
+                >
+                    <ChartCount />
+                </Box>
+                <Box
+                    sx={{
+                        width: 'calc(100% / 3 - 16px)',
+                        height: '615px'
+                    }}
+                >
+                    <ListRead />
+                </Box>
+            </Box>
+            <Box
+                sx={{
+                    display: 'flex',
+                    width: '100%',
+                    gap: '24px',
+                    mt: '24px'
+                }}
+            >
+                <Box
+                    sx={{
+                        width: 'calc(100% / 2 - 12px)',
+                        height: '615px'
+                    }}
+                >
+                    <ListEvent />
+                </Box>
+                <Box
+                    sx={{
+                        width: 'calc(100% / 2 - 12px)'
+                    }}
+                >
+                    <ChartEvent />
+                </Box>
+            </Box>
             <Paper
                 elevation={0}
                 sx={{
                     width: '100%',
                     overflow: 'hidden',
                     borderRadius: '15px',
-                    backgroundColor: 'var(--background-item)'
+                    backgroundColor: 'var(--background-color-after)'
                 }}
             >
                 <Typography
@@ -349,7 +392,7 @@ function ContractExpPage() {
                         padding: '24px 24px 15px'
                     }}
                 >
-                    {t('COMMON.ERROR_REPORT.TITLE')}
+                    {t('COMMON.STAT_NOTIFY.LIST_NOTIFICATIONS')}
                 </Typography>
 
                 <Box>
@@ -624,7 +667,6 @@ function ContractExpPage() {
                             }}
                         >
                             <InputLabel
-                                id='select-label'
                                 sx={{
                                     color: 'var(--text-label-color)',
                                     '&.Mui-focused': {
@@ -635,7 +677,6 @@ function ContractExpPage() {
                                 {t('COMMON.ERROR_REPORT.TYPE')}
                             </InputLabel>
                             <Select
-                                labelId='select-label'
                                 // open={openSelectType}
                                 // onClose={handleCloseSelectType}
                                 // onOpen={handleOpenSelectType}
@@ -708,7 +749,7 @@ function ContractExpPage() {
                     </Box>
                 </Box>
 
-                <TableErrorReport errorsData={filteredData} totalRecords={totalRecords} type={currentTab} />
+                <ListNotify notifications={notifyData} totalRecords={totalRecords} />
 
                 <Box display='flex' alignItems='center' justifyContent='space-between' padding='24px'>
                     <Box display='flex' alignItems='center'>

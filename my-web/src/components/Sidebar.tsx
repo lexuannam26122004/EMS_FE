@@ -136,25 +136,27 @@ export const TypographyItem: FC<TypographyItemProps> = ({ text }) => {
     )
 }
 
+import ReactDOM from 'react-dom'
+import React, { ReactElement } from 'react'
+
 interface SidebarItemProps {
     icon: ReactNode
     text: string
-    route: string
+    route?: string
     alert?: boolean
     active?: boolean
+    children?: ReactNode
 }
 
-import ReactDOM from 'react-dom'
-
-export const SidebarItem: FC<SidebarItemProps> = ({ icon, text, route, alert, active }) => {
+export const SidebarItem: FC<SidebarItemProps> = ({ icon, text, route, alert, active, children }) => {
     const context = useContext(SidebarContext)
     const router = useRouter()
     const [showTooltip, setShowTooltip] = useState(false)
     const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 })
+    const [isExpanded, setIsExpanded] = useState(false) // Để mở rộng các tab con
 
     const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null)
 
-    // Khởi tạo portal container một lần khi component mount
     useEffect(() => {
         const container =
             document.getElementById('tooltip-portal') ||
@@ -166,9 +168,7 @@ export const SidebarItem: FC<SidebarItemProps> = ({ icon, text, route, alert, ac
             })()
         setPortalContainer(container)
 
-        // Cleanup function
         return () => {
-            // Kiểm tra xem container còn tồn tại và là con của document.body không
             if (container && document.body.contains(container)) {
                 document.body.removeChild(container)
             }
@@ -182,7 +182,11 @@ export const SidebarItem: FC<SidebarItemProps> = ({ icon, text, route, alert, ac
     const { expanded } = context
 
     const handleClick = () => {
-        router.push(route)
+        if (route) {
+            router.push(route)
+        } else {
+            setIsExpanded(!isExpanded) // Toggle mở rộng nếu có tab con
+        }
     }
 
     const handleMouseEnter = (event: React.MouseEvent) => {
@@ -199,56 +203,69 @@ export const SidebarItem: FC<SidebarItemProps> = ({ icon, text, route, alert, ac
     }
 
     return (
-        <Box
-            onClick={handleClick}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            className={`group relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors ${
-                active
-                    ? 'bg-[var(--selected-menu-left-color)] hover:bg-[var(--hover-color)]'
-                    : 'hover:bg-[var(--hover-color)] text-[var(--text-color)]'
-            }`}
-        >
-            <div
-                className='w-6 h-6 flex items-center justify-center flex-shrink-0'
-                style={{ ...(active ? { color: 'var(--selected-menu-text-color)' } : { color: 'var(--text-color)' }) }}
+        <>
+            <Box
+                onClick={handleClick}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                className={`group relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors ${
+                    active
+                        ? 'bg-[var(--selected-menu-left-color)] hover:bg-[var(--hover-color)]'
+                        : 'hover:bg-[var(--hover-color)] text-[var(--text-color)]'
+                }`}
             >
-                {icon}
-            </div>
+                <div
+                    className='w-6 h-6 flex items-center justify-center flex-shrink-0'
+                    style={{
+                        ...(active ? { color: 'var(--selected-menu-text-color)' } : { color: 'var(--text-color)' })
+                    }}
+                >
+                    {icon}
+                </div>
 
-            <span
-                className={`
-                    overflow-hidden whitespace-nowrap
-                    transition-all duration-300 ease-in-out
-                    ${expanded ? 'w-48 ml-3 opacity-100' : 'w-0 opacity-0'}
-                `}
-                style={{ ...(active ? { color: 'var(--selected-menu-text-color)' } : { color: 'var(--text-color)' }) }}
-            >
-                {text}
-            </span>
-            {alert && <div className={`absolute right-2 w-2 h-2 rounded bg-[red] ${expanded ? '' : 'top-2'}`} />}
+                <span
+                    className={`overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out ${
+                        expanded ? 'w-48 ml-3 opacity-100' : 'w-0 opacity-0'
+                    }`}
+                    style={{
+                        ...(active ? { color: 'var(--selected-menu-text-color)' } : { color: 'var(--text-color)' })
+                    }}
+                >
+                    {text}
+                </span>
+                {alert && <div className={`absolute right-2 w-2 h-2 rounded bg-[red] ${expanded ? '' : 'top-2'}`} />}
 
-            {!expanded &&
-                showTooltip &&
-                portalContainer &&
-                ReactDOM.createPortal(
-                    <div
+                {children && (
+                    <ChevronLast
                         style={{
-                            position: 'absolute',
-                            top: tooltipPosition.top,
-                            left: tooltipPosition.left,
-                            zIndex: 1000000
+                            transform: isExpanded ? 'rotate(90deg)' : 'rotate(0)',
+                            transition: 'transform 200ms ease-in-out',
+                            marginLeft: 'auto'
                         }}
-                        className='
-                        rounded-md px-2 py-1 bg-[var(--hover-color)] text-[var(--text-color)] text-sm
-                        transition-opacity opacity-100 shadow-lg
-                    '
-                    >
-                        {text}
-                    </div>,
-                    portalContainer
+                    />
                 )}
-        </Box>
+
+                {!expanded &&
+                    showTooltip &&
+                    portalContainer &&
+                    ReactDOM.createPortal(
+                        <div
+                            style={{
+                                position: 'absolute',
+                                top: tooltipPosition.top,
+                                left: tooltipPosition.left,
+                                zIndex: 1000000
+                            }}
+                            className='rounded-md px-2 py-1 bg-[var(--hover-color)] text-[var(--text-color)] text-sm transition-opacity opacity-100 shadow-lg'
+                        >
+                            {text}
+                        </div>,
+                        portalContainer
+                    )}
+            </Box>
+
+            {isExpanded && children && children && <Box className='pl-4'>{children}</Box>}
+        </>
     )
 }
 

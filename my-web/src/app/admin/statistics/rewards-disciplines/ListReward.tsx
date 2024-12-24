@@ -17,7 +17,7 @@ import {
     TableContainer,
     TextField,
     InputAdornment,
-    TableSortLabel,
+    OutlinedInput,
     Avatar
 } from '@mui/material'
 import { useEffect, useState, useMemo } from 'react'
@@ -25,7 +25,7 @@ import { useTranslation } from 'react-i18next'
 import SearchIcon from '@mui/icons-material/Search'
 import { useRouter } from 'next/navigation'
 import { useGetContractsExpiringSoonQuery } from '@/services/EmploymentContractService'
-import TableErrorReport from '@/components/TableErrorReport'
+import TableReward from '@/components/TableReward'
 
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
@@ -37,20 +37,17 @@ function a11yProps(index: number) {
     }
 }
 
-interface IGetAllErrorReport {
+interface IGetAllDiscipline {
     Id: number
-    FullNameReported: string
-    AvatarReportedPath: string
-    EmployeeIdReported: string
-    ReportedDate: string
-    Type: string
-    TypeId: string
-    Description: string
-    Status: string
-    AvatarResolvedPath: string
-    FullNameResolved: string | null
-    ResolvedDate: string | null
-    ResolutionDetails: string | null
+    FullName: string
+    AvatarPath: string
+    EmployeeId: string
+    Department: string
+    Money?: number
+    Date: string
+    Reason: string
+    Note: string
+    IsReceived: boolean
 }
 
 const responseData = {
@@ -59,139 +56,129 @@ const responseData = {
         Records: [
             {
                 Id: 1,
-                FullNameReported: 'Nguyen Van A',
-                EmployeeIdReported: 'CC001',
-                ReportedDate: '2024-11-27 00:00:00.0000000',
-                Type: 'Salary',
-                TypeId: 'S0001',
-                Description: 'Bảng lương sai',
-                Status: 'Rejected',
-                FullNameResolved: 'Nguyen Van D',
-                ResolvedDate: '2024-11-27',
-                ResolutionDetails: null
+                FullName: 'Nguyen Van A',
+                AvatarPath: '/images/avatar1.jpg',
+                EmployeeId: 'CC001',
+                Department: 'Phòng kế toán',
+                Date: '2024-11-27',
+                Reason: 'Đi làm muộn',
+                Note: 'Cảnh cáo vì vi phạm nội quy',
+                IsReceived: true,
+                Money: 500000 // Số tiền phạt (đơn vị: VNĐ)
             },
             {
                 Id: 2,
-                FullNameReported: 'Tran Thi B',
-                EmployeeIdReported: 'CC002',
-                ReportedDate: '2024-11-28 00:00:00.0000000',
-                Type: 'Benefit',
-                TypeId: 'L0001',
-                Description: 'Sai thông tin phép năm',
-                Status: 'Pending',
-                FullNameResolved: null,
-                ResolvedDate: null,
-                ResolutionDetails: null
+                FullName: 'Tran Thi B',
+                AvatarPath: '/images/avatar2.jpg',
+                EmployeeId: 'CC002',
+                Date: '2024-11-28',
+                Department: 'Phòng nhân sự',
+                Reason: 'Không đeo thẻ nhân viên',
+                Note: 'Nhắc nhở lần đầu',
+                IsReceived: false,
+                Money: null // Không bị phạt
             },
             {
                 Id: 3,
-                FullNameReported: 'Le Van C',
-                EmployeeIdReported: 'CC003',
-                ReportedDate: '2024-11-29 00:00:00.0000000',
-                Type: 'Discipline',
-                TypeId: 'O0001',
-                Description: 'Tăng ca không được tính',
-                Status: 'In Progress',
-                FullNameResolved: 'Nguyen Van D',
-                ResolvedDate: '2024-12-01 00:00:00.0000000',
-                ResolutionDetails: 'Đã cập nhật dữ liệu tăng ca'
+                FullName: 'Le Van C',
+                AvatarPath: '/images/avatar3.jpg',
+                EmployeeId: 'CC003',
+                Date: '2024-11-29',
+                Department: 'Phòng sản xuất',
+                Reason: 'Nghỉ không báo trước',
+                Note: 'Cắt thưởng tháng',
+                IsReceived: true,
+                Money: 1005000
             },
             {
                 Id: 4,
-                FullNameReported: 'Pham Thi E',
-                EmployeeIdReported: 'CC004',
-                ReportedDate: '2024-11-30 00:00:00.0000000',
-                Type: 'Salary',
-                TypeId: 'S0002',
-                Description: 'Thưởng Tết không đúng',
-                Status: 'Pending',
-                FullNameResolved: null,
-                ResolvedDate: null,
-                ResolutionDetails: null
+                FullName: 'Pham Thi D',
+                AvatarPath: '/images/avatar4.jpg',
+                EmployeeId: 'CC004',
+                Date: '2024-11-30',
+                Department: 'Phòng kỹ thuật',
+                Reason: 'Sử dụng điện thoại trong giờ làm',
+                Note: 'Nhắc nhở lần đầu',
+                IsReceived: false,
+                Money: null
             },
             {
                 Id: 5,
-                FullNameReported: 'Hoang Van F',
-                EmployeeIdReported: 'CC005',
-                ReportedDate: '2024-12-01 00:00:00.0000000',
-                Type: 'Reward',
-                TypeId: 'L0002',
-                Description: 'Đăng ký nghỉ nhưng không được duyệt',
-                Status: 'Resolved',
-                FullNameResolved: 'Nguyen Van G',
-                ResolvedDate: '2024-12-03 00:00:00.0000000',
-                ResolutionDetails: 'Đã xử lý phê duyệt nghỉ'
+                FullName: 'Hoang Van E',
+                AvatarPath: '/images/avatar5.jpg',
+                EmployeeId: 'CC005',
+                Department: 'Phòng kế toán',
+                Date: '2024-12-01',
+                Reason: 'Gây mất trật tự trong công ty',
+                Note: 'Cảnh cáo lần 2',
+                IsReceived: true,
+                Money: 800000
             },
             {
                 Id: 6,
-                FullNameReported: 'Vo Thi H',
-                EmployeeIdReported: 'CC006',
-                ReportedDate: '2024-12-02 00:00:00.0000000',
-                Type: 'Timekeeping',
-                TypeId: 'O0002',
-                Description: 'Sai số giờ tăng ca',
-                Status: 'Pending',
-                FullNameResolved: null,
-                ResolvedDate: null,
-                ResolutionDetails: null
+                FullName: 'Vo Thi F',
+                AvatarPath: '/images/avatar6.jpg',
+                EmployeeId: 'CC006',
+                Date: '2024-12-02',
+                Department: 'Phòng sản xuất',
+                Reason: 'Không hoàn thành công việc đúng hạn',
+                Note: 'Giảm KPI tháng',
+                IsReceived: true,
+                Money: 1200000
             },
             {
                 Id: 7,
-                FullNameReported: 'Tran Van I',
-                EmployeeIdReported: 'CC007',
-                ReportedDate: '2024-12-03 00:00:00.0000000',
-                Type: 'Salary',
-                TypeId: 'S0003',
-                Description: 'Chưa nhận được lương tháng 11',
-                Status: 'In Progress',
-                FullNameResolved: null,
-                ResolvedDate: null,
-                ResolutionDetails: null
+                FullName: 'Tran Van G',
+                AvatarPath: '/images/avatar7.jpg',
+                EmployeeId: 'CC007',
+                Department: 'Phòng kỹ thuật',
+                Date: '2024-12-03',
+                Reason: 'Đi trễ nhiều lần',
+                Note: 'Cắt thưởng cuối năm',
+                IsReceived: true,
+                Money: 2000000
             },
             {
                 Id: 8,
-                FullNameReported: 'Nguyen Thi K',
-                EmployeeIdReported: 'CC008',
-                ReportedDate: '2024-12-04 00:00:00.0000000',
-                Type: 'Insurance',
-                TypeId: 'L0003',
-                Description: 'Ngày phép bị trừ sai',
-                Status: 'Resolved',
-                FullNameResolved: 'Pham Van L',
-                ResolvedDate: '2024-12-05 00:00:00.0000000',
-                ResolutionDetails: 'Đã điều chỉnh ngày phép'
+                FullName: 'Nguyen Thi H',
+                AvatarPath: '/images/avatar8.jpg',
+                EmployeeId: 'CC008',
+                Department: 'Phòng nhân sự',
+                Date: '2024-12-04',
+                Reason: 'Không đúng trang phục quy định',
+                Note: 'Nhắc nhở',
+                IsReceived: false,
+                Money: null
             },
             {
                 Id: 9,
-                FullNameReported: 'Hoang Thi M',
-                EmployeeIdReported: 'CC009',
-                ReportedDate: '2024-12-05 00:00:00.0000000',
-                Type: 'Contract',
-                TypeId: 'O0003',
-                Description: 'Tăng ca bị thiếu tiền',
-                Status: 'Rejected',
-                FullNameResolved: 'Nguyen Van D',
-                ResolvedDate: '2024-11-27',
-                ResolutionDetails: null
+                FullName: 'Hoang Thi I',
+                AvatarPath: '/images/avatar9.jpg',
+                EmployeeId: 'CC009',
+                Date: '2024-12-05',
+                Department: 'Phòng sản xuất',
+                Reason: 'Làm sai quy trình sản xuất',
+                Note: 'Cảnh cáo và đào tạo lại',
+                IsReceived: true,
+                Money: 1500000
             },
             {
                 Id: 10,
-                FullNameReported: 'Le Van N',
-                EmployeeIdReported: 'CC010',
-                ReportedDate: '2024-12-06 00:00:00.0000000',
-                Type: 'All',
-                TypeId: 'S0004',
-                Description: 'Sai bậc lương',
-                Status: 'Pending',
-                FullNameResolved: null,
-                ResolvedDate: null,
-                ResolutionDetails: null
+                FullName: 'Le Van J',
+                AvatarPath: '/images/avatar10.jpg',
+                EmployeeId: 'CC010',
+                Date: '2024-12-06',
+                Department: 'Phòng kế toán',
+                Reason: 'Không tham gia họp đúng giờ',
+                Note: 'Nhắc nhở',
+                IsReceived: false,
+                Money: null
             }
         ]
     }
 }
 
-function ContractExpPage() {
+function Page() {
     const { t } = useTranslation('common')
     const router = useRouter()
     const [selected, setSelected] = useState<number[]>([])
@@ -219,7 +206,7 @@ function ContractExpPage() {
     //     setOpenModal(true)
     // }
 
-    const errorsData = responseData?.Data.Records as IGetAllErrorReport[]
+    const rewardData = responseData?.Data.Records as IGetAllDiscipline[]
 
     const totalRecords = (responseData?.Data.TotalRecords as number) || 0
 
@@ -258,10 +245,10 @@ function ContractExpPage() {
 
     // useEffect(() => {
     //     if (!isFetching && responseData?.Data) {
-    //         const from = (page - 1) * Number(rowsPerPage) + Math.min(1, errorsData.length)
+    //         const from = (page - 1) * Number(rowsPerPage) + Math.min(1, rewardData.length)
     //         setFrom(from)
 
-    //         const to = Math.min(errorsData.length + (page - 1) * Number(rowsPerPage), totalRecords)
+    //         const to = Math.min(rewardData.length + (page - 1) * Number(rowsPerPage), totalRecords)
     //         setTo(to)
     //     }
     // }, [isFetching, responseData, page, rowsPerPage])
@@ -270,49 +257,29 @@ function ContractExpPage() {
     //     refetch()
     // }, [filter])
 
-    const handleSort = (property: string) => {
-        setFilter(prev => ({
-            ...prev,
-            sortBy: property,
-            isDescending: orderBy === property && order === 'asc' ? true : false
-        }))
-        if (orderBy === property) {
-            setOrder(order === 'asc' ? 'desc' : 'asc')
-        } else {
-            setOrder('asc')
-        }
-        setOrderBy(property)
-    }
-
     const [currentTab, setCurrentTab] = useState(0)
 
     // Lọc dữ liệu theo status
     const filteredData = useMemo(() => {
         switch (currentTab) {
             case 0: // All
-                return errorsData
+                return rewardData
             case 1: // Pending
-                return errorsData.filter(item => item.Status === 'Pending')
+                return rewardData.filter(item => item.IsReceived === false)
             case 2: // In Progress
-                return errorsData.filter(item => item.Status === 'In Progress')
-            case 3: // Resolved
-                return errorsData.filter(item => item.Status === 'Resolved')
-            case 4: // Rejected
-                return errorsData.filter(item => item.Status === 'Rejected')
+                return rewardData.filter(item => item.IsReceived === true)
             default:
-                return errorsData
+                return rewardData
         }
-    }, [errorsData, currentTab])
+    }, [rewardData, currentTab])
 
     const counts = useMemo(
         () => ({
-            0: errorsData.length,
-            1: errorsData.filter(item => item.Status === 'Pending').length,
-            2: errorsData.filter(item => item.Status === 'In Progress').length,
-            3: errorsData.filter(item => item.Status === 'Resolved').length,
-            4: errorsData.filter(item => item.Status === 'Rejected').length
+            0: rewardData.length,
+            1: rewardData.filter(item => item.IsReceived === false).length,
+            2: rewardData.filter(item => item.IsReceived === true).length
         }),
-        [errorsData]
+        [rewardData]
     )
 
     const badgeStyle: React.CSSProperties = {
@@ -328,13 +295,16 @@ function ContractExpPage() {
     }
 
     return (
-        <Box>
+        <Box
+            sx={{
+                mt: '24px'
+            }}
+        >
             <Paper
-                elevation={0}
                 sx={{
                     width: '100%',
                     overflow: 'hidden',
-                    borderRadius: '15px',
+                    borderRadius: '20px',
                     backgroundColor: 'var(--background-item)'
                 }}
             >
@@ -349,7 +319,7 @@ function ContractExpPage() {
                         padding: '24px 24px 15px'
                     }}
                 >
-                    {t('COMMON.ERROR_REPORT.TITLE')}
+                    {t('COMMON.REWARD_DISCIPLINE.LIST_REWARD')}
                 </Typography>
 
                 <Box>
@@ -409,7 +379,7 @@ function ContractExpPage() {
                             }}
                             label={
                                 <Box style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    {t('COMMON.ERROR_REPORT.PENDING')}
+                                    {t('COMMON.REWARD_DISCIPLINE.UNPROCESSED')}
                                     <Box
                                         style={{
                                             ...badgeStyle,
@@ -441,16 +411,18 @@ function ContractExpPage() {
                             }}
                             label={
                                 <Box style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    {t('COMMON.ERROR_REPORT.IN_PROGRESS')}
+                                    {t('COMMON.REWARD_DISCIPLINE.PROCESSED')}
                                     <Box
                                         style={{
                                             ...badgeStyle,
                                             backgroundColor:
-                                                currentTab === 2 ? 'var(--bg-closed-color)' : 'var(--bg-closed-color1)',
+                                                currentTab === 2
+                                                    ? 'var(--bg-success-color)'
+                                                    : 'var(--bg-success-color1)',
                                             color:
                                                 currentTab === 2
-                                                    ? 'var(--text-closed-color)'
-                                                    : 'var(--text-closed-color1)'
+                                                    ? 'var(--text-success-color)'
+                                                    : 'var(--text-success-color1)'
                                         }}
                                     >
                                         {counts[2]}
@@ -459,73 +431,11 @@ function ContractExpPage() {
                             }
                             {...a11yProps(2)}
                         />
-                        <Tab
-                            sx={{
-                                textTransform: 'none',
-                                color: 'var(--text-rejected-color1)',
-                                fontWeight: '600',
-                                '&.Mui-selected': {
-                                    color: 'var(--text-color)',
-                                    fontWeight: '600'
-                                }
-                            }}
-                            label={
-                                <Box style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    {t('COMMON.ERROR_REPORT.RESOLVED')}
-                                    <Box
-                                        style={{
-                                            ...badgeStyle,
-                                            backgroundColor:
-                                                currentTab === 3
-                                                    ? 'var(--bg-success-color)'
-                                                    : 'var(--bg-success-color1)',
-                                            color:
-                                                currentTab === 3
-                                                    ? 'var(--text-success-color)'
-                                                    : 'var(--text-success-color1)'
-                                        }}
-                                    >
-                                        {counts[3]}
-                                    </Box>
-                                </Box>
-                            }
-                            {...a11yProps(3)}
-                        />
-                        <Tab
-                            sx={{
-                                textTransform: 'none',
-                                color: 'var(--text-rejected-color1)',
-                                fontWeight: '600',
-                                '&.Mui-selected': {
-                                    color: 'var(--text-color)',
-                                    fontWeight: '600'
-                                }
-                            }}
-                            label={
-                                <Box style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    {t('COMMON.ERROR_REPORT.REJECTED')}
-                                    <Box
-                                        style={{
-                                            ...badgeStyle,
-                                            backgroundColor:
-                                                currentTab === 4 ? 'var(--bg-danger-color)' : 'var(--bg-danger-color1)',
-                                            color:
-                                                currentTab === 4
-                                                    ? 'var(--text-danger-color)'
-                                                    : 'var(--text-danger-color1)'
-                                        }}
-                                    >
-                                        {counts[4]}
-                                    </Box>
-                                </Box>
-                            }
-                            {...a11yProps(4)}
-                        />
                     </Tabs>
                 </Box>
 
                 <Box display='flex' alignItems='center' gap='24px' margin='20px 24px'>
-                    <Box sx={{ position: 'relative', width: '45%', height: '55px' }}>
+                    <Box sx={{ position: 'relative', width: '40%', height: '55px' }}>
                         <TextField
                             id='location-search'
                             type='search'
@@ -632,8 +542,9 @@ function ContractExpPage() {
                                     }
                                 }}
                             >
-                                {t('COMMON.ERROR_REPORT.TYPE')}
+                                {t('COMMON.REWARD_DISCIPLINE.DEPARTMENT')}
                             </InputLabel>
+
                             <Select
                                 labelId='select-label'
                                 // open={openSelectType}
@@ -641,7 +552,7 @@ function ContractExpPage() {
                                 // onOpen={handleOpenSelectType}
                                 // value={typeNotification}
                                 // onChange={handleChange}
-                                label={t('COMMON.CREATE_NOTIFICATION.TYPE')}
+                                label={t('COMMON.REWARD_DISCIPLINE.DEPARTMENT')}
                                 autoFocus={false}
                                 sx={{
                                     height: '53px',
@@ -708,7 +619,7 @@ function ContractExpPage() {
                     </Box>
                 </Box>
 
-                <TableErrorReport errorsData={filteredData} totalRecords={totalRecords} type={currentTab} />
+                <TableReward rewardsData={filteredData} totalRecords={totalRecords} type={currentTab} />
 
                 <Box display='flex' alignItems='center' justifyContent='space-between' padding='24px'>
                     <Box display='flex' alignItems='center'>
@@ -823,4 +734,4 @@ function ContractExpPage() {
     )
 }
 
-export default ContractExpPage
+export default Page

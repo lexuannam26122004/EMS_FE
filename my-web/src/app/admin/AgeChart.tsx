@@ -39,7 +39,8 @@ const SaleByGenderChart = () => {
             top: 'bottom',
             itemGap: 10,
             textStyle: {
-                color: theme === 'light' ? 'black' : '#fff'
+                color: theme === 'light' ? 'black' : '#fff',
+                fontFamily: 'Arial, sans-serif'
             },
             formatter: (name: string) => {
                 const percent =

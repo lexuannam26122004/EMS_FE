@@ -36,7 +36,8 @@ const DepartmentChart = () => {
             top: 'bottom',
             itemGap: 14, // Thêm khoảng cách giữa các mục chú thích
             textStyle: {
-                color: theme === 'light' ? 'black' : '#fff'
+                color: theme === 'light' ? 'black' : '#fff',
+                fontFamily: 'Arial, sans-serif'
             },
             selectedMode: false // Tắt tính năng ẩn màu khi nhấn vào chú thích
         },

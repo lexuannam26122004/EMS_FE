@@ -152,7 +152,7 @@ export default function ChartSalary() {
 
     return (
         <Paper
-            elevation={0}
+            elevation={1}
             sx={{
                 height: '100%',
                 width: '100%',
@@ -272,7 +272,7 @@ export default function ChartSalary() {
                     </Select>
                 </FormControl>
             </Box>
-            <ReactECharts option={option} style={{ height: 360 }} />
+            <ReactECharts option={option} style={{ height: 500 }} />
         </Paper>
     )
 }

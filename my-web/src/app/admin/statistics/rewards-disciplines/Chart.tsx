@@ -4,7 +4,7 @@ import { useTheme } from 'next-themes'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-export default function ChartSalary() {
+export default function Chart() {
     const { t } = useTranslation('common')
     const { theme } = useTheme()
     const currentYear = new Date().getFullYear()
@@ -28,123 +28,109 @@ export default function ChartSalary() {
             }
         },
         legend: {
-            data: [
-                t('COMMON.DASHBOARD.YEAR') + ' ' + (selectedYear - 1).toString(),
-                t('COMMON.DASHBOARD.YEAR') + ' ' + selectedYear.toString()
-            ],
+            data: [t('COMMON.REWARD_DISCIPLINE.DISCIPLINE'), t('COMMON.REWARD_DISCIPLINE.REWARD')],
             textStyle: {
                 color: theme === 'light' ? '#000000' : '#ffffff',
                 fontFamily: 'Arial, sans-serif'
             },
-            itemGap: 30,
-            formatter: (name: string) => {
-                const year = name.split(' ')[1] // Lấy năm từ tên
-                const total = year === selectedYear.toString() ? '1.23k' : '6.79k' // Thay đổi giá trị tổng theo năm
-                return `${name} (${t('COMMON.DASHBOARD.SUM')}: ${total})` // Thay đổi cách hiển thị
+            itemGap: 30
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                magicType: { show: true, type: ['line', 'bar'] },
+                saveAsImage: { show: true }
             }
         },
         grid: {
-            left: '3%',
-            right: '4%',
+            left: '2%',
+            right: '5.5%',
             bottom: '3%',
             containLabel: true
         },
-        xAxis: {
-            type: 'category',
-            boundaryGap: false,
-
-            axisLine: {
-                lineStyle: {
-                    color: theme === 'dark' ? '#919EAB' : '#637381'
-                }
-            },
-            splitLine: {
-                lineStyle: {
-                    type: 'dashed',
-                    color: theme === 'light' ? '#e9ecee' : '#333d47' // Màu sắc của đường chia
-                }
-            },
-            data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-        },
-        yAxis: {
-            type: 'value',
-            axisLine: {
-                lineStyle: {
-                    color: theme === 'dark' ? '#919EAB' : '#637381'
-                }
-            },
-            splitLine: {
-                lineStyle: {
-                    type: 'dashed',
-                    color: theme === 'light' ? '#e9ecee' : '#333d47' // Màu sắc của đường chia
-                }
+        calculable: true,
+        xAxis: [
+            {
+                type: 'category',
+                boundaryGap: true, // Để cột không chạm vào nhau
+                axisLine: {
+                    lineStyle: {
+                        color: theme === 'dark' ? '#919EAB' : '#637381'
+                    }
+                },
+                splitLine: {
+                    lineStyle: {
+                        type: 'dashed',
+                        color: theme === 'light' ? '#e9ecee' : '#333d47'
+                    }
+                },
+                // prettier-ignore
+                data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
             }
-        },
+        ],
+        yAxis: [
+            {
+                axisLine: {
+                    lineStyle: {
+                        color: theme === 'dark' ? '#919EAB' : '#637381'
+                    }
+                },
+                splitLine: {
+                    lineStyle: {
+                        type: 'dashed',
+                        color: theme === 'light' ? '#e9ecee' : '#333d47'
+                    }
+                },
+                type: 'value'
+            }
+        ],
         series: [
             {
-                name: t('COMMON.DASHBOARD.YEAR') + ' ' + selectedYear.toString(),
-                type: 'line',
-                data: [40, 45, 40, 50, 50, 60, 70, 90, 150, 40, 50, 50],
-                smooth: true,
-                symbol: 'circle', // Hiển thị biểu tượng tròn
-                symbolSize: 8, // Kích thước biểu tượng
-                showSymbol: false,
-                areaStyle: {
-                    opacity: 0.2,
-                    color: {
-                        type: 'linear',
-                        x: 0,
-                        y: 0,
-                        x2: 0,
-                        y2: 1,
-                        colorStops: [
-                            {
-                                offset: 0,
-                                color: 'rgba(102,187,106,0.6)'
-                            },
-                            {
-                                offset: 1,
-                                color: 'rgba(102,187,106,0.1)'
-                            }
-                        ]
-                    }
+                name: t('COMMON.REWARD_DISCIPLINE.DISCIPLINE'),
+                type: 'bar',
+                data: [76, 75, 19, 48, 78, 31, 51, 78, 20, 6, 30, 70],
+                markPoint: {
+                    data: [
+                        { type: 'max', name: 'Max' },
+                        { type: 'min', name: 'Min' }
+                    ]
                 },
-                lineStyle: { color: '#00a76f', width: 2 },
+                barWidth: '22%', // Điều chỉnh độ rộng của cột
                 itemStyle: {
-                    color: '#00a76f'
+                    color: '#d24c2f',
+                    borderRadius: [6, 6, 0, 0] // Bo tròn đỉnh cột
+                },
+                markLine: {
+                    data: [{ type: 'average', name: 'Avg' }],
+                    label: {
+                        color: theme === 'light' ? '#000000' : '#ffffff',
+                        fontSize: 11,
+                        fontWeight: 'bold'
+                    }
                 }
             },
             {
-                name: t('COMMON.DASHBOARD.YEAR') + ' ' + (selectedYear - 1).toString(),
-                type: 'line',
-                data: [10, 30, 15, 50, 80, 90, 100, 70, 40, 15, 80, 80],
-                smooth: true,
-                symbol: 'circle', // Hiển thị biểu tượng tròn
-                symbolSize: 8, // Kích thước biểu tượng
-                showSymbol: false,
-                areaStyle: {
-                    opacity: 0.2,
-                    color: {
-                        type: 'linear',
-                        x: 0,
-                        y: 0,
-                        x2: 0,
-                        y2: 1,
-                        colorStops: [
-                            {
-                                offset: 0,
-                                color: 'rgba(255,167,38,0.6)'
-                            },
-                            {
-                                offset: 1,
-                                color: 'rgba(255,167,38,0.1)'
-                            }
-                        ]
-                    }
-                },
-                lineStyle: { color: '#ffab00', width: 2 },
+                name: t('COMMON.REWARD_DISCIPLINE.REWARD'),
+                type: 'bar',
+                data: [49, 31, 53, 88, 16, 74, 85, 73, 68, 93, 62, 89],
+                barWidth: '22%', // Điều chỉnh độ rộng của cột
                 itemStyle: {
-                    color: '#ffab00'
+                    color: '#00a76f',
+                    borderRadius: [6, 6, 0, 0] // Bo tròn đỉnh cột
+                },
+                markPoint: {
+                    data: [
+                        { type: 'max', name: 'Max' },
+                        { type: 'min', name: 'Min' }
+                    ]
+                },
+                markLine: {
+                    data: [{ type: 'average', name: 'Avg' }],
+                    label: {
+                        color: theme === 'light' ? '#000000' : '#ffffff',
+                        fontSize: 11,
+                        fontWeight: 'bold'
+                    }
                 }
             }
         ]
@@ -152,19 +138,18 @@ export default function ChartSalary() {
 
     return (
         <Paper
-            elevation={0}
             sx={{
-                height: '100%',
                 width: '100%',
-                padding: '24px 5px 15px',
-                borderRadius: '15px',
+                mt: '24px',
+                padding: '24px 24px 15px',
+                overflow: 'hidden',
+                borderRadius: '20px',
                 backgroundColor: 'var(--background-item)'
             }}
         >
             <Box
                 sx={{
                     display: 'flex',
-                    padding: '0 20px',
                     mb: '24px',
                     justifyContent: 'space-between'
                 }}
@@ -177,7 +162,7 @@ export default function ChartSalary() {
                             color: 'var(--text-color)'
                         }}
                     >
-                        {t('COMMON.DASHBOARD.EMPLOYEE_SALARY_BY_MONTH')}
+                        {t('COMMON.REWARD_DISCIPLINE.CHART_STATISTIC_REWARD_DISCIPLINE')}
                     </Typography>
                     <Typography
                         sx={{
@@ -186,11 +171,8 @@ export default function ChartSalary() {
                             color: theme === 'dark' ? '#919EAB' : '#637381'
                         }}
                     >
-                        {'(' +
-                            (percent > 0 ? '+' : '') +
-                            percent +
-                            '%) ' +
-                            t('COMMON.DASHBOARD.THAN_LAST_YEAR', { year: selectedYear - 1 })}
+                        {t('COMMON.REWARD_DISCIPLINE.PERCENT_REWARD_DISCIPLINE_IN_YEAR')}
+                        {' ' + percent + '% '}
                     </Typography>
                 </Box>
                 <FormControl sx={{ width: '90px' }}>
@@ -272,7 +254,7 @@ export default function ChartSalary() {
                     </Select>
                 </FormControl>
             </Box>
-            <ReactECharts option={option} style={{ height: 360 }} />
+            <ReactECharts option={option} style={{ height: 450 }} />
         </Paper>
     )
 }

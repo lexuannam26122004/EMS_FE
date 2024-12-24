@@ -10,7 +10,8 @@ const EmployeeGenderChart = () => {
             top: '5%',
             textStyle: {
                 fontSize: 16,
-                fontWeight: 'bold'
+                fontWeight: 'bold',
+                fontFamily: 'Arial, sans-serif'
             }
         },
         radar: {

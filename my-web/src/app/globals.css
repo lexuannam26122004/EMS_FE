@@ -88,9 +88,9 @@ body {
     --error-color: #ff5630;
     --hover-box-color: #03214772;
     --bg-danger-color1: rgba(255, 22, 22, 0.356);
-    --bg-warning-color1: rgba(255, 255, 0, 0.349);
-    --text-warning-color1: #fcec37;
-    --bg-success-color1: rgba(0, 200, 77, 0.404);
+    --bg-warning-color1: rgba(255, 171, 0, 0.16);
+    --text-warning-color1: #ffd666;
+    --bg-success-color1: rgba(2, 177, 90, 0.2);
     --text-danger-color1: #ff7650;
     --text-success-color1: #00ff77;
     --text-all-color1: #1c252e;
@@ -102,6 +102,8 @@ body {
     --border-dialog: #3d4853;
     --background-switch: #5a6672;
     --today-color: #39424a;
+    --reward-title-color: #131215;
+    --rank-1-color: #343e49;
 }
 
 .light {
@@ -180,6 +182,8 @@ body {
     --border-dialog: #e0e5e8;
     --background-switch: #c4ccd3;
     --today-color: #dae1ec;
+    --reward-title-color: #131215;
+    --rank-1-color: #dfe2e8;
 }
 
 body {

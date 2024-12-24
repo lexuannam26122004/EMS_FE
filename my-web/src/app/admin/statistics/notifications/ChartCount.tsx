@@ -4,7 +4,7 @@ import { useTheme } from 'next-themes'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-export default function ChartSalary() {
+export default function Chart() {
     const { t } = useTranslation('common')
     const { theme } = useTheme()
     const currentYear = new Date().getFullYear()
@@ -27,124 +27,78 @@ export default function ChartSalary() {
                 color: theme === 'light' ? '#000000' : '#ffffff'
             }
         },
-        legend: {
-            data: [
-                t('COMMON.DASHBOARD.YEAR') + ' ' + (selectedYear - 1).toString(),
-                t('COMMON.DASHBOARD.YEAR') + ' ' + selectedYear.toString()
-            ],
+        dataset: {
+            source: [
+                ['score', 'amount', 'product'],
+                [12, 12, 'Matcha Latte'],
+                [24, 13, 'Milk Tea'],
+                [17, 10, 'Cheese Cocoa'],
+                [44, 24, 'Cheese Brownie'],
+                [98, 98, 'Matcha Cocoa'],
+                [46, 67, 'Tea'],
+                [34, 34, 'Orange Juice'],
+                [23, 23, 'Lemon Juice'],
+                [3, 3, 'Walnut Brownie']
+            ]
+        },
+        calculable: true,
+        grid: {
+            top: '2%',
+            left: '2%',
+            right: '10%',
+            bottom: '10%',
+            containLabel: true
+        },
+        xAxis: {
+            name: 'amount',
+            boundaryGap: true, // Để cột không chạm vào nhau
+            axisLine: {
+                lineStyle: {
+                    color: theme === 'dark' ? '#919EAB' : '#637381'
+                }
+            },
+            splitLine: {
+                lineStyle: {
+                    type: 'dashed',
+                    color: theme === 'light' ? '#e9ecee' : '#333d47'
+                }
+            }
+        },
+        yAxis: {
+            type: 'category',
+            axisLine: {
+                lineStyle: {
+                    color: theme === 'dark' ? '#919EAB' : '#637381'
+                }
+            },
+            splitLine: {
+                lineStyle: {
+                    type: 'dashed',
+                    color: theme === 'light' ? '#e9ecee' : '#333d47'
+                }
+            }
+        },
+        visualMap: {
+            orient: 'horizontal',
+            left: 'center',
             textStyle: {
                 color: theme === 'light' ? '#000000' : '#ffffff',
                 fontFamily: 'Arial, sans-serif'
             },
-            itemGap: 30,
-            formatter: (name: string) => {
-                const year = name.split(' ')[1] // Lấy năm từ tên
-                const total = year === selectedYear.toString() ? '1.23k' : '6.79k' // Thay đổi giá trị tổng theo năm
-                return `${name} (${t('COMMON.DASHBOARD.SUM')}: ${total})` // Thay đổi cách hiển thị
-            }
-        },
-        grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-        },
-        xAxis: {
-            type: 'category',
-            boundaryGap: false,
-
-            axisLine: {
-                lineStyle: {
-                    color: theme === 'dark' ? '#919EAB' : '#637381'
-                }
-            },
-            splitLine: {
-                lineStyle: {
-                    type: 'dashed',
-                    color: theme === 'light' ? '#e9ecee' : '#333d47' // Màu sắc của đường chia
-                }
-            },
-            data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-        },
-        yAxis: {
-            type: 'value',
-            axisLine: {
-                lineStyle: {
-                    color: theme === 'dark' ? '#919EAB' : '#637381'
-                }
-            },
-            splitLine: {
-                lineStyle: {
-                    type: 'dashed',
-                    color: theme === 'light' ? '#e9ecee' : '#333d47' // Màu sắc của đường chia
-                }
+            min: 0,
+            max: 50,
+            text: ['High Score', 'Low Score'],
+            dimension: 0,
+            inRange: {
+                color: ['#d24c2f', '#d99347', '#00a76f']
             }
         },
         series: [
             {
-                name: t('COMMON.DASHBOARD.YEAR') + ' ' + selectedYear.toString(),
-                type: 'line',
-                data: [40, 45, 40, 50, 50, 60, 70, 90, 150, 40, 50, 50],
-                smooth: true,
-                symbol: 'circle', // Hiển thị biểu tượng tròn
-                symbolSize: 8, // Kích thước biểu tượng
-                showSymbol: false,
-                areaStyle: {
-                    opacity: 0.2,
-                    color: {
-                        type: 'linear',
-                        x: 0,
-                        y: 0,
-                        x2: 0,
-                        y2: 1,
-                        colorStops: [
-                            {
-                                offset: 0,
-                                color: 'rgba(102,187,106,0.6)'
-                            },
-                            {
-                                offset: 1,
-                                color: 'rgba(102,187,106,0.1)'
-                            }
-                        ]
-                    }
-                },
-                lineStyle: { color: '#00a76f', width: 2 },
-                itemStyle: {
-                    color: '#00a76f'
-                }
-            },
-            {
-                name: t('COMMON.DASHBOARD.YEAR') + ' ' + (selectedYear - 1).toString(),
-                type: 'line',
-                data: [10, 30, 15, 50, 80, 90, 100, 70, 40, 15, 80, 80],
-                smooth: true,
-                symbol: 'circle', // Hiển thị biểu tượng tròn
-                symbolSize: 8, // Kích thước biểu tượng
-                showSymbol: false,
-                areaStyle: {
-                    opacity: 0.2,
-                    color: {
-                        type: 'linear',
-                        x: 0,
-                        y: 0,
-                        x2: 0,
-                        y2: 1,
-                        colorStops: [
-                            {
-                                offset: 0,
-                                color: 'rgba(255,167,38,0.6)'
-                            },
-                            {
-                                offset: 1,
-                                color: 'rgba(255,167,38,0.1)'
-                            }
-                        ]
-                    }
-                },
-                lineStyle: { color: '#ffab00', width: 2 },
-                itemStyle: {
-                    color: '#ffab00'
+                type: 'bar',
+                encode: {
+                    x: 'amount',
+                    y: 'product'
                 }
             }
         ]
@@ -152,11 +106,10 @@ export default function ChartSalary() {
 
     return (
         <Paper
-            elevation={0}
             sx={{
-                height: '100%',
                 width: '100%',
-                padding: '24px 5px 15px',
+                padding: '24px 24px 15px',
+                overflow: 'hidden',
                 borderRadius: '15px',
                 backgroundColor: 'var(--background-item)'
             }}
@@ -164,7 +117,6 @@ export default function ChartSalary() {
             <Box
                 sx={{
                     display: 'flex',
-                    padding: '0 20px',
                     mb: '24px',
                     justifyContent: 'space-between'
                 }}
@@ -177,7 +129,7 @@ export default function ChartSalary() {
                             color: 'var(--text-color)'
                         }}
                     >
-                        {t('COMMON.DASHBOARD.EMPLOYEE_SALARY_BY_MONTH')}
+                        {t('COMMON.STAT_NOTIFY.CHART_TYPE')}
                     </Typography>
                     <Typography
                         sx={{
@@ -186,11 +138,12 @@ export default function ChartSalary() {
                             color: theme === 'dark' ? '#919EAB' : '#637381'
                         }}
                     >
-                        {'(' +
-                            (percent > 0 ? '+' : '') +
-                            percent +
-                            '%) ' +
-                            t('COMMON.DASHBOARD.THAN_LAST_YEAR', { year: selectedYear - 1 })}
+                        {t('COMMON.STAT_NOTIFY.CHART_TYPE_RATE', {
+                            status:
+                                percent >= 0 ? t('COMMON.STAT_NOTIFY.INCREASED') : t('COMMON.STAT_NOTIFY.DECREASED'),
+                            x: percent,
+                            year: selectedYear - 1
+                        })}
                     </Typography>
                 </Box>
                 <FormControl sx={{ width: '90px' }}>
@@ -272,7 +225,7 @@ export default function ChartSalary() {
                     </Select>
                 </FormControl>
             </Box>
-            <ReactECharts option={option} style={{ height: 360 }} />
+            <ReactECharts option={option} style={{ height: 500 }} />
         </Paper>
     )
 }

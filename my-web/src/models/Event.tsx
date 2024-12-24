@@ -28,5 +28,7 @@ export interface IFilterEvent {
     pageNumber?: number
     sortBy?: string
     isDescending?: boolean
+    startDate?: string
+    endDate?: string
     keyword?: string
 }

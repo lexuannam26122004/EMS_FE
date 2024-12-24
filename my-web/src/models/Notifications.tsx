@@ -35,6 +35,13 @@ export interface IFilterNotificationsForUserVModel {
     sentDate?: Date
 }
 
+export interface IFilterReadNotificationsForUserVModel {
+    userId?: string
+    type?: string
+    pageSize?: number
+    pageNumber?: number
+}
+
 export interface INotificationGetById {
     Id: number
     Title: string
@@ -43,7 +50,7 @@ export interface INotificationGetById {
     Type: string
     UserId: string
     FullName: string
-    AvatarPath: string
+    AvatarPath?: string
     Role: string
     ListFile?: string[]
     ListUser?: string[]

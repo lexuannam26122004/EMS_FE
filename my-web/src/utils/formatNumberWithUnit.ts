@@ -23,3 +23,14 @@ export default function formatNumberWithUnit(number: number): string {
 
     return `${formattedNumber} ${units[unitIndex]} VND`
 }
+
+export function formatNumberToMoney(number: number): string {
+    if (isNaN(number)) {
+        return 'Số không hợp lệ'
+    }
+
+    // Sử dụng toLocaleString cho định dạng dấu phẩy
+    const formattedNumber = number.toLocaleString('vi-VN')
+
+    return `${formattedNumber} VND`
+}

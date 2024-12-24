@@ -45,7 +45,8 @@ const EmployeeCountChart = () => {
                 t('COMMON.DASHBOARD.YEAR') + ' ' + selectedYear.toString()
             ],
             textStyle: {
-                color: theme === 'light' ? '#000000' : '#ffffff'
+                color: theme === 'light' ? '#000000' : '#ffffff',
+                fontFamily: 'Arial, sans-serif'
             },
             formatter: (name: string) => {
                 const year = name.split(' ')[1] // Lấy năm từ tên
