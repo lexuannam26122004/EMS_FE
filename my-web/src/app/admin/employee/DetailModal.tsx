@@ -397,7 +397,8 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
                         sx={{
                             display: 'flex',
                             justifyContent: 'flex-end',
-                            paddingRight: '30px'
+                            paddingRight: '30px',
+                            color: 'var(--text-color)'
                         }}
                     >
                         <Tabs
@@ -406,7 +407,14 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
                             aria-label='right-aligned tabs'
                             sx={{
                                 borderBottom: 1,
-                                borderColor: 'divider'
+                                borderColor: 'divider',
+                                color: 'var(--text-color)',
+                                '& .MuiTab-root': {
+                                    color: 'var(--text-color)'
+                                },
+                                '& .Mui-selected': {
+                                    color: 'var(--selected-text-color)'
+                                }
                             }}
                         >
                             <Tab label={t('COMMON.SIDEBAR.EMPLOYEE')} />
@@ -415,6 +423,7 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
                             <Tab label={t('COMMON.SIDEBAR.DISCIPLINE')} />
                         </Tabs>
                     </Box>
+
                     <Box
                         sx={{
                             display: 'flex',
@@ -429,45 +438,71 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
 
                 <TableContainer
                     sx={{
-                        padding: '10px 3px 10px 10px',
-                        scrollbarGutter: 'stable',
+                        padding: '20px',
+                        backgroundColor: 'var(--hover-color)',
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                        borderRadius: '12px',
+                        overflow: 'hidden',
+                        border: '1px solid #e0e0e0',
+                        maxWidth: '100%',
+                        marginTop: '20px',
+                        marginBottom: '20px',
                         '&::-webkit-scrollbar': {
-                            width: '7px',
-                            height: '7px',
-                            backgroundColor: 'var(--background-after-color)'
+                            width: '8px',
+                            height: '8px',
+                            backgroundColor: 'var(--hover-color)'
                         },
                         '&::-webkit-scrollbar-thumb': {
-                            backgroundColor: 'var(--scrollbar-color)',
-                            borderRadius: '10px'
+                            backgroundColor: '#888',
+                            borderRadius: '10px',
+                            transition: 'background-color 0.3s ease'
                         },
-                        overflow: 'auto',
+                        '&::-webkit-scrollbar-thumb:hover': {
+                            backgroundColor: '#555' // Hover effect when dragging the scrollbar
+                        },
                         '&::-webkit-scrollbar-corner': {
                             borderRadius: '10px'
-                        }
+                        },
+                        color: 'var(--text-color)'
                     }}
                 >
                     <Table>
                         <TableBody>
                             {renderTableContent()?.map((item, index) => (
-                                <TableRow key={index}>
+                                <TableRow
+                                    key={index}
+                                    sx={{
+                                        color: 'var(--text-color)',
+                                        backgroundColor: index % 2 === 0 ? 'var(--hover-color)' : 'var(--background-color)',
+                                        '&:hover': {
+                                            backgroundColor: 'var(--selected-menu-text-color)',
+                                            cursor: 'pointer'
+                                        },
+                                        transition: 'background-color 0.3s ease'
+                                    }}
+                                >
                                     <TableCell
                                         sx={{
-                                            fontSize: '16px',
-                                            fontWeight: 'bold',
-                                            whiteSpace: 'nowrap',
-                                            color: 'var(--text-color)',
-                                            borderBottom: 'none',
-                                            paddingLeft: '100px',
-                                            width: '40%'
+                                            fontSize: '18px',
+                                            fontWeight: '600',
+                                            paddingLeft: '30px',
+                                            paddingRight: '20px',
+                                            width: '40%',
+                                            borderBottom: '1px solid var(--hover-color)',
+                                            borderRight: '2px solid var(--hover-color)',
+                                            color: 'var(--text-color)'
                                         }}
                                     >
                                         {item.label}:
                                     </TableCell>
                                     <TableCell
                                         sx={{
-                                            color: 'var(--text-color)',
                                             fontSize: '16px',
-                                            borderBottom: 'none'
+                                            paddingLeft: '20px',
+                                            borderBottom: '1px solid var(--hover-color)',
+                                            paddingRight: '30px',
+                                            borderLeft: '2px solid var(--hover-color)',
+                                            color: 'var(--text-color)'
                                         }}
                                     >
                                         {item.value}
