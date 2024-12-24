@@ -258,7 +258,16 @@
             "PAYROLL_PERIOD": "Kỳ hạn trả",
             "PAYROLL_SCHEDULE": "Bảng lương định kỳ",
             "OVERVIEW": "Tổng quan",
-            "PAYROLL_CYCLE": "Danh sách chu kì lương"
+            "PAYROLL_CYCLE": "Danh sách chu kì lương",
+            "TOTAL_INCOME": "Lương gộp năm ",
+            "TOTAL": "Lương ròng năm ",
+            "UNDER10": "Dưới 10",
+            "BETWEEN10AND20": "Từ 10 đến 20",
+            "BETWEEN20AND30": "Từ 20 đến 30",
+            "BETWEEN30AND40": "Từ 30 đến 40",
+            "GREATER40": "Trên 40",
+            "SALARY_LEVEL": "Mức lương (Triệu VND)",
+            "NUMBER_OF_EMPLOYEES": "Số lượng nhân viên"
         },
         "CREATE_NOTIFICATION": {
             "TITLE_PAGE": "Tạo thông báo mới",

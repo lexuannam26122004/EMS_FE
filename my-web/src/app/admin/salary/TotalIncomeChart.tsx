@@ -3,10 +3,27 @@ import ReactECharts from 'echarts-for-react'
 import { Paper, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'next-themes'
+import { useGetTotalIncomeOverTimeQuery } from '@/services/SalaryService'
+import { TotalIncome } from '@/models/salary'
 
 function TotalIncomeChart() {
     const { t } = useTranslation('common')
     const { theme } = useTheme()
+    const { data, isLoading, isError } = useGetTotalIncomeOverTimeQuery()
+
+    const totalData = data?.Data as TotalIncome[]
+
+    if (isLoading) {
+        return <Typography>Loading...</Typography>
+    }
+
+    if (isError) {
+        return <Typography>Error loading data.</Typography>
+    }
+
+    const period = totalData?.[0]?.payrollPeriod
+    const year = period ? period.split('-')[1] : null
+
     const option = {
         animation: true, // Bật hiệu ứng chuyển tiếp
         animationDuration: 700, // Thời gian chuyển tiếp (ms)
@@ -19,7 +36,10 @@ function TotalIncomeChart() {
             }
         },
         legend: {
-            data: [t('COMMON.DASHBOARD.YEAR'), t('COMMON.DASHBOARD.YEAR')],
+            data: [
+                year ? t('COMMON.SALARY.TOTAL_INCOME') + year.toString() : t('COMMON.SALARY.TOTAL_INCOME'),
+                year ? t('COMMON.SALARY.TOTAL') + year.toString() : t('COMMON.SALARY.TOTAL')
+            ],
             textStyle: {
                 color: theme === 'light' ? '#000000' : '#ffffff'
             },
@@ -65,13 +85,26 @@ function TotalIncomeChart() {
                     type: 'dashed',
                     color: theme === 'light' ? '#e9ecee' : '#333d47' // Màu sắc của đường chia
                 }
+            },
+            axisLabel: {
+                formatter: function (value: number) {
+                    if (value >= 1e9) {
+                        return (value / 1e9).toFixed(1) + 'B' // "B" cho tỷ
+                    } else if (value >= 1e6) {
+                        return (value / 1e6).toFixed(1) + 'M' // "M" cho triệu
+                    } else if (value >= 1e3) {
+                        return (value / 1e3).toFixed(1) + 'K' // "K" cho nghìn
+                    } else {
+                        return value // Trả về giá trị bình thường nếu nhỏ hơn 1000
+                    }
+                }
             }
         },
         series: [
             {
-                name: t('COMMON.DASHBOARD.YEAR'),
+                name: year ? t('COMMON.SALARY.TOTAL_INCOME') + year.toString() : t('COMMON.SALARY.TOTAL_INCOME'),
                 type: 'line',
-                data: [40, 45, 40, 50, 50, 60, 70, 90, 150, 40, 50, 50],
+                data: totalData ? totalData.map(item => item.TotalIncome) : [],
                 smooth: true,
                 symbol: 'circle', // Hiển thị biểu tượng tròn
                 symbolSize: 8, // Kích thước biểu tượng
@@ -102,9 +135,9 @@ function TotalIncomeChart() {
                 }
             },
             {
-                name: t('COMMON.DASHBOARD.YEAR'),
+                name: year ? t('COMMON.SALARY.TOTAL') + year.toString() : t('COMMON.SALARY.TOTAL'),
                 type: 'line',
-                data: [10, 30, 15, 50, 80, 90, 100, 70, 40, 15, 80, 80],
+                data: totalData ? totalData.map(item => item.TotalSalary) : [],
                 smooth: true,
                 symbol: 'circle', // Hiển thị biểu tượng tròn
                 symbolSize: 8, // Kích thước biểu tượng

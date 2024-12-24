@@ -1,17 +1,54 @@
 import React from 'react'
 import ReactECharts from 'echarts-for-react'
-import { Paper, Typography } from '@mui/material'
+import { CircularProgress, Paper, Typography } from '@mui/material'
 import { useTheme } from 'next-themes'
 import { useGetSalaryByLevelQuery } from '@/services/SalaryService'
 import { ISalaryByLevel } from '@/models/salary'
+import { useTranslation } from 'react-i18next'
 
 const EmployeeSalaryChart = () => {
-    const { data, isLoading } = useGetSalaryByLevelQuery()
+    const { t } = useTranslation('common')
+    const { data, isLoading, isError } = useGetSalaryByLevelQuery()
     const { theme } = useTheme()
     const levels = data?.Data as ISalaryByLevel
 
     if (isLoading) {
-        return <div>Loading...</div>
+        return (
+            <Paper
+                elevation={0}
+                sx={{
+                    width: '100%',
+                    padding: '24px',
+                    backgroundColor: 'var(--background-item)',
+                    borderRadius: '15px',
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+            >
+                <CircularProgress /> {/* Hiển thị spinner khi đang tải */}
+            </Paper>
+        )
+    }
+    if (isError) {
+        return (
+            <Paper
+                elevation={0}
+                sx={{
+                    width: '100%',
+                    padding: '24px',
+                    backgroundColor: 'var(--background-item)',
+                    borderRadius: '15px',
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+            >
+                <Typography color='red'>Có lỗi xảy ra khi tải dữ liệu.</Typography> {/* Thông báo lỗi */}
+            </Paper>
+        )
     }
 
     const option = {
@@ -25,16 +62,30 @@ const EmployeeSalaryChart = () => {
         grid: {
             left: '3%',
             right: '4%',
-            bottom: '3%',
+            bottom: '10%',
             containLabel: true
         },
         xAxis: {
             type: 'value',
-            boundaryGap: [0, 0.01]
+            boundaryGap: [0, 0.01],
+            name: t('COMMON.SALARY.NUMBER_OF_EMPLOYEES'), // Tên cho trục x
+            nameLocation: 'middle', // Vị trí tên
+            nameGap: 30,
+            position: 'bottom'
         },
         yAxis: {
             type: 'category',
-            data: ['under10', 'Indonesia', 'USA', 'India', 'China']
+            data: [
+                t('COMMON.SALARY.UNDER10'),
+                t('COMMON.SALARY.BETWEEN10AND20'),
+                t('COMMON.SALARY.BETWEEN20AND30'),
+                t('COMMON.SALARY.BETWEEN30AND40'),
+                t('COMMON.SALARY.GREATER40')
+            ], // Cập nhật dữ liệu cho yAxis
+            name: t('COMMON.SALARY.SALARY_LEVEL'), // Tên cho trục y
+            nameLocation: 'end', // Vị trí tên
+            nameGap: 20,
+            position: 'left'
         },
         series: [
             {
@@ -70,7 +121,7 @@ const EmployeeSalaryChart = () => {
             <Typography fontSize={'24px'} fontWeight={'bold'} color='var(--text-color)'>
                 Phân tích mức lương nhân viên
             </Typography>
-            <ReactECharts option={option} style={{ width: '100%', height: '300px', marginTop: '10px' }}></ReactECharts>
+            <ReactECharts option={option} style={{ width: '100%', height: '320px', marginTop: '10px' }}></ReactECharts>
         </Paper>
     )
 }

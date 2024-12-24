@@ -259,7 +259,16 @@
             "PAYROLL_PERIOD": "Payroll Period",
             "PAYROLL_SCHEDULE": "Payroll schedule",
             "OVERVIEW": "Overview",
-            "PAYROLL_CYCLE": "Payroll Cycle List"
+            "PAYROLL_CYCLE": "Payroll Cycle List",
+            "TOTAL_INCOME": "Gross Salary Year ",
+            "TOTAL": "Net Salary Year ",
+            "UNDER10": "Under 10",
+            "BETWEEN10AND20": "From 10 to 20",
+            "BETWEEN20AND30": "From 20 to 30",
+            "BETWEEN30AND40": "From 30 to 40",
+            "GREATER40": "Greater 40",
+            "SALARY_LEVEL": "Salary Level (Million VND)",
+            "NUMBER_OF_EMPLOYEES": "Number of Employees"
         },
         "BENEFIT": {
             "NAME": "Name",
