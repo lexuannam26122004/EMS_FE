@@ -8,11 +8,12 @@ const GenderPieChart: React.FC = () => {
     const { t } = useTranslation('common')
     const option = {
         tooltip: {
-            trigger: 'item'
+            trigger: 'item',
+            formatter: '{a} <br/>{b}: {c} ({d}%)'
         },
         legend: {
             top: 'bottom'
-          },
+        },
         series: [
             {
                 name: 'Gender Distribution',

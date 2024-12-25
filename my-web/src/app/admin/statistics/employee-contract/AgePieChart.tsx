@@ -34,11 +34,11 @@ const AgePieChart: React.FC = () => {
                     show: false
                 },
                 data: [
-                    { value: 15, name: '0-18 years' },
-                    { value: 25, name: '19-35 years' },
-                    { value: 20, name: '36-50 years' },
-                    { value: 18, name: '51-65 years' },
-                    { value: 12, name: '66+ years' }
+                    { value: 10, name: '0-18 years' },
+                    { value: 10, name: '19-35 years' },
+                    { value: 10, name: '36-50 years' },
+                    { value: 10, name: '51-65 years' },
+                    { value: 10, name: '66+ years' }
                 ]
             }
         ]
@@ -65,7 +65,7 @@ const AgePieChart: React.FC = () => {
                     {t('COMMON.DASHBOARD.AGE_OF_EMPLOYEE')}
                 </Typography>
             </Box>
-            <ReactECharts option={option} style={{ height: '450px', width: '100%', marginTop: '-50px' }} />
+            <ReactECharts option={option} style={{ height: '400px', width: '100%'}} />
         </Paper>
     )
 }
