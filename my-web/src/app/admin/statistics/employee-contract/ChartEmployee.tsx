@@ -14,8 +14,6 @@ export default function Chart() {
         setSelectedYear(event.target.value as number)
     }
 
-    const percent = 43
-
     const option = {
         animation: true, // Bật hiệu ứng chuyển tiếp
         animationDuration: 700, // Thời gian chuyển tiếp (ms)
@@ -28,7 +26,7 @@ export default function Chart() {
             }
         },
         legend: {
-            data: [t('COMMON.REWARD_DISCIPLINE.DISCIPLINE'), t('COMMON.REWARD_DISCIPLINE.REWARD')],
+            data: [t('Nhân viên mới'), t('Nhân viên nghỉ việc'), t('Nhân viên trong công ty')],
             textStyle: {
                 color: theme === 'light' ? '#000000' : '#ffffff',
                 fontFamily: 'Arial, sans-serif'
@@ -86,7 +84,7 @@ export default function Chart() {
         ],
         series: [
             {
-                name: t('COMMON.REWARD_DISCIPLINE.DISCIPLINE'),
+                name: t('Nhân viên mới'),
                 type: 'bar',
                 data: [76, 75, 19, 48, 78, 31, 51, 78, 20, 6, 30, 70],
                 markPoint: {
@@ -97,7 +95,7 @@ export default function Chart() {
                 },
                 barWidth: '22%', // Điều chỉnh độ rộng của cột
                 itemStyle: {
-                    color: '#d24c2f',
+                    color: '#0BF4A6',
                     borderRadius: [6, 6, 0, 0] // Bo tròn đỉnh cột
                 },
                 markLine: {
@@ -110,12 +108,12 @@ export default function Chart() {
                 }
             },
             {
-                name: t('COMMON.REWARD_DISCIPLINE.REWARD'),
+                name: t('Nhân viên nghỉ việc'),
                 type: 'bar',
                 data: [49, 31, 53, 88, 16, 74, 85, 73, 68, 93, 62, 89],
                 barWidth: '22%', // Điều chỉnh độ rộng của cột
                 itemStyle: {
-                    color: '#00a76f',
+                    color: '#FF6F91',
                     borderRadius: [6, 6, 0, 0] // Bo tròn đỉnh cột
                 },
                 markPoint: {
@@ -123,6 +121,31 @@ export default function Chart() {
                         { type: 'max', name: 'Max' },
                         { type: 'min', name: 'Min' }
                     ]
+                },
+                markLine: {
+                    data: [{ type: 'average', name: 'Avg' }],
+                    label: {
+                        color: theme === 'light' ? '#000000' : '#ffffff',
+                        fontSize: 11,
+                        fontWeight: 'bold'
+                    }
+                }
+            },
+
+            {
+                name: t('Nhân viên trong công ty'),
+                type: 'bar',
+                data: [50, 80, 60, 100, 70, 110, 90, 130, 110, 140, 120, 160],
+                markPoint: {
+                    data: [
+                        { type: 'max', name: 'Max' },
+                        { type: 'min', name: 'Min' }
+                    ]
+                },
+                barWidth: '22%', // Điều chỉnh độ rộng của cột
+                itemStyle: {
+                    color: '#FFC8A0',
+                    borderRadius: [6, 6, 0, 0] // Bo tròn đỉnh cột
                 },
                 markLine: {
                     data: [{ type: 'average', name: 'Avg' }],
@@ -138,6 +161,7 @@ export default function Chart() {
 
     return (
         <Paper
+            elevation={0}
             sx={{
                 width: '100%',
                 mt: '24px',
@@ -162,17 +186,7 @@ export default function Chart() {
                             color: 'var(--text-color)'
                         }}
                     >
-                        {t('COMMON.REWARD_DISCIPLINE.CHART_STATISTIC_REWARD_DISCIPLINE')}
-                    </Typography>
-                    <Typography
-                        sx={{
-                            fontSize: '14px',
-                            mt: '4px',
-                            color: theme === 'dark' ? '#919EAB' : '#637381'
-                        }}
-                    >
-                        {t('COMMON.REWARD_DISCIPLINE.PERCENT_REWARD_DISCIPLINE_IN_YEAR')}
-                        {' ' + percent + '% '}
+                        {t('Biểu đồ thống kê nhân viên')}
                     </Typography>
                 </Box>
                 <FormControl sx={{ width: '90px' }}>
