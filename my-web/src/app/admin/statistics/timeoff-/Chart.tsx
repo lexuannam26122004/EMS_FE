@@ -46,7 +46,11 @@ const Chart: React.FC = () => {
         },
         legend: {
             data: ['Nghỉ phép đã duyệt', 'Nghỉ phép chưa duyệt', 'Báo cáo lỗi đã duyệt', 'Báo cáo lỗi chưa duyệt'],
-            width: '50%'
+            width: '50%',
+            textStyle: {
+                color: theme === 'light' ? '#000000' : '#ffffff',
+                fontFamily: 'Arial, sans-serif'
+            },
         },
 
         toolbox: {
