@@ -482,6 +482,7 @@ function Page() {
                 >
                     {users.map((user, index) => (
                         <Box
+                            key={index}
                             sx={{
                                 '&:hover': {
                                     backgroundColor: 'var(--hover-color)',

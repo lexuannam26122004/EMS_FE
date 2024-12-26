@@ -535,6 +535,7 @@ function Page() {
                 >
                     {eventData.map((event, index) => (
                         <Box
+                            key={index}
                             sx={{
                                 '&:hover': {
                                     backgroundColor: 'var(--hover-color)'

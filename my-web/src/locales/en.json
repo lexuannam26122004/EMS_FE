@@ -153,13 +153,7 @@
             "REWARDS_DISCIPLINE": "Rewards - Disciplines",
             "ACTIVITIES_EVENTS": "Activities - Events",
             "REPORTS_SYSTEM": "Reports - System",
-            "SCHEDULAR": "Schedular",
-            "PERSONNEL": "Personnel",
-            "ATTENDANCE_SALARY": "Timekeeping - Salary",
-            "CONTRACT_BENEFITS": "Contracts - Benefits",
-            "REWARDS_DISCIPLINE": "Rewards - Disciplines",
-            "ACTIVITIES_EVENTS": "Activities - Events",
-            "REPORTS_SYSTEM": "Reports - System"
+            "ATTENDANCE": "Attendance"
         },
         "MODE": {
             "LIGHT": "Light",
@@ -592,6 +586,34 @@
             "TO": " to ",
             "COUNT_READ_NOTIFY": "Count read notifications",
             "HOLIDAY": "Holiday"
+        },
+        "ATTENDANCE": {
+            "ON_TIME": "Number of employees on time",
+            "LATE": "Number of employees late",
+            "ABSENT": "Number of employees absent",
+            "LEAVE": "Number of employees leave",
+            "EARLY": "Number of employees early",
+            "INVALID": "Number of employees invalid",
+            "YESTERDAY": "from yesterday",
+            "CELL_VALUE": "Cell value",
+            "EMPLOYEE_ATTENDANCE_BY_TIME": "Chart illustrating Employee Attendance by Time",
+            "STATUS_LATE": "Late",
+            "STATUS_ON_TIME": "On time",
+            "ALL": "All",
+            "STATUS_EARLY": "Early",
+            "STATUS_INVALID": "Invalid",
+            "CHECK_IN_&_OUT": "Check in & out",
+            "OVERTIME": "Overtime",
+            "STATUS": "Status",
+            "CHECK_IN": "Check in",
+            "CHECK_OUT": "Check out",
+            "NOTE": "Note",
+            "JOIN": "Join",
+            "STATUS_ABSENT": "Absent",
+            "MEMBER_ATTENDANCE": "Attendance Overview",
+            "ATTENDANCE_PERCENT": "{{status}} {{x}}% attendance from yesterday",
+            "DETAIL_EMPLOYEE": "Detail Employee",
+            "DOWNLOAD_INFO": "Download Infor"
         }
     }
 }
