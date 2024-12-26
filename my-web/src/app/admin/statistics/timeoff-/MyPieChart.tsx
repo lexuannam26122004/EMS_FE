@@ -35,16 +35,28 @@ const Chart: React.FC = () => {
             top: '0%',
             min: 60,
             max: 100,
-
             text: ['Cao', 'Thấp'],
             dimension: 0,
             inRange: {
                 color: ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3']
             },
-
             itemHeight: '300'
         },
-
+        tooltip: {
+            trigger: 'item', // Trigger when hovering over an item
+            formatter: function (params) {
+                return `Loại: ${params.value[2]}<br/>Số lượng: ${params.value[1]}`
+            }
+        },
+        toolbox: {
+            feature: {
+                saveAsImage: {
+                    show: true,
+                    title: 'Save as Image',
+                    pixelRatio: 2
+                }
+            }
+        },
         series: [
             {
                 type: 'bar',
@@ -55,14 +67,13 @@ const Chart: React.FC = () => {
                 itemStyle: {
                     borderRadius: [0, 30, 30, 0]
                 },
-
                 emphasis: {
                     itemStyle: {
                         borderWidth: 2,
                         shadowBlur: 20,
-                        shadowOffsetX: 5, 
+                        shadowOffsetX: 5,
                         shadowOffsetY: 5,
-                        shadowColor: 'var( --text-color)', 
+                        shadowColor: 'var(--text-color)'
                     }
                 }
             }

@@ -36,12 +36,12 @@ function Page() {
                         backgroundColor: 'var(--background-color-after)',
                         backgroundSize: 'cover',
                         borderRadius: '38px',
-                        backgroundPosition: 'right center',
+                        backgroundPosition: 'left center',
                         height: '100%',
+                        padding: '24px',
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
-                        padding: '24px',
                         position: 'relative'
                     }}
                 >
@@ -60,7 +60,7 @@ function Page() {
                     <Box
                         sx={{
                             position: 'absolute',
-                            backgroundImage: 'url(/images/statistics_new_employee.png)',
+                            backgroundImage: 'url(/images/off.png)',
                             backgroundSize: 'contain', // Đảm bảo hình hiển thị đầy đủ và tỷ lệ gốc
                             backgroundRepeat: 'no-repeat',
                             backgroundPosition: 'right 0px bottom 0px',
@@ -135,12 +135,12 @@ function Page() {
                         backgroundColor: 'var(--background-color-after)',
                         backgroundSize: 'cover',
                         borderRadius: '38px',
-                        backgroundPosition: 'right center',
+                        backgroundPosition: 'left center',
                         height: '100%',
+                        padding: '24px',
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
-                        padding: '24px',
                         position: 'relative'
                     }}
                 >
@@ -159,7 +159,7 @@ function Page() {
                     <Box
                         sx={{
                             position: 'absolute',
-                            backgroundImage: 'url(/images/statistics_employees.png)',
+                            backgroundImage: 'url(/images/error.png)',
                             backgroundSize: 'contain', // Đảm bảo hình hiển thị đầy đủ và tỷ lệ gốc
                             backgroundRepeat: 'no-repeat',
                             backgroundPosition: 'right 0px bottom 0px',
@@ -262,7 +262,7 @@ function Page() {
                     <Box
                         sx={{
                             position: 'absolute',
-                            backgroundImage: 'url(/images/statistics_employee_quit.png)',
+                            backgroundImage: 'url(/images/request.png)',
                             backgroundSize: 'contain', // Đảm bảo hình hiển thị đầy đủ và tỷ lệ gốc
                             backgroundRepeat: 'no-repeat',
                             backgroundPosition: 'right 0px bottom 0px',
