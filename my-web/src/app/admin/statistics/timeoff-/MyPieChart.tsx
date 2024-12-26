@@ -3,12 +3,12 @@ import React, { useState } from 'react'
 import { MenuItem, FormControl, Select, Box, Paper, Typography, SelectChangeEvent } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import ReactECharts from 'echarts-for-react'
-
+import { useTheme } from 'next-themes'
 const Chart: React.FC = () => {
     const currentYear = new Date().getFullYear()
     const [selectedYear, setSelectedYear] = useState(currentYear)
     const { t } = useTranslation('common')
-
+    const { theme } = useTheme()
     const handleYearChange = (event: SelectChangeEvent<number>) => {
         setSelectedYear(Number(event.target.value))
     }
@@ -23,6 +23,10 @@ const Chart: React.FC = () => {
     ]
 
     const option = {
+        textStyle: {
+            color: theme === 'light' ? '#000000' : '#ffffff',
+            fontFamily: 'Arial, sans-serif'
+        },
         dataset: {
             source: [['score', 'amount', 'type'], ...reportData.map(item => [item.score, item.amount, item.type])]
         },
@@ -36,9 +40,13 @@ const Chart: React.FC = () => {
             min: 60,
             max: 100,
             text: ['Cao', 'Thấp'],
+            textStyle: {
+                color: theme === 'light' ? '#000000' : '#ffffff',
+                fontFamily: 'Arial, sans-serif'
+            },
             dimension: 0,
             inRange: {
-                color: ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3']
+                color: ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF']
             },
             itemHeight: '300'
         },
@@ -46,7 +54,10 @@ const Chart: React.FC = () => {
             trigger: 'item', // Trigger when hovering over an item
             formatter: function (params) {
                 return `Loại: ${params.value[2]}<br/>Số lượng: ${params.value[1]}`
-            }
+            },
+            textStyle: {
+                fontFamily: 'Arial, sans-serif'
+            },
         },
         toolbox: {
             feature: {
@@ -55,6 +66,12 @@ const Chart: React.FC = () => {
                     title: 'Save as Image',
                     pixelRatio: 2
                 }
+            }
+        },
+        legend: {
+            textStyle: {
+                color: theme === 'light' ? '#000000' : '#ffffff',
+                fontFamily: 'Arial, sans-serif'
             }
         },
         series: [

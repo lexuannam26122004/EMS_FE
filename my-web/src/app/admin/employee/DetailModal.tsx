@@ -43,8 +43,7 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
     const { refetch } = useGetAllUsersQuery()
     const [changeEmployee] = useChangeStatusUsersMutation()
     const [selectedEmployeeId, setSelectedEmployeeId] = useState<string | null>(null)
-    const backgroundImageUrl = `/background/${randomIndex}.jpg`
-
+    const backgroundImageUrl = `https://api-prod-minimal-v620.pages.dev/assets/images/cover/cover-${randomIndex}.webp`
     const handleDeleteClick = (id: string) => {
         setSelectedEmployeeId(id)
         setOpenDialog(true)

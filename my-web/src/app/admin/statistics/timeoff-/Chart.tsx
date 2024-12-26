@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-
+import { useTheme } from 'next-themes'
 import { MenuItem, FormControl, Select, Box, Paper, Typography, SelectChangeEvent } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import ReactECharts from 'echarts-for-react'
@@ -8,6 +8,7 @@ const Chart: React.FC = () => {
     const currentYear = new Date().getFullYear()
     const [selectedYear, setSelectedYear] = useState(currentYear)
     const { t } = useTranslation('common')
+    const { theme } = useTheme()
 
     const handleYearChange = (event: SelectChangeEvent<number>) => {
         setSelectedYear(Number(event.target.value))
@@ -39,6 +40,10 @@ const Chart: React.FC = () => {
     }
 
     const option = {
+        textStyle: {
+            color: theme === 'light' ? '#000000' : '#ffffff',
+            fontFamily: 'Arial, sans-serif'
+        },
         legend: {
             data: ['Nghỉ phép đã duyệt', 'Nghỉ phép chưa duyệt', 'Báo cáo lỗi đã duyệt', 'Báo cáo lỗi chưa duyệt'],
             width: '50%'

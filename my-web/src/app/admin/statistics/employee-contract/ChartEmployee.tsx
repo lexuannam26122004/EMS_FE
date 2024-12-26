@@ -15,6 +15,10 @@ export default function Chart() {
     }
 
     const option = {
+        textStyle: {
+            color: theme === 'light' ? '#000000' : '#ffffff',
+            fontFamily: 'Arial, sans-serif'
+        },
         animation: true, // Bật hiệu ứng chuyển tiếp
         animationDuration: 700, // Thời gian chuyển tiếp (ms)
         tooltip: {
