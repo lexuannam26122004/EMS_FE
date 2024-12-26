@@ -13,7 +13,6 @@ import {
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined'
-import { ChevronDown, CalendarClock, ChevronUp } from 'lucide-react'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined'
