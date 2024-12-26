@@ -195,7 +195,7 @@ const Chart: React.FC = () => {
                             color: 'var(--text-color)'
                         }}
                     >
-                        {t('Biểu đồ thống kê nhân viên')}
+                        {t('Biểu đồ thống kê yêu cầu')}
                     </Typography>
                 </Box>
                 <FormControl sx={{ width: '100px' }}>
@@ -277,7 +277,7 @@ const Chart: React.FC = () => {
                     </Select>
                 </FormControl>
             </Box>
-            <ReactECharts option={option} style={{ height: 510 }} />
+            <ReactECharts option={option} style={{ height: 512 }} />
         </Paper>
     )
 }

@@ -38,12 +38,12 @@ function Page() {
                         backgroundColor: 'var(--background-color-after)',
                         backgroundSize: 'cover',
                         borderRadius: '38px',
-                        backgroundPosition: 'right center',
+                        backgroundPosition: 'left center',
                         height: '100%',
+                        padding: '24px',
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
-                        padding: '24px',
                         position: 'relative'
                     }}
                 >
@@ -230,12 +230,12 @@ function Page() {
                         backgroundColor: 'var(--background-color-after)',
                         backgroundSize: 'cover',
                         borderRadius: '38px',
-                        backgroundPosition: 'right center',
+                        backgroundPosition: 'left center',
                         height: '100%',
+                        padding: '24px',
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
-                        padding: '24px',
                         position: 'relative'
                     }}
                 >

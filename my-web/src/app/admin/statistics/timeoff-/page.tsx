@@ -24,8 +24,8 @@ const App: React.FC = () => {
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
-                        height: '100%', // Ensure the first column takes full height
-                        gap: '24px' // Ensure the components inside the column have 24px gap
+                        height: '100%',
+                        gap: '24px'
                     }}
                 >
                     <DisplayInfo />
@@ -36,8 +36,8 @@ const App: React.FC = () => {
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
-                        height: '100%', // Ensure the second column takes full height
-                        gap: '24px' // Ensure the components inside the column have 24px gap
+                        height: '100%',
+                        gap: '24px'
                     }}
                 >
                     <Chart />
@@ -46,11 +46,11 @@ const App: React.FC = () => {
 
             <Box
                 sx={{
-                    marginTop: '24px',
                     display: 'grid',
                     gridTemplateColumns: 'calc(100% / 3 * 2 - 8px) calc(100% / 3 - 16px)',
                     gap: '24px',
-                    height: '100%'
+                    height: '100%',
+                    marginBottom: '24px'
                 }}
             >
                 <Box
@@ -58,11 +58,10 @@ const App: React.FC = () => {
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
-                        height: '100%', // Ensure the first column takes full height
-                        gap: '24px' // Ensure the components inside the column have 24px gap
+                        height: '100%'
                     }}
                 >
-                    <ErrorReport />
+                    <MyPieChart />
                 </Box>
 
                 <Box
@@ -71,13 +70,14 @@ const App: React.FC = () => {
                         flexDirection: 'column',
                         justifyContent: 'space-between',
                         height: '100%', // Ensure the second column takes full height
-                        gap: '24px' // Ensure the components inside the column have 24px gap
+                        gap: '24px', // Ensure the components inside the column have 24px gap
+                        marginTop: '24px'
                     }}
                 >
                     <LeaveApplication />
-                    <MyPieChart />
                 </Box>
             </Box>
+            <ErrorReport />
         </Box>
     )
 }

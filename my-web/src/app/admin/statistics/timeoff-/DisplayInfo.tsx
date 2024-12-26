@@ -13,6 +13,9 @@ function Page() {
     const currentEmployeesCount = 50
     const currentEmployeesPercent = 72.0
 
+    const resignedEmployeesCount = 3
+    const resignedEmployeesPercent = -5.0
+
     return (
         <Box>
             <Box
@@ -33,12 +36,12 @@ function Page() {
                         backgroundColor: 'var(--background-color-after)',
                         backgroundSize: 'cover',
                         borderRadius: '38px',
-                        backgroundPosition: 'right center',
+                        backgroundPosition: 'left center',
                         height: '100%',
+                        padding: '24px',
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
-                        padding: '24px',
                         position: 'relative'
                     }}
                 >
@@ -57,7 +60,7 @@ function Page() {
                     <Box
                         sx={{
                             position: 'absolute',
-                            backgroundImage: 'url(/images/statistics_new_employee.png)',
+                            backgroundImage: 'url(/images/off.png)',
                             backgroundSize: 'contain', // Đảm bảo hình hiển thị đầy đủ và tỷ lệ gốc
                             backgroundRepeat: 'no-repeat',
                             backgroundPosition: 'right 0px bottom 0px',
@@ -74,7 +77,7 @@ function Page() {
                             color: 'var(--reward-title-color)'
                         }}
                     >
-                        {t('Tổng số nhân viên mới')}
+                        {t('Tổng số đơn nghỉ phép')}
                     </Typography>
                     <Typography
                         sx={{
@@ -132,12 +135,12 @@ function Page() {
                         backgroundColor: 'var(--background-color-after)',
                         backgroundSize: 'cover',
                         borderRadius: '38px',
-                        backgroundPosition: 'right center',
+                        backgroundPosition: 'left center',
                         height: '100%',
+                        padding: '24px',
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
-                        padding: '24px',
                         position: 'relative'
                     }}
                 >
@@ -156,7 +159,7 @@ function Page() {
                     <Box
                         sx={{
                             position: 'absolute',
-                            backgroundImage: 'url(/images/statistics_employees.png)',
+                            backgroundImage: 'url(/images/error.png)',
                             backgroundSize: 'contain', // Đảm bảo hình hiển thị đầy đủ và tỷ lệ gốc
                             backgroundRepeat: 'no-repeat',
                             backgroundPosition: 'right 0px bottom 0px',
@@ -173,7 +176,7 @@ function Page() {
                             color: 'var(--reward-title-color)'
                         }}
                     >
-                        {t('Tổng số nhân viên trong công ty')}
+                        {t('Tổng số đơn báo cáo lỗi')}
                     </Typography>
                     <Typography
                         sx={{
@@ -230,23 +233,23 @@ function Page() {
                 <Paper
                     sx={{
                         width: '100%',
-                        backgroundImage: 'url(/images/Subtract_green.svg)',
+                        backgroundImage: 'url(/images/Subtract_red.svg)',
                         backgroundColor: 'var(--background-color-after)',
                         backgroundSize: 'cover',
                         borderRadius: '38px',
-                        backgroundPosition: 'right center',
+                        backgroundPosition: 'left center',
                         height: '100%',
+                        padding: '24px',
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
-                        padding: '24px',
                         position: 'relative'
                     }}
                 >
                     <Box
                         sx={{
                             position: 'absolute',
-                            backgroundImage: 'url(/images/group_1.svg)',
+                            backgroundImage: 'url(/images/group_2.svg)',
                             backgroundSize: 'auto 50%',
                             backgroundRepeat: 'no-repeat',
                             left: '24px',
@@ -255,10 +258,11 @@ function Page() {
                             height: '100%'
                         }}
                     ></Box>
+
                     <Box
                         sx={{
                             position: 'absolute',
-                            backgroundImage: 'url(/images/statistics_new_employee.png)',
+                            backgroundImage: 'url(/images/request.png)',
                             backgroundSize: 'contain', // Đảm bảo hình hiển thị đầy đủ và tỷ lệ gốc
                             backgroundRepeat: 'no-repeat',
                             backgroundPosition: 'right 0px bottom 0px',
@@ -268,6 +272,7 @@ function Page() {
                             height: '60%'
                         }}
                     ></Box>
+
                     <Typography
                         sx={{
                             fontSize: '20px',
@@ -275,7 +280,7 @@ function Page() {
                             color: 'var(--reward-title-color)'
                         }}
                     >
-                        {t('Tổng số nhân viên mới')}
+                        {t('Tổng số yêu cầu')}
                     </Typography>
                     <Typography
                         sx={{
@@ -285,7 +290,7 @@ function Page() {
                             fontWeight: 'bold'
                         }}
                     >
-                        {newEmployeesCount}
+                        {resignedEmployeesCount}
                     </Typography>
                     <Box
                         sx={{
@@ -297,13 +302,15 @@ function Page() {
                             alignItems: 'center'
                         }}
                     >
-                        {newEmployeesPercent !== null &&
-                            (!(!newEmployeesPercent || newEmployeesPercent >= 0) ? (
+                        {resignedEmployeesPercent !== null &&
+                            (!(!resignedEmployeesPercent || resignedEmployeesPercent >= 0) ? (
                                 <TrendingDown style={{ marginRight: '6px' }} />
                             ) : (
                                 <TrendingUp style={{ marginRight: '6px' }} />
                             ))}
-                        {newEmployeesPercent !== null ? newEmployeesPercent + '%' : t('COMMON.DASHBOARD.NO_CHANGE')}
+                        {resignedEmployeesPercent !== null
+                            ? resignedEmployeesPercent + '%'
+                            : t('COMMON.DASHBOARD.NO_CHANGE')}
                         <Typography
                             sx={{
                                 ml: '6px',
