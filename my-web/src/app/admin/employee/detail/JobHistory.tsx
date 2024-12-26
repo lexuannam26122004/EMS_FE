@@ -2,19 +2,81 @@ import React from 'react'
 import { Box, Typography } from '@mui/material'
 
 const Timeline: React.FC = () => {
+
+    const colors = [
+        'hsl(0, 100%, 50%)',    
+        'hsl(30, 100%, 50%)',  
+        'hsl(60, 100%, 50%)',  
+        'hsl(120, 100%, 50%)', 
+        'hsl(180, 100%, 50%)',  
+        'hsl(240, 100%, 50%)'  
+    ];
+    
+    let colorIndex = 0;  
+    
     const getRandomColor = (): string => {
-        const hue = Math.floor(Math.random() * 360) // Giá trị hue từ 0 đến 360 (đủ các màu sắc)
-        const saturation = 70 + Math.random() * 30 // Độ bão hòa từ 70% đến 100%
-        const lightness = 50 + Math.random() * 20 // Độ sáng từ 50% đến 70%
-        return `hsl(${hue}, ${saturation}%, ${lightness}%)`
+        const color = colors[colorIndex];
+        colorIndex = (colorIndex + 1) % colors.length; 
+        return color;
     }
+    
 
     const events = [
-        { date: '24 Dec 2024 - 9:47 PM', content: '1983, orders, $4220', color: getRandomColor() },
-        { date: '23 Dec 2024 - 8:47 PM', content: '12 Invoices have been paid', color: getRandomColor() },
-        { date: '22 Dec 2024 - 7:47 PM', content: 'Order #37745 from September', color: getRandomColor() },
-        { date: '21 Dec 2024 - 6:47 PM', content: 'New order placed #XF-2356', color: getRandomColor() },
-        { date: '20 Dec 2024 - 5:47 PM', content: 'New order placed #XF-2346', color: getRandomColor() }
+        {
+            startDate: '24 Dec 2024 - 9:47 PM',
+            endDate: '24 Dec 2024 - 10:47 PM',
+            location: 'New York',
+            content: {
+                jobDescription: 'Software Developer',
+                allowance: '$2000',
+                note: 'Completed annual review'
+            },
+            color: getRandomColor()
+        },
+        {
+            startDate: '23 Dec 2024 - 8:47 PM',
+            endDate: '23 Dec 2024 - 9:47 PM',
+            location: 'San Francisco',
+            content: {
+                jobDescription: 'Senior Developer',
+                allowance: '$3000',
+                note: 'Promoted to Senior Developer'
+            },
+            color: getRandomColor()
+        },
+        {
+            startDate: '22 Dec 2024 - 7:47 PM',
+            endDate: '22 Dec 2024 - 8:47 PM',
+            location: 'Los Angeles',
+            content: {
+                jobDescription: 'Project Manager',
+                allowance: '$2500',
+                note: 'Project completed on time'
+            },
+            color: getRandomColor()
+        },
+        {
+            startDate: '21 Dec 2024 - 6:47 PM',
+            endDate: '21 Dec 2024 - 7:47 PM',
+            location: 'Chicago',
+            content: {
+                jobDescription: 'Data Analyst',
+                allowance: '$1800',
+                note: 'Analyzed quarterly data'
+            },
+            color: getRandomColor()
+        },
+        {
+            startDate: '20 Dec 2024 - 5:47 PM',
+            endDate: '20 Dec 2024 - 6:47 PM',
+            location: 'Boston',
+            content: {
+                jobDescription: 'System Architect',
+                allowance: '$2200',
+                note: 'Designing system architecture for new project'
+            },
+            color: getRandomColor()
+        }
     ]
 
     return (
@@ -47,7 +109,7 @@ const Timeline: React.FC = () => {
                         borderRadius: '8px',
                         margin: '20px 0',
                         width: 'calc(50%)',
-                        left: index % 2 === 0 ? 'calc(0% - 19px)' : 'calc(50% + 21px)',
+                        left: index % 2 === 0 ? 'calc(0% - 18px)' : 'calc(50% + 22px)',
                         borderLeft: index % 2 === 0 ? `4px solid ${event.color}` : 'none',
                         borderRight: index % 2 !== 0 ? `4px solid ${event.color}` : 'none',
                         color: '#fff',
@@ -66,8 +128,12 @@ const Timeline: React.FC = () => {
                         }
                     }}
                 >
-                    <Typography sx={{ color: '#aaa', fontSize: '0.9em', marginBottom: '5px' }}>{event.date}</Typography>
-                    <Typography sx={{ fontSize: '1.1em' }}>{event.content}</Typography>
+                    <Typography sx={{ color: '#aaa', fontSize: '0.9em', marginBottom: '5px' }}>
+                        {event.startDate} - {event.endDate} | {event.location}
+                    </Typography>
+                    <Typography sx={{ fontSize: '1.1em' }}>{event.content.jobDescription}</Typography>
+                    <Typography sx={{ fontSize: '1.1em' }}>Allowance: {event.content.allowance}</Typography>
+                    <Typography sx={{ fontSize: '1.1em' }}>Note: {event.content.note}</Typography>
                 </Box>
             ))}
         </Box>
@@ -91,7 +157,7 @@ const App: React.FC = () => {
                     marginBottom: '20px'
                 }}
             >
-                Order Timeline
+                Lịch sử
             </Typography>
             <Timeline />
         </Box>

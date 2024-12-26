@@ -27,6 +27,7 @@ import { IAspNetUserGetAll } from '@/models/AspNetUser'
 import { useGetAllUsersQuery, useChangeStatusUsersMutation } from '@/services/AspNetUserService'
 import { IEmploymentContractSearch, IUserDetails } from '@/models/EmploymentContract'
 import { useSearchEmploymentContractsQuery } from '@/services/EmploymentContractService'
+import JobHistory from './detail/JobHistory'
 
 interface Props {
     open: boolean
@@ -421,6 +422,7 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
                             <Tab label={t('COMMON.SIDEBAR.CONTRACT')} />
                             <Tab label={t('COMMON.SIDEBAR.BENEFIT')} />
                             <Tab label={t('COMMON.SIDEBAR.DISCIPLINE')} />
+                            <Tab label={t('Công tác')} />
                         </Tabs>
                     </Box>
 
@@ -436,82 +438,87 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
                     ></Box>
                 </Box>
 
-                <TableContainer
-                    sx={{
-                        padding: '20px',
-                        backgroundColor: 'var(--hover-color)',
-                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                        borderRadius: '12px',
-                        overflow: 'hidden',
-                        border: '1px solid #e0e0e0',
-                        maxWidth: '100%',
-                        marginTop: '20px',
-                        marginBottom: '20px',
-                        '&::-webkit-scrollbar': {
-                            width: '8px',
-                            height: '8px',
-                            backgroundColor: 'var(--hover-color)'
-                        },
-                        '&::-webkit-scrollbar-thumb': {
-                            backgroundColor: '#888',
-                            borderRadius: '10px',
-                            transition: 'background-color 0.3s ease'
-                        },
-                        '&::-webkit-scrollbar-thumb:hover': {
-                            backgroundColor: '#555' // Hover effect when dragging the scrollbar
-                        },
-                        '&::-webkit-scrollbar-corner': {
-                            borderRadius: '10px'
-                        },
-                        color: 'var(--text-color)'
-                    }}
-                >
-                    <Table>
-                        <TableBody>
-                            {renderTableContent()?.map((item, index) => (
-                                <TableRow
-                                    key={index}
-                                    sx={{
-                                        color: 'var(--text-color)',
-                                        backgroundColor: index % 2 === 0 ? 'var(--hover-color)' : 'var(--background-color)',
-                                        '&:hover': {
-                                            backgroundColor: 'var(--selected-menu-text-color)',
-                                            cursor: 'pointer'
-                                        },
-                                        transition: 'background-color 0.3s ease'
-                                    }}
-                                >
-                                    <TableCell
+                {selectedTab < 4 ? (
+                    <TableContainer
+                        sx={{
+                            padding: '20px',
+                            backgroundColor: 'var(--hover-color)',
+                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                            borderRadius: '12px',
+                            overflow: 'hidden',
+                            border: '1px solid #e0e0e0',
+                            maxWidth: '100%',
+                            marginTop: '20px',
+                            marginBottom: '20px',
+                            '&::-webkit-scrollbar': {
+                                width: '8px',
+                                height: '8px',
+                                backgroundColor: 'var(--hover-color)'
+                            },
+                            '&::-webkit-scrollbar-thumb': {
+                                backgroundColor: '#888',
+                                borderRadius: '10px',
+                                transition: 'background-color 0.3s ease'
+                            },
+                            '&::-webkit-scrollbar-thumb:hover': {
+                                backgroundColor: '#555' // Hover effect when dragging the scrollbar
+                            },
+                            '&::-webkit-scrollbar-corner': {
+                                borderRadius: '10px'
+                            },
+                            color: 'var(--text-color)'
+                        }}
+                    >
+                        <Table>
+                            <TableBody>
+                                {renderTableContent()?.map((item, index) => (
+                                    <TableRow
+                                        key={index}
                                         sx={{
-                                            fontSize: '18px',
-                                            fontWeight: '600',
-                                            paddingLeft: '30px',
-                                            paddingRight: '20px',
-                                            width: '40%',
-                                            borderBottom: '1px solid var(--hover-color)',
-                                            borderRight: '2px solid var(--hover-color)',
-                                            color: 'var(--text-color)'
+                                            color: 'var(--text-color)',
+                                            backgroundColor:
+                                                index % 2 === 0 ? 'var(--hover-color)' : 'var(--background-color)',
+                                            '&:hover': {
+                                                backgroundColor: 'var(--selected-menu-text-color)',
+                                                cursor: 'pointer'
+                                            },
+                                            transition: 'background-color 0.3s ease'
                                         }}
                                     >
-                                        {item.label}:
-                                    </TableCell>
-                                    <TableCell
-                                        sx={{
-                                            fontSize: '16px',
-                                            paddingLeft: '20px',
-                                            borderBottom: '1px solid var(--hover-color)',
-                                            paddingRight: '30px',
-                                            borderLeft: '2px solid var(--hover-color)',
-                                            color: 'var(--text-color)'
-                                        }}
-                                    >
-                                        {item.value}
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                                        <TableCell
+                                            sx={{
+                                                fontSize: '18px',
+                                                fontWeight: '600',
+                                                paddingLeft: '30px',
+                                                paddingRight: '20px',
+                                                width: '40%',
+                                                borderBottom: '1px solid var(--hover-color)',
+                                                borderRight: '2px solid var(--hover-color)',
+                                                color: 'var(--text-color)'
+                                            }}
+                                        >
+                                            {item.label}:
+                                        </TableCell>
+                                        <TableCell
+                                            sx={{
+                                                fontSize: '16px',
+                                                paddingLeft: '20px',
+                                                borderBottom: '1px solid var(--hover-color)',
+                                                paddingRight: '30px',
+                                                borderLeft: '2px solid var(--hover-color)',
+                                                color: 'var(--text-color)'
+                                            }}
+                                        >
+                                            {item.value}
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                ) : (
+                    <JobHistory />
+                )}
 
                 <AlertDialog
                     title={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.TITLE')}
