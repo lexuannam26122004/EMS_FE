@@ -90,7 +90,7 @@ export default function LeaveRequestCarousel() {
                 padding: '24px 0',
                 backgroundColor: 'var(--background-item)',
                 borderRadius: '15px',
-                height: '600px',
+                height: '606px',
                 display: 'flex',
                 flexDirection: 'column'
             }}

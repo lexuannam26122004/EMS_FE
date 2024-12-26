@@ -70,6 +70,7 @@
     "react-uuid": "^2.0.0",
     "slick-carousel": "^1.8.1",
     "sonner": "^1.5.0",
+    "styled-components": "^6.1.13",
     "tailwind-merge": "^2.5.4",
     "uuid": "^11.0.3",
     "yet-another-react-lightbox": "^3.21.6",
