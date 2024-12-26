@@ -56,8 +56,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 >
                     <SidebarItem
                         icon={<ChartNoAxesCombined />}
-                        text={t('COMMON.SIDEBAR.ATTENDANCE_SALARY')}
-                        route='/admin/statistics/attendance-salary'
+                        text={t('COMMON.SIDEBAR.ATTENDANCE')}
+                        route='/admin/statistics/attendance'
                     />
                     <SidebarItem
                         icon={<ChartNoAxesCombined />}
