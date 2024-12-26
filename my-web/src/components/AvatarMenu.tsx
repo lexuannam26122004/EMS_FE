@@ -13,7 +13,7 @@ import {
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined'
-import { ChevronDown, CalendarClock, ChevronUp } from 'lucide-react'
+import { ChevronDown, CalendarClock, ChevronUp, BriefcaseBusiness } from 'lucide-react'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined'
@@ -242,6 +242,20 @@ const AvatarMenu = () => {
                                         }}
                                     >
                                         <CalendarClock style={{ marginRight: '16px' }} />
+                                        {t('COMMON.SIDEBAR.SCHEDULAR')}
+                                    </MenuItem>
+
+                                    <MenuItem
+                                        onClick={handleClose}
+                                        sx={{
+                                            color: 'var(--text-color)',
+                                            borderRadius: '6px',
+                                            '&:hover': {
+                                                backgroundColor: 'var(--hover-color)'
+                                            }
+                                        }}
+                                    >
+                                        <BriefcaseBusiness style={{ marginRight: '16px' }} />
                                         {t('COMMON.SIDEBAR.SCHEDULAR')}
                                     </MenuItem>
                                     <MenuItem
