@@ -153,7 +153,8 @@
             "REWARDS_DISCIPLINE": "Khen thưởng - Kỷ luật",
             "ACTIVITIES_EVENTS": "Hoạt động - Sự kiện",
             "REPORTS_SYSTEM": "Báo cáo - Hệ thống",
-            "ATTENDANCE": "Chấm công"
+            "ATTENDANCE": "Chấm công",
+            "WORKHISTORY":"Lịch sử công tác"
         },
         "MODE": {
             "LIGHT": "Sáng",

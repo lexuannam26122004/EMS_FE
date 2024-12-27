@@ -153,7 +153,8 @@
             "REWARDS_DISCIPLINE": "Rewards - Disciplines",
             "ACTIVITIES_EVENTS": "Activities - Events",
             "REPORTS_SYSTEM": "Reports - System",
-            "ATTENDANCE": "Attendance"
+            "ATTENDANCE": "Attendance",
+            "WORKHISTORY": "Work History"
         },
         "MODE": {
             "LIGHT": "Light",

@@ -71,6 +71,7 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
                 return <Contract aspnetUserId={aspnetuser?.Id} />
             case 2:
             case 3:
+            case 4:
                 return (
                     <TableContainer
                         sx={{
@@ -339,8 +340,9 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
                             <Tab label={t('COMMON.SIDEBAR.EMPLOYEE')} />
                             <Tab label={t('COMMON.SIDEBAR.CONTRACT')} />
                             <Tab label={t('COMMON.SIDEBAR.BENEFIT')} />
+                            <Tab label={t('COMMON.SIDEBAR.REWARD')} />
                             <Tab label={t('COMMON.SIDEBAR.DISCIPLINE')} />
-                            <Tab label={t('Công tác')} />
+                            <Tab label={t('COMMON.SIDEBAR.WORKHISTORY')} />
                         </Tabs>
                     </Box>
 

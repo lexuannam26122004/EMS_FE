@@ -1,25 +1,69 @@
 import React from 'react'
 import { Box, Typography } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 
 const Timeline: React.FC = () => {
-
     const colors = [
-        'hsl(0, 100%, 50%)',    
-        'hsl(30, 100%, 50%)',  
-        'hsl(60, 100%, 50%)',  
-        'hsl(120, 100%, 50%)', 
-        'hsl(180, 100%, 50%)',  
-        'hsl(240, 100%, 50%)'  
-    ];
-    
-    let colorIndex = 0;  
-    
+        'hsl(0, 100%, 50%)',
+        'hsl(30, 100%, 50%)',
+        'hsl(60, 100%, 50%)',
+        'hsl(120, 100%, 50%)',
+        'hsl(180, 100%, 50%)',
+        'hsl(240, 100%, 50%)'
+    ]
+
+    let colorIndex = 0
+
     const getRandomColor = (): string => {
-        const color = colors[colorIndex];
-        colorIndex = (colorIndex + 1) % colors.length; 
-        return color;
+        const color = colors[colorIndex]
+        colorIndex = (colorIndex + 1) % colors.length
+        return color
     }
-    
+
+    const hslToRgba = (hsl: string, alpha = 0.5): string => {
+        const match = hsl.match(/\d+/g)
+        if (!match) {
+            throw new Error('Invalid HSL string')
+        }
+        const [h, s, l] = match.map(Number)
+        const c = (1 - Math.abs((2 * l) / 100 - 1)) * (s / 100)
+        const x = c * (1 - Math.abs(((h / 60) % 2) - 1))
+        const m = l / 100 - c / 2
+        let r = 0,
+            g = 0,
+            b = 0
+
+        if (h >= 0 && h < 60) {
+            r = c
+            g = x
+            b = 0
+        } else if (h >= 60 && h < 120) {
+            r = x
+            g = c
+            b = 0
+        } else if (h >= 120 && h < 180) {
+            r = 0
+            g = c
+            b = x
+        } else if (h >= 180 && h < 240) {
+            r = 0
+            g = x
+            b = c
+        } else if (h >= 240 && h < 300) {
+            r = x
+            g = 0
+            b = c
+        } else {
+            r = c
+            g = 0
+            b = x
+        }
+        r = Math.round((r + m) * 255)
+        g = Math.round((g + m) * 255)
+        b = Math.round((b + m) * 255)
+
+        return `rgba(${r}, ${g}, ${b}, ${alpha})`
+    }
 
     const events = [
         {
@@ -92,10 +136,21 @@ const Timeline: React.FC = () => {
                 sx={{
                     position: 'absolute',
                     width: '4px',
-                    backgroundColor: '#444',
+                    backgroundColor: ' #333e47',
                     top: 0,
                     bottom: 0,
-                    left: '50%'
+                    left: '50%',
+                    '&:before': {
+                        content: '""',
+                        position: 'absolute',
+                        width: 0,
+                        height: 0,
+                        borderLeft: '10px solid transparent',
+                        borderRight: '10px solid transparent',
+                        borderBottom: '24px solid #333e47',
+                        top: '-24px',
+                        left: '-8px'
+                    }
                 }}
             />
 
@@ -105,7 +160,7 @@ const Timeline: React.FC = () => {
                     sx={{
                         padding: '10px 20px',
                         position: 'relative',
-                        backgroundColor: '#2b2b3c',
+                        backgroundColor: hslToRgba(event.color, 0.2),
                         borderRadius: '8px',
                         margin: '20px 0',
                         width: 'calc(50%)',
@@ -120,7 +175,7 @@ const Timeline: React.FC = () => {
                             width: '20px',
                             height: '20px',
                             backgroundColor: event.color,
-                            border: '4px solid #1f1f2e',
+                            border: '4px solid #333e47',
                             borderRadius: '50%',
                             top: '15px',
                             left: index % 2 === 0 ? 'calc(100% + 10px)' : 'auto',
@@ -128,12 +183,18 @@ const Timeline: React.FC = () => {
                         }
                     }}
                 >
-                    <Typography sx={{ color: '#aaa', fontSize: '0.9em', marginBottom: '5px' }}>
+                    <Typography sx={{ color: 'var(--text-color)', fontSize: '0.9em', marginBottom: '5px' }}>
                         {event.startDate} - {event.endDate} | {event.location}
                     </Typography>
-                    <Typography sx={{ fontSize: '1.1em' }}>{event.content.jobDescription}</Typography>
-                    <Typography sx={{ fontSize: '1.1em' }}>Allowance: {event.content.allowance}</Typography>
-                    <Typography sx={{ fontSize: '1.1em' }}>Note: {event.content.note}</Typography>
+                    <Typography sx={{ color: 'var(--text-color)', fontSize: '1.1em' }}>
+                        {event.content.jobDescription}
+                    </Typography>
+                    <Typography sx={{ color: 'var(--text-color)', fontSize: '1.1em' }}>
+                        Allowance: {event.content.allowance}
+                    </Typography>
+                    <Typography sx={{ color: 'var(--text-color)', fontSize: '1.1em' }}>
+                        Note: {event.content.note}
+                    </Typography>
                 </Box>
             ))}
         </Box>
@@ -141,10 +202,11 @@ const Timeline: React.FC = () => {
 }
 
 const App: React.FC = () => {
+    const { t } = useTranslation('common')
     return (
         <Box
             sx={{
-                backgroundColor: '#1f1f2e',
+                backgroundColor: 'var(--background-color)',
                 padding: '20px'
             }}
         >
@@ -152,12 +214,12 @@ const App: React.FC = () => {
                 variant='h1'
                 sx={{
                     textAlign: 'center',
-                    color: '#fff',
+                    color: 'var(--text-color)',
                     fontSize: '2rem',
-                    marginBottom: '20px'
+                    marginBottom: '40px'
                 }}
             >
-                Lịch sử
+                {t('COMMON.SIDEBAR.WORKHISTORY')}
             </Typography>
             <Timeline />
         </Box>
