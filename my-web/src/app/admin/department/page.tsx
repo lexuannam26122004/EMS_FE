@@ -5,8 +5,6 @@ import DepartmentTable from './DepartmentTable'
 import ReactECharts from 'echarts-for-react'
 
 function DepartmentPage() {
-<<<<<<< Updated upstream
-=======
     const option = {
         title: {
             text: 'Rainfall vs Evaporation',
@@ -72,15 +70,11 @@ function DepartmentPage() {
         ]
     }
 
->>>>>>> Stashed changes
     return (
         <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '24px' }}>
             <DepartmentInfo />
             <DepartmentTable />
-<<<<<<< Updated upstream
-=======
             <ReactECharts option={option} style={{ height: 450 }} />
->>>>>>> Stashed changes
         </Box>
     )
 }
