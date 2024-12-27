@@ -93,8 +93,8 @@ function CreateBenefitPage() {
 
     const handleSaveBenefitType = async () => {
         setIsSubmit(true)
-        
-        if(benefitTypeId){
+
+        if (benefitTypeId) {
             const data = {
                 Id: benefitTypeId,
                 Name: benefitTypeName,
@@ -103,7 +103,7 @@ function CreateBenefitPage() {
             await updateBenefitType(data).unwrap()
             refetch()
             handleCloseUpdateDialog()
-        }else{
+        } else {
             const data = {
                 Name: benefitTypeName,
                 Description: benefitTypeDescription || ''
@@ -148,9 +148,8 @@ function CreateBenefitPage() {
 
     const handleSaveAndClose = async () => {
         await handleSave()
-        if (isSuccess) {
-            router.push('/admin/benefit')
-        }
+
+        router.push('/admin/benefit')
     }
 
     const specialOption = { Id: -1, Name: '---Lựa chọn---', Description: null }
