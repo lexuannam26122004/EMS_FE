@@ -68,6 +68,11 @@ const AvatarMenu = () => {
         router.push('/admin/notification/create')
     }
 
+    const handleCreateTasks = () => {
+        setOpen(false)
+        router.push('/admin/tasks/create')
+    }
+
     return (
         <Box>
             <Box
@@ -246,7 +251,7 @@ const AvatarMenu = () => {
                                     </MenuItem>
 
                                     <MenuItem
-                                        onClick={handleClose}
+                                        onClick={handleCreateTasks}
                                         sx={{
                                             color: 'var(--text-color)',
                                             borderRadius: '6px',
@@ -256,7 +261,7 @@ const AvatarMenu = () => {
                                         }}
                                     >
                                         <BriefcaseBusiness style={{ marginRight: '16px' }} />
-                                        {t('COMMON.SIDEBAR.SCHEDULAR')}
+                                        {t('COMMON.SIDEBAR.CREATETASKS')}
                                     </MenuItem>
                                     <MenuItem
                                         onClick={handleClose}

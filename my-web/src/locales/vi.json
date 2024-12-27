@@ -154,7 +154,8 @@
             "ACTIVITIES_EVENTS": "Hoạt động - Sự kiện",
             "REPORTS_SYSTEM": "Báo cáo - Hệ thống",
             "ATTENDANCE": "Chấm công",
-            "WORKHISTORY":"Lịch sử công tác"
+            "WORKHISTORY":"Lịch sử công tác",
+            "CREATETASKS":"Tạo công tác"
         },
         "MODE": {
             "LIGHT": "Sáng",

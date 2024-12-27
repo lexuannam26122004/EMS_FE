@@ -154,7 +154,8 @@
             "ACTIVITIES_EVENTS": "Activities - Events",
             "REPORTS_SYSTEM": "Reports - System",
             "ATTENDANCE": "Attendance",
-            "WORKHISTORY": "Work History"
+            "WORKHISTORY": "Work History",
+            "CREATETASKS":"Create tasks"
         },
         "MODE": {
             "LIGHT": "Light",
