@@ -8,14 +8,11 @@ import {
     TableContainer,
     Table,
     Typography,
-    TableRow,
     TableBody,
-    TableCell,
     Tooltip,
     Avatar,
     Tab,
-    Tabs,
-    CircularProgress
+    Tabs
 } from '@mui/material'
 import { X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -25,9 +22,9 @@ import AlertDialog from '@/components/AlertDialog'
 import React, { useState } from 'react'
 import { IAspNetUserGetAll } from '@/models/AspNetUser'
 import { useGetAllUsersQuery, useChangeStatusUsersMutation } from '@/services/AspNetUserService'
-import { IEmploymentContractSearch, IUserDetails } from '@/models/EmploymentContract'
-import { useSearchEmploymentContractsQuery } from '@/services/EmploymentContractService'
 import JobHistory from './detail/JobHistory'
+import Employee from './detail/Employee'
+import Contract from './detail/Contract'
 
 interface Props {
     open: boolean
@@ -66,130 +63,52 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
         console.log('Selected Tab:', newValue)
     }
 
-    const { data: contractResponse, isLoading: isContractsLoading } = useSearchEmploymentContractsQuery()
-    const { data: userResponse, isLoading: isUsersLoading } = useGetAllUsersQuery()
-
-    let users: IUserDetails[] = []
-
-    const contract = (contractResponse?.Data?.Records as IEmploymentContractSearch[]) || []
-    const employee = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
-
-    const foundContract = contract.find(contract => contract.UserId === aspnetuser.Id)
-
-    if (foundContract) {
-        const matchedEmployee = employee.find(emp => emp.Id === foundContract.UserId)
-        const matchedManager = employee.find(emp => emp.Id === foundContract.ManagerId)
-
-        users = [
-            {
-                ...foundContract,
-                FullName: matchedEmployee?.FullName || 'N/A',
-                EmployeeId: matchedEmployee?.EmployeeId || 'N/A',
-                ManagerFullName: matchedManager?.FullName || 'N/A',
-                Manager: matchedManager?.EmployeeId || 'N/A'
-            }
-        ]
-    } else {
-        users = []
-    }
-
-    if (isContractsLoading || isUsersLoading) {
-        return (
-            <Box
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: '400px',
-                    backgroundColor: '#f5f5f5'
-                }}
-            >
-                <CircularProgress />
-            </Box>
-        )
-    }
-
-    const renderTableContent = () => {
+    const renderTabContent = () => {
         switch (selectedTab) {
             case 0:
-                return [
-                    { label: t('COMMON.EMPLOYEE.FULLNAME'), value: aspnetuser.FullName || 'N/A' },
-                    { label: t('COMMON.EMPLOYEE.DEPARTMENTNAME'), value: aspnetuser.DepartmentName || 'N/A' },
-                    { label: t('COMMON.EMPLOYEE.USERNAME'), value: aspnetuser.UserName || 'N/A' },
-                    {
-                        label: t('COMMON.EMPLOYEE.ROLES'),
-                        value: aspnetuser.Roles?.join(', ') || 'N/A'
-                    },
-                    {
-                        label: t('COMMON.EMPLOYEE.GENDER'),
-                        value: aspnetuser.Gender === true ? t('Nam') : aspnetuser.Gender === false ? t('Nữ') : t('Khác')
-                    },
-                    { label: t('COMMON.EMPLOYEE.ADDRESS'), value: aspnetuser.Address || 'N/A' },
-                    {
-                        label: t('COMMON.EMPLOYEE.BIRTHDAY'),
-                        value:
-                            aspnetuser.Birthday && !isNaN(new Date(aspnetuser.Birthday).getTime())
-                                ? new Date(aspnetuser.Birthday).toLocaleDateString()
-                                : 'N/A'
-                    },
-                    {
-                        label: t('COMMON.EMPLOYEE.STARTDATE'),
-                        value:
-                            aspnetuser.StartDateWork && !isNaN(new Date(aspnetuser.StartDateWork).getTime())
-                                ? new Date(aspnetuser.StartDateWork).toLocaleDateString()
-                                : 'N/A'
-                    },
-                    { label: t('COMMON.EMPLOYEE.EMAIL'), value: aspnetuser.Email || 'N/A' },
-                    { label: t('COMMON.EMPLOYEE.PHONENUMBER'), value: aspnetuser.PhoneNumber || 'N/A' },
-                    { label: t('COMMON.EMPLOYEE.NOTE'), value: aspnetuser.Note || 'N/A' }
-                ]
-
+                return <Employee aspnetUserId={aspnetuser?.Id} />
             case 1:
-                if (users.length > 0) {
-                    return [
-                        { label: t('ID'), value: users[0]?.Id },
-                        {
-                            label: t('COMMON.CONTRACT.INFORMATION'),
-                            value: `${users[0].EmployeeId || 'N/A'} ${users[0].FullName || 'N/A'}`
-                        },
-
-                        {
-                            label: t('COMMON.CONTRACT.INFORMATIONMANAGER'),
-                            value: `${users[0].Manager || 'N/A'} ${users[0].ManagerFullName || 'N/A'}`
-                        },
-
-                        { label: t('COMMON.CONTRACT.CONTRACTNAME'), value: users[0].ContractName || 'N/A' },
-                        {
-                            label: t('COMMON.CONTRACT.STARTDATE'),
-                            value:
-                                users[0].StartDate && !isNaN(new Date(users[0].StartDate).getTime())
-                                    ? new Date(users[0].StartDate).toLocaleDateString()
-                                    : 'N/A'
-                        },
-                        {
-                            label: t('COMMON.CONTRACT.ENDDATE'),
-                            value:
-                                users[0].EndDate && !isNaN(new Date(users[0].EndDate).getTime())
-                                    ? new Date(users[0].EndDate).toLocaleDateString()
-                                    : 'N/A'
-                        },
-                        { label: t('COMMON.CONTRACT.CLAUSE'), value: users[0].Clause || 'N/A' },
-                        { label: t('COMMON.CONTRACT.BASICSALARY'), value: users[0].BasicSalary || 'N/A' },
-                        { label: t('COMMON.CONTRACT.PROBATIONPERIOD'), value: users[0].ProbationPeriod || 'N/A' },
-                        { label: t('COMMON.CONTRACT.WORKINGHOURS'), value: users[0].WorkingHours || 'N/A' },
-                        { label: t('COMMON.CONTRACT.TYPECONTRACT'), value: users[0].TypeContract || 'N/A' },
-                        { label: t('COMMON.CONTRACT.TERMINATIONCLAUSE'), value: users[0].TerminationClause || 'N/A' },
-                        { label: t('COMMON.CONTRACT.APPENDIX'), value: users[0].Appendix || 'N/A' }
-                    ]
-                } else {
-                    return []
-                }
+                return <Contract aspnetUserId={aspnetuser?.Id} />
             case 2:
-                return []
             case 3:
-                return []
+                return (
+                    <TableContainer
+                        sx={{
+                            padding: '20px',
+                            backgroundColor: 'var(--hover-color)',
+                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                            borderRadius: '12px',
+                            overflow: 'hidden',
+                            border: '1px solid #e0e0e0',
+                            maxWidth: '100%',
+                            marginTop: '20px',
+                            marginBottom: '20px',
+                            '&::-webkit-scrollbar': {
+                                width: '8px',
+                                height: '8px',
+                                backgroundColor: 'var(--hover-color)'
+                            },
+                            '&::-webkit-scrollbar-thumb': {
+                                backgroundColor: '#888',
+                                borderRadius: '10px',
+                                transition: 'background-color 0.3s ease'
+                            },
+                            '&::-webkit-scrollbar-thumb:hover': {
+                                backgroundColor: '#555' // Hover effect when dragging the scrollbar
+                            },
+                            '&::-webkit-scrollbar-corner': {
+                                borderRadius: '10px'
+                            },
+                            color: 'var(--text-color)'
+                        }}
+                    >
+                        <Table>
+                            <TableBody></TableBody>
+                        </Table>
+                    </TableContainer>
+                )
             default:
-                return null
+                return <JobHistory />
         }
     }
 
@@ -437,87 +356,7 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
                     ></Box>
                 </Box>
 
-                {selectedTab < 4 ? (
-                    <TableContainer
-                        sx={{
-                            padding: '20px',
-                            backgroundColor: 'var(--hover-color)',
-                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                            borderRadius: '12px',
-                            overflow: 'hidden',
-                            border: '1px solid #e0e0e0',
-                            maxWidth: '100%',
-                            marginTop: '20px',
-                            marginBottom: '20px',
-                            '&::-webkit-scrollbar': {
-                                width: '8px',
-                                height: '8px',
-                                backgroundColor: 'var(--hover-color)'
-                            },
-                            '&::-webkit-scrollbar-thumb': {
-                                backgroundColor: '#888',
-                                borderRadius: '10px',
-                                transition: 'background-color 0.3s ease'
-                            },
-                            '&::-webkit-scrollbar-thumb:hover': {
-                                backgroundColor: '#555' // Hover effect when dragging the scrollbar
-                            },
-                            '&::-webkit-scrollbar-corner': {
-                                borderRadius: '10px'
-                            },
-                            color: 'var(--text-color)'
-                        }}
-                    >
-                        <Table>
-                            <TableBody>
-                                {renderTableContent()?.map((item, index) => (
-                                    <TableRow
-                                        key={index}
-                                        sx={{
-                                            color: 'var(--text-color)',
-                                            backgroundColor:
-                                                index % 2 === 0 ? 'var(--hover-color)' : 'var(--background-color)',
-                                            '&:hover': {
-                                                backgroundColor: 'var(--selected-menu-text-color)',
-                                                cursor: 'pointer'
-                                            },
-                                            transition: 'background-color 0.3s ease'
-                                        }}
-                                    >
-                                        <TableCell
-                                            sx={{
-                                                fontSize: '18px',
-                                                fontWeight: '600',
-                                                paddingLeft: '30px',
-                                                paddingRight: '20px',
-                                                width: '40%',
-                                                borderBottom: '1px solid var(--hover-color)',
-                                                borderRight: '2px solid var(--hover-color)',
-                                                color: 'var(--text-color)'
-                                            }}
-                                        >
-                                            {item.label}:
-                                        </TableCell>
-                                        <TableCell
-                                            sx={{
-                                                fontSize: '16px',
-                                                paddingLeft: '20px',
-                                                borderBottom: '1px solid var(--hover-color)',
-                                                paddingRight: '30px',
-                                                borderLeft: '2px solid var(--hover-color)',
-                                                color: 'var(--text-color)'
-                                            }}
-                                        >
-                                            {item.value}
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                ) : (
-                    <JobHistory />
-                )}
+                <Box>{renderTabContent()}</Box>
 
                 <AlertDialog
                     title={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.TITLE')}
