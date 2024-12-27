@@ -1,8 +1,8 @@
 export interface IDepartmentGetAll {
     Id: number
     Name: string
-    CreateDate: string | null
-    CreateBy: string | null
+    CreatedDate: string
+    CreatedBy: string | null
     UpdateBy: string | null
     UpdateDate: string | null
     CountDepartment: number
@@ -11,6 +11,12 @@ export interface IDepartmentGetAll {
 }
 
 export interface IDepartmentCreate {
+    Name: string
+    DepartmentHeadId: string | null
+}
+
+export interface IDepartmentUpdate {
+    Id: number
     Name: string
     DepartmentHeadId: string | null
 }

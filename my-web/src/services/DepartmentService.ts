@@ -1,4 +1,5 @@
-import { IDepartmentCreate, IDepartmentGetAll } from '@/models/Department'
+import { IDepartmentCreate, IDepartmentGetAll, IDepartmentUpdate } from '@/models/Department'
+import { IFilterSysConfiguration } from '@/models/SysConfiguration'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 interface DepartmentResponse {
@@ -21,7 +22,7 @@ export const departmentApi = createApi({
             }),
             invalidatesTags: ['Department']
         }),
-        updateDepartment: builder.mutation<void, IDepartmentGetAll>({
+        updateDepartment: builder.mutation<void, IDepartmentUpdate>({
             query: department => ({
                 url: 'Update',
                 method: 'PUT',
@@ -50,9 +51,28 @@ export const departmentApi = createApi({
                 method: 'PUT'
             })
         }),
-        getAllDepartment: builder.query<DepartmentResponse, IDepartmentGetAll | void>({
+        ChangeStatusManyDepartment: builder.mutation<void, number[]>({
+            query: ids => ({
+                url: 'ChangeStatusMany',
+                method: 'PUT',
+                body: { Ids: ids }
+            })
+        }),
+        getAllDepartment: builder.query<DepartmentResponse, IFilterSysConfiguration | void>({
             query: filter => {
-                return `GetAllDepartments?`
+                const params = new URLSearchParams()
+
+                if (filter) {
+                    if (filter.createdBy) params.append('CreatedBy', filter.createdBy)
+                    if (filter.createdDate) params.append('CreatedDate', filter.createdDate.toDateString())
+                    if (filter.pageSize) params.append('PageSize', filter.pageSize.toString())
+                    if (filter.pageNumber) params.append('PageNumber', filter.pageNumber.toString())
+                    if (filter.isActive !== undefined) params.append('IsActive', filter.isActive.toString())
+                    if (filter.keyword) params.append('Keyword', filter.keyword)
+                    if (filter.isDescending !== undefined) params.append('IsDescending', filter.isDescending.toString())
+                    if (filter.sortBy) params.append('SortBy', filter.sortBy)
+                }
+                return `Search?${params.toString()}`
             }
         })
     })
@@ -64,5 +84,6 @@ export const {
     useUpdateDepartmentMutation,
     useDeleteDepartmentMutation,
     useDeleteManyDepartmentsMutation,
-    useChangeStatusMutation
+    useChangeStatusMutation,
+    useChangeStatusManyDepartmentMutation
 } = departmentApi

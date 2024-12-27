@@ -66,8 +66,9 @@ function BenefitPage() {
 
     const { data: responseData, isFetching, refetch } = useGetAllBenefitsQuery(filter)
     const [deleteBenefit, { isSuccess: isSuccessDelete }] = useChangeStatusBenefitMutation()
-    const [createBenefit, { isSuccess, isLoading, isError }] = useCreateBenefitMutation()
-    const [updateBenefit] = useUpdateBenefitMutation()
+    //const [createBenefit, { isSuccess, isLoading, isError }] = useCreateBenefitMutation()
+    //const [updateBenefit] = useUpdateBenefitMutation()
+    const [isSuccess, setSuccess] = useState(false)
     const [
         changeManyBenefit,
         { isError: isErrorChangeMany, isSuccess: isSuccessChangeMany, isLoading: isLoadingChangeMany }
