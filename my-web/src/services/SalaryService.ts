@@ -8,11 +8,6 @@ interface SalaryResponse {
     Data: any
 }
 
-interface SalaryGetAll {
-    filter: IFilterSysConfiguration
-    period: string
-}
-
 const apiPath = 'https://localhost:44381/api/admin/Salary'
 
 export const salaryApi = createApi({
@@ -20,8 +15,8 @@ export const salaryApi = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: apiPath }),
     tagTypes: ['Salary'],
     endpoints: builder => ({
-        getAllSalaries: builder.query<SalaryResponse, SalaryGetAll>({
-            query: ({ filter, period }) => {
+        getAllSalaries: builder.query<SalaryResponse, IFilterSysConfiguration>({
+            query: filter => {
                 const params = new URLSearchParams()
 
                 if (filter) {
@@ -34,8 +29,6 @@ export const salaryApi = createApi({
                     if (filter.isDescending !== undefined) params.append('IsDescending', filter.isDescending.toString())
                     if (filter.sortBy) params.append('SortBy', filter.sortBy)
                 }
-
-                params.append('period', period)
 
                 return `GetAll?${params.toString()}`
             },

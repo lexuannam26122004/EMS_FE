@@ -35,7 +35,23 @@ export default function DepartmentChart() {
         )
     }
     if (error) {
-        return <Typography>Có lỗi xảy ra khi tải dữ liệu.</Typography> // Hiển thị thông báo lỗi
+        return (
+            <Paper
+                elevation={0}
+                sx={{
+                    width: '100%',
+                    padding: '24px',
+                    backgroundColor: 'var(--background-item)',
+                    borderRadius: '15px',
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+            >
+                <Typography color='red'>Có lỗi xảy ra khi tải dữ liệu.</Typography> {/* Thông báo lỗi */}
+            </Paper>
+        )
     }
     const option = {
         tooltip: {

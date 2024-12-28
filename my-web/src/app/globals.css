@@ -104,6 +104,7 @@ body {
     --today-color: #39424a;
     --reward-title-color: #131215;
     --rank-1-color: #343e49;
+    --title-color: #028224;
     --bg-item-attendance: #28323d;
 }
 
@@ -185,6 +186,7 @@ body {
     --today-color: #dae1ec;
     --reward-title-color: #131215;
     --rank-1-color: #dfe2e8;
+    --title-color: #03d794;
     --bg-item-attendance: #f1f4f982;
 }
 
