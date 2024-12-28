@@ -25,6 +25,7 @@ import { useGetAllUsersQuery, useChangeStatusUsersMutation } from '@/services/As
 import JobHistory from './detail/JobHistory'
 import Employee from './detail/Employee'
 import Contract from './detail/Contract'
+import Reward from './detail/Reward'
 
 interface Props {
     open: boolean
@@ -69,8 +70,9 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
                 return <Employee aspnetUserId={aspnetuser?.Id} />
             case 1:
                 return <Contract aspnetUserId={aspnetuser?.Id} />
-            case 2:
             case 3:
+                return <Reward aspnetUserId={aspnetuser?.Id} />
+            case 2:
             case 4:
                 return (
                     <TableContainer

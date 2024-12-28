@@ -1,7 +1,7 @@
 import { TableContainer, Table, TableRow, TableBody, TableCell, Box, CircularProgress } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useSearchEmploymentContractsQuery } from '@/services/EmploymentContractService'
-import { IEmploymentContractSearch} from '@/models/EmploymentContract'
+import { IEmploymentContractSearch } from '@/models/EmploymentContract'
 import { IAspNetUserGetAll } from '@/models/AspNetUser'
 import { useGetAllUsersQuery } from '@/services/AspNetUserService'
 
@@ -21,7 +21,6 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
     const userscontract = contract.find(ct => ct.UserId === aspnetUserId)
     const matchedEmployee = employee.find(emp => emp.Id === userscontract?.UserId)
     const matchedManager = employee.find(emp => emp.Id === userscontract?.ManagerId)
-
 
     if (isContractsLoading || isuserscontractLoading) {
         return (
@@ -48,9 +47,8 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                 borderRadius: '12px',
                 overflow: 'hidden',
                 border: '1px solid #e0e0e0',
-                maxWidth: '100%',
-                marginTop: '20px',
-                marginBottom: '20px',
+                maxWidth: '96%',
+                margin: '20px auto',
                 '&::-webkit-scrollbar': {
                     width: '8px',
                     height: '8px',
@@ -104,7 +102,10 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                         { label: t('COMMON.CONTRACT.PROBATIONPERIOD'), value: userscontract?.ProbationPeriod || 'N/A' },
                         { label: t('COMMON.CONTRACT.WORKINGHOURS'), value: userscontract?.WorkingHours || 'N/A' },
                         { label: t('COMMON.CONTRACT.TYPECONTRACT'), value: userscontract?.TypeContract || 'N/A' },
-                        { label: t('COMMON.CONTRACT.TERMINATIONCLAUSE'), value: userscontract?.TerminationClause || 'N/A' },
+                        {
+                            label: t('COMMON.CONTRACT.TERMINATIONCLAUSE'),
+                            value: userscontract?.TerminationClause || 'N/A'
+                        },
                         { label: t('COMMON.CONTRACT.APPENDIX'), value: userscontract?.Appendix || 'N/A' }
                     ].map((item, index) => (
                         <TableRow

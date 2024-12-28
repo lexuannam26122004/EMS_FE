@@ -14,13 +14,15 @@ const Chart: React.FC = () => {
     }
 
     const reportData = [
-        { score: 85.5, amount: 85.5, type: 'Lương' },
-        { score: 78.1, amount: 78.1, type: 'Lợi ích' },
-        { score: 65.3, amount: 65.3, type: 'Kỉ luật' },
-        { score: 92.4, amount: 92.4, type: 'Khen thưởng' },
-        { score: 72.6, amount: 72.6, type: 'Cá Nhân' },
-        { score: 88.9, amount: 88.9, type: 'Hợp đồng' }
+        { score: 12, amount: 12, type: 'Lương' },
+        { score: 14, amount: 14, type: 'Lợi ích' },
+        { score: 5, amount: 5, type: 'Kỉ luật' },
+        { score: 25, amount: 25, type: 'Khen thưởng' },
+        { score: 17, amount: 17, type: 'Cá Nhân' },
+        { score: 8, amount: 8, type: 'Hợp đồng' }
     ]
+
+    const maxScore = Math.max(...reportData.map(item => item.score))
 
     const option = {
         textStyle: {
@@ -37,8 +39,8 @@ const Chart: React.FC = () => {
             orient: 'horizontal',
             left: 'center',
             top: '0%',
-            min: 60,
-            max: 100,
+            min: 0,
+            max: maxScore,
             text: ['Cao', 'Thấp'],
             textStyle: {
                 color: theme === 'light' ? '#000000' : '#ffffff',
@@ -46,7 +48,7 @@ const Chart: React.FC = () => {
             },
             dimension: 0,
             inRange: {
-                color: ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF']
+                color: ['#e0f7fa', '#00796b']
             },
             itemHeight: '300'
         },
@@ -57,7 +59,7 @@ const Chart: React.FC = () => {
             },
             textStyle: {
                 fontFamily: 'Arial, sans-serif'
-            },
+            }
         },
         toolbox: {
             feature: {
