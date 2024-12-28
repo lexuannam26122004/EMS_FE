@@ -1,17 +1,42 @@
-import { MenuItem, FormControl, Select, Box, Paper, Typography, SelectChangeEvent } from '@mui/material'
-import ReactECharts from 'echarts-for-react'
+import React, { useState } from 'react'
 import { useTheme } from 'next-themes'
-import { useState } from 'react'
+import { MenuItem, FormControl, Select, Box, Paper, Typography, SelectChangeEvent } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import ReactECharts from 'echarts-for-react'
 
-export default function Chart() {
-    const { t } = useTranslation('common')
-    const { theme } = useTheme()
+const Chart: React.FC = () => {
     const currentYear = new Date().getFullYear()
     const [selectedYear, setSelectedYear] = useState(currentYear)
+    const { t } = useTranslation('common')
+    const { theme } = useTheme()
 
     const handleYearChange = (event: SelectChangeEvent<number>) => {
-        setSelectedYear(event.target.value as number)
+        setSelectedYear(Number(event.target.value))
+    }
+
+    const xAxisData = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    const data1: number[] = []
+    const data2: number[] = []
+    const data3: number[] = []
+    const data4: number[] = []
+
+    for (let i = 0; i < 12; i++) {
+        data1.push(+(Math.random() * 2).toFixed(2))
+        data2.push(+(Math.random() * 5).toFixed(2))
+        data3.push(+(Math.random() + 0.3).toFixed(2))
+        data4.push(+Math.random().toFixed(2))
+    }
+
+    const totalLeaveApproved = data1.reduce((sum, val) => sum + val, 0).toFixed(2)
+    const totalLeavePending = data2.reduce((sum, val) => sum + val, 0).toFixed(2)
+    const totalReportApproved = data3.reduce((sum, val) => sum + val, 0).toFixed(2)
+    const totalReportPending = data4.reduce((sum, val) => sum + val, 0).toFixed(2)
+
+    const emphasisStyle = {
+        itemStyle: {
+            shadowBlur: 10,
+            shadowColor: 'rgba(0,0,0,0.3)'
+        }
     }
 
     const option = {
@@ -19,145 +44,134 @@ export default function Chart() {
             color: theme === 'light' ? '#000000' : '#ffffff',
             fontFamily: 'Arial, sans-serif'
         },
-        animation: true, // Bật hiệu ứng chuyển tiếp
-        animationDuration: 700, // Thời gian chuyển tiếp (ms)
-        tooltip: {
-            trigger: 'axis',
-            backgroundColor: theme === 'light' ? 'rgba(250, 250, 250, 0.98)' : 'rgba(20, 26, 25, 0.98)',
-            borderColor: theme === 'light' ? 'rgba(250, 250, 250, 0.98)' : 'rgba(20, 26, 25, 0.98)',
-            textStyle: {
-                color: theme === 'light' ? '#000000' : '#ffffff'
-            }
-        },
         legend: {
-            data: [t('Nhân viên mới'), t('Nhân viên nghỉ việc'), t('Nhân viên trong công ty')],
+            data: ['Nghỉ phép đã duyệt', 'Nghỉ phép chưa duyệt', 'Báo cáo lỗi đã duyệt', 'Báo cáo lỗi chưa duyệt'],
+            width: '50%',
             textStyle: {
                 color: theme === 'light' ? '#000000' : '#ffffff',
                 fontFamily: 'Arial, sans-serif'
             },
-            itemGap: 30
         },
+
         toolbox: {
-            show: true,
             feature: {
-                magicType: { show: true, type: ['line', 'bar'] },
-                saveAsImage: { show: true }
+                dataView: {
+                    readOnly: false,
+                    buttonColor: '#5f8c99',
+                    optionToContent: () => {
+                        let tableContent = '<table style="width: 100%; text-align: left; border-collapse: collapse;">'
+                        tableContent += '<tr>'
+                        tableContent += `<th style="border: 1px solid #ccc; padding: 5px;"></th>`
+                        tableContent += `<th style="border: 1px solid #ccc; padding: 5px;">Nghỉ phép đã duyệt</th>`
+                        tableContent += `<th style="border: 1px solid #ccc; padding: 5px;">Nghỉ phép chưa duyệt</th>`
+                        tableContent += `<th style="border: 1px solid #ccc; padding: 5px;">Báo cáo lỗi đã duyệt</th>`
+                        tableContent += `<th style="border: 1px solid #ccc; padding: 5px;">Báo cáo lỗi chưa duyệt</th>`
+                        tableContent += '</tr>'
+
+                        for (let i = 0; i < 12; i++) {
+                            tableContent += `<tr>`
+                            tableContent += `<td style="border: 1px solid #ccc; padding: 5px;">${xAxisData[i]}</td>`
+                            tableContent += `<td style="border: 1px solid #ccc; padding: 5px;">${data1[i]}</td>`
+                            tableContent += `<td style="border: 1px solid #ccc; padding: 5px;">${data2[i]}</td>`
+                            tableContent += `<td style="border: 1px solid #ccc; padding: 5px;">${data3[i]}</td>`
+                            tableContent += `<td style="border: 1px solid #ccc; padding: 5px;">${data4[i]}</td>`
+                            tableContent += '</tr>'
+                        }
+
+                        tableContent += `<tr>`
+                        tableContent += `<td style="border: 1px solid #ccc; padding: 5px; font-weight: bold;">Tổng</td>`
+                        tableContent += `<td style="border: 1px solid #ccc; padding: 5px;">${totalLeaveApproved}</td>`
+                        tableContent += `<td style="border: 1px solid #ccc; padding: 5px;">${totalLeavePending}</td>`
+                        tableContent += `<td style="border: 1px solid #ccc; padding: 5px;">${totalReportApproved}</td>`
+                        tableContent += `<td style="border: 1px solid #ccc; padding: 5px;">${totalReportPending}</td>`
+                        tableContent += `</tr>`
+
+                        tableContent += '</table>'
+                        return tableContent
+                    }
+                },
+                saveAsImage: {
+                    pixelRatio: 2,
+                    name: 'chart-download'
+                }
             }
         },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: { type: 'shadow' },
+            formatter: (params: any) => {
+                let totalLeave = 0
+                let totalErrorReport = 0
+
+                params.forEach((param: any) => {
+                    if (param.seriesName.includes('Nghỉ phép')) {
+                        totalLeave += param.value
+                    } else if (param.seriesName.includes('Báo cáo lỗi')) {
+                        totalErrorReport += param.value
+                    }
+                })
+
+                let tooltipContent = `${params[0].name}<br/>`
+                params.forEach((param: any) => {
+                    tooltipContent += `<span style="display: inline-block; width: 8px; height: 8px; background-color: ${param.color}; border-radius: 50%; margin-right: 8px;"></span>`
+                    tooltipContent += `${param.seriesName}: ${param.value}<br/>`
+                })
+
+                tooltipContent += `<br/><strong>Tổng Nghỉ Phép:</strong> ${totalLeave.toFixed(2)}<br/>`
+                tooltipContent += `<strong>Tổng Báo Cáo Lỗi:</strong> ${totalErrorReport.toFixed(2)}<br/>`
+
+                return tooltipContent
+            }
+        },
+        xAxis: {
+            data: xAxisData
+        },
+        yAxis: {},
         grid: {
             left: '2%',
             right: '5.5%',
             bottom: '3%',
             containLabel: true
         },
-        calculable: true,
-        xAxis: [
-            {
-                type: 'category',
-                boundaryGap: true, // Để cột không chạm vào nhau
-                axisLine: {
-                    lineStyle: {
-                        color: theme === 'dark' ? '#919EAB' : '#637381'
-                    }
-                },
-                splitLine: {
-                    lineStyle: {
-                        type: 'dashed',
-                        color: theme === 'light' ? '#e9ecee' : '#333d47'
-                    }
-                },
-                // prettier-ignore
-                data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-            }
-        ],
-        yAxis: [
-            {
-                axisLine: {
-                    lineStyle: {
-                        color: theme === 'dark' ? '#919EAB' : '#637381'
-                    }
-                },
-                splitLine: {
-                    lineStyle: {
-                        type: 'dashed',
-                        color: theme === 'light' ? '#e9ecee' : '#333d47'
-                    }
-                },
-                type: 'value'
-            }
-        ],
         series: [
             {
-                name: t('Nhân viên mới'),
+                name: 'Nghỉ phép đã duyệt',
                 type: 'bar',
-                data: [76, 75, 19, 48, 78, 31, 51, 78, 20, 6, 30, 70],
-                markPoint: {
-                    data: [
-                        { type: 'max', name: 'Max' },
-                        { type: 'min', name: 'Min' }
-                    ]
-                },
-                barWidth: '22%', // Điều chỉnh độ rộng của cột
+                stack: 'stack1',
+                emphasis: emphasisStyle,
+                data: data1,
                 itemStyle: {
-                    color: '#0BF4A6',
-                    borderRadius: [6, 6, 0, 0] // Bo tròn đỉnh cột
-                },
-                markLine: {
-                    data: [{ type: 'average', name: 'Avg' }],
-                    label: {
-                        color: theme === 'light' ? '#000000' : '#ffffff',
-                        fontSize: 11,
-                        fontWeight: 'bold'
-                    }
+                    color: '#5470C6'
                 }
             },
             {
-                name: t('Nhân viên nghỉ việc'),
+                name: 'Nghỉ phép chưa duyệt',
                 type: 'bar',
-                data: [49, 31, 53, 88, 16, 74, 85, 73, 68, 93, 62, 89],
-                barWidth: '22%', // Điều chỉnh độ rộng của cột
+                stack: 'stack1',
+                emphasis: emphasisStyle,
+                data: data2,
                 itemStyle: {
-                    color: '#FF6F91',
-                    borderRadius: [6, 6, 0, 0] // Bo tròn đỉnh cột
-                },
-                markPoint: {
-                    data: [
-                        { type: 'max', name: 'Max' },
-                        { type: 'min', name: 'Min' }
-                    ]
-                },
-                markLine: {
-                    data: [{ type: 'average', name: 'Avg' }],
-                    label: {
-                        color: theme === 'light' ? '#000000' : '#ffffff',
-                        fontSize: 11,
-                        fontWeight: 'bold'
-                    }
+                    color: '#91CC75'
                 }
             },
-
             {
-                name: t('Nhân viên trong công ty'),
+                name: 'Báo cáo lỗi đã duyệt',
                 type: 'bar',
-                data: [50, 80, 60, 100, 70, 110, 90, 130, 110, 140, 120, 160],
-                markPoint: {
-                    data: [
-                        { type: 'max', name: 'Max' },
-                        { type: 'min', name: 'Min' }
-                    ]
-                },
-                barWidth: '22%', // Điều chỉnh độ rộng của cột
+                stack: 'stack2',
+                emphasis: emphasisStyle,
+                data: data3,
                 itemStyle: {
-                    color: '#FFC8A0',
-                    borderRadius: [6, 6, 0, 0] // Bo tròn đỉnh cột
-                },
-                markLine: {
-                    data: [{ type: 'average', name: 'Avg' }],
-                    label: {
-                        color: theme === 'light' ? '#000000' : '#ffffff',
-                        fontSize: 11,
-                        fontWeight: 'bold'
-                    }
+                    color: '#EE6666'
+                }
+            },
+            {
+                name: 'Báo cáo lỗi chưa duyệt',
+                type: 'bar',
+                stack: 'stack2',
+                emphasis: emphasisStyle,
+                data: data4,
+                itemStyle: {
+                    color: '#FFB980'
                 }
             }
         ]
@@ -190,12 +204,12 @@ export default function Chart() {
                             color: 'var(--text-color)'
                         }}
                     >
-                        {t('Biểu đồ thống kê nhân viên')}
+                        {t('Biểu đồ thống kê yêu cầu')}
                     </Typography>
                 </Box>
-                <FormControl sx={{ width: '90px' }}>
+                <FormControl sx={{ width: '100px' }}>
                     <Select
-                        defaultValue={currentYear}
+                        value={selectedYear}
                         onChange={handleYearChange}
                         sx={{
                             '&:hover .MuiOutlinedInput-notchedOutline': {
@@ -252,8 +266,8 @@ export default function Chart() {
                             }
                         }}
                     >
-                        {[...Array(currentYear - 2022)].map((_, index) => {
-                            const year = currentYear - index
+                        {[...Array(currentYear - 2022 + 1)].map((_, index) => {
+                            const year = 2022 + index
                             return (
                                 <MenuItem
                                     key={year}
@@ -272,7 +286,9 @@ export default function Chart() {
                     </Select>
                 </FormControl>
             </Box>
-            <ReactECharts option={option} style={{ height: 450 }} />
+            <ReactECharts option={option} style={{ height: 512 }} />
         </Paper>
     )
 }
+
+export default Chart

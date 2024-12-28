@@ -149,10 +149,15 @@
             "WORK_SHIFT": "Ca làm việc",
             "PERSONNEL": "Nhân sự",
             "ATTENDANCE_SALARY": "Chấm công - Lương",
-            "CONTRACT_BENEFITS": "Hợp đồng - Phúc lợi",
+            "EMPLOYEE-CONTRACT": "Nhân viên - Hợp đồng",
+            "TIMEOFF-ERRORREPORT": "Nghỉ phép - Báo cáo",
+            "BENEFITS": "Phúc lợi",
             "REWARDS_DISCIPLINE": "Khen thưởng - Kỷ luật",
             "ACTIVITIES_EVENTS": "Hoạt động - Sự kiện",
-            "REPORTS_SYSTEM": "Báo cáo - Hệ thống"
+            "REPORTS_SYSTEM": "Báo cáo - Hệ thống",
+            "ATTENDANCE": "Chấm công",
+            "WORKHISTORY": "Lịch sử công tác",
+            "CREATETASKS": "Tạo công tác"
         },
         "MODE": {
             "LIGHT": "Sáng",
@@ -538,6 +543,34 @@
             "TO": " đến ",
             "COUNT_READ_NOTIFY": "Số thông báo đã đọc",
             "HOLIDAY": "Ngày lễ"
+        },
+        "ATTENDANCE": {
+            "ON_TIME": "Số nhân viên đúng giờ",
+            "LATE": "Số nhân viên đi trễ",
+            "ABSENT": "Số nhân viên vắng mặt",
+            "LEAVE": "Số nhân viên nghỉ phép",
+            "EARLY": "Số nhân viên đi sớm",
+            "INVALID": "Số chấm công không hợp lệ",
+            "YESTERDAY": "so với hôm qua",
+            "CELL_VALUE": "Giá trị ô",
+            "EMPLOYEE_ATTENDANCE_BY_TIME": "Biểu đồ thể hiện Số nhân viên có mặt theo giờ",
+            "STATUS_ON_TIME": "Đúng giờ",
+            "STATUS_LATE": "Đi trễ",
+            "STATUS_EARLY": "Về sớm",
+            "ALL": "Tất cả",
+            "STATUS_INVALID": "Không hợp lệ",
+            "CHECK_IN_&_OUT": "Giờ vào & ra",
+            "OVERTIME": "Làm thêm giờ",
+            "STATUS": "Trạng thái",
+            "NOTE": "Ghi chú",
+            "CHECK_IN": "Giờ vào",
+            "CHECK_OUT": "Giờ ra",
+            "JOIN": "Tham gia",
+            "STATUS_ABSENT": "Vắng mặt",
+            "MEMBER_ATTENDANCE": "Chấm công nhân viên",
+            "ATTENDANCE_PERCENT": "Tỉ lệ chấm công {{status}} {{x}}% so với hôm qua",
+            "DETAIL_EMPLOYEE": "Thông tin chi tiết nhân viên",
+            "DOWNLOAD_INFO": "Tải thông tin"
         }
     }
 }

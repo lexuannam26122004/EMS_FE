@@ -1,162 +1,96 @@
+import React, { useState } from 'react'
+
 import { MenuItem, FormControl, Select, Box, Paper, Typography, SelectChangeEvent } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 import ReactECharts from 'echarts-for-react'
 import { useTheme } from 'next-themes'
-import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
-
-export default function Chart() {
-    const { t } = useTranslation('common')
-    const { theme } = useTheme()
+const Chart: React.FC = () => {
     const currentYear = new Date().getFullYear()
     const [selectedYear, setSelectedYear] = useState(currentYear)
-
+    const { t } = useTranslation('common')
+    const { theme } = useTheme()
     const handleYearChange = (event: SelectChangeEvent<number>) => {
-        setSelectedYear(event.target.value as number)
+        setSelectedYear(Number(event.target.value))
     }
+
+    const reportData = [
+        { score: 85.5, amount: 85.5, type: 'Lương' },
+        { score: 78.1, amount: 78.1, type: 'Lợi ích' },
+        { score: 65.3, amount: 65.3, type: 'Kỉ luật' },
+        { score: 92.4, amount: 92.4, type: 'Khen thưởng' },
+        { score: 72.6, amount: 72.6, type: 'Cá Nhân' },
+        { score: 88.9, amount: 88.9, type: 'Hợp đồng' }
+    ]
 
     const option = {
         textStyle: {
             color: theme === 'light' ? '#000000' : '#ffffff',
             fontFamily: 'Arial, sans-serif'
         },
-        animation: true, // Bật hiệu ứng chuyển tiếp
-        animationDuration: 700, // Thời gian chuyển tiếp (ms)
-        tooltip: {
-            trigger: 'axis',
-            backgroundColor: theme === 'light' ? 'rgba(250, 250, 250, 0.98)' : 'rgba(20, 26, 25, 0.98)',
-            borderColor: theme === 'light' ? 'rgba(250, 250, 250, 0.98)' : 'rgba(20, 26, 25, 0.98)',
-            textStyle: {
-                color: theme === 'light' ? '#000000' : '#ffffff'
-            }
+        dataset: {
+            source: [['score', 'amount', 'type'], ...reportData.map(item => [item.score, item.amount, item.type])]
         },
-        legend: {
-            data: [t('Nhân viên mới'), t('Nhân viên nghỉ việc'), t('Nhân viên trong công ty')],
+        grid: { containLabel: true, top: '10%', left: '2%', right: '10%', bottom: '3%' },
+        xAxis: { name: 'Số lượng' },
+        yAxis: { type: 'category' },
+        visualMap: {
+            orient: 'horizontal',
+            left: 'center',
+            top: '0%',
+            min: 60,
+            max: 100,
+            text: ['Cao', 'Thấp'],
             textStyle: {
                 color: theme === 'light' ? '#000000' : '#ffffff',
                 fontFamily: 'Arial, sans-serif'
             },
-            itemGap: 30
+            dimension: 0,
+            inRange: {
+                color: ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF']
+            },
+            itemHeight: '300'
+        },
+        tooltip: {
+            trigger: 'item', // Trigger when hovering over an item
+            formatter: function (params) {
+                return `Loại: ${params.value[2]}<br/>Số lượng: ${params.value[1]}`
+            },
+            textStyle: {
+                fontFamily: 'Arial, sans-serif'
+            },
         },
         toolbox: {
-            show: true,
             feature: {
-                magicType: { show: true, type: ['line', 'bar'] },
-                saveAsImage: { show: true }
+                saveAsImage: {
+                    show: true,
+                    title: 'Save as Image',
+                    pixelRatio: 2
+                }
             }
         },
-        grid: {
-            left: '2%',
-            right: '5.5%',
-            bottom: '3%',
-            containLabel: true
+        legend: {
+            textStyle: {
+                color: theme === 'light' ? '#000000' : '#ffffff',
+                fontFamily: 'Arial, sans-serif'
+            }
         },
-        calculable: true,
-        xAxis: [
-            {
-                type: 'category',
-                boundaryGap: true, // Để cột không chạm vào nhau
-                axisLine: {
-                    lineStyle: {
-                        color: theme === 'dark' ? '#919EAB' : '#637381'
-                    }
-                },
-                splitLine: {
-                    lineStyle: {
-                        type: 'dashed',
-                        color: theme === 'light' ? '#e9ecee' : '#333d47'
-                    }
-                },
-                // prettier-ignore
-                data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-            }
-        ],
-        yAxis: [
-            {
-                axisLine: {
-                    lineStyle: {
-                        color: theme === 'dark' ? '#919EAB' : '#637381'
-                    }
-                },
-                splitLine: {
-                    lineStyle: {
-                        type: 'dashed',
-                        color: theme === 'light' ? '#e9ecee' : '#333d47'
-                    }
-                },
-                type: 'value'
-            }
-        ],
         series: [
             {
-                name: t('Nhân viên mới'),
                 type: 'bar',
-                data: [76, 75, 19, 48, 78, 31, 51, 78, 20, 6, 30, 70],
-                markPoint: {
-                    data: [
-                        { type: 'max', name: 'Max' },
-                        { type: 'min', name: 'Min' }
-                    ]
+                encode: {
+                    x: 'amount',
+                    y: 'type'
                 },
-                barWidth: '22%', // Điều chỉnh độ rộng của cột
                 itemStyle: {
-                    color: '#0BF4A6',
-                    borderRadius: [6, 6, 0, 0] // Bo tròn đỉnh cột
+                    borderRadius: [0, 30, 30, 0]
                 },
-                markLine: {
-                    data: [{ type: 'average', name: 'Avg' }],
-                    label: {
-                        color: theme === 'light' ? '#000000' : '#ffffff',
-                        fontSize: 11,
-                        fontWeight: 'bold'
-                    }
-                }
-            },
-            {
-                name: t('Nhân viên nghỉ việc'),
-                type: 'bar',
-                data: [49, 31, 53, 88, 16, 74, 85, 73, 68, 93, 62, 89],
-                barWidth: '22%', // Điều chỉnh độ rộng của cột
-                itemStyle: {
-                    color: '#FF6F91',
-                    borderRadius: [6, 6, 0, 0] // Bo tròn đỉnh cột
-                },
-                markPoint: {
-                    data: [
-                        { type: 'max', name: 'Max' },
-                        { type: 'min', name: 'Min' }
-                    ]
-                },
-                markLine: {
-                    data: [{ type: 'average', name: 'Avg' }],
-                    label: {
-                        color: theme === 'light' ? '#000000' : '#ffffff',
-                        fontSize: 11,
-                        fontWeight: 'bold'
-                    }
-                }
-            },
-
-            {
-                name: t('Nhân viên trong công ty'),
-                type: 'bar',
-                data: [50, 80, 60, 100, 70, 110, 90, 130, 110, 140, 120, 160],
-                markPoint: {
-                    data: [
-                        { type: 'max', name: 'Max' },
-                        { type: 'min', name: 'Min' }
-                    ]
-                },
-                barWidth: '22%', // Điều chỉnh độ rộng của cột
-                itemStyle: {
-                    color: '#FFC8A0',
-                    borderRadius: [6, 6, 0, 0] // Bo tròn đỉnh cột
-                },
-                markLine: {
-                    data: [{ type: 'average', name: 'Avg' }],
-                    label: {
-                        color: theme === 'light' ? '#000000' : '#ffffff',
-                        fontSize: 11,
-                        fontWeight: 'bold'
+                emphasis: {
+                    itemStyle: {
+                        borderWidth: 2,
+                        shadowBlur: 20,
+                        shadowOffsetX: 5,
+                        shadowOffsetY: 5,
+                        shadowColor: 'var(--text-color)'
                     }
                 }
             }
@@ -190,12 +124,12 @@ export default function Chart() {
                             color: 'var(--text-color)'
                         }}
                     >
-                        {t('Biểu đồ thống kê nhân viên')}
+                        {t('Biểu đồ thống kê báo cáo lỗi')}
                     </Typography>
                 </Box>
-                <FormControl sx={{ width: '90px' }}>
+                <FormControl sx={{ width: '100px' }}>
                     <Select
-                        defaultValue={currentYear}
+                        value={selectedYear}
                         onChange={handleYearChange}
                         sx={{
                             '&:hover .MuiOutlinedInput-notchedOutline': {
@@ -252,8 +186,8 @@ export default function Chart() {
                             }
                         }}
                     >
-                        {[...Array(currentYear - 2022)].map((_, index) => {
-                            const year = currentYear - index
+                        {[...Array(currentYear - 2022 + 1)].map((_, index) => {
+                            const year = 2022 + index
                             return (
                                 <MenuItem
                                     key={year}
@@ -272,7 +206,9 @@ export default function Chart() {
                     </Select>
                 </FormControl>
             </Box>
-            <ReactECharts option={option} style={{ height: 450 }} />
+            <ReactECharts option={option} style={{ height: 500 }} />
         </Paper>
     )
 }
+
+export default Chart

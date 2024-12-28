@@ -1,82 +1,82 @@
 'use client'
 import AlertDialog from '@/components/AlertDialog'
 import { IDepartmentGetAll } from '@/models/Department'
-import { useChangeStatusMutation, useGetAllDepartmentQuery } from '@/services/DepartmentService'
-import { Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, SelectChangeEvent, TextField, InputAdornment, Button, Checkbox, TableSortLabel, Tooltip, Select, MenuItem, Pagination } from '@mui/material'
-import { CirclePlus, EyeIcon, Pencil, SearchIcon, Trash2 } from 'lucide-react'
+import {
+    useChangeStatusManyDepartmentMutation,
+    useChangeStatusMutation,
+    useGetAllDepartmentQuery
+} from '@/services/DepartmentService'
+import {
+    Box,
+    Typography,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    SelectChangeEvent,
+    TextField,
+    InputAdornment,
+    Button,
+    Checkbox,
+    TableSortLabel,
+    Tooltip,
+    Select,
+    MenuItem,
+    Pagination,
+    IconButton
+} from '@mui/material'
+import { CirclePlus, EyeIcon, Pencil, Trash2 } from 'lucide-react'
+import SearchIcon from '@mui/icons-material/Search'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import DetailModal from '../configuration/DetailModal'
+import { IFilterSysConfiguration } from '@/models/SysConfiguration'
+import { formatDate } from '@/utils/formatDate'
 
 function DepartmentTable() {
-    const { data: department, isLoading: isBenefitTypesLoading, refetch } = useGetAllDepartmentQuery()
-    const departmentDataRecord = (department?.Data?.Records as IDepartmentGetAll[]) || []
-    const departmentDataTotalRecord = (department?.Data?.TotalRecords as IDepartmentGetAll[]) || []
+    //const { data: department, isLoading: isBenefitTypesLoading, refetch } = useGetAllDepartmentQuery()
+    //const departmentDataRecord = (department?.Data?.Records as IDepartmentGetAll[]) || []
+    //const departmentDataTotalRecord = (department?.Data?.TotalRecords as IDepartmentGetAll[]) || []
 
-    const [selectedRow, setSelectedRow] = useState<number | null>(null)
-    const [openDialog, setOpenDialog] = useState(false)
-    const [isChangeMany, setIsChangeMany] = useState(false)
-    const [selected, setSelected] = useState<number[]>([])
-    const [searchTerm, setSearchTerm] = useState<string>('')
-    const [rowsPerPage, setRowsPerPage] = useState('10')
-    const [currentPage, setCurrentPage] = useState<number>(1)
-    const [sortConfig, setSortConfig] = useState<{
-        key: keyof IDepartmentGetAll | 'Id'
-        direction: 'asc' | 'desc'
-    }>({ key: 'Id', direction: 'asc' })
     const { t } = useTranslation('common')
     const router = useRouter()
-
-    const [changeEmployee] = useChangeStatusMutation()
-
-    //const { data: contractResponse, isLoading: isContractsLoading } = useSearchEmploymentContractsQuery()
-   //// const { data: userResponse, isLoading: isUsersLoading, refetch } = useGetAllDepartmentQuery()
-
-    //const contract = (contractResponse?.Data?.Records as IEmploymentContractSearch[]) || []
-    //const employee = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
-
-    //const users = employee.map(employee => {
-    //    const matchedEmployee = contract.find(ct => ct.UserId === employee.Id)
-    //    return {
-    //        ...employee,
-    //        ContractName: matchedEmployee?.ContractName || 'N/A',
-    //        StartDate: matchedEmployee?.StartDate || 'N/A'
-    //    }
-    //})
-
-    //const [selectedUser, setSelectedUser] = useState<IDepartmentGetAll | null>(null)
-    //const [openModal, setOpenModal] = useState(false)
-
-    const handleClickDetail = (department: IDepartmentGetAll) => {
-        //setSelectedUser(department)
-        //setOpenModal(true)
-    }
-
-    //if (isContractsLoading || isUsersLoading) return <div>Loading...</div>
-    const departmentfilter = departmentDataRecord.map(department => {
-        return {
-            ...department,
-            DepartmentHeadName: department.DepartmentHeadName || 'N/A'
-        }
+    const [selected, setSelected] = useState<number[]>([])
+    const [page, setPage] = useState(1)
+    const [rowsPerPage, setRowsPerPage] = useState('10')
+    const [from, setFrom] = useState(1)
+    const [to, setTo] = useState(10)
+    const [keyword, setKeyword] = useState('')
+    const [isSubmit, setIsSubmit] = useState(false)
+    const [openDialog, setOpenDialog] = useState(false)
+    const [selectedRow, setSelectedRow] = useState<number | null>(null)
+    const [order, setOrder] = useState<'asc' | 'desc'>('asc')
+    const [orderBy, setOrderBy] = useState<string>('')
+    const [name, setName] = useState('')
+    const [benefitContribution, setBenefitContribution] = useState<number>(0)
+    const [benefitTypeId, setBenefitTypeId] = useState<number>(0)
+    const [nameOfBenefitType, setNameOfBenefitType] = useState('')
+    const [isChangeMany, setIsChangeMany] = useState(false)
+    const [filter, setFilter] = useState<IFilterSysConfiguration>({
+        pageSize: 10,
+        pageNumber: 1
     })
-    const filteredUsers = departmentfilter.filter(
-        department =>
-            department.Id?.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-            department.Name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            department.DepartmentHeadName?.toLowerCase().includes(searchTerm.toLowerCase())
-            //department.DepartmentHeadId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            //department.CountDepartment?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            //user.UserName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            //user.Roles?.some(role => role.toLowerCase().includes(searchTerm.toLowerCase())) ||
-            //(user.Birthday &&
-            //    new Date(user.Birthday).toLocaleDateString().toLowerCase().includes(searchTerm.toLowerCase())) ||
-            //user.Gender?.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-            //user.Address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            //user.ContractName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            //(user.StartDate &&
-            //    new Date(user.StartDate).toLocaleDateString().toLowerCase().includes(searchTerm.toLowerCase()))
-    )
+
+    const { data: responseData, isFetching, refetch } = useGetAllDepartmentQuery(filter)
+    const [deleteBenefit, { isSuccess: isSuccessDelete }] = useChangeStatusMutation()
+    //const [createBenefit, { isSuccess, isLoading, isError }] = useCreateBenefitMutation()
+    //const [updateBenefit] = useUpdateBenefitMutation()
+    const [isSuccess, setSuccess] = useState(false)
+    const [
+        changeManyBenefit,
+        { isError: isErrorChangeMany, isSuccess: isSuccessChangeMany, isLoading: isLoadingChangeMany }
+    ] = useChangeStatusManyDepartmentMutation()
+
+    const departmentdata = responseData?.Data.Records as IDepartmentGetAll[]
+    const totalRecords = responseData?.Data.TotalRecords as number
 
     const isSelected = (id: number) => selected.includes(id)
 
@@ -84,75 +84,124 @@ function DepartmentTable() {
         setSelected(prev => (prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]))
     }
 
-    const sortedUsers = filteredUsers.sort((a, b) => {
-        const aValue = a[sortConfig.key]?.toString().toLowerCase() || ''
-        const bValue = b[sortConfig.key]?.toString().toLowerCase() || ''
-        return sortConfig.direction === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue)
-    })
-
-    const totalRecords = sortedUsers.length
-    const paginatedUsers = sortedUsers.slice((currentPage - 1) * Number(rowsPerPage), currentPage * Number(rowsPerPage))
-
-    const handleSort = (key: keyof IDepartmentGetAll | 'Id') => {
-        setSortConfig(prev => ({
-            key,
-            direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc'
-        }))
-    }
-
-    const handleChangePage = (_event: React.ChangeEvent<unknown>, page: number) => setCurrentPage(page)
-
-    const handleChangeRowsPerPage = (event: SelectChangeEvent<string>) => {
-        setRowsPerPage(event.target.value)
-        setCurrentPage(1)
-    }
-
-    const handleDeleteManyClick = async () => {
-        setIsChangeMany(true)
-        setOpenDialog(true)
-    }
+    useEffect(() => {
+        if (isSuccess) {
+            refetch()
+        }
+    }, [isSuccess])
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
-            setSelected(departmentfilter.map(row => row.Id))
+            setSelected(departmentdata.map(row => row.Id))
         } else {
             setSelected([])
         }
     }
 
-    const from = (currentPage - 1) * Number(rowsPerPage) + 1
-    const to = Math.min(currentPage * Number(rowsPerPage), totalRecords)
+    const handleChangePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
+        setPage(newPage)
+        setFilter(prev => {
+            return {
+                ...prev,
+                pageNumber: newPage
+            }
+        })
+    }
 
-    const countRows = selected.length
+    const handleChangeRowsPerPage = (event: SelectChangeEvent) => {
+        const newRowsPerPage = event.target.value as string
+        setRowsPerPage(newRowsPerPage)
+        setPage(1)
+        setFilter(prev => ({
+            ...prev,
+            pageSize: Number(newRowsPerPage),
+            pageNumber: 1
+        }))
+    }
+
+    const handleSearchKeyword = () => {
+        setPage(1)
+        setFilter(prev => {
+            return {
+                ...prev,
+                keyword: keyword,
+                pageNumber: 1
+            }
+        })
+    }
+
+    useEffect(() => {
+        if (!isFetching && responseData?.Data) {
+            const from = (page - 1) * Number(rowsPerPage) + 1
+            setFrom(from)
+
+            const to = Math.min(page * Number(rowsPerPage), totalRecords)
+            setTo(to)
+        }
+    }, [isFetching, responseData, page, rowsPerPage])
+
+    useEffect(() => {
+        refetch()
+    }, [page, rowsPerPage, keyword])
 
     const handleDeleteClick = async (id: number) => {
         setOpenDialog(true)
         setSelectedRow(id)
     }
 
-    const handleDeleteEmployee = async () => {
+    const handleChangeManyClick = async () => {
+        setIsChangeMany(true)
+        setOpenDialog(true)
+    }
+
+    const handleChangeStatusManyBenefit = async () => {
+        if (selected.length > 0) {
+            await changeManyBenefit(selected)
+            setIsChangeMany(false)
+            setSelected([])
+            setOpenDialog(false)
+        }
+    }
+
+    const handleConfirmChangeMany = async () => {
+        await handleChangeStatusManyBenefit()
+        refetch()
+    }
+
+    const handleDeleteBenefit = async () => {
         if (selectedRow) {
-            await changeEmployee(selectedRow)
+            await deleteBenefit(selectedRow)
             if (isSelected(selectedRow)) {
                 setSelected(prev => prev.filter(item => item !== selectedRow))
             }
             setOpenDialog(false)
             setSelectedRow(null)
-            refetch()
         }
     }
 
-    const handleDeleteManyEmployee = async () => {
-        if (selected.length > 0) {
-            for (const id of selected) {
-                await changeEmployee(id)
-            }
-            setIsChangeMany(false)
-            setSelected([])
-            setOpenDialog(false)
+    useEffect(() => {
+        if (isSuccessDelete) {
             refetch()
         }
+    }, [isSuccessDelete])
+
+    const [isOpen, setIsOpen] = useState(false)
+
+    const handleSort = (property: string) => {
+        setFilter(prev => ({
+            ...prev,
+            sortBy: property,
+            isDescending: orderBy === property && order === 'asc' ? true : false
+        }))
+        if (orderBy === property) {
+            setOrder(order === 'asc' ? 'desc' : 'asc')
+        } else {
+            setOrder('asc')
+        }
+        setOrderBy(property)
     }
+
+    const countRows = selected.length
 
     return (
         <Box>
@@ -160,69 +209,68 @@ function DepartmentTable() {
                 sx={{
                     width: '100%',
                     overflow: 'hidden',
-                    borderRadius: '15px',
-                    backgroundColor: 'var(--background-item)'
+                    borderRadius: '6px',
+                    backgroundColor: 'var(--background-color)'
                 }}
             >
-                <Box display='flex' alignItems='center' justifyContent='space-between' margin='24px'>
-                    <Box sx={{ position: 'relative', width: '100%', height: '55px' }}>
+                <Box display='flex' alignItems='center' justifyContent='space-between' margin='20px'>
+                    <Box sx={{ position: 'relative', width: '100%' }}>
                         <TextField
                             fullWidth
-                            variant='outlined'
+                            id='location-search'
+                            type='search'
                             placeholder={t('COMMON.SYS_CONFIGURATION.PLACEHOLDER_SEARCH')}
-                            value={searchTerm}
+                            variant='outlined'
+                            value={keyword}
+                            onChange={e => setKeyword(e.target.value)}
                             sx={{
                                 color: 'var(--text-color)',
                                 padding: '0px',
                                 width: '335px',
                                 '& fieldset': {
-                                    borderRadius: '10px',
+                                    borderRadius: '8px',
                                     borderColor: 'var(--border-color)'
                                 },
-                                '& .MuiInputBase-root': { paddingLeft: '0px', paddingRight: '12px' },
+                                '& .MuiInputBase-root': { paddingRight: '0px' },
                                 '& .MuiInputBase-input': {
-                                    padding: '15px 0px',
+                                    padding: '11px 0 11px 14px',
                                     color: 'var(--text-color)',
-                                    fontSize: '16px',
-                                    '&::placeholder': {
-                                        color: 'var(--placeholder-color)',
-                                        opacity: 1 // Đảm bảo opacity của placeholder không bị giảm
-                                    }
+                                    fontSize: '16px'
                                 },
                                 '& .MuiOutlinedInput-root:hover fieldset': {
-                                    borderColor: 'var(--hover-field-color)'
+                                    borderColor: 'var(--hover-color)'
                                 },
                                 '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                    borderColor: 'var(--selected-field-color)'
+                                    borderColor: 'var(--selected-color)'
                                 }
                             }}
-                            onChange={e => setSearchTerm(e.target.value)}
-                            slotProps={{
-                                input: {
-                                    startAdornment: (
-                                        <InputAdornment
-                                            position='start'
+                            onKeyDown={e => {
+                                if (e.key === 'Enter') {
+                                    e.preventDefault()
+                                    handleSearchKeyword()
+                                }
+                            }}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position='end'>
+                                        <IconButton
+                                            onClick={handleSearchKeyword}
                                             sx={{
-                                                mr: 0
+                                                backgroundColor: 'var(--button-color)',
+                                                borderRadius: '0 8px 8px 0',
+                                                padding: '10.5px',
+                                                '&:hover': {
+                                                    backgroundColor: 'var(--hover-button-color)'
+                                                }
                                             }}
                                         >
-                                            <Box
-                                                sx={{
-                                                    height: '100%',
-                                                    color: '#a5bed4',
-                                                    padding: '10.5px',
-                                                    zIndex: 100
-                                                }}
-                                            >
-                                                <SearchIcon />
-                                            </Box>
-                                        </InputAdornment>
-                                    )
-                                }
+                                            <SearchIcon sx={{ color: 'white' }} />
+                                        </IconButton>
+                                    </InputAdornment>
+                                )
                             }}
                         />
                     </Box>
-
                     <Box display='flex' alignItems='center' justifyContent='center' gap='20px'>
                         <Typography
                             sx={{
@@ -237,12 +285,11 @@ function DepartmentTable() {
                             variant='contained'
                             startIcon={<Trash2 />}
                             sx={{
-                                mr: '5px',
-                                height: '53px',
+                                height: '44px',
                                 visibility: countRows > 0 ? 'visible' : 'hidden',
                                 backgroundColor: 'var(--button-color)',
                                 width: 'auto',
-                                padding: '0px 30px',
+                                padding: '0px 24px',
                                 '&:hover': {
                                     backgroundColor: 'var(--hover-button-color)'
                                 },
@@ -251,7 +298,8 @@ function DepartmentTable() {
                                 whiteSpace: 'nowrap',
                                 textTransform: 'none'
                             }}
-                            onClick={() => handleDeleteManyClick()}
+                            onClick={() => handleChangeManyClick()}
+                            //onClick={() => handleDeleteBenefit()}
                         >
                             {t('COMMON.BUTTON.DELETE')}
                         </Button>
@@ -260,10 +308,10 @@ function DepartmentTable() {
                             variant='contained'
                             startIcon={<CirclePlus />}
                             sx={{
-                                height: '53px',
+                                height: '44px',
                                 backgroundColor: 'var(--button-color)',
                                 width: 'auto',
-                                padding: '0px 30px',
+                                padding: '0px 24px',
                                 '&:hover': {
                                     backgroundColor: 'var(--hover-button-color)'
                                 },
@@ -272,66 +320,41 @@ function DepartmentTable() {
                                 whiteSpace: 'nowrap',
                                 textTransform: 'none'
                             }}
-                            onClick={() => router.push('/admin/employee/create-employee')}
+                            onClick={() => router.push('/admin/benefit/create-benefit')}
+                            //onClick={() => handleOpenCreateDialog()}
                         >
                             {t('COMMON.BUTTON.CREATE')}
                         </Button>
                     </Box>
                 </Box>
 
-                <TableContainer
-                    sx={{
-                        textAlign: 'center',
-                        '&::-webkit-scrollbar': {
-                            width: '7px',
-                            height: '7px',
-                            backgroundColor: 'var(--background-color)'
-                        },
-                        '&::-webkit-scrollbar-thumb': {
-                            backgroundColor: 'var(--scrollbar-color)',
-                            borderRadius: '10px'
-                        }
-                    }}
-                >
+                <TableContainer>
                     <Table>
                         <TableHead>
                             <TableRow sx={{ backgroundColor: 'var(--header-color-table)' }}>
                                 <TableCell
                                     padding='checkbox'
-                                    sx={{
-                                        borderColor: 'var(--border-color)',
-                                        paddingLeft: '12px',
-                                        backgroundColor: 'var(--header-color-table)',
-                                        position: 'sticky',
-                                        left: 0,
-                                        zIndex: 2
-                                    }}
+                                    sx={{ borderColor: 'var(--border-color)', paddingLeft: '8.5px' }}
                                 >
                                     <Checkbox
-                                        indeterminate={selected.length > 0 && selected.length < departmentfilter.length}
+                                        indeterminate={selected.length > 0 && selected.length < departmentdata.length}
                                         checked={
-                                            departmentfilter && selected.length > 0 ? selected.length === departmentfilter.length : false
+                                            departmentdata && selected.length > 0
+                                                ? selected.length === departmentdata.length
+                                                : false
                                         }
                                         onChange={handleSelectAllClick}
                                         sx={{
-                                            color: 'var(--text-color)',
-                                            width: '48px'
+                                            color: 'var(--text-color)'
                                         }}
                                     />
                                 </TableCell>
-
                                 <TableCell
-                                    sx={{
-                                        borderColor: 'var(--border-color)',
-                                        backgroundColor: 'var(--header-color-table)',
-                                        position: 'sticky',
-                                        left: 60,
-                                        zIndex: 1
-                                    }}
+                                    sx={{ borderColor: 'var(--border-color)', minWidth: '49px', maxWidth: '60px' }}
                                 >
                                     <TableSortLabel
-                                        active={sortConfig.key === 'Id'}
-                                        direction={sortConfig.key === 'Id' ? sortConfig.direction : 'asc'}
+                                        active={'Id' === orderBy}
+                                        direction={orderBy === 'Id' ? order : 'asc'}
                                         onClick={() => handleSort('Id')}
                                         sx={{
                                             '& .MuiTableSortLabel-icon': {
@@ -341,12 +364,10 @@ function DepartmentTable() {
                                     >
                                         <Typography
                                             sx={{
-                                                width: '27px',
                                                 fontWeight: 'bold',
                                                 color: 'var(--text-color)',
                                                 fontSize: '16px',
                                                 overflow: 'hidden',
-                                                maxWidth: '260px',
                                                 textOverflow: 'ellipsis',
                                                 whiteSpace: 'nowrap'
                                             }}
@@ -355,20 +376,39 @@ function DepartmentTable() {
                                         </Typography>
                                     </TableSortLabel>
                                 </TableCell>
-
+                                <TableCell>
+                                    <TableSortLabel
+                                        active={orderBy === 'Name'}
+                                        direction={orderBy === 'Name' ? order : 'asc'}
+                                        onClick={() => handleSort('Name')}
+                                        sx={{
+                                            '& .MuiTableSortLabel-icon': {
+                                                color: 'var(--text-color) !important'
+                                            },
+                                            width: '200px'
+                                        }}
+                                    >
+                                        <Typography
+                                            sx={{
+                                                fontWeight: 'bold',
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            {t('Name')} {/* Cập nhật khóa dịch này */}
+                                        </Typography>
+                                    </TableSortLabel>
+                                </TableCell>
                                 <TableCell
-                                    sx={{
-                                        borderColor: 'var(--border-color)',
-                                        backgroundColor: 'var(--header-color-table)',
-                                        position: 'sticky',
-                                        left: 145,
-                                        zIndex: 1
-                                    }}
+                                    sx={{ borderColor: 'var(--border-color)', minWidth: '49px', maxWidth: '60px' }}
                                 >
                                     <TableSortLabel
-                                        active={sortConfig.key === 'Name'}
-                                        direction={sortConfig.key === 'Name' ? sortConfig.direction : 'asc'}
-                                        onClick={() => handleSort('Name' as keyof IDepartmentGetAll)}
+                                        active={orderBy === 'DepartmentHeadName'}
+                                        direction={orderBy === 'DepartmentHeadName' ? order : 'asc'}
+                                        onClick={() => handleSort('DepartmentHeadName')}
                                         sx={{
                                             '& .MuiTableSortLabel-icon': {
                                                 color: 'var(--text-color) !important'
@@ -381,60 +421,67 @@ function DepartmentTable() {
                                                 color: 'var(--text-color)',
                                                 fontSize: '16px',
                                                 overflow: 'hidden',
-                                                maxWidth: '260px',
                                                 textOverflow: 'ellipsis',
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {t('Tên phòng ban')}
+                                            {t('DepartmentHeadName')}
                                         </Typography>
                                     </TableSortLabel>
                                 </TableCell>
 
-                                {[
-                                    'quanly',
-                                    'ngaytao',
-                                    
-                                ].map((column, index) => (
-                                    <TableCell key={index} sx={{ borderColor: 'var(--border-color)' }}>
-                                        <TableSortLabel
-                                            active={sortConfig.key === column}
-                                            direction={sortConfig.key === column ? sortConfig.direction : 'asc'}
-                                            onClick={() => handleSort(column as keyof IDepartmentGetAll)}
+                                <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                    <TableSortLabel
+                                        active={'CreatedDate' === orderBy}
+                                        direction={orderBy === 'CreatedDate' ? order : 'asc'}
+                                        onClick={() => handleSort('CreatedDate')}
+                                        sx={{
+                                            '& .MuiTableSortLabel-icon': {
+                                                color: 'var(--text-color) !important'
+                                            }
+                                        }}
+                                    >
+                                        <Typography
                                             sx={{
-                                                '& .MuiTableSortLabel-icon': {
-                                                    color: 'var(--text-color) !important'
-                                                }
+                                                fontWeight: 'bold',
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            <Typography
-                                                sx={{
-                                                    fontWeight: 'bold',
-                                                    color: 'var(--text-color)',
-                                                    fontSize: '16px',
-                                                    overflow: 'hidden',
-                                                    maxWidth: '260px',
-                                                    textOverflow: 'ellipsis',
-                                                    whiteSpace: 'nowrap'
-                                                }}
-                                            >
-                                                {t(`COMMON.EMPLOYEE.${column.toUpperCase()}`)}
-                                            </Typography>
-                                        </TableSortLabel>
-                                    </TableCell>
-                                ))}
-
-                                <TableCell
-                                    sx={{
-                                        borderColor: 'var(--border-color)',
-                                        padding: '0px 9.5px 0px 0px',
-                                        width: '146px',
-                                        position: 'sticky',
-                                        right: -0.45,
-                                        zIndex: 1,
-                                        backgroundColor: 'var(--header-color-table)'
-                                    }}
-                                >
+                                            {t('COMMON.SYS_CONFIGURATION.CREATED_DATE')}
+                                        </Typography>
+                                    </TableSortLabel>
+                                </TableCell>
+                                <TableCell>
+                                    <TableSortLabel
+                                        active={orderBy === 'CreatedBy'}
+                                        direction={orderBy === 'CreatedBy' ? order : 'asc'}
+                                        onClick={() => handleSort('CreatedBy')}
+                                        sx={{
+                                            '& .MuiTableSortLabel-icon': {
+                                                color: 'var(--text-color) !important'
+                                            },
+                                            width: '150px'
+                                        }}
+                                    >
+                                        <Typography
+                                            sx={{
+                                                fontWeight: 'bold',
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            {t('Người tạo')}
+                                        </Typography>
+                                    </TableSortLabel>
+                                </TableCell>
+                                <TableCell>
                                     <Typography
                                         sx={{
                                             fontWeight: 'bold',
@@ -443,138 +490,48 @@ function DepartmentTable() {
                                             overflow: 'hidden',
                                             textAlign: 'center',
                                             textOverflow: 'ellipsis',
-                                            whiteSpace: 'nowrap'
+                                            whiteSpace: 'nowrap',
+                                            width: '150px'
                                         }}
                                     >
-                                        {t('COMMON.SYS_CONFIGURATION.ACTION')}
+                                        {t('COMMON.BENEFIT.ACTION')}
                                     </Typography>
                                 </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {paginatedUsers.map(department => (
-                                <TableRow key={department.Id} selected={isSelected(department.Id)}>
-                                    <TableCell
-                                        padding='checkbox'
-                                        sx={{
-                                            borderColor: 'var(--border-color)',
-                                            paddingLeft: '12px',
-                                            position: 'sticky',
-                                            left: 0,
-                                            zIndex: 1,
-                                            clipPath: 'inset(0px 0px 1px 0px)',
-                                            backdropFilter: 'blur(250px)',
-                                            WebkitBackdropFilter: 'blur(250px)'
-                                        }}
-                                    >
+                            {departmentdata?.map(row => (
+                                <TableRow key={row.Id} selected={isSelected(row.Id)}>
+                                    <TableCell padding='checkbox'>
                                         <Checkbox
-                                            checked={isSelected(department.Id)}
-                                            onChange={() => handleCheckboxClick(department.Id)}
-                                            sx={{
-                                                color: 'var(--text-color)',
-                                                width: '48px'
-                                            }}
+                                            checked={isSelected(row.Id)}
+                                            onChange={() => handleCheckboxClick(row.Id)}
                                         />
                                     </TableCell>
-
-                                    <TableCell
-                                        sx={{
-                                            borderColor: 'var(--border-color)',
-                                            position: 'sticky',
-                                            left: 60,
-                                            zIndex: 1,
-                                            clipPath: 'inset(0px 0px 1px 0px)',
-                                            backdropFilter: 'blur(3000px)',
-                                            WebkitBackdropFilter: 'blur(3000px)'
-                                        }}
-                                    >
-                                        <Typography
-                                            sx={{
-                                                color: 'var(--text-color)',
-                                                fontSize: '16px',
-                                                maxWidth: '260px',
-                                                overflow: 'hidden',
-                                                textOverflow: 'ellipsis',
-                                                whiteSpace: 'nowrap'
-                                            }}
-                                        >
-                                            {department.Id}
-                                        </Typography>
-                                    </TableCell>
-
-                                    <TableCell
-                                        sx={{
-                                            borderColor: 'var(--border-color)',
-                                            position: 'sticky',
-                                            left: 145,
-                                            zIndex: 1,
-                                            clipPath: 'inset(0px 0px 1px 0px)',
-                                            backdropFilter: 'blur(3000px)',
-                                            WebkitBackdropFilter: 'blur(3000px)'
-                                        }}
-                                    >
-                                        <Typography
-                                            sx={{
-                                                color: 'var(--text-color)',
-                                                fontSize: '16px',
-                                                maxWidth: '260px',
-                                                overflow: 'hidden',
-                                                whiteSpace: 'nowrap',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                textOverflow: 'ellipsis'
-                                            }}
-                                            component='div'
-                                        >
-                                            {department.Name || 'N/A'}
-                                        </Typography>
-                                    </TableCell>
+                                    <TableCell sx={{ fontWeight: 'bold' }}>{row.Id}</TableCell>
+                                    <TableCell sx={{ width: '200px' }}>{row.Name}</TableCell>
+                                    <TableCell>{row.DepartmentHeadName}</TableCell>
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                         <Typography
                                             sx={{
                                                 color: 'var(--text-color)',
                                                 fontSize: '16px',
-                                                maxWidth: '260px',
                                                 overflow: 'hidden',
                                                 textOverflow: 'ellipsis',
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {department.DepartmentHeadName || 'N/A'}
+                                            {formatDate(row.CreatedDate)}
                                         </Typography>
                                     </TableCell>
-                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
-                                        <Typography
-                                            sx={{
-                                                color: 'var(--text-color)',
-                                                fontSize: '16px',
-                                                maxWidth: '260px',
-                                                overflow: 'hidden',
-                                                textOverflow: 'ellipsis',
-                                                whiteSpace: 'nowrap'
-                                            }}
-                                        >
-                                            {department.CreateDate || 'N/A'}
-                                        </Typography>
-                                    </TableCell>
-                                    <TableCell
-                                        sx={{
-                                            padding: '0px 9.5px 0px 0px',
-                                            borderColor: 'var(--border-color)',
-                                            width: '146px',
-                                            position: 'sticky',
-                                            right: -0.45,
-                                            zIndex: 1,
-                                            clipPath: 'inset(0px 0px 1px 0px)',
-                                            backdropFilter: 'blur(3000px)',
-                                            WebkitBackdropFilter: 'blur(3000px)'
-                                        }}
-                                    >
+                                    <TableCell sx={{ width: '100px' }}>{row.CreatedBy}</TableCell>
+                                    <TableCell>
                                         <Box
                                             display='flex'
                                             alignItems='center'
                                             justifyContent='space-between'
                                             gap='10px'
+                                            width={'150px'}
                                         >
                                             <Tooltip title={t('COMMON.BUTTON.VIEW_DETAIL')}>
                                                 <Box
@@ -591,7 +548,6 @@ function DepartmentTable() {
                                                             backgroundColor: 'var(--hover-color)'
                                                         }
                                                     }}
-                                                    onClick={() => handleClickDetail(department)}
                                                 >
                                                     <EyeIcon />
                                                 </Box>
@@ -611,9 +567,7 @@ function DepartmentTable() {
                                                             backgroundColor: 'var(--hover-color)'
                                                         }
                                                     }}
-                                                    onClick={() =>
-                                                        router.push(`/admin/department/update-department?id=${department.Id}`)
-                                                    }
+                                                    //onClick={() => handleUpdate(row)}
                                                 >
                                                     <Pencil />
                                                 </Box>
@@ -633,7 +587,7 @@ function DepartmentTable() {
                                                             backgroundColor: 'var(--hover-color)'
                                                         }
                                                     }}
-                                                    onClick={() => handleDeleteClick(department.Id)}
+                                                    onClick={() => handleDeleteClick(row.Id)}
                                                 >
                                                     <Trash2 />
                                                 </Box>
@@ -648,10 +602,7 @@ function DepartmentTable() {
 
                 <Box display='flex' alignItems='center' justifyContent='space-between' padding='15px'>
                     <Box display='flex' alignItems='center'>
-                        <Typography sx={{ mr: '10px', color: 'var(--text-color)' }}>
-                            {' '}
-                            {t('COMMON.PAGINATION.ROWS_PER_PAGE')}
-                        </Typography>
+                        <Typography sx={{ mr: '10px' }}>{t('COMMON.PAGINATION.ROWS_PER_PAGE')}</Typography>
                         <Select
                             id='select'
                             sx={{
@@ -675,7 +626,7 @@ function DepartmentTable() {
                                 }
                             }}
                             value={rowsPerPage}
-                            defaultValue='10'
+                            defaultValue='5'
                             onChange={handleChangeRowsPerPage}
                             MenuProps={{
                                 PaperProps: {
@@ -700,27 +651,19 @@ function DepartmentTable() {
                                 }
                             }}
                         >
-                            <MenuItem sx={{ marginBottom: '3px' }} value={5}>
-                                5
-                            </MenuItem>
-                            <MenuItem sx={{ marginBottom: '3px' }} value={10}>
-                                10
-                            </MenuItem>
-                            <MenuItem sx={{ marginBottom: '3px' }} value={20}>
-                                20
-                            </MenuItem>
-                            <MenuItem sx={{ marginBottom: '3px' }} value={30}>
-                                30
-                            </MenuItem>
-                            <MenuItem value={40}>40</MenuItem>
+                            {[1, 2, 3, 4, 5, 10, 20, 30, 40].map(value => (
+                                <MenuItem key={value} value={value}>
+                                    {value}
+                                </MenuItem>
+                            ))}
                         </Select>
-                        <Typography sx={{ ml: '30px', color: 'var(--text-color)' }}>
+                        <Typography sx={{ ml: '30px' }}>
                             {t('COMMON.PAGINATION.FROM_TO', { from, to, totalRecords })}
                         </Typography>
                     </Box>
                     <Pagination
                         count={Math.ceil(totalRecords / Number(rowsPerPage))}
-                        page={currentPage}
+                        page={page}
                         onChange={handleChangePage}
                         boundaryCount={1}
                         siblingCount={2}
@@ -754,14 +697,10 @@ function DepartmentTable() {
                 setOpen={setOpenDialog}
                 buttonCancel={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.CANCEL')}
                 buttonConfirm={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.DELETE')}
-                onConfirm={() => (isChangeMany ? handleDeleteManyEmployee() : handleDeleteEmployee())}
+                onConfirm={() => (isChangeMany ? handleConfirmChangeMany() : handleDeleteBenefit())}
             />
-
-            
         </Box>
     )
 }
 
-
 export default DepartmentTable
-

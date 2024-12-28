@@ -800,7 +800,7 @@ const MyCalendar = () => {
 
                     <FormControlLabel
                         sx={{
-                            mt: 'px',
+                            mt: '0px',
                             ml: '-8px',
                             mb: '20px',
                             '& .MuiFormControlLabel-label': {

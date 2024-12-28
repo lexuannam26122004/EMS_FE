@@ -5,6 +5,11 @@ export interface ITimekeeping {
     CheckInTime: string // Sử dụng string để đại diện cho TimeSpan
     CheckOutTime: string // Sử dụng string để đại diện cho TimeSpan
     CheckInIP: string
+    Note: string
+    Agent: string
+    IsValid: boolean
+    Overtime: string
+    WorkingHours: string
 }
 
 export interface ITimekeepingCreate {
@@ -26,4 +31,16 @@ export interface ITimekeepingGetById extends ITimekeepingUpdate {
 export interface IFilterTimekeeping {
     Month: number
     Year: number
+}
+
+export interface IFilterAttendance {
+    isHoliday?: boolean
+    pageSize?: number
+    pageNumber?: number
+    sortBy?: string
+    isDescending?: boolean
+    departmentId?: number
+    startDate?: string
+    endDate?: string
+    keyword?: string
 }

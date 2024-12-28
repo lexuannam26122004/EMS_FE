@@ -14,11 +14,9 @@ export default function Chart() {
         setSelectedYear(event.target.value as number)
     }
 
+    const percent = 43
+
     const option = {
-        textStyle: {
-            color: theme === 'light' ? '#000000' : '#ffffff',
-            fontFamily: 'Arial, sans-serif'
-        },
         animation: true, // Bật hiệu ứng chuyển tiếp
         animationDuration: 700, // Thời gian chuyển tiếp (ms)
         tooltip: {
@@ -26,138 +24,84 @@ export default function Chart() {
             backgroundColor: theme === 'light' ? 'rgba(250, 250, 250, 0.98)' : 'rgba(20, 26, 25, 0.98)',
             borderColor: theme === 'light' ? 'rgba(250, 250, 250, 0.98)' : 'rgba(20, 26, 25, 0.98)',
             textStyle: {
-                color: theme === 'light' ? '#000000' : '#ffffff'
-            }
-        },
-        legend: {
-            data: [t('Nhân viên mới'), t('Nhân viên nghỉ việc'), t('Nhân viên trong công ty')],
-            textStyle: {
                 color: theme === 'light' ? '#000000' : '#ffffff',
                 fontFamily: 'Arial, sans-serif'
-            },
-            itemGap: 30
-        },
-        toolbox: {
-            show: true,
-            feature: {
-                magicType: { show: true, type: ['line', 'bar'] },
-                saveAsImage: { show: true }
             }
         },
-        grid: {
-            left: '2%',
-            right: '5.5%',
-            bottom: '3%',
-            containLabel: true
+        dataset: {
+            source: [
+                ['department', t('COMMON.ATTENDANCE.JOIN'), t('COMMON.ATTENDANCE.STATUS_ABSENT')], // Cột đầu tiên là danh mục, sau đó là các giá trị
+                ['Matcha Latte', 12, 3],
+                ['Milk Tea', 24, 5],
+                ['Cheese Cocoa', 17, 8],
+                ['Cheese Brownie', 44, 2],
+                ['Matcha Cocoa', 98, 4],
+                ['Tea', 46, 9],
+                ['Orange Juice', 34, 6],
+                ['Lemon Juice', 23, 7],
+                ['Walnut Brownie', 3, 1]
+            ]
         },
         calculable: true,
-        xAxis: [
-            {
-                type: 'category',
-                boundaryGap: true, // Để cột không chạm vào nhau
-                axisLine: {
-                    lineStyle: {
-                        color: theme === 'dark' ? '#919EAB' : '#637381'
-                    }
-                },
-                splitLine: {
-                    lineStyle: {
-                        type: 'dashed',
-                        color: theme === 'light' ? '#e9ecee' : '#333d47'
-                    }
-                },
-                // prettier-ignore
-                data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        grid: {
+            top: '2%',
+            left: '0%',
+            right: '10%',
+            bottom: '4%',
+            containLabel: true
+        },
+        xAxis: {
+            name: 'Số lượng',
+            type: 'value',
+            axisLine: {
+                lineStyle: {
+                    color: theme === 'dark' ? '#919EAB' : '#637381'
+                }
+            },
+            splitLine: {
+                lineStyle: {
+                    type: 'dashed',
+                    color: theme === 'light' ? '#e9ecee' : '#333d47'
+                }
             }
-        ],
-        yAxis: [
-            {
-                axisLine: {
-                    lineStyle: {
-                        color: theme === 'dark' ? '#919EAB' : '#637381'
-                    }
-                },
-                splitLine: {
-                    lineStyle: {
-                        type: 'dashed',
-                        color: theme === 'light' ? '#e9ecee' : '#333d47'
-                    }
-                },
-                type: 'value'
+        },
+        yAxis: {
+            type: 'category',
+            axisLine: {
+                show: false // Ẩn đường trục y
+            },
+            axisTick: {
+                show: false // Ẩn đánh dấu trục y
+            },
+            axisLabel: {
+                fontSize: '13px',
+                fontFamily: 'Arial, sans-serif'
+            },
+            splitLine: {
+                show: false // Ẩn đường chia lưới
             }
-        ],
+        },
         series: [
             {
-                name: t('Nhân viên mới'),
                 type: 'bar',
-                data: [76, 75, 19, 48, 78, 31, 51, 78, 20, 6, 30, 70],
-                markPoint: {
-                    data: [
-                        { type: 'max', name: 'Max' },
-                        { type: 'min', name: 'Min' }
-                    ]
+                name: t('COMMON.ATTENDANCE.JOIN'),
+                encode: {
+                    x: t('COMMON.ATTENDANCE.JOIN'), // Giá trị cột "tham gia"
+                    y: 'product' // Danh mục
                 },
-                barWidth: '22%', // Điều chỉnh độ rộng của cột
                 itemStyle: {
-                    color: '#0BF4A6',
-                    borderRadius: [6, 6, 0, 0] // Bo tròn đỉnh cột
-                },
-                markLine: {
-                    data: [{ type: 'average', name: 'Avg' }],
-                    label: {
-                        color: theme === 'light' ? '#000000' : '#ffffff',
-                        fontSize: 11,
-                        fontWeight: 'bold'
-                    }
+                    color: theme === 'dark' ? '#007867' : '#007867'
                 }
             },
             {
-                name: t('Nhân viên nghỉ việc'),
                 type: 'bar',
-                data: [49, 31, 53, 88, 16, 74, 85, 73, 68, 93, 62, 89],
-                barWidth: '22%', // Điều chỉnh độ rộng của cột
+                name: t('COMMON.ATTENDANCE.STATUS_ABSENT'),
+                encode: {
+                    x: t('COMMON.ATTENDANCE.STATUS_ABSENT'), // Giá trị cột "vắng mặt"
+                    y: 'product' // Danh mục
+                },
                 itemStyle: {
-                    color: '#FF6F91',
-                    borderRadius: [6, 6, 0, 0] // Bo tròn đỉnh cột
-                },
-                markPoint: {
-                    data: [
-                        { type: 'max', name: 'Max' },
-                        { type: 'min', name: 'Min' }
-                    ]
-                },
-                markLine: {
-                    data: [{ type: 'average', name: 'Avg' }],
-                    label: {
-                        color: theme === 'light' ? '#000000' : '#ffffff',
-                        fontSize: 11,
-                        fontWeight: 'bold'
-                    }
-                }
-            },
-
-            {
-                name: t('Nhân viên trong công ty'),
-                type: 'bar',
-                data: [50, 80, 60, 100, 70, 110, 90, 130, 110, 140, 120, 160],
-                markPoint: {
-                    data: [
-                        { type: 'max', name: 'Max' },
-                        { type: 'min', name: 'Min' }
-                    ]
-                },
-                barWidth: '22%', // Điều chỉnh độ rộng của cột
-                itemStyle: {
-                    color: '#FFC8A0',
-                    borderRadius: [6, 6, 0, 0] // Bo tròn đỉnh cột
-                },
-                markLine: {
-                    data: [{ type: 'average', name: 'Avg' }],
-                    label: {
-                        color: theme === 'light' ? '#000000' : '#ffffff',
-                        fontSize: 11,
-                        fontWeight: 'bold'
-                    }
+                    color: theme === 'dark' ? '#15393c' : '#c2dfdb'
                 }
             }
         ]
@@ -165,13 +109,11 @@ export default function Chart() {
 
     return (
         <Paper
-            elevation={0}
             sx={{
                 width: '100%',
-                mt: '24px',
                 padding: '24px 24px 15px',
                 overflow: 'hidden',
-                borderRadius: '20px',
+                borderRadius: '15px',
                 backgroundColor: 'var(--background-item)'
             }}
         >
@@ -190,7 +132,21 @@ export default function Chart() {
                             color: 'var(--text-color)'
                         }}
                     >
-                        {t('Biểu đồ thống kê nhân viên')}
+                        {t('COMMON.STAT_NOTIFY.CHART_TYPE')}
+                    </Typography>
+                    <Typography
+                        sx={{
+                            fontSize: '14px',
+                            mt: '4px',
+                            color: theme === 'dark' ? '#919EAB' : '#637381'
+                        }}
+                    >
+                        {t('COMMON.STAT_NOTIFY.CHART_TYPE_RATE', {
+                            status:
+                                percent >= 0 ? t('COMMON.STAT_NOTIFY.INCREASED') : t('COMMON.STAT_NOTIFY.DECREASED'),
+                            x: percent,
+                            year: selectedYear - 1
+                        })}
                     </Typography>
                 </Box>
                 <FormControl sx={{ width: '90px' }}>

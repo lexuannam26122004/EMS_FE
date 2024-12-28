@@ -914,7 +914,7 @@ const EmployeeTable: React.FC = () => {
                     handleToggle={() => setOpenModal(false)}
                     open={openModal}
                     aspnetuser={selectedUser}
-                    randomIndex={Math.floor(Math.random() * 10) + 1}
+                    randomIndex={Math.floor(Math.random() * 20) + 1}
                 />
             )}
         </Box>

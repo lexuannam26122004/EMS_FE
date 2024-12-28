@@ -28,7 +28,13 @@ const App: React.FC = () => {
                     }}
                 >
                     <DisplayInfo />
-                    <ChartEmployee />
+                    <Box
+                        sx={{
+                            marginTop: '-24px'
+                        }}
+                    >
+                        <ChartEmployee />
+                    </Box>
                 </Box>
 
                 {/* Cột bên phải */}

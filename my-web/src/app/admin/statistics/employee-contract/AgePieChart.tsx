@@ -3,11 +3,22 @@ import React from 'react'
 import ReactECharts from 'echarts-for-react'
 import { Box, Paper, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import { useTheme } from 'next-themes'
 const AgePieChart: React.FC = () => {
     const { t } = useTranslation('common')
+    const { theme } = useTheme()
+    
     const option = {
+        textStyle: {
+            color: theme === 'light' ? '#000000' : '#ffffff',
+            fontFamily: 'Arial, sans-serif'
+        },
         legend: {
-            top: 'bottom'
+            top: 'bottom',
+            textStyle: {
+                color: theme === 'light' ? '#000000' : '#ffffff',
+                fontFamily: 'Arial, sans-serif'
+            },
         },
         tooltip: {
             trigger: 'item',
@@ -65,7 +76,7 @@ const AgePieChart: React.FC = () => {
                     {t('COMMON.DASHBOARD.AGE_OF_EMPLOYEE')}
                 </Typography>
             </Box>
-            <ReactECharts option={option} style={{ height: '400px', width: '100%'}} />
+            <ReactECharts option={option} style={{ height: '400px', width: '100%' }} />
         </Paper>
     )
 }
