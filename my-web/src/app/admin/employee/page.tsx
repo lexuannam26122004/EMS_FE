@@ -26,8 +26,6 @@ import {
 } from '@mui/material'
 import { IAspNetUserGetAll } from '@/models/AspNetUser'
 import { useGetAllUsersQuery, useChangeStatusUsersMutation } from '@/services/AspNetUserService'
-import { IEmploymentContractSearch } from '@/models/EmploymentContract'
-import { useSearchEmploymentContractsQuery } from '@/services/EmploymentContractService'
 
 import { CirclePlus, EyeIcon, Pencil, Trash2 } from 'lucide-react'
 import SearchIcon from '@mui/icons-material/Search'
@@ -52,20 +50,9 @@ const EmployeeTable: React.FC = () => {
 
     const [changeEmployee] = useChangeStatusUsersMutation()
 
-    const { data: contractResponse, isLoading: isContractsLoading } = useSearchEmploymentContractsQuery()
     const { data: userResponse, isLoading: isUsersLoading, refetch } = useGetAllUsersQuery()
 
-    const contract = (contractResponse?.Data?.Records as IEmploymentContractSearch[]) || []
-    const employee = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
-
-    const users = employee.map(employee => {
-        const matchedEmployee = contract.find(ct => ct.UserId === employee.Id)
-        return {
-            ...employee,
-            ContractName: matchedEmployee?.ContractName || 'N/A',
-            StartDate: matchedEmployee?.StartDate || 'N/A'
-        }
-    })
+    const users = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
 
     const [selectedUser, setSelectedUser] = useState<IAspNetUserGetAll | null>(null)
     const [openModal, setOpenModal] = useState(false)
@@ -75,7 +62,7 @@ const EmployeeTable: React.FC = () => {
         setOpenModal(true)
     }
 
-    if (isContractsLoading || isUsersLoading) return <div>Loading...</div>
+    if (isUsersLoading) return <div>Loading...</div>
 
     const filteredUsers = users.filter(
         user =>
@@ -90,9 +77,8 @@ const EmployeeTable: React.FC = () => {
                 new Date(user.Birthday).toLocaleDateString().toLowerCase().includes(searchTerm.toLowerCase())) ||
             user.Gender?.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.Address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.ContractName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            (user.StartDate &&
-                new Date(user.StartDate).toLocaleDateString().toLowerCase().includes(searchTerm.toLowerCase()))
+            (user.StartDateWork &&
+                new Date(user.StartDateWork).toLocaleDateString().toLowerCase().includes(searchTerm.toLowerCase()))
     )
 
     const isSelected = (id: string) => selected.includes(id)
@@ -417,8 +403,7 @@ const EmployeeTable: React.FC = () => {
                                     'Birthday',
                                     'Gender',
                                     'Address',
-                                    'ContractName',
-                                    'StartDate'
+                                    'StartDateWork'
                                 ].map((column, index) => (
                                     <TableCell key={index} sx={{ borderColor: 'var(--border-color)' }}>
                                         <TableSortLabel
@@ -690,22 +675,8 @@ const EmployeeTable: React.FC = () => {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {user.ContractName || 'N/A'}
-                                        </Typography>
-                                    </TableCell>
-                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
-                                        <Typography
-                                            sx={{
-                                                color: 'var(--text-color)',
-                                                fontSize: '16px',
-                                                maxWidth: '260px',
-                                                overflow: 'hidden',
-                                                textOverflow: 'ellipsis',
-                                                whiteSpace: 'nowrap'
-                                            }}
-                                        >
-                                            {user.StartDate && !isNaN(new Date(user.StartDate).getTime())
-                                                ? new Date(user.StartDate).toLocaleDateString()
+                                            {user.StartDateWork && !isNaN(new Date(user.StartDateWork).getTime())
+                                                ? new Date(user.StartDateWork).toLocaleDateString()
                                                 : 'N/A'}
                                         </Typography>
                                     </TableCell>

@@ -455,6 +455,7 @@
             "ADDRESS": "Address",
             "CONTRACTNAME": "Contract Name",
             "STARTDATE": "Start Date",
+            "STARTDATEWORK":"Start Date Work",
             "CREATE": {
                 "CREATE_EMPLOYEE": "Add new employee",
                 "SUCCESS": {

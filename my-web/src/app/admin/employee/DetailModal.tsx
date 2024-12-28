@@ -1,19 +1,6 @@
 'use client'
 
-import {
-    Box,
-    Divider,
-    Modal,
-    Paper,
-    TableContainer,
-    Table,
-    Typography,
-    TableBody,
-    Tooltip,
-    Avatar,
-    Tab,
-    Tabs
-} from '@mui/material'
+import { Box, Divider, Modal, Paper, Typography, Tooltip, Avatar, Tab, Tabs } from '@mui/material'
 import { X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Pencil, Trash2 } from 'lucide-react'
@@ -26,7 +13,8 @@ import JobHistory from './detail/JobHistory'
 import Employee from './detail/Employee'
 import Contract from './detail/Contract'
 import Reward from './detail/Reward'
-
+import Benefit from './detail/Benefit'
+import Discipline from './detail/Discipline'
 interface Props {
     open: boolean
     handleToggle: () => void
@@ -70,46 +58,12 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
                 return <Employee aspnetUserId={aspnetuser?.Id} />
             case 1:
                 return <Contract aspnetUserId={aspnetuser?.Id} />
+            case 2:
+                return <Benefit aspnetUserId={aspnetuser?.Id} />
             case 3:
                 return <Reward aspnetUserId={aspnetuser?.Id} />
-            case 2:
             case 4:
-                return (
-                    <TableContainer
-                        sx={{
-                            padding: '20px',
-                            backgroundColor: 'var(--hover-color)',
-                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                            borderRadius: '12px',
-                            overflow: 'hidden',
-                            border: '1px solid #e0e0e0',
-                            maxWidth: '100%',
-                            marginTop: '20px',
-                            marginBottom: '20px',
-                            '&::-webkit-scrollbar': {
-                                width: '8px',
-                                height: '8px',
-                                backgroundColor: 'var(--hover-color)'
-                            },
-                            '&::-webkit-scrollbar-thumb': {
-                                backgroundColor: '#888',
-                                borderRadius: '10px',
-                                transition: 'background-color 0.3s ease'
-                            },
-                            '&::-webkit-scrollbar-thumb:hover': {
-                                backgroundColor: '#555' // Hover effect when dragging the scrollbar
-                            },
-                            '&::-webkit-scrollbar-corner': {
-                                borderRadius: '10px'
-                            },
-                            color: 'var(--text-color)'
-                        }}
-                    >
-                        <Table>
-                            <TableBody></TableBody>
-                        </Table>
-                    </TableContainer>
-                )
+                return <Discipline aspnetUserId={aspnetuser?.Id} />
             default:
                 return <JobHistory />
         }

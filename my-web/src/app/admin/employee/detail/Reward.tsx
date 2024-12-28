@@ -18,16 +18,11 @@ import {
     TableContainer,
     TextField,
     InputAdornment,
-    Tooltip,
-    TableSortLabel,
-    Avatar
+    TableSortLabel
 } from '@mui/material'
 import { IAspNetUserGetAll } from '@/models/AspNetUser'
 import { useGetAllUsersQuery } from '@/services/AspNetUserService'
-import { IEmploymentContractSearch } from '@/models/EmploymentContract'
-import { useSearchEmploymentContractsQuery } from '@/services/EmploymentContractService'
 
-import { EyeIcon } from 'lucide-react'
 import SearchIcon from '@mui/icons-material/Search'
 import { useTranslation } from 'react-i18next'
 
@@ -36,7 +31,6 @@ interface EmployeeProps {
 }
 
 const Reward: React.FC<EmployeeProps> = ({ aspnetUserId }) => {
-    const [selected, setSelected] = useState<string[]>([])
     const [searchTerm, setSearchTerm] = useState<string>('')
     const [rowsPerPage, setRowsPerPage] = useState('10')
     const [currentPage, setCurrentPage] = useState<number>(1)
@@ -46,22 +40,12 @@ const Reward: React.FC<EmployeeProps> = ({ aspnetUserId }) => {
     }>({ key: 'EmployeeId', direction: 'asc' })
     const { t } = useTranslation('common')
 
-    const { data: contractResponse, isLoading: isContractsLoading } = useSearchEmploymentContractsQuery()
+    
     const { data: userResponse, isLoading: isUsersLoading } = useGetAllUsersQuery()
-
-    const contract = (contractResponse?.Data?.Records as IEmploymentContractSearch[]) || []
     const employee = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
+    const users  = employee.filter(u => u.Id === aspnetUserId);
 
-    const users = employee.map(employee => {
-        const matchedEmployee = contract.find(ct => ct.UserId === employee.Id)
-        return {
-            ...employee,
-            ContractName: matchedEmployee?.ContractName || 'N/A',
-            StartDate: matchedEmployee?.StartDate || 'N/A'
-        }
-    })
-
-    if (isContractsLoading || isUsersLoading) return <div>Loading...</div>
+    if (isUsersLoading) return <div>Loading...</div>
 
     const filteredUsers = users.filter(
         user =>
@@ -75,10 +59,7 @@ const Reward: React.FC<EmployeeProps> = ({ aspnetUserId }) => {
             (user.Birthday &&
                 new Date(user.Birthday).toLocaleDateString().toLowerCase().includes(searchTerm.toLowerCase())) ||
             user.Gender?.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.Address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.ContractName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            (user.StartDate &&
-                new Date(user.StartDate).toLocaleDateString().toLowerCase().includes(searchTerm.toLowerCase()))
+            user.Address?.toLowerCase().includes(searchTerm.toLowerCase())
     )
 
     const sortedUsers = filteredUsers.sort((a, b) => {
@@ -173,7 +154,7 @@ const Reward: React.FC<EmployeeProps> = ({ aspnetUserId }) => {
                                                 sx={{
                                                     height: '100%',
                                                     color: '#a5bed4',
-                                                    padding: '10.5px',
+                                                    padding: '10.5px'
                                                 }}
                                             >
                                                 <SearchIcon />

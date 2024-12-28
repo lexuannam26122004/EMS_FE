@@ -364,6 +364,7 @@
             "ADDRESS": "Địa chỉ",
             "CONTRACTNAME": "Tên hợp đồng",
             "STARTDATE": "Ngày vào làm",
+            "STARTDATEWORK":"Ngày vào làm",
             "CREATE": {
                 "CREATE_EMPLOYEE": "Thêm mới nhân viên",
                 "SUCCESS": {
