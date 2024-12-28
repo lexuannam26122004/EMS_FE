@@ -24,13 +24,47 @@ import {
     InputAdornment,
     IconButton,
     Tooltip,
-    TableSortLabel
+    TableSortLabel,
+    Divider,
+    LinearProgress,
+    LinearProgressProps,
+    FormControl,
+    InputLabel
 } from '@mui/material'
-import { CirclePlus, EyeIcon, Pencil, SearchIcon, Trash2 } from 'lucide-react'
+import {
+    ArrowLeft,
+    BadgeCheck,
+    BadgeDollarSign,
+    BadgeMinus,
+    Bitcoin,
+    ChevronLeft,
+    CirclePlus,
+    EyeIcon,
+    Heart,
+    LocateFixed,
+    Pencil,
+    SearchIcon,
+    Smile,
+    Trash2,
+    Users
+} from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-function GetAllSalaryPage(period: string) {
+function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
+    return (
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ width: '100%', mr: 1 }}>
+                <LinearProgress variant='determinate' {...props} />
+            </Box>
+            <Box sx={{ minWidth: 35 }}>
+                <Typography variant='body2' sx={{ color: 'var(--text-color)' }}>{`${props.value}%`}</Typography>
+            </Box>
+        </Box>
+    )
+}
+
+function GetAllSalaryPage() {
     const { t } = useTranslation('common')
     const [selected, setSelected] = useState<string[]>([])
     const [page, setPage] = useState(1)
@@ -47,8 +81,23 @@ function GetAllSalaryPage(period: string) {
         pageSize: 10,
         pageNumber: 1
     })
+    const [progress, setProgress] = useState(50)
+    const periodList = [
+        '01/2024',
+        '02/2024',
+        '03/2024',
+        '04/2024',
+        '05/2024',
+        '06/2024',
+        '07/2024',
+        '08/2024',
+        '09/2024',
+        '10/2024',
+        '11/2024'
+    ]
+    const [period, setPeriod] = useState(periodList[periodList.length - 1])
 
-    const { data: responseData, isFetching, refetch } = useGetAllSalariesQuery({ filter, period })
+    const { data: responseData, isFetching, refetch } = useGetAllSalariesQuery(filter)
 
     const salaryData = responseData?.Data as ISalaryGetAll[]
     const totalRecords = responseData?.Data.TotalRecords as number
@@ -134,40 +183,34 @@ function GetAllSalaryPage(period: string) {
 
     const countRows = selected.length
 
+    const departmentList = [
+        'Cycle 1',
+        'Cycle 2',
+        'Cycle 3',
+        'Cycle 4',
+        'Cycle 5',
+        'Cycle 6',
+        'Cycle 7',
+        'Cycle 8',
+        'Cycle 9',
+        'Cycle 10'
+    ]
+
     return (
         <Box
             sx={{
                 display: 'flex',
                 width: '100%',
-                height: '80vh',
+                height: '100%',
                 overflow: 'hidden',
                 gap: '10px'
             }}
         >
             <Box
                 sx={{
-                    width: 'calc(100% / 5)',
-                    scrollbarGutter: 'stable',
-                    overflow: 'auto',
-                    backgroundColor: 'var(--background-color)',
-                    '&::-webkit-scrollbar': {
-                        width: '7px',
-                        height: '7px',
-                        backgroundColor: 'var(--background-color)'
-                    },
-                    '&::-webkit-scrollbar-thumb': {
-                        backgroundColor: 'var(--scrollbar-color)',
-                        borderRadius: '10px'
-                    }
-                }}
-            >
-                <Typography style={{ fontWeight: 'bold', fontSize: '20px', color: 'green' }}>cycle</Typography>
-                hello
-            </Box>
-            <Box
-                sx={{
-                    width: 'calc(100% / 5 * 4)',
+                    width: 'calc(100% / 5 + 30px)',
                     height: '100%',
+                    backgroundColor: 'var(--background-color)',
                     overflow: 'auto',
                     scrollbarGutter: 'stable',
 
@@ -182,6 +225,362 @@ function GetAllSalaryPage(period: string) {
                     }
                 }}
             >
+                <Box
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        marginTop: '10px'
+                    }}
+                >
+                    <IconButton
+                        sx={{
+                            marginRight: '16px',
+                            '& .MuiOutlinedInput-root:hover fieldset': {
+                                borderColor: 'var(--hover-field-color)'
+                            },
+                            '& .MuiOutlinedInput-root.Mui-focused fieldset': {
+                                borderColor: 'var(--selected-field-color)'
+                            }
+                        }}
+                    >
+                        <ChevronLeft size={24} color='var(--text-color)' />
+                    </IconButton>
+                    <BadgeDollarSign size={'24px'} color='var(--button-color)'></BadgeDollarSign>
+                    <Typography
+                        style={{ marginLeft: '10px', fontWeight: 'bold', fontSize: '20px', color: 'var(--text-color)' }}
+                    >
+                        Payroll 11/2024
+                    </Typography>
+                </Box>
+                <Typography fontSize={'16px'} sx={{ marginLeft: '60px' }}>
+                    Hoàn thành 01/11 - 30/11/24
+                </Typography>
+                <Divider
+                    orientation='horizontal'
+                    flexItem
+                    sx={{
+                        marginRight: '20px',
+                        marginLeft: '20px',
+                        marginTop: '15px',
+                        marginBottom: '15px',
+                        backgroundColor: 'var(--divider-color)'
+                    }}
+                />
+                <Box
+                    sx={{
+                        marginLeft: '20px',
+                        marginRight: '20px'
+                    }}
+                >
+                    <Typography
+                        sx={{
+                            fontSize: '20px',
+                            color: 'var(--title-color)',
+
+                            marginTop: '5px',
+                            fontWeight: 'bold'
+                        }}
+                    >
+                        Tổng quan về chu kì
+                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', marginTop: '15px' }}>
+                        <Box
+                            sx={{
+                                borderRadius: '45px',
+                                backgroundColor: 'green',
+                                width: '50px', // Thiết lập chiều rộng
+                                height: '50px', // Thiết lập chiều cao
+                                display: 'flex', // Nếu bạn muốn căn giữa nội dung bên trong
+                                alignItems: 'center', // Căn giữa theo chiều dọc
+                                justifyContent: 'center'
+                            }}
+                        >
+                            <LocateFixed size={'30px'}></LocateFixed>
+                        </Box>
+                        <Box sx={{ marginLeft: '10px' }}>
+                            <Typography sx={{ fontWeight: 'bold' }}>Tổng lương gross</Typography>
+                            <Typography>4000000 Đ</Typography>
+                        </Box>
+                    </Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', marginTop: '15px' }}>
+                        <Box
+                            sx={{
+                                borderRadius: '45px',
+                                backgroundColor: '#00FF00',
+                                width: '50px', // Thiết lập chiều rộng
+                                height: '50px', // Thiết lập chiều cao
+                                display: 'flex', // Nếu bạn muốn căn giữa nội dung bên trong
+                                alignItems: 'center', // Căn giữa theo chiều dọc
+                                justifyContent: 'center'
+                            }}
+                        >
+                            <BadgeCheck size={'30px'}></BadgeCheck>
+                        </Box>
+                        <Box sx={{ marginLeft: '10px' }}>
+                            <Typography sx={{ fontWeight: 'bold' }}>Tổng thực lĩnh</Typography>
+                            <Typography>2000000 Đ</Typography>
+                        </Box>
+                    </Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', marginTop: '15px' }}>
+                        <Box
+                            sx={{
+                                borderRadius: '45px',
+                                backgroundColor: '#FFCC66',
+                                width: '50px', // Thiết lập chiều rộng
+                                height: '50px', // Thiết lập chiều cao
+                                display: 'flex', // Nếu bạn muốn căn giữa nội dung bên trong
+                                alignItems: 'center', // Căn giữa theo chiều dọc
+                                justifyContent: 'center'
+                            }}
+                        >
+                            <Users size={'30px'}></Users>
+                        </Box>
+                        <Box sx={{ marginLeft: '10px' }}>
+                            <Typography sx={{ fontWeight: 'bold' }}>Tổng nhân sự</Typography>
+                            <Typography>100 Nhân sự</Typography>
+                        </Box>
+                    </Box>
+
+                    <Box sx={{ display: 'flex', alignItems: 'center', marginTop: '15px' }}>
+                        <Box
+                            sx={{
+                                borderRadius: '45px',
+                                backgroundColor: '#00FFFF',
+                                width: '50px', // Thiết lập chiều rộng
+                                height: '50px', // Thiết lập chiều cao
+                                display: 'flex', // Nếu bạn muốn căn giữa nội dung bên trong
+                                alignItems: 'center', // Căn giữa theo chiều dọc
+                                justifyContent: 'center'
+                            }}
+                        >
+                            <Smile size={'30px'}></Smile>
+                        </Box>
+                        <Box sx={{ marginLeft: '10px' }}>
+                            <Typography sx={{ fontWeight: 'bold' }}>Tổng phúc lợi được trả</Typography>
+                            <Typography>300000 Đ</Typography>
+                        </Box>
+                    </Box>
+                </Box>
+                <Divider
+                    orientation='horizontal'
+                    flexItem
+                    sx={{
+                        marginRight: '20px',
+                        marginLeft: '20px',
+                        marginTop: '15px',
+                        marginBottom: '15px',
+                        backgroundColor: 'var(--divider-color)'
+                    }}
+                />
+                <Box
+                    sx={{
+                        marginLeft: '20px',
+                        marginRight: '20px'
+                    }}
+                >
+                    <Typography
+                        sx={{
+                            fontSize: '20px',
+                            color: 'var(--title-color)',
+
+                            marginTop: '5px',
+                            fontWeight: 'bold'
+                        }}
+                    >
+                        Tổng quan về thuế và bảo hiểm
+                    </Typography>
+
+                    <Box sx={{ display: 'flex', alignItems: 'center', marginTop: '15px' }}>
+                        <Box
+                            sx={{
+                                borderRadius: '45px',
+                                backgroundColor: '#FF9933',
+                                width: '50px', // Thiết lập chiều rộng
+                                height: '50px', // Thiết lập chiều cao
+                                display: 'flex', // Nếu bạn muốn căn giữa nội dung bên trong
+                                alignItems: 'center', // Căn giữa theo chiều dọc
+                                justifyContent: 'center'
+                            }}
+                        >
+                            <BadgeMinus size={'30px'}></BadgeMinus>
+                        </Box>
+                        <Box sx={{ marginLeft: '10px' }}>
+                            <Typography sx={{ fontWeight: 'bold' }}>Tổng thuế nhân viên chi trả</Typography>
+                            <Typography>300000 Đ</Typography>
+                        </Box>
+                    </Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', marginTop: '15px' }}>
+                        <Box
+                            sx={{
+                                borderRadius: '45px',
+                                backgroundColor: '#FF0033',
+                                width: '50px', // Thiết lập chiều rộng
+                                height: '50px', // Thiết lập chiều cao
+                                display: 'flex', // Nếu bạn muốn căn giữa nội dung bên trong
+                                alignItems: 'center', // Căn giữa theo chiều dọc
+                                justifyContent: 'center'
+                            }}
+                        >
+                            <Heart size={'30px'}></Heart>
+                        </Box>
+                        <Box sx={{ marginLeft: '10px' }}>
+                            <Typography sx={{ fontWeight: 'bold' }}>Tổng bảo hiểm của nhân sự</Typography>
+                            <Typography>300000 Đ</Typography>
+                        </Box>
+                    </Box>
+                </Box>
+                <Divider
+                    orientation='horizontal'
+                    flexItem
+                    sx={{
+                        marginRight: '20px',
+                        marginLeft: '20px',
+                        marginTop: '15px',
+                        marginBottom: '15px',
+                        backgroundColor: 'var(--divider-color)'
+                    }}
+                />
+                <Box
+                    sx={{
+                        marginLeft: '20px',
+                        marginRight: '20px'
+                    }}
+                >
+                    <Typography
+                        sx={{
+                            fontSize: '20px',
+                            color: 'var(--title-color)',
+
+                            marginTop: '5px',
+                            fontWeight: 'bold'
+                        }}
+                    >
+                        Tổng quan về thu nhập
+                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', marginTop: '15px', gap: '10px' }}>
+                        <Box
+                            sx={{
+                                borderRadius: '45px',
+                                backgroundColor: '#00CCCC',
+                                width: '50px', // Thiết lập chiều rộng
+                                height: '50px', // Thiết lập chiều cao
+                                display: 'flex', // Nếu bạn muốn căn giữa nội dung bên trong
+                                alignItems: 'center', // Căn giữa theo chiều dọc
+                                justifyContent: 'center'
+                            }}
+                        >
+                            <BadgeDollarSign size={'30px'}></BadgeDollarSign>
+                        </Box>
+                        <Box>
+                            <Typography sx={{ fontWeight: 'bold' }}>Lương gross trung bình</Typography>
+                            <Typography>300000 Đ</Typography>
+                        </Box>
+                    </Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', marginTop: '15px' }}>
+                        <Box
+                            sx={{
+                                borderRadius: '45px',
+                                backgroundColor: '#CC99FF',
+                                width: '50px', // Thiết lập chiều rộng
+                                height: '50px', // Thiết lập chiều cao
+                                display: 'flex', // Nếu bạn muốn căn giữa nội dung bên trong
+                                alignItems: 'center', // Căn giữa theo chiều dọc
+                                justifyContent: 'center'
+                            }}
+                        >
+                            <Bitcoin size={'30px'}></Bitcoin>
+                        </Box>
+                        <Box sx={{ marginLeft: '10px' }}>
+                            <Typography sx={{ fontWeight: 'bold' }}>Lương thực lĩnh trung bình</Typography>
+                            <Typography>300000 Đ</Typography>
+                        </Box>
+                    </Box>
+
+                    <Box sx={{ display: 'flex', alignItems: 'center', marginTop: '15px', gap: '10px' }}>
+                        <Box
+                            sx={{
+                                borderRadius: '45px',
+                                backgroundColor: '#FF0066',
+                                width: '50px', // Thiết lập chiều rộng
+                                height: '50px', // Thiết lập chiều cao
+                                display: 'flex', // Nếu bạn muốn căn giữa nội dung bên trong
+                                alignItems: 'center', // Căn giữa theo chiều dọc
+                                justifyContent: 'center'
+                            }}
+                        >
+                            <Heart size={'30px'}></Heart>
+                        </Box>
+                        <Box>
+                            <Typography sx={{ fontWeight: 'bold' }}>Bảo hiểm trung bình</Typography>
+                            <Typography>300000 Đ</Typography>
+                        </Box>
+                    </Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', marginTop: '15px' }}>
+                        <Box
+                            sx={{
+                                borderRadius: '45px',
+                                backgroundColor: '#FF33CC',
+                                width: '50px', // Thiết lập chiều rộng
+                                height: '50px', // Thiết lập chiều cao
+                                display: 'flex', // Nếu bạn muốn căn giữa nội dung bên trong
+                                alignItems: 'center', // Căn giữa theo chiều dọc
+                                justifyContent: 'center'
+                            }}
+                        >
+                            <BadgeMinus size={'30px'}></BadgeMinus>
+                        </Box>
+                        <Box sx={{ marginLeft: '10px' }}>
+                            <Typography sx={{ fontWeight: 'bold' }}>Thuế trung bình mỗi nhân sự</Typography>
+                            <Typography>300000 Đ</Typography>
+                        </Box>
+                    </Box>
+                </Box>
+                <Divider
+                    orientation='horizontal'
+                    flexItem
+                    sx={{
+                        marginRight: '20px',
+                        marginLeft: '20px',
+                        marginTop: '15px',
+                        marginBottom: '15px',
+                        backgroundColor: 'var(--divider-color)'
+                    }}
+                />
+                <Box
+                    sx={{
+                        marginLeft: '20px',
+                        marginRight: '20px',
+                        marginBottom: '10px'
+                    }}
+                >
+                    <Typography
+                        sx={{
+                            fontSize: '20px',
+                            color: 'var(--title-color)',
+
+                            marginTop: '5px',
+                            fontWeight: 'bold'
+                        }}
+                    >
+                        Báo cáo theo phòng ban
+                    </Typography>
+                    {departmentList?.map(department => (
+                        <Box sx={{ marginTop: '10px' }}>
+                            <Typography sx={{ fontWeight: 'bold' }}>{department}</Typography>
+                            <Typography>100,000,000 đ</Typography>
+                            <Box sx={{ width: '100%' }}>
+                                <LinearProgressWithLabel value={progress} />
+                            </Box>
+                        </Box>
+                    ))}
+                </Box>
+            </Box>
+            <Box
+                sx={{
+                    width: 'calc(100% / 5 * 4 - 30px)',
+                    height: '100%'
+                }}
+            >
                 <Paper
                     sx={{
                         width: '100%',
@@ -192,7 +591,7 @@ function GetAllSalaryPage(period: string) {
                     }}
                 >
                     <Box display='flex' alignItems='center' justifyContent='space-between' margin='20px'>
-                        <Box sx={{ position: 'relative', width: '100%' }}>
+                        <Box sx={{ position: 'relative', width: '100%', height: '55px' }}>
                             <TextField
                                 id='location-search'
                                 type='search'
@@ -206,49 +605,48 @@ function GetAllSalaryPage(period: string) {
                                     padding: '0px',
                                     width: '335px',
                                     '& fieldset': {
-                                        borderRadius: '8px',
+                                        borderRadius: '10px',
                                         borderColor: 'var(--border-color)'
                                     },
-                                    '& .MuiInputBase-root': { paddingRight: '0px' },
+                                    '& .MuiInputBase-root': { paddingLeft: '0px', paddingRight: '12px' },
                                     '& .MuiInputBase-input': {
-                                        padding: '11px 0 11px 14px',
+                                        padding: '15px 0px',
                                         color: 'var(--text-color)',
-                                        fontSize: '16px'
+                                        fontSize: '16px',
+                                        '&::placeholder': {
+                                            color: 'var(--placeholder-color)',
+                                            opacity: 1 // Đảm bảo opacity của placeholder không bị giảm
+                                        }
                                     },
                                     '& .MuiOutlinedInput-root:hover fieldset': {
-                                        borderColor: 'var(--hover-color)'
+                                        borderColor: 'var(--hover-field-color)'
                                     },
                                     '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                        borderColor: 'var(--selected-color)'
+                                        borderColor: 'var(--selected-field-color)'
                                     }
                                 }}
                                 onKeyDown={e => {
-                                    if (e.key === 'Enter') {
-                                        e.preventDefault()
-                                        handleSearchKeyword()
-                                    }
+                                    handleSearchKeyword()
                                 }}
                                 slotProps={{
                                     input: {
-                                        endAdornment: (
-                                            <InputAdornment position='end'>
-                                                <IconButton
-                                                    color='primary'
+                                        startAdornment: (
+                                            <InputAdornment
+                                                position='start'
+                                                sx={{
+                                                    mr: 0
+                                                }}
+                                            >
+                                                <Box
                                                     sx={{
                                                         height: '100%',
-                                                        backgroundColor: 'var(--button-color)',
-                                                        color: 'white',
-                                                        borderRadius: '0 8px 8px 0',
+                                                        color: '#a5bed4',
                                                         padding: '10.5px',
-                                                        zIndex: 100,
-                                                        '&:hover': {
-                                                            backgroundColor: 'var(--hover-button-color)'
-                                                        }
+                                                        zIndex: 100
                                                     }}
-                                                    onClick={handleSearchKeyword}
                                                 >
                                                     <SearchIcon />
-                                                </IconButton>
+                                                </Box>
                                             </InputAdornment>
                                         )
                                     }
@@ -269,11 +667,12 @@ function GetAllSalaryPage(period: string) {
                                 variant='contained'
                                 startIcon={<Trash2 />}
                                 sx={{
-                                    height: '44px',
+                                    mr: '5px',
+                                    height: '53px',
                                     visibility: countRows > 0 ? 'visible' : 'hidden',
                                     backgroundColor: 'var(--button-color)',
                                     width: 'auto',
-                                    padding: '0px 24px',
+                                    padding: '0px 30px',
                                     '&:hover': {
                                         backgroundColor: 'var(--hover-button-color)'
                                     },
@@ -287,26 +686,98 @@ function GetAllSalaryPage(period: string) {
                                 {t('COMMON.BUTTON.DELETE')}
                             </Button>
 
-                            <Button
-                                variant='contained'
-                                startIcon={<CirclePlus />}
+                            <FormControl
+                                fullWidth
+                                //error={isSubmit && departmentId === ''}
                                 sx={{
-                                    height: '44px',
-                                    backgroundColor: 'var(--button-color)',
-                                    width: 'auto',
-                                    padding: '0px 24px',
-                                    '&:hover': {
-                                        backgroundColor: 'var(--hover-button-color)'
+                                    '& fieldset': {
+                                        borderRadius: '8px',
+                                        color: 'var(--text-color)',
+                                        borderColor: 'var(--border-color)'
                                     },
-                                    fontSize: '16px',
-                                    fontWeight: 'bold',
-                                    whiteSpace: 'nowrap',
-                                    textTransform: 'none'
+                                    '& .MuiInputBase-root': {
+                                        paddingRight: '0px'
+                                    },
+                                    '& .MuiInputBase-input': {
+                                        paddingRight: '12px',
+                                        color: 'var(--text-color)',
+                                        fontSize: '16px',
+                                        '&::placeholder': {
+                                            color: 'var(--placeholder-color)',
+                                            opacity: 1
+                                        }
+                                    },
+                                    '& .MuiOutlinedInput-root:hover fieldset': {
+                                        borderColor: 'var(--hover-field-color)'
+                                    },
+                                    '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                        borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                    },
+                                    '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                        borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                    },
+                                    '& .MuiOutlinedInput-root.Mui-focused fieldset': {
+                                        borderColor: 'var(--selected-field-color)'
+                                    },
+                                    '& .MuiInputLabel-root': {
+                                        color: 'var(--text-label-color)'
+                                    },
+                                    '& .MuiInputLabel-root.Mui-focused': {
+                                        color: 'var(--selected-field-color)'
+                                    },
+                                    '& .MuiInputLabel-root.Mui-error': {
+                                        color: 'var(--error-color)'
+                                    },
+                                    '& .MuiSelect-icon': {
+                                        color: 'var(--error-color)'
+                                        //isSubmit && departmentId === '' ? 'var(--error-color)' : 'var(--text-color)'
+                                    }
                                 }}
-                                //onClick={() => router.push('/admin/configuration/create-configuration')}
                             >
-                                {t('COMMON.BUTTON.CREATE')}
-                            </Button>
+                                <InputLabel>{t('COMMON.EMPLOYEE.DEPARTMENTNAME')}</InputLabel>
+                                <Select
+                                    value={period}
+                                    onChange={e => setPeriod(e.target.value)}
+                                    label={t('COMMON.EMPLOYEE.DEPARTMENTNAME')}
+                                    MenuProps={{
+                                        PaperProps: {
+                                            elevation: 0,
+                                            sx: {
+                                                backgroundImage:
+                                                    'url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSJ1cmwoI3BhaW50MF9yYWRpYWxfMjc0OV8xNDUxODYpIiBmaWxsLW9wYWNpdHk9IjAuMTIiLz4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0icGFpbnQwX3JhZGlhbF8yNzQ5XzE0NTE4NiIgY3g9IjAiIGN5PSIwIiByPSIxIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgZ3JhZGllbnRUcmFuc2Zvcm09InRyYW5zbGF0ZSgxMjAgMS44MTgxMmUtMDUpIHJvdGF0ZSgtNDUpIHNjYWxlKDEyMy4yNSkiPgo8c3RvcCBzdG9wLWNvbG9yPSIjMDBCOEQ5Ii8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzAwQjhEOSIgc3RvcC1vcGFjaXR5PSIwIi8+CjwvcmFkaWFsR3JhZGllbnQ+CjwvZGVmcz4KPC9zdmc+Cg==), url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSJ1cmwoI3BhaW50MF9yYWRpYWxfMjc0OV8xNDUxODcpIiBmaWxsLW9wYWNpdHk9IjAuMTIiLz4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0icGFpbnQwX3JhZGlhbF8yNzQ5XzE0NTE4NyIgY3g9IjAiIGN5PSIwIiByPSIxIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgZ3JhZGllbnRUcmFuc2Zvcm09InRyYW5zbGF0ZSgwIDEyMCkgcm90YXRlKDEzNSkgc2NhbGUoMTIzLjI1KSI+CjxzdG9wIHN0b3AtY29sb3I9IiNGRjU2MzAiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRkY1NjMwIiBzdG9wLW9wYWNpdHk9IjAiLz4KPC9yYWRpYWxHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K)',
+                                                backgroundPosition: 'top right, bottom left',
+                                                backgroundSize: '50%, 50%',
+                                                backgroundRepeat: 'no-repeat',
+                                                padding: '0 8px',
+                                                backdropFilter: 'blur(20px)',
+                                                borderRadius: '8px',
+                                                backgroundColor: 'var(--background-item)',
+                                                color: 'var(--text-color)',
+                                                border: '1px solid var(--border-color)',
+                                                '& .MuiMenuItem-root': {
+                                                    borderRadius: '6px',
+                                                    '&:hover': {
+                                                        backgroundColor: 'var(--hover-color)'
+                                                    },
+                                                    '&.Mui-selected': {
+                                                        backgroundColor: 'var(--selected-color)',
+                                                        '&:hover': {
+                                                            backgroundColor: 'var(--hover-color)'
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            autoFocus: false
+                                        }
+                                    }}
+                                >
+                                    {periodList.map(dept => (
+                                        <MenuItem key={dept} value={dept}>
+                                            {dept}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                         </Box>
                     </Box>
                     <TableContainer
