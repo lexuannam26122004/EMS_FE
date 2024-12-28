@@ -21,6 +21,7 @@ import { workShiftApis } from '@/services/WorkShiftService'
 import { salaryApi } from '@/services/SalaryService'
 import { benefitApi } from '@/services/BenefitService'
 import { eventApi } from '@/services/EventService'
+import { rewardApi } from '@/services/RewardService'
 
 export const store = configureStore({
     reducer: {
@@ -45,7 +46,8 @@ export const store = configureStore({
         [workShiftApis.reducerPath]: workShiftApis.reducer,
         [salaryApi.reducerPath]: salaryApi.reducer,
         [benefitApi.reducerPath]: benefitApi.reducer,
-        [eventApi.reducerPath]: eventApi.reducer
+        [eventApi.reducerPath]: eventApi.reducer,
+        [rewardApi.reducerPath]: rewardApi.reducer
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware().concat(
@@ -62,7 +64,9 @@ export const store = configureStore({
             workShiftApis.middleware,
             salaryApi.middleware,
             benefitApi.middleware,
-            eventApi.middleware
+            eventApi.middleware,
+            rewardApi.middleware,
+
         )
 })
 

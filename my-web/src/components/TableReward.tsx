@@ -27,6 +27,7 @@ import { useTranslation } from 'react-i18next'
 import SearchIcon from '@mui/icons-material/Search'
 import { useRouter } from 'next/navigation'
 import { useGetContractsExpiringSoonQuery } from '@/services/EmploymentContractService'
+import { IRewardGetAll } from '@/models/Reward'
 
 function getStatusBgColor(status: boolean): string {
     if (status === false) {
