@@ -165,7 +165,8 @@ const UpdateTimeOff = () => {
                     overflow: 'hidden',
                     borderRadius: '15px',
                     backgroundColor: 'var(--background-item)',
-                    padding: '24px'
+                    padding: '24px',
+                    boxShadow: 'var(--box-shadow-paper)'
                 }}
             >
                 <Typography sx={{ fontWeight: 'bold', fontSize: '22px', color: 'var(--text-color)' }}>
@@ -242,7 +243,7 @@ const UpdateTimeOff = () => {
                                 const { key, ...otherProps } = props
                                 return (
                                     <Box
-                                        key={`${option.Id}`}
+                                        key={key}
                                         component='li'
                                         {...otherProps}
                                         sx={{

@@ -134,7 +134,8 @@ const CreateTimeOff = () => {
                     overflow: 'hidden',
                     borderRadius: '15px',
                     backgroundColor: 'var(--background-item)',
-                    padding: '24px'
+                    padding: '24px',
+                    boxShadow: 'var(--box-shadow-paper)'
                 }}
             >
                 <Typography sx={{ fontWeight: 'bold', fontSize: '22px', color: 'var(--text-color)' }}>
@@ -211,7 +212,7 @@ const CreateTimeOff = () => {
                                 const { key, ...otherProps } = props
                                 return (
                                     <Box
-                                        key={`${option.Id}`}
+                                        key={key}
                                         component='li'
                                         {...otherProps}
                                         sx={{
@@ -241,7 +242,7 @@ const CreateTimeOff = () => {
                                 <TextField
                                     {...params}
                                     variant='outlined'
-                                    label={t('COMMON.TIMEOFF.INFORMATION')+'*'}
+                                    label={t('COMMON.TIMEOFF.INFORMATION') + '*'}
                                     fullWidth
                                     error={isSubmit && userId === ''}
                                 />
@@ -259,7 +260,7 @@ const CreateTimeOff = () => {
                                 visibility: isSubmit && userId === '' ? 'visible' : 'hidden'
                             }}
                         >
-                            {t('COMMON.TEXTFIELD.REQUIRED')+'*'}
+                            {t('COMMON.TEXTFIELD.REQUIRED') + '*'}
                         </Typography>
                     </Box>
                     <Box
@@ -314,13 +315,13 @@ const CreateTimeOff = () => {
                                 }
                             }}
                         >
-                            <InputLabel>{t('COMMON.TIMEOFF.ISACCEPTED')+'*'}</InputLabel>
+                            <InputLabel>{t('COMMON.TIMEOFF.ISACCEPTED') + '*'}</InputLabel>
 
                             <Select
                                 labelId='gender-label'
                                 id='gender'
                                 value={isAccepted}
-                                label={t('COMMON.TIMEOFF.ISACCEPTED')+'*'}
+                                label={t('COMMON.TIMEOFF.ISACCEPTED') + '*'}
                                 onChange={e => setIsAccepted(e.target.value)}
                                 MenuProps={{
                                     PaperProps: {
@@ -386,7 +387,7 @@ const CreateTimeOff = () => {
                     >
                         <TextField
                             variant='outlined'
-                            label={t('COMMON.TIMEOFF.STARTDATE')+'*'}
+                            label={t('COMMON.TIMEOFF.STARTDATE') + '*'}
                             type='date'
                             fullWidth
                             {...(isSubmit && startDate === '' && { error: true })}
@@ -452,7 +453,7 @@ const CreateTimeOff = () => {
                     >
                         <TextField
                             variant='outlined'
-                            label={t('COMMON.TIMEOFF.ENDDATE')+'*'}
+                            label={t('COMMON.TIMEOFF.ENDDATE') + '*'}
                             type='date'
                             fullWidth
                             {...(isSubmit && endDate === '' && { error: true })}
@@ -527,7 +528,7 @@ const CreateTimeOff = () => {
                     >
                         <TextField
                             variant='outlined'
-                            label={t('COMMON.TIMEOFF.REASON')+'*'}
+                            label={t('COMMON.TIMEOFF.REASON') + '*'}
                             id='fullWidth'
                             fullWidth
                             multiline

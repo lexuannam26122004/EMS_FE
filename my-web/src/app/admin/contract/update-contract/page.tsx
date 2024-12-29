@@ -218,6 +218,7 @@ const UpdateEmploymentContract = () => {
                 sx={{
                     width: '100%',
                     overflow: 'hidden',
+                    boxShadow: 'var(--box-shadow-paper)',
                     borderRadius: '15px',
                     backgroundColor: 'var(--background-item)',
                     padding: '24px'
@@ -297,7 +298,7 @@ const UpdateEmploymentContract = () => {
                                 const { key, ...otherProps } = props
                                 return (
                                     <Box
-                                        key={`${option.Id}`}
+                                        key={key}
                                         component='li'
                                         {...otherProps}
                                         sx={{
@@ -410,7 +411,7 @@ const UpdateEmploymentContract = () => {
                                 const { key, ...otherProps } = props
                                 return (
                                     <Box
-                                        key={`${option.Id}`}
+                                        key={key}
                                         component='li'
                                         {...otherProps}
                                         sx={{

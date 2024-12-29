@@ -437,7 +437,8 @@ const UpdateEmployeePage = () => {
                     marginBottom: 'auto',
                     borderRadius: '15px',
                     backgroundColor: 'var(--background-item)',
-                    padding: '24px'
+                    padding: '24px',
+                    boxShadow: 'var(--box-shadow-paper)'
                 }}
             >
                 <Typography sx={{ fontWeight: 'bold', fontSize: '22px', color: 'var(--text-color)' }}>
