@@ -43,15 +43,13 @@ const DetailModal = () => {
                     zIndex: -1
                 }}
             />
-            {/* Color overlay */}
+
             <Box
                 sx={{
                     position: 'absolute',
-                    top: 0,
-                    left: 0,
                     width: '100%',
                     height: '100%',
-                    backgroundColor: 'rgba(0, 0, 0, 0.4)', // Adjust opacity and color as needed
+                    backgroundColor: 'rgba(0, 0, 0, 0.4)',
                     zIndex: -1
                 }}
             />
@@ -155,10 +153,6 @@ const DetailModal = () => {
                             value={selectedTab}
                             onChange={handleTabChange}
                             aria-label='right-aligned tabs'
-                            sx={{
-                                borderBottom: 1,
-                                borderColor: 'divider'
-                            }}
                         >
                             <Tab label='Cá Nhân' sx={{ color: 'var(--text-color)' }} />
                             <Tab label='Hợp Đồng' sx={{ color: 'var(--text-color)' }} />

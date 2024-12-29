@@ -73,6 +73,12 @@ const AvatarMenu = () => {
         router.push('/admin/tasks/create')
     }
 
+    const handleLogout = () => {
+        setOpen(false)
+        localStorage.removeItem('userData')
+        router.push('/login')
+    }
+
     return (
         <Box>
             <Box
@@ -134,7 +140,7 @@ const AvatarMenu = () => {
                             fontSize: '12px'
                         }}
                     >
-                        {roles}
+                        {roles.join(', ')}
                     </Typography>
                 </Box>
 
@@ -304,7 +310,7 @@ const AvatarMenu = () => {
                                     </MenuItem>
                                     <Divider sx={{ margin: '0 -8px', borderColor: 'var(--border-color)' }} />
                                     <MenuItem
-                                        onClick={handleClose}
+                                        onClick={handleLogout}
                                         sx={{
                                             color: 'var(--text-color)',
                                             borderRadius: '6px',

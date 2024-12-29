@@ -1,13 +1,15 @@
 'use client'
 import React, { useState } from 'react'
-import { Box, TextField, Button, CircularProgress } from '@mui/material'
+import { Box, TextField, Button } from '@mui/material'
 import { useToast } from '@/hooks/useToast'
+import { useRouter } from 'next/navigation'
 
 const LoginForm: React.FC = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
     const toast = useToast()
+    const router = useRouter()
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -45,6 +47,8 @@ const LoginForm: React.FC = () => {
 
                 if (userResponse.ok) {
                     const user = userData.Data
+                    localStorage.setItem('userData', JSON.stringify(user))
+                    router.push('/admin')
                     toast(`Đăng nhập thành công! Chào mừng ${user.FullName}`, 'success')
                 } else {
                     toast('Không thể lấy thông tin người dùng.', 'error')
