@@ -9,7 +9,7 @@ interface Props {
     setFiles: React.Dispatch<React.SetStateAction<number[]>>
 }
 
-function UploadFiles({ files, setFiles }: Props) {
+function UploadFiles({ setFiles }: Props) {
     const { t } = useTranslation('common')
     const [fileCurrents, setFileCurrents] = useState<File[]>([])
 

@@ -18,7 +18,7 @@ import {
     Avatar
 } from '@mui/material'
 import { SaveIcon } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { XIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -31,7 +31,6 @@ import {
     selectedUsersToNotifySliceSelector
 } from '@/redux/slices/selectedUsersToNotifySlice'
 import { useSelector, useDispatch } from 'react-redux'
-import { IAspNetUserGetAll } from '@/models/AspNetUser'
 import DepartmentAndRoleModal from './DepartmentAndRoleModal'
 import {
     selectedDepartmentsToNotifySelector,
@@ -39,15 +38,13 @@ import {
 } from '@/redux/slices/selectedDepartmentsToNotifySlice'
 import { selectedRolesToNotifySelector, selectedRolesToNotifySlice } from '@/redux/slices/selectedRolesToNotifySlice'
 import UploadFiles from './UploadFiles'
-import ListRole from './ListRole'
 
-function createNotification() {
+function CreateNotification() {
     const { t } = useTranslation('common')
     const router = useRouter()
     const [typeNotification, setTypeNotification] = useState<string>('')
     const [openSelectType, setOpenSelectType] = useState(false)
-    const [createNotification, { isError: isErrorCreate, isLoading, isSuccess: isSuccessCreate }] =
-        useCreateNotificationMutation()
+    const [createNotification, { isLoading }] = useCreateNotificationMutation()
     const [title, setTitle] = useState('')
     const [content, setContent] = useState('')
     const [files, setFiles] = useState<number[]>([])
@@ -785,4 +782,4 @@ function createNotification() {
     )
 }
 
-export default createNotification
+export default CreateNotification

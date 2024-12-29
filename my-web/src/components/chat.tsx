@@ -1,5 +1,5 @@
 import { MessageCircleMore } from 'lucide-react'
-import { Box, Button, Fab, Tooltip, Typography } from '@mui/material'
+import { Box, Button, Tooltip, Typography } from '@mui/material'
 import { useState } from 'react'
 import { CloseIcon } from 'yet-another-react-lightbox'
 

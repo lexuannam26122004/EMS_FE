@@ -24,10 +24,24 @@ const AdminPage = () => {
                     gap: '24px'
                 }}
             >
-                <Box sx={{ width: 'calc(100% / 3)', overflow: 'hidden' }}>
+                <Box
+                    sx={{
+                        width: 'calc(100% / 3)',
+                        boxShadow: 'var(--box-shadow-paper)',
+                        borderRadius: '15px',
+                        overflow: 'hidden'
+                    }}
+                >
                     <DepartmentChart />
                 </Box>
-                <Box sx={{ width: 'calc(100% / 3 * 2 + 24px)', overflow: 'hidden' }}>
+                <Box
+                    sx={{
+                        width: 'calc(100% / 3 * 2 + 24px)',
+                        boxShadow: 'var(--box-shadow-paper)',
+                        borderRadius: '15px',
+                        overflow: 'hidden'
+                    }}
+                >
                     <ChartSalary />
                 </Box>
             </Box>
@@ -41,10 +55,24 @@ const AdminPage = () => {
                     gap: '24px'
                 }}
             >
-                <Box sx={{ width: 'calc(100% / 3 * 2 + 24px)', overflow: 'hidden' }}>
+                <Box
+                    sx={{
+                        width: 'calc(100% / 3 * 2 + 24px)',
+                        boxShadow: 'var(--box-shadow-paper)',
+                        borderRadius: '15px',
+                        overflow: 'hidden'
+                    }}
+                >
                     <EmployeeCountChart />
                 </Box>
-                <Box sx={{ width: 'calc(100% / 3)', overflow: 'hidden' }}>
+                <Box
+                    sx={{
+                        width: 'calc(100% / 3)',
+                        boxShadow: 'var(--box-shadow-paper)',
+                        borderRadius: '15px',
+                        overflow: 'hidden'
+                    }}
+                >
                     <AgeDistributionChart />
                 </Box>
             </Box>
@@ -58,10 +86,24 @@ const AdminPage = () => {
                     gap: '24px'
                 }}
             >
-                <Box sx={{ width: 'calc(100% / 3 * 2 + 24px)', overflow: 'hidden' }}>
+                <Box
+                    sx={{
+                        width: 'calc(100% / 3 * 2 + 24px)',
+                        boxShadow: 'var(--box-shadow-paper)',
+                        borderRadius: '15px',
+                        overflow: 'hidden'
+                    }}
+                >
                     <ErrorReport />
                 </Box>
-                <Box sx={{ width: 'calc(100% / 3)', overflow: 'hidden' }}>
+                <Box
+                    sx={{
+                        width: 'calc(100% / 3)',
+                        boxShadow: 'var(--box-shadow-paper)',
+                        borderRadius: '15px',
+                        overflow: 'hidden'
+                    }}
+                >
                     <LeaveApplication />
                 </Box>
             </Box>

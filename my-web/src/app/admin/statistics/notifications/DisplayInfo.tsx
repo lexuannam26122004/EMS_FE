@@ -1,7 +1,6 @@
 'use client'
 
 import { Box, Paper, Typography } from '@mui/material'
-import { TrendingDown, TrendingUp } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 
 function Page() {
@@ -28,6 +27,7 @@ function Page() {
                     height: '100%',
                     display: 'flex',
                     alignItems: 'center',
+                    boxShadow: 'var(--box-shadow-paper)',
                     backgroundColor: 'var(--background-item)',
                     justifyContent: 'space-between',
                     borderRadius: '15px',
@@ -116,6 +116,7 @@ function Page() {
                     height: '100%',
                     display: 'flex',
                     alignItems: 'center',
+                    boxShadow: 'var(--box-shadow-paper)',
                     backgroundColor: 'var(--background-item)',
                     justifyContent: 'space-between',
                     borderRadius: '15px',
@@ -204,6 +205,7 @@ function Page() {
                     height: '100%',
                     display: 'flex',
                     alignItems: 'center',
+                    boxShadow: 'var(--box-shadow-paper)',
                     backgroundColor: 'var(--background-item)',
                     justifyContent: 'space-between',
                     borderRadius: '15px',

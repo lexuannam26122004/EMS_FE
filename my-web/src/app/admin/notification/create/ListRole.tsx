@@ -1,30 +1,13 @@
 import React, { useMemo } from 'react'
-import {
-    Box,
-    Paper,
-    Modal,
-    Typography,
-    Avatar,
-    Divider,
-    Skeleton,
-    Button,
-    InputAdornment,
-    TextField
-} from '@mui/material'
+import { Box, Typography, Divider, Skeleton, Button, InputAdornment, TextField } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import { ArrowLeft, ArrowRight, Save, SaveIcon, SearchIcon, X } from 'lucide-react'
+import { ArrowLeft, Save, SearchIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import { IAspNetRoleGetAll } from '@/models/AspNetRole'
 import { useGetAllRolesQuery } from '@/services/AspNetRoleService'
-import { useSelector, useDispatch } from 'react-redux'
-import { selectedRolesToNotifySelector, selectedRolesToNotifySlice } from '@/redux/slices/selectedRolesToNotifySlice'
 import debounce from 'lodash.debounce'
-import {
-    selectedDepartmentsToNotifySelector,
-    selectedDepartmentsToNotifySlice
-} from '@/redux/slices/selectedDepartmentsToNotifySlice'
 
 interface Props {
     handleBefore: () => void
@@ -38,10 +21,9 @@ function ListRole({ handleBefore, handleClose, handleSave, tempSelectedRole, set
     const { t } = useTranslation('common')
     const [showError, setShowError] = useState(false)
     const [showSkeleton, setShowSkeleton] = useState(true)
-    const { data: roleResponse, isFetching: isFetchingRole, isError: isErrorRole, refetch } = useGetAllRolesQuery()
+    const { data: roleResponse, isFetching: isFetchingRole, isError: isErrorRole } = useGetAllRolesQuery()
     const roles = (roleResponse?.Data.Records as IAspNetRoleGetAll[]) || []
     const [filteredRoles, setFilteredRoles] = useState<IAspNetRoleGetAll[]>([])
-    const selectedRole = useSelector(selectedRolesToNotifySelector)
     const [search, setSearch] = useState('')
     const [select, setSelect] = useState(true)
 

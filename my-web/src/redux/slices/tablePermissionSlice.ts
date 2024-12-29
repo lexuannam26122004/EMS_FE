@@ -106,7 +106,7 @@ export const tablePermissionSlice = createSlice({
             const find = state.role.find((item: any) => item.Id === id)
             if (find && find.Function) {
                 const updatedPermission = { ...find.Function, ...data }
-                // @ts-ignore
+
                 const { IsAllowView, IsAllowEdit, IsAllowCreate, IsAllowPrint, IsAllowDelete } = updatedPermission
 
                 const updatedPermissionWithAllowAll = {

@@ -113,6 +113,7 @@ export default function Chart() {
                 width: '100%',
                 padding: '24px 24px 15px',
                 overflow: 'hidden',
+                boxShadow: 'var(--box-shadow-paper)',
                 borderRadius: '15px',
                 backgroundColor: 'var(--background-item)'
             }}

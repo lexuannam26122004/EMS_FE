@@ -3,7 +3,6 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { avatarPath } from '@/utils/globalVariables'
 import { Star } from 'lucide-react'
 
 function a11yProps(index: number) {
@@ -70,9 +69,9 @@ function Page() {
     const countTop2 = 24
     const countTop3 = 19
 
-    const employeeIDTop1 = 'EMP001'
-    const employeeIDTop2 = 'EMP002'
-    const employeeIDTop3 = 'EMP003'
+    // const employeeIDTop1 = 'EMP001'
+    // const employeeIDTop2 = 'EMP002'
+    // const employeeIDTop3 = 'EMP003'
 
     return (
         <Box width='100%'>
@@ -80,6 +79,7 @@ function Page() {
                 sx={{
                     width: '100%',
                     height: '100%',
+                    boxShadow: 'var(--box-shadow-paper)',
                     overflow: 'hidden',
                     borderRadius: '20px',
                     backgroundColor: '#6A5AE0'

@@ -54,13 +54,13 @@ const users = [
     }
 ]
 
-interface IGetAll {
-    avatarPath: string
-    fullname: string
-    count: number
-    employeeID: string
-    roles: string[]
-}
+// interface IGetAll {
+//     avatarPath: string
+//     fullname: string
+//     count: number
+//     employeeID: string
+//     roles: string[]
+// }
 
 const responseData = {
     Data: {
@@ -82,9 +82,11 @@ function Page() {
         pageNumber: 1
     })
 
-    const handleSearchKeyword = () => {}
+    const handleSearchKeyword = () => {
+        console.log('Search keyword:', keyword, value, filter)
+    }
 
-    const notifyData = responseData?.Data.Records as IGetAll[]
+    //const notifyData = responseData?.Data.Records as IGetAll[]
 
     const totalRecords = (responseData?.Data.TotalRecords as number) || 0
 
@@ -114,6 +116,7 @@ function Page() {
                 width: '100%',
                 height: '100%',
                 overflow: 'hidden',
+                boxShadow: 'var(--box-shadow-paper)',
                 display: 'flex',
                 flexDirection: 'column',
                 borderRadius: '15px',
@@ -427,7 +430,7 @@ function Page() {
                             borderColor: 'var(--selected-field-color)'
                         }
                     }}
-                    onKeyDown={e => {
+                    onKeyDown={() => {
                         handleSearchKeyword()
                     }}
                     slotProps={{

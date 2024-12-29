@@ -1,6 +1,6 @@
 import { INotificationsForUser } from '@/models/Notifications'
-import React, { useCallback, useRef, useState, useEffect } from 'react'
-import { Box, Typography, Avatar, Popper, Paper, MenuItem, styled } from '@mui/material'
+import React, { useCallback, useState, useEffect } from 'react'
+import { Box, Typography, Avatar, Popper, MenuItem, styled } from '@mui/material'
 import { Ellipsis, Check, Trash2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useChangeNotificationReadMutation, useDeleteNotificationMutation } from '@/services/NotificationsService'
@@ -9,7 +9,7 @@ import { useToast } from '@/hooks/useToast'
 import { notificationsSelector, notificationsSlice } from '@/redux/slices/notificationsSlice'
 import { iconsForNotification, getTimeDifferenceText } from '@/utils/calcForNotification'
 
-const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
+const StyledMenuItem = styled(MenuItem)(() => ({
     padding: '7.5px',
     fontSize: '14px',
     fontWeight: 'bold',
@@ -264,5 +264,8 @@ const NotificationsComponent = React.memo(({ setNotificationId }: ListNotificati
         </Box>
     ))
 })
+
+// Đặt displayName
+NotificationsComponent.displayName = 'NotificationsComponent'
 
 export default NotificationsComponent

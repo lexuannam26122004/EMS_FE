@@ -7,8 +7,6 @@ import { useTranslation } from 'react-i18next'
 import { useTheme } from 'next-themes'
 import { useGetEmployeeCountByDepartmentQuery } from '@/services/AspNetUserService'
 
-const getRandomInt = (max: number) => Math.floor(Math.random() * max)
-
 const DepartmentChart = () => {
     const { data } = useGetEmployeeCountByDepartmentQuery()
     const { t } = useTranslation('common')

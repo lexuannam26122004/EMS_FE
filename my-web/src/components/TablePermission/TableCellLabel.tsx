@@ -46,7 +46,6 @@ function TableCellLabel({ id, keyName }: Props) {
 
         if (elementHoverSelectors) {
             elementHoverSelectors.forEach(element => {
-                // @ts-ignore
                 const el = element as HTMLElement
                 el.style.background = 'var(--hover-color-permission)'
             })

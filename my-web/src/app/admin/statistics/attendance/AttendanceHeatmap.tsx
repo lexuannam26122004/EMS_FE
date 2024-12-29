@@ -5,7 +5,6 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ReactECharts from 'echarts-for-react'
 import { Box, FormControlLabel, Paper, Switch, Typography } from '@mui/material'
-import { BorderRadius } from 'mdi-material-ui'
 import { styled } from '@mui/material/styles'
 import { SwitchProps } from '@mui/material/Switch'
 
@@ -246,6 +245,7 @@ const AttendanceHeatmap = () => {
                 mt: '24px',
                 padding: '24px 24px 15px',
                 overflow: 'hidden',
+                boxShadow: 'var(--box-shadow-paper)',
                 borderRadius: '20px',
                 backgroundColor: 'var(--background-item)'
             }}

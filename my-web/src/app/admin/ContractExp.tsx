@@ -80,6 +80,21 @@ function ContractExpPage() {
     // const [selectedConfig, setSelectedConfig] = useState<IGetAllSysConfiguration | null>(null)
     const [openModal, setOpenModal] = useState(false)
 
+    useEffect(() => {}, [
+        router,
+        openDialog,
+        selectedRow,
+        openModal,
+        selected,
+        setSelected,
+        setOpenDialog,
+        setSelectedRow,
+        setFilter,
+        setOpenModal,
+        setOrder,
+        setOrderBy
+    ])
+
     const { data: responseData, isFetching, refetch } = useGetContractsExpiringSoonQuery(filter)
 
     // const handleClickDetail = (config: IGetAllSysConfiguration) => {
@@ -170,6 +185,7 @@ function ContractExpPage() {
                 sx={{
                     width: '100%',
                     overflow: 'hidden',
+                    boxShadow: 'var(--box-shadow-paper)',
                     borderRadius: '15px',
                     backgroundColor: 'var(--background-item)'
                 }}
@@ -222,7 +238,7 @@ function ContractExpPage() {
                                     borderColor: 'var(--selected-field-color)'
                                 }
                             }}
-                            onKeyDown={e => {
+                            onKeyDown={() => {
                                 handleSearchKeyword()
                             }}
                             slotProps={{

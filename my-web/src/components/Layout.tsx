@@ -1,7 +1,7 @@
 'use client'
-import React, { useEffect, useRef } from 'react'
+import React from 'react'
 import Sidebar, { SidebarItem, TypographyItem } from '@/components/Sidebar'
-import { Alert, Box, Divider } from '@mui/material'
+import { Box, Divider } from '@mui/material'
 import { Building2, Wallet } from 'lucide-react'
 import {
     ShieldCheck,
@@ -17,16 +17,7 @@ import {
     CalendarClock,
     SlidersHorizontal
 } from 'lucide-react'
-import {
-    ChartNoAxesCombined,
-    Users,
-    FileSignature,
-    Stethoscope,
-    Award,
-    CalendarX,
-    BellRing,
-    CalendarHeart
-} from 'lucide-react'
+import { ChartNoAxesCombined, Users, FileSignature, Stethoscope, Award, CalendarX } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import Header from './Header'
 import { useTranslation } from 'react-i18next'

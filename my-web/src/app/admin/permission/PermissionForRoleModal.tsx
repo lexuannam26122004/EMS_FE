@@ -1,6 +1,5 @@
 import { Box, Button, CircularProgress, Modal, Paper, Typography } from '@mui/material'
 import Grid2 from '@mui/material/Grid2'
-import { Close, ContentSaveEditOutline } from 'mdi-material-ui'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetJsonRoleHasFunctionsQuery, useUpdateJsonRoleHasFunctionsMutation } from '@/services/AspNetRoleService'
@@ -9,9 +8,12 @@ import { useToast } from '@/hooks/useToast'
 import { useSelector, useDispatch } from 'react-redux'
 import TablePermission from '@/components/TablePermission'
 import { tablePermissionSlice, getPermissionForRoleSelector } from '@/redux/slices/tablePermissionSlice'
+import LoadingButton from '@mui/lab/LoadingButton'
+import { SaveIcon, XIcon } from 'lucide-react'
+import { IAspNetRoleGetAll } from '@/models/AspNetRole'
 
 interface Props {
-    data: any
+    data: IAspNetRoleGetAll | null
     open: boolean
     onClose: () => void
 }
@@ -25,9 +27,10 @@ function PermissionForRoleModal({ data, open, onClose }: Props) {
         data: jsonRoleData,
         isLoading: isJsonRoleDataLoading,
         refetch: refetchJsonRoleData
-    } = useGetJsonRoleHasFunctionsQuery(data?.Id)
+    } = useGetJsonRoleHasFunctionsQuery(data?.Id ?? '')
     const [updateJsonRole, resultUpdateRoleMutation] = useUpdateJsonRoleHasFunctionsMutation()
     const [isDataLoaded, setIsDataLoaded] = useState(false)
+    const [isClose, setIsClose] = useState(false)
 
     const dataPermission = useSelector(getPermissionForRoleSelector)
 
@@ -60,10 +63,28 @@ function PermissionForRoleModal({ data, open, onClose }: Props) {
                 Id: data?.Id,
                 JsonRoleHasFunctions: JSON.stringify(dataPermission)
             })
-        } catch (err) {
+        } catch {
             console.log(t('COMMON.PERMISSIONS.MESSAGE.ERROR.UPDATE_PERMISSION'))
         }
     }
+
+    const handleSaveAndClose = async () => {
+        try {
+            await updateJsonRole({
+                Id: data?.Id,
+                JsonRoleHasFunctions: JSON.stringify(dataPermission)
+            })
+            setIsClose(true)
+        } catch {
+            console.log(t('COMMON.PERMISSIONS.MESSAGE.ERROR.UPDATE_PERMISSION'))
+        }
+    }
+
+    useEffect(() => {
+        if (resultUpdateRoleMutation.isSuccess && isClose && !resultUpdateRoleMutation.isLoading) {
+            handleClose()
+        }
+    }, [isClose, resultUpdateRoleMutation])
 
     useEffect(() => {
         if (resultUpdateRoleMutation.isSuccess) {
@@ -87,7 +108,7 @@ function PermissionForRoleModal({ data, open, onClose }: Props) {
                     transform: 'translate(-50%, -50%)',
                     backgroundColor: 'var(--background-color)',
                     border: '1px solid var(--border-color)',
-                    borderRadius: '6px'
+                    borderRadius: '15px'
                 }}
             >
                 <Box
@@ -127,42 +148,82 @@ function PermissionForRoleModal({ data, open, onClose }: Props) {
                         <TablePermission height='100%' sx={{ flexGrow: '1', overflowY: 'auto' }} />
                     )}
 
-                    <Grid2 sx={{ marginTop: '18px' }} container justifyContent={'center'} gap={5}>
-                        <Button
-                            size='medium'
-                            type='button'
-                            variant='outlined'
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '20px',
+                            mt: '18px'
+                        }}
+                    >
+                        <LoadingButton
+                            variant='contained'
+                            {...(resultUpdateRoleMutation.isLoading && { loading: true })}
+                            loadingPosition='start'
+                            startIcon={<SaveIcon />}
                             sx={{
-                                borderColor: 'var(--border-color)',
-                                color: 'var(--text-color)',
+                                height: '50px',
+                                backgroundColor: 'var(--button-color)',
+                                width: 'auto',
+                                padding: '0px 30px',
+                                fontSize: '16px',
                                 '&:hover': {
-                                    borderColor: 'var(--hover-color)',
-                                    backgroundColor: 'var(--hover-color)'
-                                }
+                                    backgroundColor: 'var(--hover-button-color)'
+                                },
+                                fontWeight: 'bold',
+                                whiteSpace: 'nowrap',
+                                textTransform: 'none'
                             }}
-                            startIcon={<ContentSaveEditOutline />}
                             onClick={handleSave}
                         >
                             {t('COMMON.BUTTON.SAVE')}
-                        </Button>
-                        <Button
-                            size='medium'
-                            type='button'
-                            variant='outlined'
+                        </LoadingButton>
+
+                        <LoadingButton
+                            variant='contained'
+                            {...(resultUpdateRoleMutation.isLoading && { loading: true })}
+                            loadingPosition='start'
+                            startIcon={<SaveIcon />}
                             sx={{
-                                borderColor: 'var(--border-color)',
-                                color: 'var(--text-color)',
+                                height: '50px',
+                                backgroundColor: 'var(--button-color)',
+                                width: 'auto',
+                                padding: '0px 30px',
                                 '&:hover': {
-                                    borderColor: 'var(--hover-color)',
-                                    backgroundColor: 'var(--hover-color)'
-                                }
+                                    backgroundColor: 'var(--hover-button-color)'
+                                },
+                                fontSize: '16px',
+                                fontWeight: 'bold',
+                                whiteSpace: 'nowrap',
+                                textTransform: 'none'
                             }}
-                            startIcon={<Close />}
+                            onClick={handleSaveAndClose}
+                        >
+                            {t('COMMON.BUTTON.SAVE_AND_CLOSE')}
+                        </LoadingButton>
+
+                        <Button
+                            variant='contained'
+                            startIcon={<XIcon />}
+                            sx={{
+                                height: '50px',
+                                backgroundColor: 'var(--button-color)',
+                                width: 'auto',
+                                fontSize: '16px',
+                                '&:hover': {
+                                    backgroundColor: 'var(--hover-button-color)'
+                                },
+                                padding: '0px 30px',
+                                fontWeight: 'bold',
+                                whiteSpace: 'nowrap',
+                                textTransform: 'none'
+                            }}
                             onClick={handleClose}
                         >
-                            {t('COMMON.BUTTON.CANCEL')}
+                            {t('COMMON.BUTTON.CLOSE')}
                         </Button>
-                    </Grid2>
+                    </Box>
                 </Box>
             </Paper>
         </Modal>

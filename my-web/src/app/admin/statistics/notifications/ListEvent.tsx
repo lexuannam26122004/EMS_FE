@@ -1,7 +1,7 @@
 import { Box, InputLabel, Paper, Tooltip, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
-import { SelectChangeEvent, TextField, InputAdornment, Pagination, Avatar } from '@mui/material'
+import { SelectChangeEvent, TextField, InputAdornment, Pagination } from '@mui/material'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
@@ -119,13 +119,13 @@ export const eventData: IEventGetAll[] = [
     }
 ]
 
-interface IGetAll {
-    avatarPath: string
-    fullname: string
-    count: number
-    employeeID: string
-    roles: string[]
-}
+// interface IGetAll {
+//     avatarPath: string
+//     fullname: string
+//     count: number
+//     employeeID: string
+//     roles: string[]
+// }
 
 const responseData = {
     Data: {
@@ -156,7 +156,7 @@ function Page() {
 
     const currentMonth = new Date().getMonth()
     const currentYear = new Date().getFullYear()
-    const [type, setType] = useState(0)
+    const [type] = useState(0)
     const [value, setValue] = useState(currentMonth)
     const [keyword, setKeyword] = useState('')
     const [filter, setFilter] = useState<IFilterEvent>({
@@ -166,15 +166,17 @@ function Page() {
         pageNumber: 1
     })
 
-    const handleSearchKeyword = () => {}
+    const handleSearchKeyword = () => {
+        console.log('Search keyword:', value)
+    }
 
-    const notifyData = responseData?.Data.Records as IEventGetAll[]
+    //const notifyData = responseData?.Data.Records as IEventGetAll[]
 
     const totalRecords = (responseData?.Data.TotalRecords as number) || 0
 
-    const handleTypeChange = (event: SelectChangeEvent<number>) => {
-        setType(event.target.value as number)
-    }
+    // const handleTypeChange = (event: SelectChangeEvent<number>) => {
+    //     setType(event.target.value as number)
+    // }
 
     const handleValueChange = (event: SelectChangeEvent<number>) => {
         setValue(event.target.value as number)
@@ -199,6 +201,7 @@ function Page() {
                 height: '100%',
                 overflow: 'hidden',
                 display: 'flex',
+                boxShadow: 'var(--box-shadow-paper)',
                 flexDirection: 'column',
                 borderRadius: '15px',
                 backgroundColor: 'var(--background-item)'
@@ -350,7 +353,7 @@ function Page() {
                             borderColor: 'var(--selected-field-color)'
                         }
                     }}
-                    onKeyDown={e => {
+                    onKeyDown={() => {
                         handleSearchKeyword()
                     }}
                     slotProps={{

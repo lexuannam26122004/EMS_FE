@@ -1,11 +1,11 @@
 'use client'
 
-import { MoreVertical, ChevronLast, ChevronFirst } from 'lucide-react'
+import { ChevronLast, ChevronFirst } from 'lucide-react'
 import { useContext, createContext, useState, ReactNode, FC, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Box, Divider, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { useSelector, useDispatch } from 'react-redux'
-import { sidebarSlice, sidebarSliceSelector } from '@/redux/slices/sidebarSlice'
+import { sidebarSlice } from '@/redux/slices/sidebarSlice'
 import { RootState } from '@/redux/store'
 
 // Define a context type for the Sidebar context
@@ -137,7 +137,7 @@ export const TypographyItem: FC<TypographyItemProps> = ({ text }) => {
 }
 
 import ReactDOM from 'react-dom'
-import React, { ReactElement } from 'react'
+import React from 'react'
 
 interface SidebarItemProps {
     icon: ReactNode

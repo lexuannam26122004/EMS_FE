@@ -9,7 +9,6 @@ import DialogTitle from '@mui/material/DialogTitle'
 import ErrorIcon from '@mui/icons-material/Error'
 import WarningIcon from '@mui/icons-material/Warning'
 import InfoIcon from '@mui/icons-material/Info'
-import Box from '@mui/material/Box'
 
 interface AlertDialogProps {
     title: string

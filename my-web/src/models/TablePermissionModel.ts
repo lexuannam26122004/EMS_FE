@@ -8,10 +8,9 @@ export interface ITablePermission {
     Function?: IFunctions
     Children?: ITablePermission[]
     data?: IFunctions
+    NameController?: string
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface ITableAPIFunction {}
 export interface IFunctions {
     IsAllowAll?: boolean
     IsAllowView?: boolean
@@ -19,6 +18,14 @@ export interface IFunctions {
     IsAllowEdit?: boolean
     IsAllowPrint?: boolean
     IsAllowDelete?: boolean
+}
+
+export interface IFilterRole {
+    pageSize?: number
+    pageNumber?: number
+    sortBy?: string
+    isDescending?: boolean
+    keyword?: string
 }
 
 export interface ITableTempData {

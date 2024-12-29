@@ -40,16 +40,18 @@
         "TABLE": {
             "COMMON": {
                 "ID": "ID",
-                "ACTION": "HÀNH ĐỘNG"
+                "ACTION": "Hành động"
             },
             "PERMISSION": {
                 "USER": {
-                    "FULLNAME": "HỌ VÀ TÊN",
-                    "ROLE": "CHỨC VỤ"
+                    "FULLNAME": "Họ và tên",
+                    "ROLE": "Chức vụ"
                 },
                 "ROLE": {
-                    "NAME": "TÊN CHỨC VỤ"
-                }
+                    "NAME": "Tên chức vụ"
+                },
+                "TITLE": "Danh sách Chức vụ Phân quyền",
+                "SEARCH": "Tìm kiếm theo Chức vụ"
             }
         },
         "BUTTON": {
@@ -364,7 +366,7 @@
             "ADDRESS": "Địa chỉ",
             "CONTRACTNAME": "Tên hợp đồng",
             "STARTDATE": "Ngày vào làm",
-            "STARTDATEWORK":"Ngày vào làm",
+            "STARTDATEWORK": "Ngày vào làm",
             "CREATE": {
                 "CREATE_EMPLOYEE": "Thêm mới nhân viên",
                 "SUCCESS": {

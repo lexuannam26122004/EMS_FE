@@ -143,7 +143,7 @@ interface Event {
 const MyCalendar = () => {
     const { t } = useTranslation('common')
 
-    const [filter, setFilter] = useState<IFilterEvent>({
+    const [filter] = useState<IFilterEvent>({
         pageNumber: 1,
         sortBy: 'Id',
         isDescending: false,
@@ -153,7 +153,7 @@ const MyCalendar = () => {
     const [createEvent, { isLoading: isLoadingCreate }] = useCreateEventMutation()
     const [deleteEvent, { isLoading: isLoadingDelete }] = useDeleteEventMutation()
     const [updateEvent, { isLoading: isLoadingUpdate }] = useUpdateEventMutation()
-    const { data: responseData, isLoading, error, refetch } = useSearchEventQuery(filter)
+    const { data: responseData, refetch } = useSearchEventQuery(filter)
 
     const eventData = responseData?.Data.Records as IEventGetAll[]
 
@@ -373,6 +373,7 @@ const MyCalendar = () => {
             sx={{
                 borderRadius: '15px',
                 width: '100%',
+                boxShadow: 'var(--box-shadow-paper)',
                 overflow: 'hidden',
                 backgroundColor: 'var(--background-item)',
                 position: 'relative'

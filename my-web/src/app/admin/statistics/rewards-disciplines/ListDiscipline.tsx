@@ -1,6 +1,5 @@
 'use client'
 import { IFilterEmploymentContract } from '@/models/EmploymentContract'
-import { formatDate } from '@/utils/formatDate'
 import {
     Box,
     Select,
@@ -9,22 +8,15 @@ import {
     MenuItem,
     SelectChangeEvent,
     Paper,
-    TableRow,
     InputLabel,
-    Table,
-    TableCell,
     FormControl,
-    TableContainer,
     TextField,
-    InputAdornment,
-    OutlinedInput,
-    Avatar
+    InputAdornment
 } from '@mui/material'
-import { useEffect, useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import SearchIcon from '@mui/icons-material/Search'
-import { useRouter } from 'next/navigation'
-import { useGetContractsExpiringSoonQuery } from '@/services/EmploymentContractService'
+// import { useRouter } from 'next/navigation'
 import TableDiscipline from '@/components/TableDiscipline'
 
 import Tabs from '@mui/material/Tabs'
@@ -180,24 +172,24 @@ const responseData = {
 
 function Page() {
     const { t } = useTranslation('common')
-    const router = useRouter()
-    const [selected, setSelected] = useState<number[]>([])
+    // const router = useRouter()
+    // const [selected, setSelected] = useState<number[]>([])
     const [page, setPage] = useState(1)
     const [rowsPerPage, setRowsPerPage] = useState('5')
-    const [from, setFrom] = useState(1)
-    const [to, setTo] = useState(5)
+    const [from] = useState(1)
+    const [to] = useState(5)
     const [filter, setFilter] = useState<IFilterEmploymentContract>({
         pageSize: 5,
         pageNumber: 1,
         daysUntilExpiration: 60
     })
     const [keyword, setKeyword] = useState('')
-    const [openDialog, setOpenDialog] = useState(false)
-    const [selectedRow, setSelectedRow] = useState<number | null>(null)
-    const [order, setOrder] = useState<'asc' | 'desc'>('asc')
-    const [orderBy, setOrderBy] = useState<string>('')
+    // const [openDialog, setOpenDialog] = useState(false)
+    // const [selectedRow, setSelectedRow] = useState<number | null>(null)
+    // const [order, setOrder] = useState<'asc' | 'desc'>('asc')
+    // const [orderBy, setOrderBy] = useState<string>('')
     // const [selectedConfig, setSelectedConfig] = useState<IGetAllSysConfiguration | null>(null)
-    const [openModal, setOpenModal] = useState(false)
+    // const [openModal, setOpenModal] = useState(false)
 
     // const { data: responseD, isFetching, refetch } = useGetContractsExpiringSoonQuery(filter)
 
@@ -253,23 +245,23 @@ function Page() {
     //     }
     // }, [isFetching, responseData, page, rowsPerPage])
 
-    // useEffect(() => {
-    //     refetch()
-    // }, [filter])
+    useEffect(() => {
+        //refetch()
+    }, [filter])
 
-    const handleSort = (property: string) => {
-        setFilter(prev => ({
-            ...prev,
-            sortBy: property,
-            isDescending: orderBy === property && order === 'asc' ? true : false
-        }))
-        if (orderBy === property) {
-            setOrder(order === 'asc' ? 'desc' : 'asc')
-        } else {
-            setOrder('asc')
-        }
-        setOrderBy(property)
-    }
+    // const handleSort = (property: string) => {
+    //     setFilter(prev => ({
+    //         ...prev,
+    //         sortBy: property,
+    //         isDescending: orderBy === property && order === 'asc' ? true : false
+    //     }))
+    //     if (orderBy === property) {
+    //         setOrder(order === 'asc' ? 'desc' : 'asc')
+    //     } else {
+    //         setOrder('asc')
+    //     }
+    //     setOrderBy(property)
+    // }
 
     const [currentTab, setCurrentTab] = useState(0)
 
@@ -317,6 +309,7 @@ function Page() {
             <Paper
                 sx={{
                     width: '100%',
+                    boxShadow: 'var(--box-shadow-paper)',
                     overflow: 'hidden',
                     borderRadius: '20px',
                     backgroundColor: 'var(--background-item)'
@@ -483,7 +476,7 @@ function Page() {
                                     borderColor: 'var(--selected-field-color)'
                                 }
                             }}
-                            onKeyDown={e => {
+                            onKeyDown={() => {
                                 handleSearchKeyword()
                             }}
                             slotProps={{

@@ -1,7 +1,7 @@
 import { MenuItem, FormControl, Select, Box, Paper, Typography, SelectChangeEvent } from '@mui/material'
 import ReactECharts from 'echarts-for-react'
 import { useTheme } from 'next-themes'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export default function Chart() {
@@ -13,6 +13,8 @@ export default function Chart() {
     const handleYearChange = (event: SelectChangeEvent<number>) => {
         setSelectedYear(event.target.value as number)
     }
+
+    useEffect(() => {}, [selectedYear])
 
     const percent = 43
 
@@ -141,6 +143,7 @@ export default function Chart() {
             sx={{
                 width: '100%',
                 mt: '24px',
+                boxShadow: 'var(--box-shadow-paper)',
                 padding: '24px 24px 15px',
                 overflow: 'hidden',
                 borderRadius: '20px',

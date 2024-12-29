@@ -1,31 +1,22 @@
 'use client'
-import { IFilterEmploymentContract } from '@/models/EmploymentContract'
 import { formatDate } from '@/utils/formatDate'
 import {
     Box,
-    Select,
-    Pagination,
     Typography,
     Tooltip,
-    SelectChangeEvent,
-    Paper,
     TableRow,
     TableBody,
     Table,
     TableCell,
     TableHead,
     TableContainer,
-    TextField,
-    InputAdornment,
     TableSortLabel,
     Avatar
 } from '@mui/material'
 import { ClipboardCheck } from 'lucide-react'
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import SearchIcon from '@mui/icons-material/Search'
 import { useRouter } from 'next/navigation'
-import { useGetContractsExpiringSoonQuery } from '@/services/EmploymentContractService'
 
 function getStatusBgColor(status: string): string {
     if (status === 'Rejected') {
@@ -51,29 +42,29 @@ function getStatusTextColor(status: string): string {
     }
 }
 
-function getStatusBgColor1(status: string): string {
-    if (status === 'Rejected') {
-        return 'var(--bg-danger-color1)'
-    } else if (status === 'Pending') {
-        return 'var(--bg-warning-color1)'
-    } else if (status === 'Resolved') {
-        return 'var(--bg-success-color1)'
-    } else {
-        return 'var(--bg-closed-color1)'
-    }
-}
+// function getStatusBgColor1(status: string): string {
+//     if (status === 'Rejected') {
+//         return 'var(--bg-danger-color1)'
+//     } else if (status === 'Pending') {
+//         return 'var(--bg-warning-color1)'
+//     } else if (status === 'Resolved') {
+//         return 'var(--bg-success-color1)'
+//     } else {
+//         return 'var(--bg-closed-color1)'
+//     }
+// }
 
-function getStatusTextColor1(status: string): string {
-    if (status === 'Rejected') {
-        return 'var(--text-danger-color1)'
-    } else if (status === 'Pending') {
-        return 'var(--text-warning-color1)'
-    } else if (status === 'Resolved') {
-        return 'var(--text-success-color1)'
-    } else {
-        return 'var(--text-closed-color1)'
-    }
-}
+// function getStatusTextColor1(status: string): string {
+//     if (status === 'Rejected') {
+//         return 'var(--text-danger-color1)'
+//     } else if (status === 'Pending') {
+//         return 'var(--text-warning-color1)'
+//     } else if (status === 'Resolved') {
+//         return 'var(--text-success-color1)'
+//     } else {
+//         return 'var(--text-closed-color1)'
+//     }
+// }
 
 interface IGetAllErrorReport {
     Id: number
@@ -113,6 +104,25 @@ function TableErrorReport({ errorsData, totalRecords, type }: IProps) {
     //     setOpenModal(true)
     // }
 
+    useEffect(() => {}, [
+        totalRecords,
+        type,
+        selected,
+        openDialog,
+        selectedRow,
+        order,
+        orderBy,
+        openModal,
+        router,
+        t,
+        setSelected,
+        setOpenDialog,
+        setSelectedRow,
+        setOrder,
+        setOrderBy,
+        setOpenModal
+    ])
+
     const handleSort = (property: string) => {
         if (orderBy === property) {
             setOrder(order === 'asc' ? 'desc' : 'asc')
@@ -125,6 +135,9 @@ function TableErrorReport({ errorsData, totalRecords, type }: IProps) {
     return (
         <TableContainer
             sx={{
+                scrollbarGutter: 'stable',
+                paddingLeft: '7px',
+                height: '303px',
                 '&::-webkit-scrollbar': {
                     width: '7px',
                     height: '7px'
@@ -135,11 +148,14 @@ function TableErrorReport({ errorsData, totalRecords, type }: IProps) {
                 }
             }}
         >
-            <Table>
+            <Table stickyHeader>
                 <TableHead>
                     <TableRow
                         sx={{
-                            backgroundColor: 'var(--header-table-dashboard)',
+                            backgroundColor: 'var(--header-table-dashboard) !important', // Đặt !important để ưu tiên
+                            '& th': {
+                                backgroundColor: 'var(--header-table-dashboard) !important' // Áp dụng cho các ô
+                            },
                             '&:last-child td, &:last-child th': {
                                 border: 'none'
                             }
