@@ -92,7 +92,7 @@ const AvatarMenu = () => {
 
     const handleLogout = () => {
         setOpen(false)
-        localStorage.removeItem('userData')
+        localStorage.removeItem('auth_token');
         router.push('/login')
     }
 
