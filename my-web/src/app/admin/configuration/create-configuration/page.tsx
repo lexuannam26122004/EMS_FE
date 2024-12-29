@@ -1,14 +1,14 @@
 'use client'
-import { Box, Button, Grid2, Paper, TextField, Typography } from '@mui/material'
+import { Box, Button, Paper, TextField, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { SaveIcon, XIcon, Loader } from 'lucide-react'
+import { SaveIcon, XIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useCreateSysConfigurationMutation } from '@/services/SysConfigurationService'
 import { useEffect, useState } from 'react'
 import LoadingButton from '@mui/lab/LoadingButton'
 import { useToast } from '@/hooks/useToast'
 
-function createConfigurationPage() {
+function CreateConfigurationPage() {
     const { t } = useTranslation('common')
     const router = useRouter()
     const [key, setKey] = useState('')
@@ -66,6 +66,7 @@ function createConfigurationPage() {
                 elevation={0}
                 sx={{
                     width: '100%',
+                    boxShadow: 'var(--box-shadow-paper)',
                     overflow: 'hidden',
                     borderRadius: '15px',
                     backgroundColor: 'var(--background-item)',
@@ -428,4 +429,4 @@ function createConfigurationPage() {
     )
 }
 
-export default createConfigurationPage
+export default CreateConfigurationPage

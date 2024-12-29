@@ -1,6 +1,6 @@
 import Badge from '@mui/material/Badge'
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined'
-import { Box, ClickAwayListener, Grow, Menu, MenuList, Paper, Popper } from '@mui/material'
+import { Box, ClickAwayListener, Grow, Paper, Popper } from '@mui/material'
 import { useEffect, useRef, useState } from 'react'
 import NotificationsPage from '@/app/admin/notification/page'
 import { usePathname } from 'next/navigation'
@@ -19,7 +19,7 @@ const NotificationMenu = () => {
 
     const unreadCount = useSelector(countNewNotificationSelector)
 
-    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    const handleClick = () => {
         if (pathname === '/admin/notification') {
             return
         }
@@ -48,12 +48,12 @@ const NotificationMenu = () => {
         setOpen(false)
     }
 
-    const handleListKeyDown = (event: React.KeyboardEvent) => {
-        if (event.key === 'Tab' || event.key === 'Escape') {
-            event.preventDefault()
-            setOpen(false)
-        }
-    }
+    // const handleListKeyDown = (event: React.KeyboardEvent) => {
+    //     if (event.key === 'Tab' || event.key === 'Escape') {
+    //         event.preventDefault()
+    //         setOpen(false)
+    //     }
+    // }
 
     const prevOpen = useRef(open)
     useEffect(() => {

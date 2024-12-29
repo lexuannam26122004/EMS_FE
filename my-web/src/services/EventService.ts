@@ -1,4 +1,3 @@
-import Search from '@/components/Search'
 import { IEventCreate, IFilterEvent, IEventUpdate } from '@/models/Event'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 

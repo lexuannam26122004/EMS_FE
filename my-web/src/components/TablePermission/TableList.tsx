@@ -17,4 +17,6 @@ const TableList = memo(({ data, level = 0 }: Props) => {
     )
 })
 
+TableList.displayName = 'TableList'
+
 export default TableList

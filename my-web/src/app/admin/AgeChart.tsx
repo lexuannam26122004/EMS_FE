@@ -1,5 +1,4 @@
 import React from 'react'
-import * as echarts from 'echarts'
 import ReactECharts from 'echarts-for-react'
 import { Box, Paper } from '@mui/material'
 import { Typography } from '@mui/material'
@@ -103,7 +102,7 @@ const SaleByGenderChart = () => {
                 },
                 animationType: 'scale',
                 animationEasing: 'elasticOut',
-                animationDelay: function (idx: number) {
+                animationDelay: function () {
                     return Math.random() * 200
                 }
             }

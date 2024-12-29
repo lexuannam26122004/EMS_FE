@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { Box, Paper, Modal, Typography, Divider } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { X } from 'lucide-react'

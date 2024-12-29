@@ -1,6 +1,5 @@
 'use client'
 import { IFilterEmploymentContract } from '@/models/EmploymentContract'
-import { formatDate } from '@/utils/formatDate'
 import {
     Box,
     Select,
@@ -9,22 +8,15 @@ import {
     MenuItem,
     SelectChangeEvent,
     Paper,
-    TableRow,
     InputLabel,
-    Table,
-    TableCell,
     FormControl,
-    TableContainer,
     TextField,
-    InputAdornment,
-    OutlinedInput,
-    Avatar
+    InputAdornment
 } from '@mui/material'
 import { useEffect, useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import SearchIcon from '@mui/icons-material/Search'
 import { useRouter } from 'next/navigation'
-import { useGetContractsExpiringSoonQuery } from '@/services/EmploymentContractService'
 import TableReward from '@/components/TableReward'
 
 import Tabs from '@mui/material/Tabs'
@@ -192,12 +184,14 @@ function Page() {
         daysUntilExpiration: 60
     })
     const [keyword, setKeyword] = useState('')
-    const [openDialog, setOpenDialog] = useState(false)
-    const [selectedRow, setSelectedRow] = useState<number | null>(null)
-    const [order, setOrder] = useState<'asc' | 'desc'>('asc')
-    const [orderBy, setOrderBy] = useState<string>('')
+    // const [openDialog, setOpenDialog] = useState(false)
+    // const [selectedRow, setSelectedRow] = useState<number | null>(null)
+    // const [order, setOrder] = useState<'asc' | 'desc'>('asc')
+    // const [orderBy, setOrderBy] = useState<string>('')
     // const [selectedConfig, setSelectedConfig] = useState<IGetAllSysConfiguration | null>(null)
-    const [openModal, setOpenModal] = useState(false)
+    // const [openModal, setOpenModal] = useState(false)
+
+    useEffect(() => {}, [page, rowsPerPage, from, to, filter, keyword, selected, router, setSelected, setFrom, setTo])
 
     // const { data: responseD, isFetching, refetch } = useGetContractsExpiringSoonQuery(filter)
 
@@ -304,6 +298,7 @@ function Page() {
                 sx={{
                     width: '100%',
                     overflow: 'hidden',
+                    boxShadow: 'var(--box-shadow-paper)',
                     borderRadius: '20px',
                     backgroundColor: 'var(--background-item)'
                 }}
@@ -469,7 +464,7 @@ function Page() {
                                     borderColor: 'var(--selected-field-color)'
                                 }
                             }}
-                            onKeyDown={e => {
+                            onKeyDown={() => {
                                 handleSearchKeyword()
                             }}
                             slotProps={{

@@ -1,17 +1,13 @@
-import { Avatar, Box, Tooltip, Typography } from '@mui/material'
-import { EllipsisIcon, EyeIcon } from 'lucide-react'
+import { Avatar, Box, Paper, Tooltip, Typography } from '@mui/material'
+import { EllipsisIcon } from 'lucide-react'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded'
 import { INotificationGetById } from '@/models/Notifications'
 import { useTranslation } from 'react-i18next'
 import formatDateToTime from '@/utils/formatDateToTime'
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import Popper from '@mui/material/Popper'
-import Grow from '@mui/material/Grow'
-import Paper from '@mui/material/Paper'
-import MenuList from '@mui/material/MenuList'
 import MenuItem from '@mui/material/MenuItem'
-import ClickAwayListener from '@mui/material/ClickAwayListener'
 import { styled } from '@mui/material/styles'
 import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded'
 import EditRoundedIcon from '@mui/icons-material/EditRounded'
@@ -65,7 +61,7 @@ const avatars = [
     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-19.webp'
 ]
 
-const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
+const StyledMenuItem = styled(MenuItem)(() => ({
     padding: '7.5px',
     fontSize: '14px',
     fontWeight: 'bold',
@@ -76,7 +72,7 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
     }
 }))
 
-function Page({ notifications, totalRecords }: Props) {
+function Page({ notifications }: Props) {
     const { t } = useTranslation('common')
 
     const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
@@ -102,22 +98,22 @@ function Page({ notifications, totalRecords }: Props) {
         }
     }, [anchorEl])
 
-    const [open, setOpen] = useState(false)
+    // const [open, setOpen] = useState(false)
 
-    const handleChangeLanguage = (language: string) => {
-        setOpen(false)
-    }
+    // const handleChangeLanguage = (language: string) => {
+    //     setOpen(false)
+    // }
 
-    const handleListKeyDown = (event: React.KeyboardEvent) => {
-        if (event.key === 'Tab' || event.key === 'Escape') {
-            event.preventDefault()
-            setOpen(false)
-        }
-    }
+    // const handleListKeyDown = (event: React.KeyboardEvent) => {
+    //     if (event.key === 'Tab' || event.key === 'Escape') {
+    //         event.preventDefault()
+    //         setOpen(false)
+    //     }
+    // }
 
-    const handleToggle = () => {
-        setOpen(prev => !prev)
-    }
+    // const handleToggle = () => {
+    //     setOpen(prev => !prev)
+    // }
 
     const chunkedNotifications = notifications.reduce<INotificationGetById[][]>((result, _, index) => {
         if (index % 2 === 0) {
@@ -147,11 +143,12 @@ function Page({ notifications, totalRecords }: Props) {
                         gap: '24px'
                     }}
                 >
-                    <Box
+                    <Paper
                         sx={{
                             display: 'flex',
                             alignItems: 'center',
                             borderRadius: '15px',
+                            boxShadow: 'var(--box-shadow-paper)',
                             flex: 1,
                             backgroundColor: 'var(--background-item)',
                             justifyContent: 'space-between'
@@ -425,12 +422,13 @@ function Page({ notifications, totalRecords }: Props) {
                                 </StyledMenuItem>
                             </Box>
                         </Popper>
-                    </Box>
+                    </Paper>
 
-                    <Box
+                    <Paper
                         sx={{
                             display: 'flex',
                             alignItems: 'center',
+                            boxShadow: 'var(--box-shadow-paper)',
                             borderRadius: '15px',
                             flex: 1,
                             backgroundColor: 'var(--background-item)',
@@ -637,7 +635,7 @@ function Page({ notifications, totalRecords }: Props) {
                                 />
                             </Tooltip>
                         </Box>
-                    </Box>
+                    </Paper>
                 </Box>
             ))}
         </Box>

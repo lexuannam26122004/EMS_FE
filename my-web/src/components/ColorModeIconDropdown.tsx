@@ -3,14 +3,11 @@
 import * as React from 'react'
 import { MoonIcon, SunIcon } from '@radix-ui/react-icons'
 import Box from '@mui/material/Box'
-import { IconButtonOwnProps } from '@mui/material/IconButton'
 import { useTheme } from 'next-themes'
-import { useTranslation } from 'react-i18next'
 
-export default function ColorModeIconDropdown(props: IconButtonOwnProps) {
-    const { t } = useTranslation('common')
+export default function ColorModeIconDropdown() {
     const { resolvedTheme, setTheme } = useTheme()
-    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    const handleClick = () => {
         setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
     }
 

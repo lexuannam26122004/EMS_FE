@@ -1,18 +1,16 @@
 'use client'
 
 import { Box, Paper, Typography } from '@mui/material'
-import { TrendingDown, TrendingUp } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 import ReactECharts from 'echarts-for-react'
 import { useTheme } from 'next-themes'
-import { useState } from 'react'
 
 const getLastWeekDays = () => {
     const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
     const currentDate = new Date()
     const currentDay = currentDate.getDay()
 
-    let weekDays = []
+    const weekDays = []
     for (let i = 0; i < 7; i++) {
         const dayIndex = (currentDay + i) % 7
         weekDays.push(daysOfWeek[dayIndex])

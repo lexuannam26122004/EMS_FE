@@ -35,7 +35,7 @@ function DisplayInfo() {
     const laborCostsPercent = 14.47
     const promotions = 12
     const promotionPercent = 24
-    const isDown = 1
+
     return (
         <Box
             sx={{

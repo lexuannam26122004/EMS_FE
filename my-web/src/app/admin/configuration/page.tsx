@@ -24,7 +24,6 @@ import {
     Button,
     TextField,
     InputAdornment,
-    IconButton,
     Tooltip,
     TableSortLabel
 } from '@mui/material'
@@ -35,6 +34,7 @@ import { useRouter } from 'next/navigation'
 import { CirclePlus, EyeIcon, Pencil, Trash2 } from 'lucide-react'
 import AlertDialog from '@/components/AlertDialog'
 import DetailModal from './DetailModal'
+import Loading from '@/components/Loading'
 
 function ConfigurationPage() {
     const { t } = useTranslation('common')
@@ -58,12 +58,9 @@ function ConfigurationPage() {
     const [openModal, setOpenModal] = useState(false)
 
     const { data: responseData, isFetching, refetch } = useSearchSysConfigurationQuery(filter)
-    const [changeSysConfiguration, { isError: isErrorChange, isSuccess: isSuccessChange, isLoading: isLoadingChange }] =
-        useChangeStatusSysConfigurationMutation()
-    const [
-        changeManySysConfiguration,
-        { isError: isErrorChangeMany, isSuccess: isSuccessChangeMany, isLoading: isLoadingChangeMany }
-    ] = useChangeStatusManySysConfigurationMutation()
+    const [changeSysConfiguration, { isSuccess: isSuccessChange }] = useChangeStatusSysConfigurationMutation()
+    const [changeManySysConfiguration, { isSuccess: isSuccessChangeMany }] =
+        useChangeStatusManySysConfigurationMutation()
 
     const handleClickDetail = (config: IGetAllSysConfiguration) => {
         setSelectedConfig(config)
@@ -190,11 +187,16 @@ function ConfigurationPage() {
 
     const countRows = selected.length
 
+    if (isFetching) {
+        return <Loading />
+    }
+
     return (
         <Box>
             <Paper
                 sx={{
                     width: '100%',
+                    boxShadow: 'var(--box-shadow-paper)',
                     overflow: 'hidden',
                     borderRadius: '15px',
                     backgroundColor: 'var(--background-item)'
@@ -235,7 +237,7 @@ function ConfigurationPage() {
                                     borderColor: 'var(--selected-field-color)'
                                 }
                             }}
-                            onKeyDown={e => {
+                            onKeyDown={() => {
                                 handleSearchKeyword()
                             }}
                             slotProps={{

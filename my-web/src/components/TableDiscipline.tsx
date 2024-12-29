@@ -1,32 +1,23 @@
 'use client'
-import { IFilterEmploymentContract } from '@/models/EmploymentContract'
 import { formatDate } from '@/utils/formatDate'
 import { formatNumberToMoney } from '@/utils/formatNumberWithUnit'
 import {
     Box,
-    Select,
-    Pagination,
     Typography,
     Tooltip,
-    SelectChangeEvent,
-    Paper,
     TableRow,
     TableBody,
     Table,
     TableCell,
     TableHead,
     TableContainer,
-    TextField,
-    InputAdornment,
     TableSortLabel,
     Avatar
 } from '@mui/material'
 import { ClipboardCheck } from 'lucide-react'
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import SearchIcon from '@mui/icons-material/Search'
 import { useRouter } from 'next/navigation'
-import { useGetContractsExpiringSoonQuery } from '@/services/EmploymentContractService'
 
 function getStatusBgColor(status: boolean): string {
     if (status === false) {
@@ -44,21 +35,21 @@ function getStatusTextColor(status: boolean): string {
     }
 }
 
-function getStatusBgColor1(status: boolean): string {
-    if (status === false) {
-        return 'var(--bg-warning-color1)'
-    } else {
-        return 'var(--bg-success-color1)'
-    }
-}
+// function getStatusBgColor1(status: boolean): string {
+//     if (status === false) {
+//         return 'var(--bg-warning-color1)'
+//     } else {
+//         return 'var(--bg-success-color1)'
+//     }
+// }
 
-function getStatusTextColor1(status: boolean): string {
-    if (status === false) {
-        return 'var(--text-warning-color1)'
-    } else {
-        return 'var(--text-success-color1)'
-    }
-}
+// function getStatusTextColor1(status: boolean): string {
+//     if (status === false) {
+//         return 'var(--text-warning-color1)'
+//     } else {
+//         return 'var(--text-success-color1)'
+//     }
+// }
 
 interface IGetAllReward {
     Id: number
@@ -94,6 +85,26 @@ function TableErrorReport({ disciplineData, totalRecords, type }: IProps) {
     //     setSelectedConfig(config)
     //     setOpenModal(true)
     // }
+
+    useEffect(() => {}, [
+        totalRecords,
+        type,
+        selected,
+        openDialog,
+        selectedRow,
+        order,
+        orderBy,
+        openModal,
+        router,
+        t,
+        disciplineData,
+        setSelected,
+        setOpenDialog,
+        setSelectedRow,
+        setOrder,
+        setOrderBy,
+        setOpenModal
+    ])
 
     const handleSort = (property: string) => {
         if (orderBy === property) {

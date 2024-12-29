@@ -40,16 +40,18 @@
         "TABLE": {
             "COMMON": {
                 "ID": "ID",
-                "ACTION": "ACTION"
+                "ACTION": "Action"
             },
-            "PERMISSIONS": {
+            "PERMISSION": {
                 "USER": {
                     "FULLNAME": "FULLNAME",
-                    "ROLE": "ROLE"
+                    "ROLE": "Role"
                 },
                 "ROLE": {
-                    "NAME": "NAME"
-                }
+                    "NAME": "Name"
+                },
+                "TITLE": "List of Roles and Permissions",
+                "SEARCH": "Search by Role Name"
             }
         },
         "BUTTON": {
@@ -157,7 +159,7 @@
             "REPORTS_SYSTEM": "Reports - System",
             "ATTENDANCE": "Attendance",
             "WORKHISTORY": "Work History",
-            "CREATETASKS":"Create tasks"
+            "CREATETASKS": "Create tasks"
         },
         "MODE": {
             "LIGHT": "Light",
@@ -455,7 +457,7 @@
             "ADDRESS": "Address",
             "CONTRACTNAME": "Contract Name",
             "STARTDATE": "Start Date",
-            "STARTDATEWORK":"Start Date Work",
+            "STARTDATEWORK": "Start Date Work",
             "CREATE": {
                 "CREATE_EMPLOYEE": "Add new employee",
                 "SUCCESS": {

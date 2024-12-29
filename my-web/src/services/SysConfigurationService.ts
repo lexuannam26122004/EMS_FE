@@ -1,4 +1,3 @@
-import Search from '@/components/Search'
 import { ICreateSysConfiguration, IFilterSysConfiguration, IUpdateSysConfiguration } from '@/models/SysConfiguration'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 

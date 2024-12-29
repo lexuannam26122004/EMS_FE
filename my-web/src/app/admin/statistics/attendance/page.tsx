@@ -39,6 +39,8 @@ const Page = () => {
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
+                        boxShadow: 'var(--box-shadow-paper)',
+                        borderRadius: '15px',
                         width: 'calc(100% / 3 - 16px)'
                     }}
                 >

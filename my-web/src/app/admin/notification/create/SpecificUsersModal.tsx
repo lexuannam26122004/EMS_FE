@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react'
+import React, { useMemo } from 'react'
 import {
     Box,
     Paper,
@@ -34,7 +34,7 @@ function SpecificUsersModal({ open, handleClose }: NotificationModalProps) {
     const { t } = useTranslation()
     const [showError, setShowError] = useState(false)
     const [showSkeleton, setShowSkeleton] = useState(true)
-    const { data: userResponse, isFetching: isFetchingUsers, isError: isErrorUser, refetch } = useGetAllUsersQuery()
+    const { data: userResponse, isFetching: isFetchingUsers, refetch } = useGetAllUsersQuery()
     const users = (userResponse?.Data.Records as IAspNetUserGetAll[]) || []
     const dispatch = useDispatch()
     const selectedUsers = useSelector(selectedUsersToNotifySliceSelector)

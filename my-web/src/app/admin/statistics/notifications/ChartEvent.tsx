@@ -157,6 +157,7 @@ export default function ChartSalary() {
                 height: '100%',
                 width: '100%',
                 padding: '24px 5px 15px',
+                boxShadow: 'var(--box-shadow-paper)',
                 borderRadius: '15px',
                 backgroundColor: 'var(--background-item)'
             }}

@@ -4,13 +4,12 @@ import * as React from 'react'
 import Stack from '@mui/material/Stack'
 import ColorModeIconDropdown from './ColorModeIconDropdown'
 import Search from './Search'
-import { Avatar, Box, Divider, Typography } from '@mui/material'
+import { Box, Divider, Typography } from '@mui/material'
 import LanguageMenu from './LanguageMenu'
 import NotificationMenu from './NotificationMenu'
 import AvatarMenu from './AvatarMenu'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { usePathMaps } from '@/utils/usePathMaps'
-import { MoveRight } from 'lucide-react'
 export default function Header() {
     const pathname = usePathname()
     const { mapPathName, mapParentPathName } = usePathMaps()
@@ -31,7 +30,9 @@ export default function Header() {
                 position: 'sticky',
                 top: 0,
                 zIndex: 1000,
-                backgroundColor: 'var(--background-color)',
+                backgroundColor: 'rgba(255, 255, 255, 0.2)', // Tạo nền mờ
+                backdropFilter: 'blur(10px)', // Làm mờ phần nền phía sau header
+                WebkitBackdropFilter: 'blur(10px)', // Hỗ trợ Safari
                 padding: '0 24px'
             }}
             spacing={2}

@@ -10,9 +10,10 @@ import { IDepartmentGetAll } from '@/models/Department'
 import { useSearchTimekeepingQuery } from '@/services/TimekeepingService'
 import { useGetAllUsersQuery } from '@/services/AspNetUserService'
 import { useGetAllRolesQuery } from '@/services/AspNetRoleService'
-import { useGetAllDepartmentsQuery } from '@/services/DepartmentService'
+import { useGetAllDepartmentQuery } from '@/services/DepartmentService'
 import debounce from 'lodash.debounce'
 import { useTranslation } from 'react-i18next'
+import Loading from '@/components/Loading'
 
 interface UserRowProps {
     user: IAspNetUserGetAll
@@ -49,18 +50,10 @@ const TimekeepingPage: React.FC<TimekeepingPageProps> = ({
         })
     }, 100)
 
-    const { data: userResponse, isLoading: isLoadingUsers, error: userError } = useGetAllUsersQuery()
-    const { data: roleResponse, isLoading: isLoadingRoles, error: roleError } = useGetAllRolesQuery()
-    const {
-        data: departmentResponse,
-        isLoading: isLoadingDepartments,
-        error: departmentError
-    } = useGetAllDepartmentsQuery()
-    const {
-        data: timekeepingResponse,
-        isLoading: isLoadingTimekeeping,
-        error: timekeepingError
-    } = useSearchTimekeepingQuery(filterModel)
+    const { data: userResponse, isLoading: isLoadingUsers } = useGetAllUsersQuery()
+    const { data: roleResponse, isLoading: isLoadingRoles } = useGetAllRolesQuery()
+    const { data: departmentResponse, isLoading: isLoadingDepartments } = useGetAllDepartmentQuery()
+    const { data: timekeepingResponse, isLoading: isLoadingTimekeeping } = useSearchTimekeepingQuery(filterModel)
 
     const data = (timekeepingResponse?.Data as ITimekeepingGetById[]) || []
     const users = (userResponse?.Data.Records as IAspNetUserGetAll[]) || []
@@ -248,6 +241,12 @@ const TimekeepingPage: React.FC<TimekeepingPageProps> = ({
         },
         (prevProps, nextProps) => prevProps.user.Id === nextProps.user.Id
     )
+
+    UserRow.displayName = 'UserRow'
+
+    if (isLoadingUsers || isLoadingRoles || isLoadingDepartments || isLoadingTimekeeping) {
+        return <Loading />
+    }
 
     return (
         <Box display='flex'>
@@ -579,5 +578,7 @@ const TimekeepingPage: React.FC<TimekeepingPageProps> = ({
         </Box>
     )
 }
+
+TimekeepingPage.displayName = 'TimekeepingPage'
 
 export default TimekeepingPage

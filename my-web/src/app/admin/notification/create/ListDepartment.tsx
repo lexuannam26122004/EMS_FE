@@ -4,16 +4,10 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { useEffect, useState } from 'react'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import { IDepartmentGetAll } from '@/models/Department'
-import { useGetAllDepartmentsQuery } from '@/services/DepartmentService'
+import { useGetAllDepartmentQuery } from '@/services/DepartmentService'
 import debounce from 'lodash.debounce'
 import { useTranslation } from 'react-i18next'
 import { ArrowRight, SearchIcon } from 'lucide-react'
-import {
-    selectedDepartmentsToNotifySelector,
-    selectedDepartmentsToNotifySlice
-} from '@/redux/slices/selectedDepartmentsToNotifySlice'
-import { useDispatch, useSelector } from 'react-redux'
-import { selectedRolesToNotifySlice } from '@/redux/slices/selectedRolesToNotifySlice'
 
 interface Props {
     handleAfter: () => void
@@ -29,9 +23,8 @@ function ListDepartment({ handleAfter, handleClose, tempSelectedDepartment, setT
     const {
         data: departmentResponse,
         isFetching: isFetchingDepartment,
-        isError: isErrorDepartment,
-        refetch
-    } = useGetAllDepartmentsQuery()
+        isError: isErrorDepartment
+    } = useGetAllDepartmentQuery()
     const departments = (departmentResponse?.Data as IDepartmentGetAll[]) || []
     const [filteredDept, setFilteredDept] = useState<IDepartmentGetAll[]>([])
     const [search, setSearch] = useState('')

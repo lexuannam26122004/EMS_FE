@@ -1,16 +1,6 @@
 // src/components/EmployeeCountChart.js
 import React, { useState } from 'react'
-import {
-    Box,
-    FormControlLabel,
-    Checkbox,
-    Paper,
-    Typography,
-    FormControl,
-    Select,
-    MenuItem,
-    InputLabel
-} from '@mui/material'
+import { Box, Paper, Typography, FormControl, Select, MenuItem } from '@mui/material'
 import ReactECharts from 'echarts-for-react'
 import { useTheme } from 'next-themes'
 import { useTranslation } from 'react-i18next'

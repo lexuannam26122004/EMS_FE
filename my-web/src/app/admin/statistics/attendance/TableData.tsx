@@ -1,55 +1,44 @@
 'use client'
-import { IFilterEmploymentContract } from '@/models/EmploymentContract'
 import { formatDate } from '@/utils/formatDate'
-import { formatNumberToMoney } from '@/utils/formatNumberWithUnit'
 import {
     Box,
-    Select,
-    Pagination,
     Typography,
     Tooltip,
-    SelectChangeEvent,
-    Paper,
     TableRow,
     TableBody,
     Table,
     TableCell,
     TableHead,
     TableContainer,
-    TextField,
-    InputAdornment,
     TableSortLabel,
     Avatar
 } from '@mui/material'
 import { ClipboardCheck } from 'lucide-react'
-import { useEffect, useState, useMemo } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import SearchIcon from '@mui/icons-material/Search'
-import { useRouter } from 'next/navigation'
-import { useGetContractsExpiringSoonQuery } from '@/services/EmploymentContractService'
 import { ITimekeeping } from '@/models/Timekeeping'
 
-const avatars = [
-    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-1.webp',
-    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-2.webp',
-    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-3.webp',
-    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-4.webp',
-    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-5.webp',
-    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-6.webp',
-    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-7.webp',
-    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-8.webp',
-    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-9.webp',
-    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-10.webp',
-    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-11.webp',
-    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-12.webp',
-    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-13.webp',
-    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-14.webp',
-    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-15.webp',
-    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-16.webp',
-    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-17.webp',
-    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-18.webp',
-    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-19.webp'
-]
+// const avatars = [
+//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-1.webp',
+//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-2.webp',
+//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-3.webp',
+//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-4.webp',
+//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-5.webp',
+//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-6.webp',
+//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-7.webp',
+//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-8.webp',
+//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-9.webp',
+//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-10.webp',
+//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-11.webp',
+//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-12.webp',
+//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-13.webp',
+//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-14.webp',
+//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-15.webp',
+//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-16.webp',
+//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-17.webp',
+//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-18.webp',
+//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-19.webp'
+// ]
 
 function convertTimeFormat(time: string): string {
     // Tách chuỗi thời gian thành giờ và phút
@@ -76,16 +65,16 @@ interface IProps {
     type: number
 }
 
-function TableErrorReport({ disciplineData, totalRecords, type }: IProps) {
+function TableErrorReport({ disciplineData }: IProps) {
     const { t } = useTranslation('common')
-    const router = useRouter()
-    const [selected, setSelected] = useState<number[]>([])
-    const [openDialog, setOpenDialog] = useState(false)
-    const [selectedRow, setSelectedRow] = useState<number | null>(null)
+    // const router = useRouter()
+    // const [selected, setSelected] = useState<number[]>([])
+    // const [openDialog, setOpenDialog] = useState(false)
+    // const [selectedRow, setSelectedRow] = useState<number | null>(null)
     const [order, setOrder] = useState<'asc' | 'desc'>('asc')
     const [orderBy, setOrderBy] = useState<string>('')
     // const [selectedConfig, setSelectedConfig] = useState<IGetAllSysConfiguration | null>(null)
-    const [openModal, setOpenModal] = useState(false)
+    //const [openModal, setOpenModal] = useState(false)
 
     // const handleClickDetail = (config: IGetAllSysConfiguration) => {
     //     setSelectedConfig(config)

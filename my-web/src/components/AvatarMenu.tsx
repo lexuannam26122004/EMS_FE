@@ -98,13 +98,13 @@ const AvatarMenu = () => {
                 <Box
                     sx={{
                         position: 'relative',
-                        width: '41px',
-                        height: '41px',
+                        width: '42px',
+                        height: '42px',
                         mt: '-1px',
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        borderRadius: '50%', // Đảm bảo Box có hình tròn
+                        borderRadius: '50%',
                         '&::before': {
                             content: '""',
                             position: 'absolute',
@@ -113,13 +113,24 @@ const AvatarMenu = () => {
                             width: '100%',
                             height: '100%',
                             borderRadius: '50%',
-                            backgroundImage: 'linear-gradient(orange, green)',
+                            backgroundImage: 'linear-gradient(#ffac06, #11aa71)',
                             animation: `${rotate} 5s linear infinite`,
+                            zIndex: 0
+                        },
+                        '&::after': {
+                            content: '""',
+                            position: 'absolute',
+                            top: '2%',
+                            left: '2%',
+                            width: '96%',
+                            height: '96%',
+                            borderRadius: '50%',
+                            backgroundColor: 'var(--background-item)',
                             zIndex: 0
                         }
                     }}
                 >
-                    <Avatar src={avatarPath} sx={{ width: 39, height: 39 }} />
+                    <Avatar src={avatarPath} sx={{ width: 37, height: 37, zIndex: 2 }} />
                 </Box>
                 <Box>
                     <Typography
