@@ -2,7 +2,7 @@
 import { fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 const getToken = () => {
-    return sessionStorage.getItem('token')
+    return sessionStorage.getItem('auth_token')
 }
 
 export const createBaseQuery = (baseUrl: string) => {

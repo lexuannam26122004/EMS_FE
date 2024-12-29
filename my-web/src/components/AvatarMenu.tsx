@@ -92,7 +92,8 @@ const AvatarMenu = () => {
 
     const handleLogout = () => {
         setOpen(false)
-        localStorage.removeItem('auth_token');
+        localStorage.removeItem('auth_token')
+        refetch()
         router.push('/login')
     }
 
