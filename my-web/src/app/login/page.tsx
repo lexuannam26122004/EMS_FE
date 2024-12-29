@@ -33,7 +33,7 @@ const LoginForm: React.FC = () => {
 
             if (response.ok) {
                 const token = data.Data.auth_token
-                localStorage.setItem('auth_token', token)
+                sessionStorage.setItem('auth_token', token)
 
                 // Gọi API /api/Auth/Me để lấy thông tin người dùng
                 const userResponse = await fetch('https://localhost:44381/api/Auth/Me', {

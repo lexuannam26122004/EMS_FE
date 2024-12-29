@@ -1,5 +1,6 @@
 import { ICreateSysConfiguration, IFilterSysConfiguration, IUpdateSysConfiguration } from '@/models/SysConfiguration'
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi } from '@reduxjs/toolkit/query/react'
+import { createBaseQuery } from './api'
 
 interface ISysConfigurationResponse {
     Success: boolean
@@ -10,7 +11,7 @@ const apiPath = 'https://localhost:44381/api/admin/SysConfiguration'
 
 export const sysConfigurationApis = createApi({
     reducerPath: 'sysConfigurationApis',
-    baseQuery: fetchBaseQuery({ baseUrl: apiPath }),
+    baseQuery: createBaseQuery(apiPath),
     endpoints: builder => ({
         SearchSysConfiguration: builder.query<ISysConfigurationResponse, IFilterSysConfiguration>({
             query: filter => {
