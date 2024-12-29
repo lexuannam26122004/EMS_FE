@@ -19,8 +19,8 @@ import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined'
 import { PencilLine } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { avatarPath, fullName, roles } from '@/utils/globalVariables'
 import { keyframes } from '@emotion/react'
+import { useGetAuthMeQuery } from '@/services/AuthService'
 
 const rotate = keyframes`
     0% {
@@ -36,6 +36,23 @@ const AvatarMenu = () => {
     const { t } = useTranslation('common')
     const anchorRef = useRef<HTMLDivElement | null>(null)
     const [open, setOpen] = useState(false)
+
+    const [avatarPath, setAvatarPath] = useState('')
+    const [fullName, setFullName] = useState('')
+    const [roles, setRoles] = useState<string[]>([])
+
+    const { data: responseData, isFetching: isFetchingGetMe, refetch } = useGetAuthMeQuery()
+    useEffect(() => {
+        refetch()
+    })
+    const data = responseData?.Data
+    useEffect(() => {
+        if (!isFetchingGetMe && data) {
+            setAvatarPath(data.AvatarPath || '')
+            setFullName(data.FullName || 'N/A')
+            setRoles(data.Roles || [])
+        }
+    }, [data, isFetchingGetMe])
 
     const handleToggle = () => {
         setOpen(prevOpen => !prevOpen)

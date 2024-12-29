@@ -22,6 +22,7 @@ import { salaryApi } from '@/services/SalaryService'
 import { benefitApi } from '@/services/BenefitService'
 import { eventApi } from '@/services/EventService'
 import { rewardApi } from '@/services/RewardService'
+import { AuthApi } from '@/services/AuthService'; 
 
 export const store = configureStore({
     reducer: {
@@ -47,7 +48,8 @@ export const store = configureStore({
         [salaryApi.reducerPath]: salaryApi.reducer,
         [benefitApi.reducerPath]: benefitApi.reducer,
         [eventApi.reducerPath]: eventApi.reducer,
-        [rewardApi.reducerPath]: rewardApi.reducer
+        [rewardApi.reducerPath]: rewardApi.reducer,
+        [AuthApi.reducerPath]: AuthApi.reducer
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware().concat(
@@ -66,7 +68,7 @@ export const store = configureStore({
             benefitApi.middleware,
             eventApi.middleware,
             rewardApi.middleware,
-
+            AuthApi.middleware
         )
 })
 

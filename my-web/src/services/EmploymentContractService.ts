@@ -4,7 +4,7 @@ import {
     IFilterEmploymentContract,
     IEmploymentContractUpdate
 } from '@/models/EmploymentContract'
-import { use } from 'i18next'
+//import { use } from 'i18next'
 interface EmploymentContractResponse {
     Success: boolean
     Data: any

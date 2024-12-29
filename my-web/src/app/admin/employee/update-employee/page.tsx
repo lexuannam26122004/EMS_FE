@@ -9,7 +9,6 @@ import {
     MenuItem,
     FormControl,
     InputLabel,
-    FormHelperText,
     Checkbox,
     ListItemText,
     Avatar
