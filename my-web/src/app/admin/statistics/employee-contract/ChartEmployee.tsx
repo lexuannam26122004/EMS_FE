@@ -90,7 +90,7 @@ export default function Chart() {
             {
                 name: t('Nhân viên mới'),
                 type: 'bar',
-                data: [76, 75, 19, 48, 78, 31, 51, 78, 20, 6, 30, 70],
+                data: [selectedYear*0+76, 75, 19, 48, 78, 31, 51, 78, 20, 6, 30, 70],
                 markPoint: {
                     data: [
                         { type: 'max', name: 'Max' },

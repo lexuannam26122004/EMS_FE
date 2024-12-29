@@ -9,7 +9,7 @@ const API_URL = 'https://localhost:44381/api/Auth/Me'
 
 export const fetchUserData = async (): Promise<User | null> => {
     try {
-        const token = localStorage.getItem('auth_token')
+        const token = sessionStorage.getItem('auth_token')
         if (!token) {
             console.error('Không tìm thấy token xác thực')
             return null
@@ -30,7 +30,7 @@ export const fetchUserData = async (): Promise<User | null> => {
         const userData = await userResponse.json()
 
         if (userData.Data) {
-            localStorage.setItem('userData', JSON.stringify(userData.Data))
+            sessionStorage.setItem('userData', JSON.stringify(userData.Data))
             return userData.Data
         } else {
             console.error('Không có dữ liệu người dùng')
@@ -46,7 +46,7 @@ export const fetchUserData = async (): Promise<User | null> => {
 fetchUserData()
 
 export const getUserData = (): User | null => {
-    const data = localStorage.getItem('userData')
+    const data = sessionStorage.getItem('userData')
     return data ? JSON.parse(data) : null
 }
 

@@ -34,7 +34,7 @@ const LoginForm: React.FC = () => {
 
             if (response.ok) {
                 const token = data.Data.auth_token
-                localStorage.setItem('auth_token', token)
+                sessionStorage.setItem('auth_token', token)
                 router.push('/admin')
                 toast('Đăng nhập thành công!', 'success')
             } else {

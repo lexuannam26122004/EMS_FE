@@ -41,10 +41,7 @@ const AvatarMenu = () => {
     const [fullName, setFullName] = useState('')
     const [roles, setRoles] = useState<string[]>([])
 
-    const { data: responseData, isFetching: isFetchingGetMe, refetch } = useGetAuthMeQuery()||[]
-    useEffect(() => {
-        refetch()
-    })
+    const { data: responseData, isFetching: isFetchingGetMe, refetch } = useGetAuthMeQuery()
     const data = responseData?.Data
     useEffect(() => {
         if (!isFetchingGetMe && data) {
@@ -96,7 +93,7 @@ const AvatarMenu = () => {
 
     const handleLogout = () => {
         setOpen(false)
-        localStorage.removeItem('auth_token')
+        sessionStorage.removeItem('auth_token')
         refetch()
         router.push('/login')
     }

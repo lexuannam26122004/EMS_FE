@@ -23,7 +23,7 @@ import {
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import SearchIcon from '@mui/icons-material/Search'
-import { useRouter } from 'next/navigation'
+//import { useRouter } from 'next/navigation'
 import { IContractExp } from '@/models/EmploymentContract'
 import { useGetContractsExpiringSoonQuery } from '@/services/EmploymentContractService'
 
@@ -61,8 +61,8 @@ function getContractTextColor(contractEnd: string): string {
 
 function ContractExpPage() {
     const { t } = useTranslation('common')
-    const router = useRouter()
-    const [selected, setSelected] = useState<number[]>([])
+    //const router = useRouter()
+    //const [selected, setSelected] = useState<number[]>([])
     const [page, setPage] = useState(1)
     const [rowsPerPage, setRowsPerPage] = useState('5')
     const [from, setFrom] = useState(1)
@@ -73,12 +73,12 @@ function ContractExpPage() {
         daysUntilExpiration: 180
     })
     const [keyword, setKeyword] = useState('')
-    const [openDialog, setOpenDialog] = useState(false)
-    const [selectedRow, setSelectedRow] = useState<number | null>(null)
+    //const [openDialog, setOpenDialog] = useState(false)
+    //const [selectedRow, setSelectedRow] = useState<number | null>(null)
     const [order, setOrder] = useState<'asc' | 'desc'>('asc')
     const [orderBy, setOrderBy] = useState<string>('')
     // const [selectedConfig, setSelectedConfig] = useState<IGetAllSysConfiguration | null>(null)
-    const [openModal, setOpenModal] = useState(false)
+    //const [openModal, setOpenModal] = useState(false)
 
     const { data: responseData, isFetching, refetch } = useGetContractsExpiringSoonQuery(filter)
 
@@ -222,9 +222,9 @@ function ContractExpPage() {
                                     borderColor: 'var(--selected-field-color)'
                                 }
                             }}
-                            onKeyDown={e => {
-                                handleSearchKeyword()
-                            }}
+                            onKeyDown={() => {
+                                handleSearchKeyword();
+                              }}                              
                             slotProps={{
                                 input: {
                                     startAdornment: (
