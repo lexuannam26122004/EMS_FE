@@ -60,7 +60,7 @@ const EmployeeTable: React.FC = () => {
 
     const contract = (contractResponse?.Data?.Records as IEmploymentContractSearch[]) || []
     const employee = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
-
+    console.log(1)
     const users = contract.map(contract => {
         const matchedEmployee = employee.find(emp => emp.Id === contract.UserId)
         const matchedManager = employee.find(emp => emp.Id === contract.ManagerId)

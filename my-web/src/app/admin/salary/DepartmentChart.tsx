@@ -60,6 +60,10 @@ export default function DepartmentChart() {
                 type: 'shadow'
             }
         },
+        grid: {
+            left: '15%', // Tăng khoảng cách bên trái, có thể điều chỉnh giá trị này
+            bottom: '30%' // Khoảng cách bên phải
+        },
         xAxis: {
             type: 'category',
             data: Object.keys(chartData),
