@@ -157,7 +157,7 @@
             "REPORTS_SYSTEM": "Reports - System",
             "ATTENDANCE": "Attendance",
             "WORKHISTORY": "Work History",
-            "CREATETASKS":"Create tasks"
+            "CREATETASKS": "Create tasks"
         },
         "MODE": {
             "LIGHT": "Light",
@@ -279,7 +279,9 @@
             "BETWEEN30AND40": "From 30 to 40",
             "GREATER40": "Greater 40",
             "SALARY_LEVEL": "Salary Level (Million VND)",
-            "NUMBER_OF_EMPLOYEES": "Number of Employees"
+            "NUMBER_OF_EMPLOYEES": "Number of Employees",
+            "UNPAID": "Unpaid Salary List",
+            "BIRTHDAY": "Birthday"
         },
         "BENEFIT": {
             "NAME": "Name",

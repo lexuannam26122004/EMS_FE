@@ -1,24 +1,19 @@
+'use client'
 import React from 'react'
 import ReactECharts from 'echarts-for-react'
-import { CircularProgress, Paper, Typography } from '@mui/material'
+import { Box, CircularProgress, Paper, Typography } from '@mui/material'
 import { useTheme } from 'next-themes'
-import { useGetIncomeStructureQuery } from '@/services/SalaryService'
-import { TotalIncome } from '@/models/salary'
-import { useTranslation } from 'react-i18next'
-
-interface IncomeStructure {
-    baseSalary: number
-    reward: number
-    PITax: number
-    birthday: number
+import { useGetTotalBySexQuery } from '@/services/SalaryService'
+interface TotalBySex {
+    male: number
+    female: number
+    other: number
 }
-
-const IncomeStructureChart = () => {
-    const { t } = useTranslation()
+export default function TotalBySex() {
     const { theme } = useTheme()
-    const { data, isLoading, isError } = useGetIncomeStructureQuery()
+    const { data, isLoading, isError } = useGetTotalBySexQuery()
 
-    const totalData = data?.Data as IncomeStructure
+    const totalData = data?.Data as TotalBySex
 
     if (isLoading) {
         return (
@@ -63,44 +58,48 @@ const IncomeStructureChart = () => {
             trigger: 'item'
         },
         legend: {
-            top: '5%',
-            left: 'center',
+            orient: 'vertical',
+            left: 'left',
             textStyle: {
-                color: theme === 'light' ? '#000000' : '#ffffff'
+                color: theme === 'light' ? 'black' : '#fff',
+                fontFamily: 'Arial, sans-serif'
             }
         },
         series: [
             {
                 name: 'Access From',
                 type: 'pie',
-                radius: ['40%', '70%'],
-                center: ['50%', '60%'],
-                avoidLabelOverlap: false,
-                itemStyle: {
-                    borderRadius: 10
-                    // borderColor: '#fff',
-                    // borderWidth: 2
-                },
-                label: {
-                    show: false,
-                    position: 'center'
-                },
-                emphasis: {
-                    label: {
-                        show: true,
-                        fontSize: 40,
-                        fontWeight: 'bold'
-                    }
-                },
-                labelLine: {
-                    show: false
-                },
+                radius: '50%',
                 data: [
-                    { value: totalData?.baseSalary, name: t('COMMON.SALARY.BASIC_SALARY') },
-                    { value: totalData?.PITax, name: t('COMMON.SALARY.PI_TAX') },
-                    { value: totalData?.reward, name: t('COMMON.SALARY.REWARD') },
-                    { value: totalData?.birthday, name: t('COMMON.SALARY.BIRTHDAY') }
-                ]
+                    {
+                        value: totalData?.male,
+                        name: 'Nam',
+                        itemStyle: {
+                            color: '#00a76f'
+                        }
+                    },
+                    {
+                        value: totalData?.female,
+                        name: 'Nữ',
+                        itemStyle: {
+                            color: '#ffab00'
+                        }
+                    },
+                    {
+                        value: totalData?.other,
+                        name: 'Khác',
+                        itemStyle: {
+                            color: '#FF6699'
+                        }
+                    }
+                ],
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
             }
         ]
     }
@@ -109,17 +108,16 @@ const IncomeStructureChart = () => {
             elevation={0}
             sx={{
                 width: '100%',
-                padding: '24px',
+                padding: '20px',
                 backgroundColor: 'var(--background-item)',
                 borderRadius: '15px',
                 height: '100%'
             }}
         >
-            <Typography fontSize={'24px'} fontWeight={'bold'} color='var(--text-color)'>
-                Cơ cấu thu nhập
+            <Typography fontSize={'20px'} fontWeight={'bold'} color='var(--text-color)'>
+                Phân tích lương theo giới tính
             </Typography>
-            <ReactECharts option={option} style={{ width: '100%', height: '320px', marginTop: '10px' }}></ReactECharts>
+            <ReactECharts option={option} style={{ width: '115%', height: '260px', marginTop: '20px' }}></ReactECharts>
         </Paper>
     )
 }
-export default IncomeStructureChart

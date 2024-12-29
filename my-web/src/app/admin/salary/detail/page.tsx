@@ -2,7 +2,7 @@
 import AlertDialog from '@/components/AlertDialog'
 import { ISalaryGetAll } from '@/models/salary'
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
-import { useGetAllSalariesQuery } from '@/services/SalaryService'
+import { useGetAllSalariesQuery, useGetPeriodQuery } from '@/services/SalaryService'
 import { formatDate } from '@/utils/formatDate'
 import {
     Box,
@@ -82,24 +82,32 @@ function GetAllSalaryPage() {
         pageNumber: 1
     })
     const [progress, setProgress] = useState(50)
-    const periodList = [
-        '01/2024',
-        '02/2024',
-        '03/2024',
-        '04/2024',
-        '05/2024',
-        '06/2024',
-        '07/2024',
-        '08/2024',
-        '09/2024',
-        '10/2024',
-        '11/2024'
-    ]
-    const [period, setPeriod] = useState(periodList[periodList.length - 1])
 
-    const { data: responseData, isFetching, refetch } = useGetAllSalariesQuery(filter)
+    const { data: periodData, isLoading, isError } = useGetPeriodQuery()
+    const periodList = periodData?.Data || []
+    const [period, setPeriod] = useState<string>(periodList[periodList.length - 1])
 
-    const salaryData = responseData?.Data as ISalaryGetAll[]
+    useEffect(() => {
+        if (periodList.length > 0) {
+            setPeriod(periodList[periodList.length - 1]) // Gán giá trị cuối cùng từ `periodList`
+        }
+    }, [periodList])
+
+    const {
+        data: responseData,
+        isFetching,
+        refetch
+    } = useGetAllSalariesQuery({
+        filter,
+        period: period || '11-2024'
+    })
+    useEffect(() => {
+        if (period && periodList.length > 0) {
+            refetch() // Trigger query if period is valid
+        }
+    }, [period, periodList, refetch])
+
+    const salaryData = Array.isArray(responseData?.Data) ? (responseData.Data as ISalaryGetAll[]) : []
     const totalRecords = responseData?.Data.TotalRecords as number
 
     const isSelected = (id: string) => selected.includes(id)
@@ -564,8 +572,10 @@ function GetAllSalaryPage() {
                     >
                         Báo cáo theo phòng ban
                     </Typography>
-                    {departmentList?.map(department => (
-                        <Box sx={{ marginTop: '10px' }}>
+                    {departmentList?.map((department, index) => (
+                        <Box key={index} sx={{ marginTop: '10px' }}>
+                            {' '}
+                            {/* Add a unique key here */}
                             <Typography sx={{ fontWeight: 'bold' }}>{department}</Typography>
                             <Typography>100,000,000 đ</Typography>
                             <Box sx={{ width: '100%' }}>
@@ -688,6 +698,7 @@ function GetAllSalaryPage() {
 
                             <FormControl
                                 fullWidth
+                                variant='outlined'
                                 //error={isSubmit && departmentId === ''}
                                 sx={{
                                     '& fieldset': {
@@ -734,8 +745,11 @@ function GetAllSalaryPage() {
                                     }
                                 }}
                             >
-                                <InputLabel>{t('COMMON.EMPLOYEE.DEPARTMENTNAME')}</InputLabel>
+                                <InputLabel shrink htmlFor='period-select'>
+                                    {t('COMMON.EMPLOYEE.DEPARTMENTNAME')}
+                                </InputLabel>
                                 <Select
+                                    id='period-select'
                                     value={period}
                                     onChange={e => setPeriod(e.target.value)}
                                     label={t('COMMON.EMPLOYEE.DEPARTMENTNAME')}
@@ -771,7 +785,7 @@ function GetAllSalaryPage() {
                                         }
                                     }}
                                 >
-                                    {periodList.map(dept => (
+                                    {periodList.map((dept: string) => (
                                         <MenuItem key={dept} value={dept}>
                                             {dept}
                                         </MenuItem>

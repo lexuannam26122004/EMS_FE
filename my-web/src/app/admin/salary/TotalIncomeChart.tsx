@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactECharts from 'echarts-for-react'
-import { Paper, Typography } from '@mui/material'
+import { CircularProgress, Paper, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'next-themes'
 import { useGetTotalIncomeOverTimeQuery } from '@/services/SalaryService'
@@ -14,11 +14,42 @@ function TotalIncomeChart() {
     const totalData = data?.Data as TotalIncome[]
 
     if (isLoading) {
-        return <Typography>Loading...</Typography>
+        return (
+            <Paper
+                elevation={0}
+                sx={{
+                    width: '100%',
+                    padding: '24px',
+                    backgroundColor: 'var(--background-item)',
+                    borderRadius: '15px',
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+            >
+                <CircularProgress /> {/* Hiển thị spinner khi đang tải */}
+            </Paper>
+        )
     }
-
     if (isError) {
-        return <Typography>Error loading data.</Typography>
+        return (
+            <Paper
+                elevation={0}
+                sx={{
+                    width: '100%',
+                    padding: '24px',
+                    backgroundColor: 'var(--background-item)',
+                    borderRadius: '15px',
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+            >
+                <Typography color='red'>Có lỗi xảy ra khi tải dữ liệu.</Typography> {/* Thông báo lỗi */}
+            </Paper>
+        )
     }
 
     const period = totalData?.[0]?.payrollPeriod
