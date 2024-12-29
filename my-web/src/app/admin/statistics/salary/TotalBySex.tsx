@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import ReactECharts from 'echarts-for-react'
-import { Box, CircularProgress, Paper, Typography } from '@mui/material'
+import { CircularProgress, Paper, Typography } from '@mui/material'
 import { useTheme } from 'next-themes'
 import { useGetTotalBySexQuery } from '@/services/SalaryService'
 interface TotalBySex {
