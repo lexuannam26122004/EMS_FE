@@ -4,6 +4,7 @@ import { Box, TextField, Button } from '@mui/material'
 import { useToast } from '@/hooks/useToast'
 import { useRouter } from 'next/navigation'
 
+
 const LoginForm: React.FC = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -33,26 +34,9 @@ const LoginForm: React.FC = () => {
 
             if (response.ok) {
                 const token = data.Data.auth_token
-                sessionStorage.setItem('auth_token', token)
-
-                // Gọi API /api/Auth/Me để lấy thông tin người dùng
-                const userResponse = await fetch('https://localhost:44381/api/Auth/Me', {
-                    method: 'GET',
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                })
-
-                const userData = await userResponse.json()
-
-                if (userResponse.ok) {
-                    const user = userData.Data
-                    localStorage.setItem('userData', JSON.stringify(user))
-                    router.push('/admin')
-                    toast(`Đăng nhập thành công! Chào mừng ${user.FullName}`, 'success')
-                } else {
-                    toast('Không thể lấy thông tin người dùng.', 'error')
-                }
+                localStorage.setItem('auth_token', token)
+                router.push('/admin')
+                toast('Đăng nhập thành công!', 'success')
             } else {
                 toast(data?.message || 'Đăng nhập thất bại!', 'error')
             }
