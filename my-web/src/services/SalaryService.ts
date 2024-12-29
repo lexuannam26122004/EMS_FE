@@ -1,8 +1,6 @@
-import { ISalaryGetAll, TotalIncome } from '@/models/salary'
+import { ISalaryGetAll } from '@/models/salary'
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { METHODS } from 'http'
-import build from 'next/dist/build'
 
 interface SalaryResponse {
     Success: boolean

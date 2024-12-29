@@ -85,11 +85,12 @@ function GetAllSalaryPage() {
 
     const { data: periodData, isLoading, isError } = useGetPeriodQuery()
     const periodList = periodData?.Data || []
-    const [period, setPeriod] = useState<string>(periodList[periodList.length - 1])
+    const [period, setPeriod] = useState<string>()
 
     useEffect(() => {
         if (periodList.length > 0) {
-            setPeriod(periodList[periodList.length - 1]) // Gán giá trị cuối cùng từ `periodList`
+            setPeriod(periodList[periodList.length - 1])
+            refetch()
         }
     }, [periodList])
 
@@ -99,7 +100,7 @@ function GetAllSalaryPage() {
         refetch
     } = useGetAllSalariesQuery({
         filter,
-        period: period || '11-2024'
+        period: period || ''
     })
     useEffect(() => {
         if (period && periodList.length > 0) {
@@ -188,6 +189,10 @@ function GetAllSalaryPage() {
     const handleDeleteManySysConfiguration = () => {}
 
     const handleDeleteSysConfiguration = () => {}
+
+    const handlePeriodChange = (event: SelectChangeEvent<string>) => {
+        setPeriod(event.target.value as string)
+    }
 
     const countRows = selected.length
 
@@ -696,92 +701,62 @@ function GetAllSalaryPage() {
                                 {t('COMMON.BUTTON.DELETE')}
                             </Button>
 
-                            <FormControl
-                                fullWidth
-                                variant='outlined'
-                                //error={isSubmit && departmentId === ''}
-                                sx={{
-                                    '& fieldset': {
-                                        borderRadius: '8px',
-                                        color: 'var(--text-color)',
-                                        borderColor: 'var(--border-color)'
-                                    },
-                                    '& .MuiInputBase-root': {
-                                        paddingRight: '0px'
-                                    },
-                                    '& .MuiInputBase-input': {
-                                        paddingRight: '12px',
-                                        color: 'var(--text-color)',
-                                        fontSize: '16px',
-                                        '&::placeholder': {
-                                            color: 'var(--placeholder-color)',
-                                            opacity: 1
-                                        }
-                                    },
-                                    '& .MuiOutlinedInput-root:hover fieldset': {
-                                        borderColor: 'var(--hover-field-color)'
-                                    },
-                                    '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
-                                        borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
-                                    },
-                                    '& .MuiOutlinedInput-root.Mui-error fieldset': {
-                                        borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
-                                    },
-                                    '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                        borderColor: 'var(--selected-field-color)'
-                                    },
-                                    '& .MuiInputLabel-root': {
-                                        color: 'var(--text-label-color)'
-                                    },
-                                    '& .MuiInputLabel-root.Mui-focused': {
-                                        color: 'var(--selected-field-color)'
-                                    },
-                                    '& .MuiInputLabel-root.Mui-error': {
-                                        color: 'var(--error-color)'
-                                    },
-                                    '& .MuiSelect-icon': {
-                                        color: 'var(--error-color)'
-                                        //isSubmit && departmentId === '' ? 'var(--error-color)' : 'var(--text-color)'
-                                    }
-                                }}
-                            >
-                                <InputLabel shrink htmlFor='period-select'>
-                                    {t('COMMON.EMPLOYEE.DEPARTMENTNAME')}
-                                </InputLabel>
+                            <FormControl fullWidth>
                                 <Select
-                                    id='period-select'
-                                    value={period}
-                                    onChange={e => setPeriod(e.target.value)}
-                                    label={t('COMMON.EMPLOYEE.DEPARTMENTNAME')}
+                                    defaultValue={period}
+                                    onChange={handlePeriodChange}
+                                    sx={{
+                                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                                            borderColor: 'var(--border-color)'
+                                        },
+                                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                            border: '1px solid var(--border-color)' // Đặt border cho trạng thái focus
+                                        },
+                                        '& fieldset': {
+                                            borderRadius: '8px',
+                                            borderColor: 'var(--border-color)'
+                                        },
+                                        '& .MuiSelect-icon': {
+                                            color: 'var(--text-color)'
+                                        },
+                                        '& .MuiInputBase-input': {
+                                            color: 'var(--text-color)',
+                                            padding: '10px'
+                                        }
+                                    }}
                                     MenuProps={{
                                         PaperProps: {
                                             elevation: 0,
                                             sx: {
+                                                width: '120px',
+                                                mt: '2px',
+                                                borderRadius: '8px',
+                                                padding: '0 8px',
                                                 backgroundImage:
                                                     'url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSJ1cmwoI3BhaW50MF9yYWRpYWxfMjc0OV8xNDUxODYpIiBmaWxsLW9wYWNpdHk9IjAuMTIiLz4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0icGFpbnQwX3JhZGlhbF8yNzQ5XzE0NTE4NiIgY3g9IjAiIGN5PSIwIiByPSIxIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgZ3JhZGllbnRUcmFuc2Zvcm09InRyYW5zbGF0ZSgxMjAgMS44MTgxMmUtMDUpIHJvdGF0ZSgtNDUpIHNjYWxlKDEyMy4yNSkiPgo8c3RvcCBzdG9wLWNvbG9yPSIjMDBCOEQ5Ii8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzAwQjhEOSIgc3RvcC1vcGFjaXR5PSIwIi8+CjwvcmFkaWFsR3JhZGllbnQ+CjwvZGVmcz4KPC9zdmc+Cg==), url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSJ1cmwoI3BhaW50MF9yYWRpYWxfMjc0OV8xNDUxODcpIiBmaWxsLW9wYWNpdHk9IjAuMTIiLz4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0icGFpbnQwX3JhZGlhbF8yNzQ5XzE0NTE4NyIgY3g9IjAiIGN5PSIwIiByPSIxIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgZ3JhZGllbnRUcmFuc2Zvcm09InRyYW5zbGF0ZSgwIDEyMCkgcm90YXRlKDEzNSkgc2NhbGUoMTIzLjI1KSI+CjxzdG9wIHN0b3AtY29sb3I9IiNGRjU2MzAiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRkY1NjMwIiBzdG9wLW9wYWNpdHk9IjAiLz4KPC9yYWRpYWxHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K)',
                                                 backgroundPosition: 'top right, bottom left',
                                                 backgroundSize: '50%, 50%',
                                                 backgroundRepeat: 'no-repeat',
-                                                padding: '0 8px',
                                                 backdropFilter: 'blur(20px)',
-                                                borderRadius: '8px',
                                                 backgroundColor: 'var(--background-item)',
                                                 color: 'var(--text-color)',
                                                 border: '1px solid var(--border-color)',
                                                 '& .MuiMenuItem-root': {
-                                                    borderRadius: '6px',
-                                                    '&:hover': {
-                                                        backgroundColor: 'var(--hover-color)'
-                                                    },
+                                                    '&:hover': { backgroundColor: 'var(--hover-color)' },
                                                     '&.Mui-selected': {
-                                                        backgroundColor: 'var(--selected-color)',
-                                                        '&:hover': {
-                                                            backgroundColor: 'var(--hover-color)'
-                                                        }
+                                                        backgroundColor: 'var(--background-selected-item)',
+                                                        '&:hover': { backgroundColor: 'var(--hover-color)' }
                                                     }
                                                 }
-                                            },
-                                            autoFocus: false
+                                            }
+                                        },
+                                        anchorOrigin: {
+                                            vertical: 'bottom',
+                                            horizontal: 'right' // Căn chỉnh bên phải
+                                        },
+                                        transformOrigin: {
+                                            vertical: 'top',
+                                            horizontal: 'right' // Căn chỉnh bên phải
                                         }
                                     }}
                                 >
