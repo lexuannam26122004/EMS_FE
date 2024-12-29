@@ -280,7 +280,9 @@
             "BETWEEN30AND40": "Từ 30 đến 40",
             "GREATER40": "Trên 40",
             "SALARY_LEVEL": "Mức lương (Triệu VND)",
-            "NUMBER_OF_EMPLOYEES": "Số lượng nhân viên"
+            "NUMBER_OF_EMPLOYEES": "Số lượng nhân viên",
+            "UNPAID": "Danh sách lương chưa trả",
+            "BIRTHDAY": "Sinh nhật"
         },
         "CREATE_NOTIFICATION": {
             "TITLE_PAGE": "Tạo thông báo mới",

@@ -82,6 +82,11 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                         text={t('COMMON.SIDEBAR.REPORTS_SYSTEM')}
                         route='/statistics/report-system'
                     />
+                    <SidebarItem
+                        icon={<ChartNoAxesCombined />}
+                        text={t('COMMON.SIDEBAR.SALARY')}
+                        route='/admin/statistics/salary'
+                    />
                 </SidebarItem>
                 <Divider sx={{ marginTop: '15px', marginBottom: '10px', borderColor: 'var(--border-color)' }} />
                 <TypographyItem text={t('COMMON.SIDEBAR.HUMAN_RESOURCES')} />
