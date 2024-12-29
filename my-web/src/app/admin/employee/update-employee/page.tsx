@@ -30,6 +30,8 @@ import { useGetAllRolesQuery } from '@/services/AspNetRoleService'
 import { IDepartmentGetAll } from '@/models/Department'
 import { useGetAllDepartmentQuery } from '@/services/DepartmentService'
 
+import { useGetAuthMeQuery } from '@/services/AuthService'
+
 const UpdateEmployeePage = () => {
     const { t } = useTranslation('common')
     const router = useRouter()
@@ -64,12 +66,15 @@ const UpdateEmployeePage = () => {
         return `${year}-${month}-${day}`
     }
 
+    const { refetch: fetchGetMe } = useGetAuthMeQuery()
+
     const toast = useToast()
     const [isSubmit, setIsSubmit] = useState(false)
 
     const searchParams = useSearchParams()
     const id = searchParams.get('id') || ''
     const { data: responseData, isFetching: isFetchingGetById, refetch: fetchUserById } = useGetByIdUsersQuery(id)
+
     const [updateUsers, { isSuccess, isError, reset }] = useUpdateUsersMutation()
 
     const data = responseData?.Data
@@ -174,13 +179,15 @@ const UpdateEmployeePage = () => {
             refetch()
             reset()
             fetchUserById()
+            fetchGetMe()
         }
         if (isError === true) {
             toast(t('COMMON.EMPLOYEE.UPDATE.ERROR.UPDATE_EMPLOYEE'), 'error')
             reset()
             fetchUserById()
+            fetchGetMe()
         }
-    }, [isSuccess, isError, toast, t, reset, refetch, fetchUserById])
+    }, [isSuccess, isError, toast, t, reset, refetch, fetchUserById, fetchGetMe])
 
     const handleSaveAndClose = async () => {
         setIsSaveAndCloseLoading(true)

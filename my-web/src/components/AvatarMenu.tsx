@@ -41,14 +41,18 @@ const AvatarMenu = () => {
     const [fullName, setFullName] = useState('')
     const [roles, setRoles] = useState<string[]>([])
 
-    const { data: responseData, isFetching: isFetchingGetMe, refetch } = useGetAuthMeQuery()
+    const { data: responseData, isFetching: isFetchingGetMe, refetch } = useGetAuthMeQuery()||[]
     useEffect(() => {
         refetch()
     })
     const data = responseData?.Data
     useEffect(() => {
         if (!isFetchingGetMe && data) {
-            setAvatarPath(data.AvatarPath || '')
+            setAvatarPath(
+                data.AvatarPath
+                    ? 'https://localhost:44381/' + data.AvatarPath
+                    : 'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'
+            )
             setFullName(data.FullName || 'N/A')
             setRoles(data.Roles || [])
         }
