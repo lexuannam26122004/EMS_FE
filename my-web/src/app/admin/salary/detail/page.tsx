@@ -660,7 +660,7 @@ function GetAllSalaryPage() {
                                         borderColor: 'var(--selected-field-color)'
                                     }
                                 }}
-                                onKeyDown={e => {
+                                onKeyDown={() => {
                                     handleSearchKeyword()
                                 }}
                                 slotProps={{
