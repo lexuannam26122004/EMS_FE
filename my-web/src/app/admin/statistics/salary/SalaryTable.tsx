@@ -23,48 +23,46 @@ import {
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import SearchIcon from '@mui/icons-material/Search'
-import { useRouter } from 'next/navigation'
-import { IContractExp } from '@/models/EmploymentContract'
-import { useGetContractsExpiringSoonQuery } from '@/services/EmploymentContractService'
+//import { useRouter } from 'next/navigation'
 import { useGetAllSalariesQuery } from '@/services/SalaryService'
 import { ISalaryGetAll } from '@/models/salary'
 
-function getContractBgColor(contractEnd: string): string {
-    const today = new Date()
-    const endDate = new Date(contractEnd)
+// function getContractBgColor(contractEnd: string): string {
+//     const today = new Date()
+//     const endDate = new Date(contractEnd)
 
-    const diffInMilliseconds = endDate.getTime() - today.getTime()
-    const diffInMonths = diffInMilliseconds / (1000 * 60 * 60 * 24 * 30)
+//     const diffInMilliseconds = endDate.getTime() - today.getTime()
+//     const diffInMonths = diffInMilliseconds / (1000 * 60 * 60 * 24 * 30)
 
-    if (diffInMonths <= 2) {
-        return 'var(--bg-danger-color)'
-    } else if (diffInMonths <= 4) {
-        return 'var(--bg-warning-color)'
-    } else {
-        return 'var(--bg-success-color)'
-    }
-}
+//     if (diffInMonths <= 2) {
+//         return 'var(--bg-danger-color)'
+//     } else if (diffInMonths <= 4) {
+//         return 'var(--bg-warning-color)'
+//     } else {
+//         return 'var(--bg-success-color)'
+//     }
+// }
 
-function getContractTextColor(contractEnd: string): string {
-    const today = new Date()
-    const endDate = new Date(contractEnd)
+// function getContractTextColor(contractEnd: string): string {
+//     const today = new Date()
+//     const endDate = new Date(contractEnd)
 
-    const diffInMilliseconds = endDate.getTime() - today.getTime()
-    const diffInMonths = diffInMilliseconds / (1000 * 60 * 60 * 24 * 30)
+//     const diffInMilliseconds = endDate.getTime() - today.getTime()
+//     const diffInMonths = diffInMilliseconds / (1000 * 60 * 60 * 24 * 30)
 
-    if (diffInMonths <= 2) {
-        return 'var(--text-danger-color)'
-    } else if (diffInMonths <= 4) {
-        return 'var(--text-warning-color)'
-    } else {
-        return 'var(--text-success-color)'
-    }
-}
+//     if (diffInMonths <= 2) {
+//         return 'var(--text-danger-color)'
+//     } else if (diffInMonths <= 4) {
+//         return 'var(--text-warning-color)'
+//     } else {
+//         return 'var(--text-success-color)'
+//     }
+// }
 
 function SalaryTablePage() {
     const { t } = useTranslation('common')
-    const router = useRouter()
-    const [selected, setSelected] = useState<number[]>([])
+    // const router = useRouter()
+    // const [selected, setSelected] = useState<number[]>([])
     const [page, setPage] = useState(1)
     const [rowsPerPage, setRowsPerPage] = useState('5')
     const [from, setFrom] = useState(1)
@@ -75,14 +73,15 @@ function SalaryTablePage() {
         daysUntilExpiration: 180
     })
     const [keyword, setKeyword] = useState('')
-    const [openDialog, setOpenDialog] = useState(false)
-    const [selectedRow, setSelectedRow] = useState<number | null>(null)
+    // const [openDialog, setOpenDialog] = useState(false)
+    // const [selectedRow, setSelectedRow] = useState<number | null>(null)
     const [order, setOrder] = useState<'asc' | 'desc'>('asc')
     const [orderBy, setOrderBy] = useState<string>('')
     // const [selectedConfig, setSelectedConfig] = useState<IGetAllSysConfiguration | null>(null)
-    const [openModal, setOpenModal] = useState(false)
-
-    const { data: responseData, isFetching, refetch } = useGetAllSalariesQuery(filter)
+    //const [openModal, setOpenModal] = useState(false)
+    const [period, setPeriod] = useState<string>('')
+    setPeriod('01-2024')
+    const { data: responseData, isFetching, refetch } = useGetAllSalariesQuery({ filter, period })
 
     const salaryData = responseData?.Data as ISalaryGetAll[]
     const totalRecords = responseData?.Data.TotalRecords as number
@@ -225,7 +224,7 @@ function SalaryTablePage() {
                                     borderColor: 'var(--selected-field-color)'
                                 }
                             }}
-                            onKeyDown={e => {
+                            onKeyDown={() => {
                                 handleSearchKeyword()
                             }}
                             slotProps={{
@@ -581,9 +580,9 @@ function SalaryTablePage() {
                         </TableHead>
                         <TableBody>
                             {salaryData &&
-                                salaryData.map(row => (
+                                salaryData.map((row, index) => (
                                     <TableRow
-                                        //key={index}
+                                        key={index}
                                         sx={{
                                             '&:last-child td, &:last-child th': {
                                                 border: 'none'

@@ -1,7 +1,7 @@
 'use client'
 import { Box } from '@mui/material'
-import React, { useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import React from 'react'
+//import { useTranslation } from 'react-i18next'
 import DisplayInfo from './DisplayInfo'
 import PayrollReport from './PayrollReport'
 import GrossTotal from './GrossTotal'
@@ -12,7 +12,7 @@ import PayrollOvertime from './departments/PayrollOvertime'
 import SalaryTablePage from './SalaryTable'
 
 export default function SalaryStatistic() {
-    const { t } = useTranslation()
+    //const { t } = useTranslation()
     return (
         <Box>
             <Box width='100%'>

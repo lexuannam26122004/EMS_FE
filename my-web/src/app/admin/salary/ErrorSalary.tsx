@@ -3,8 +3,7 @@ import Slider from 'react-slick'
 import { Card, CardContent, Typography, Button, Avatar, Box, Paper, Divider, Chip } from '@mui/material'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
-import { Building, Building2, ChevronLeft, ChevronRight, IdCard, UserRoundCog } from 'lucide-react'
-import { Create } from '@mui/icons-material'
+import { Building, ChevronLeft, ChevronRight, IdCard, UserRoundCog } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 const leaveRequests = [

@@ -1,16 +1,5 @@
 'use client'
-import {
-    Box,
-    Paper,
-    TableCell,
-    TableBody,
-    Table,
-    TableRow,
-    TableContainer,
-    Typography,
-    Divider,
-    Grid
-} from '@mui/material'
+import { Box, Paper, TableCell, TableBody, Table, TableRow, TableContainer, Typography } from '@mui/material'
 import React from 'react'
 
 export default function Payslip() {

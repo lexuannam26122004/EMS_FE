@@ -11,7 +11,7 @@ import {
 } from '@mui/material'
 import { ArrowUp, BadgeHelp } from 'lucide-react'
 import React, { useState } from 'react'
-import { useTranslation } from 'react-i18next'
+//import { useTranslation } from 'react-i18next'
 
 function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
     return (
@@ -44,8 +44,9 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
     }
 }))
 export default function DisplayInfo() {
-    const { t } = useTranslation()
+    //const { t } = useTranslation()
     const [progress, setProgress] = useState(50)
+    setProgress(60)
     return (
         <Box
             sx={{

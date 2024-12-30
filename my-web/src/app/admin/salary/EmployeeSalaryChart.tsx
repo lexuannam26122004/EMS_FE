@@ -58,7 +58,12 @@ const EmployeeSalaryChart = () => {
                 type: 'shadow'
             }
         },
-        legend: {},
+        legend: {
+            textStyle: {
+                color: theme === 'light' ? 'black' : '#fff',
+                fontFamily: 'Arial, sans-serif'
+            }
+        },
         grid: {
             left: '3%',
             right: '4%',

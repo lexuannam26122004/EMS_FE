@@ -12,44 +12,44 @@ export default function TotalByLevel() {
     const { theme } = useTheme()
     const levels = data?.Data as ISalaryByLevel
 
-    // if (isLoading) {
-    //     return (
-    //         <Paper
-    //             elevation={0}
-    //             sx={{
-    //                 width: '100%',
-    //                 padding: '24px',
-    //                 backgroundColor: 'var(--background-item)',
-    //                 borderRadius: '15px',
-    //                 height: '100%',
-    //                 display: 'flex',
-    //                 alignItems: 'center',
-    //                 justifyContent: 'center'
-    //             }}
-    //         >
-    //             <CircularProgress /> {/* Hiển thị spinner khi đang tải */}
-    //         </Paper>
-    //     )
-    // }
-    // if (isError) {
-    //     return (
-    //         <Paper
-    //             elevation={0}
-    //             sx={{
-    //                 width: '100%',
-    //                 padding: '24px',
-    //                 backgroundColor: 'var(--background-item)',
-    //                 borderRadius: '15px',
-    //                 height: '100%',
-    //                 display: 'flex',
-    //                 alignItems: 'center',
-    //                 justifyContent: 'center'
-    //             }}
-    //         >
-    //             <Typography color='red'>Có lỗi xảy ra khi tải dữ liệu.</Typography> {/* Thông báo lỗi */}
-    //         </Paper>
-    //     )
-    // }
+    if (isLoading) {
+        return (
+            <Paper
+                elevation={0}
+                sx={{
+                    width: '100%',
+                    padding: '24px',
+                    backgroundColor: 'var(--background-item)',
+                    borderRadius: '15px',
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+            >
+                <CircularProgress /> {/* Hiển thị spinner khi đang tải */}
+            </Paper>
+        )
+    }
+    if (isError) {
+        return (
+            <Paper
+                elevation={0}
+                sx={{
+                    width: '100%',
+                    padding: '24px',
+                    backgroundColor: 'var(--background-item)',
+                    borderRadius: '15px',
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+            >
+                <Typography color='red'>Có lỗi xảy ra khi tải dữ liệu.</Typography> {/* Thông báo lỗi */}
+            </Paper>
+        )
+    }
 
     const option = {
         tooltip: {
