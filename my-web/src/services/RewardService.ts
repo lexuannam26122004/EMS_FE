@@ -1,7 +1,7 @@
-import { IRewardGetAll } from "@/models/Reward";
+//import { IRewardGetAll } from "@/models/Reward";
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
-import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { createApi } from "@reduxjs/toolkit/query/react";
+import { fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi } from '@reduxjs/toolkit/query/react'
 
 interface RewardResponse {
     Success: boolean
@@ -14,7 +14,6 @@ export const rewardApi = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: apiPath }),
     tagTypes: ['Reward'],
     endpoints: builder => ({
-        
         getAllRewards: builder.query<RewardResponse, IFilterSysConfiguration>({
             query: filter => {
                 const params = new URLSearchParams()
@@ -37,6 +36,4 @@ export const rewardApi = createApi({
     })
 })
 
-export const {
-    useGetAllRewardsQuery,
-} = rewardApi
+export const { useGetAllRewardsQuery } = rewardApi

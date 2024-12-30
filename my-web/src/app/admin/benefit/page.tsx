@@ -3,8 +3,8 @@ import { IBenefitGetAll } from '@/models/Benefit'
 import {
     useGetAllBenefitsQuery,
     useChangeStatusBenefitMutation,
-    useUpdateBenefitMutation,
-    useCreateBenefitMutation,
+    // useUpdateBenefitMutation,
+    //useCreateBenefitMutation,
     useChangeStatusManyBenefitMutation
 } from '@/services/BenefitService'
 import {
@@ -36,7 +36,7 @@ import { CirclePlus, EyeIcon, Pencil, Trash2 } from 'lucide-react'
 import AlertDialog from '@/components/AlertDialog'
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
 
-import CreateBenefitPage from './create-benefit/page'
+//import CreateBenefitPage from './create-benefit/page'
 import { useRouter } from 'next/navigation'
 import { formatDate } from '@/utils/formatDate'
 
@@ -49,15 +49,15 @@ function BenefitPage() {
     const [from, setFrom] = useState(1)
     const [to, setTo] = useState(10)
     const [keyword, setKeyword] = useState('')
-    const [isSubmit, setIsSubmit] = useState(false)
+    //const [isSubmit, setIsSubmit] = useState(false)
     const [openDialog, setOpenDialog] = useState(false)
     const [selectedRow, setSelectedRow] = useState<string | null>(null)
     const [order, setOrder] = useState<'asc' | 'desc'>('asc')
     const [orderBy, setOrderBy] = useState<string>('')
-    const [name, setName] = useState('')
-    const [benefitContribution, setBenefitContribution] = useState<number>(0)
-    const [benefitTypeId, setBenefitTypeId] = useState<number>(0)
-    const [nameOfBenefitType, setNameOfBenefitType] = useState('')
+    // const [name, setName] = useState('')
+    //const [benefitContribution, setBenefitContribution] = useState<number>(0)
+    //const [benefitTypeId, setBenefitTypeId] = useState<number>(0)
+    //const [nameOfBenefitType, setNameOfBenefitType] = useState('')
     const [isChangeMany, setIsChangeMany] = useState(false)
     const [filter, setFilter] = useState<IFilterSysConfiguration>({
         pageSize: 10,
@@ -68,11 +68,8 @@ function BenefitPage() {
     const [deleteBenefit, { isSuccess: isSuccessDelete }] = useChangeStatusBenefitMutation()
     //const [createBenefit, { isSuccess, isLoading, isError }] = useCreateBenefitMutation()
     //const [updateBenefit] = useUpdateBenefitMutation()
-    const [isSuccess, setSuccess] = useState(false)
-    const [
-        changeManyBenefit,
-        { isError: isErrorChangeMany, isSuccess: isSuccessChangeMany, isLoading: isLoadingChangeMany }
-    ] = useChangeStatusManyBenefitMutation()
+    const [isSuccess] = useState(false)
+    const [changeManyBenefit] = useChangeStatusManyBenefitMutation()
 
     const benefitData = responseData?.Data.Records as IBenefitGetAll[]
     const totalRecords = responseData?.Data.TotalRecords as number
@@ -184,7 +181,7 @@ function BenefitPage() {
         }
     }, [isSuccessDelete])
 
-    const [isOpen, setIsOpen] = useState(false)
+    //const [isOpen, setIsOpen] = useState(false)
 
     const handleSort = (property: string) => {
         setFilter(prev => ({

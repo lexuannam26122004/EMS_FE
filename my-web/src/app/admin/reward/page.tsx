@@ -1,5 +1,5 @@
 'use client'
-import { IFilterEmploymentContract } from '@/models/EmploymentContract'
+//import { IFilterEmploymentContract } from '@/models/EmploymentContract'
 import { formatDate } from '@/utils/formatDate'
 import {
     Box,
@@ -17,7 +17,7 @@ import {
     TableContainer,
     TextField,
     InputAdornment,
-    OutlinedInput,
+    // OutlinedInput,
     Avatar,
     TableHead,
     TableSortLabel,
@@ -27,9 +27,9 @@ import {
 import { useEffect, useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import SearchIcon from '@mui/icons-material/Search'
-import { useRouter } from 'next/navigation'
-import { useGetContractsExpiringSoonQuery } from '@/services/EmploymentContractService'
-import TableReward from '@/components/TableReward'
+//import { useRouter } from 'next/navigation'
+//import { useGetContractsExpiringSoonQuery } from '@/services/EmploymentContractService'
+//import TableReward from '@/components/TableReward'
 
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
@@ -64,23 +64,23 @@ function getStatusTextColor(status: boolean): string {
 
 function Page() {
     const { t } = useTranslation('common')
-    const router = useRouter()
-    const [selected, setSelected] = useState<number[]>([])
+    //const router = useRouter()
+    //const [selected, setSelected] = useState<number[]>([])
     const [page, setPage] = useState(1)
     const [rowsPerPage, setRowsPerPage] = useState('5')
     const [from, setFrom] = useState(1)
     const [to, setTo] = useState(5)
     const [filter, setFilter] = useState<IFilterSysConfiguration>({
         pageSize: 10,
-        pageNumber: 1,
+        pageNumber: 1
     })
     const [keyword, setKeyword] = useState('')
-    const [openDialog, setOpenDialog] = useState(false)
-    const [selectedRow, setSelectedRow] = useState<number | null>(null)
+    //const [openDialog, setOpenDialog] = useState(false)
+    //const [selectedRow, setSelectedRow] = useState<number | null>(null)
     const [order, setOrder] = useState<'asc' | 'desc'>('asc')
     const [orderBy, setOrderBy] = useState<string>('')
     // const [selectedConfig, setSelectedConfig] = useState<IGetAllSysConfiguration | null>(null)
-    const [openModal, setOpenModal] = useState(false)
+    //const [openModal, setOpenModal] = useState(false)
     const handleSort = (property: string) => {
         setFilter(prev => ({
             ...prev,
@@ -380,7 +380,10 @@ function Page() {
                                 }
                             }}
                             onKeyDown={e => {
-                                handleSearchKeyword()
+                                if (e.key === 'Enter') {
+                                    e.preventDefault()
+                                    handleSearchKeyword()
+                                }
                             }}
                             slotProps={{
                                 input: {

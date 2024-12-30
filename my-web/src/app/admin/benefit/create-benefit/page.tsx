@@ -5,11 +5,11 @@ import {
     Paper,
     TextField,
     Typography,
-    Autocomplete,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions
+    Autocomplete
+    //Dialog,
+    //DialogTitle,
+    //DialogContent,
+    //DialogActions
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { Plus, SaveIcon, XIcon, Pencil, Ban, Trash2 } from 'lucide-react'
@@ -18,13 +18,13 @@ import {
     useCreateBenefitMutation,
     useCreateBenefitTypeMutation,
     useGetAllBenefitsTypeQuery,
-    useUpdateBenefitTypeMutation,
-    useDeleteBenefitTypeMutation
+    useUpdateBenefitTypeMutation
+    //useDeleteBenefitTypeMutation
 } from '@/services/BenefitService'
 import { useEffect, useState } from 'react'
 import LoadingButton from '@mui/lab/LoadingButton'
 import { useToast } from '@/hooks/useToast'
-import { IBenefitGetAll, IBenefitGetAllType } from '@/models/Benefit'
+import { IBenefitGetAllType } from '@/models/Benefit'
 
 function CreateBenefitPage() {
     const { t } = useTranslation('common')
@@ -34,37 +34,22 @@ function CreateBenefitPage() {
     const [benefitTypeId, setBenefitTypeId] = useState<number | null>()
     const [benefitTypeName, setBenefitTypeName] = useState('')
     const [benefitTypeDescription, setBenefitTypeDescription] = useState<string | null>(null)
-    const { data: benefitTypes, isLoading: isBenefitTypesLoading, refetch } = useGetAllBenefitsTypeQuery()
+    const { data: benefitTypes, refetch } = useGetAllBenefitsTypeQuery()
     const benefitTypesData = (benefitTypes?.Data?.Records as IBenefitGetAllType[]) || []
     const toast = useToast()
     const [isSubmit, setIsSubmit] = useState(false)
-    const [openDialog, setOpenDialog] = useState(false)
+    //const [openDialog, setOpenDialog] = useState(false)
 
     const [createBenefit, { isSuccess, isLoading, isError }] = useCreateBenefitMutation()
     const [
         createBenefitType,
         {
             isSuccess: isSuccessCreateBenefitType,
-            isLoading: isLoadingCreateBenefitType,
+            //isLoading: isLoadingCreateBenefitType,
             isError: isErrorCreateBenefitType
         }
     ] = useCreateBenefitTypeMutation()
-    const [
-        updateBenefitType,
-        {
-            isSuccess: isSuccessUpdateBenefitType,
-            isLoading: isLoadingUpdateBenefitType,
-            isError: isErrorUpdateBenefitType
-        }
-    ] = useUpdateBenefitTypeMutation()
-    const [
-        deleteBenefitType,
-        {
-            isSuccess: isSuccessDeleteBenefitType,
-            isLoading: isLoadingDeleteBenefitType,
-            isError: isErrorDeleteBenefitType
-        }
-    ] = useDeleteBenefitTypeMutation()
+    const [updateBenefitType] = useUpdateBenefitTypeMutation()
     const [isOpenCreateBenefitType, setIsOpenCreateBenefitType] = useState(false)
     const [isOpenUpdateBenefitType, setIsOpenUpdateBenefitType] = useState(false)
 

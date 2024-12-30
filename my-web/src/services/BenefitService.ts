@@ -1,7 +1,12 @@
-import { IBenefitCreate, IBenefitGetAll, IBenefitGetAllType, IBenefitUpdate, IBenefitTypeCreate, IBenefitTypeUpdate } from '@/models/Benefit'
+import {
+    IBenefitCreate,
+    IBenefitGetAllType,
+    IBenefitUpdate,
+    IBenefitTypeCreate,
+    IBenefitTypeUpdate
+} from '@/models/Benefit'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
-
 
 interface BenefitResponse {
     Success: boolean
@@ -81,10 +86,15 @@ export const benefitApi = createApi({
             providesTags: ['Benefit'] // Thêm providesTags để cập nhật cache
         }),
         getAllBenefitsType: builder.query<BenefitResponse, IBenefitGetAllType | void>({
-            query: filter => {
+            query: benefitsType => ({
+                url: 'GetAllBenefitType?',
+                method: 'GET',
+                body: benefitsType
+            })
+            /*query: filter => {
 
                 return `GetAllBenefitType?`
-            }
+            }*/
         }),
         deleteBenefitType: builder.mutation<void, number>({
             query: id => ({
@@ -93,7 +103,6 @@ export const benefitApi = createApi({
             }),
             invalidatesTags: ['Benefit']
         })
-
     })
 })
 

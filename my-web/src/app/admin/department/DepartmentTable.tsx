@@ -33,7 +33,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import DetailModal from '../configuration/DetailModal'
+//import DetailModal from '../configuration/DetailModal'
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
 import { formatDate } from '@/utils/formatDate'
 
@@ -50,15 +50,15 @@ function DepartmentTable() {
     const [from, setFrom] = useState(1)
     const [to, setTo] = useState(10)
     const [keyword, setKeyword] = useState('')
-    const [isSubmit, setIsSubmit] = useState(false)
+    //const [isSubmit, setIsSubmit] = useState(false)
     const [openDialog, setOpenDialog] = useState(false)
     const [selectedRow, setSelectedRow] = useState<number | null>(null)
     const [order, setOrder] = useState<'asc' | 'desc'>('asc')
     const [orderBy, setOrderBy] = useState<string>('')
-    const [name, setName] = useState('')
-    const [benefitContribution, setBenefitContribution] = useState<number>(0)
-    const [benefitTypeId, setBenefitTypeId] = useState<number>(0)
-    const [nameOfBenefitType, setNameOfBenefitType] = useState('')
+    //const [name, setName] = useState('')
+    //const [benefitContribution, setBenefitContribution] = useState<number>(0)
+    //const [benefitTypeId, setBenefitTypeId] = useState<number>(0)
+    //const [nameOfBenefitType, setNameOfBenefitType] = useState('')
     const [isChangeMany, setIsChangeMany] = useState(false)
     const [filter, setFilter] = useState<IFilterSysConfiguration>({
         pageSize: 10,
@@ -69,11 +69,8 @@ function DepartmentTable() {
     const [deleteBenefit, { isSuccess: isSuccessDelete }] = useChangeStatusMutation()
     //const [createBenefit, { isSuccess, isLoading, isError }] = useCreateBenefitMutation()
     //const [updateBenefit] = useUpdateBenefitMutation()
-    const [isSuccess, setSuccess] = useState(false)
-    const [
-        changeManyBenefit,
-        { isError: isErrorChangeMany, isSuccess: isSuccessChangeMany, isLoading: isLoadingChangeMany }
-    ] = useChangeStatusManyDepartmentMutation()
+    const [isSuccess] = useState(false)
+    const [changeManyBenefit] = useChangeStatusManyDepartmentMutation()
 
     const departmentdata = responseData?.Data.Records as IDepartmentGetAll[]
     const totalRecords = responseData?.Data.TotalRecords as number
@@ -185,7 +182,7 @@ function DepartmentTable() {
         }
     }, [isSuccessDelete])
 
-    const [isOpen, setIsOpen] = useState(false)
+    //const [isOpen, setIsOpen] = useState(false)
 
     const handleSort = (property: string) => {
         setFilter(prev => ({

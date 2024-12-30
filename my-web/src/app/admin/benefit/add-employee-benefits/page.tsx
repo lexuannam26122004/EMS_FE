@@ -6,8 +6,6 @@ import { ChevronDown, ChevronUp } from 'lucide-react'
 import {
     useGetAllBenefitsQuery,
     useChangeStatusBenefitMutation,
-    useUpdateBenefitMutation,
-    useCreateBenefitMutation,
     useChangeStatusManyBenefitMutation
 } from '@/services/BenefitService'
 import {
@@ -31,13 +29,7 @@ import {
     IconButton,
     Tooltip,
     TableSortLabel,
-    ListItemText,
-    InputLabel,
-    FormControl,
     FormControlLabel,
-    Chip,
-    RadioGroup,
-    Radio,
     Divider,
     Collapse
 } from '@mui/material'
@@ -52,9 +44,9 @@ import { useRouter } from 'next/navigation'
 import { formatDate } from '@/utils/formatDate'
 import { IAspNetRoleGetAll } from '@/models/AspNetRole'
 import { useGetAllRolesQuery } from '@/services/AspNetRoleService'
-import BenefitFilter from '../BenefitFilter'
 import { useGetAllDepartmentQuery } from '@/services/DepartmentService'
 import { IDepartmentGetAll } from '@/models/Department'
+import Loading from '@/components/Loading'
 
 function BenefitPage() {
     const { t } = useTranslation('common')
@@ -65,23 +57,23 @@ function BenefitPage() {
     const [from, setFrom] = useState(1)
     const [to, setTo] = useState(10)
     const [keyword, setKeyword] = useState('')
-    const [isSubmit, setIsSubmit] = useState(false)
+    const [isSubmit] = useState(false)
     const [openDialog, setOpenDialog] = useState(false)
     const [selectedRow, setSelectedRow] = useState<string | null>(null)
     const [order, setOrder] = useState<'asc' | 'desc'>('asc')
     const [orderBy, setOrderBy] = useState<string>('')
-    const [name, setName] = useState('')
-    const [benefitContribution, setBenefitContribution] = useState<number>(0)
-    const [benefitTypeId, setBenefitTypeId] = useState<number>(0)
-    const [nameOfBenefitType, setNameOfBenefitType] = useState('')
+    //const [name, setName] = useState('')
+    //const [benefitContribution, setBenefitContribution] = useState<number>(0)
+    //const [benefitTypeId, setBenefitTypeId] = useState<number>(0)
+    //const [nameOfBenefitType, setNameOfBenefitType] = useState('')
     const [isChangeMany, setIsChangeMany] = useState(false)
 
     const [roles, setRoles] = useState<string[]>([])
-    const { data: roleResponse, isLoading: isRoleLoading } = useGetAllRolesQuery()
+    const { data: roleResponse } = useGetAllRolesQuery()
     const role = (roleResponse?.Data?.Records as IAspNetRoleGetAll[]) || []
 
     const [departments, setDepartments] = useState<string[]>([])
-    const { data: departmentResponse, isLoading: isBenefitTypesLoading } = useGetAllDepartmentQuery()
+    const { data: departmentResponse } = useGetAllDepartmentQuery()
     const department = (departmentResponse?.Data?.Records as IDepartmentGetAll[]) || []
 
     const [gender, setGender] = useState<number | ''>('')
@@ -157,11 +149,8 @@ function BenefitPage() {
     const [deleteBenefit, { isSuccess: isSuccessDelete }] = useChangeStatusBenefitMutation()
     //const [createBenefit, { isSuccess, isLoading, isError }] = useCreateBenefitMutation()
     //const [updateBenefit] = useUpdateBenefitMutation()
-    const [isSuccess, setSuccess] = useState(false)
-    const [
-        changeManyBenefit,
-        { isError: isErrorChangeMany, isSuccess: isSuccessChangeMany, isLoading: isLoadingChangeMany }
-    ] = useChangeStatusManyBenefitMutation()
+    const [isSuccess] = useState(false)
+    const [changeManyBenefit] = useChangeStatusManyBenefitMutation()
 
     const benefitData = responseData?.Data.Records as IBenefitGetAll[]
     const totalRecords = responseData?.Data.TotalRecords as number
@@ -288,6 +277,10 @@ function BenefitPage() {
     }
 
     const countRows = selected.length
+
+    if (isFetching) {
+        return <Loading />
+    }
 
     return (
         <Box

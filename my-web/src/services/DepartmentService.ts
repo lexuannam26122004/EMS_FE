@@ -1,4 +1,4 @@
-import { IDepartmentCreate, IDepartmentGetAll, IDepartmentUpdate } from '@/models/Department'
+import { IDepartmentCreate, IDepartmentUpdate } from '@/models/Department'
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 

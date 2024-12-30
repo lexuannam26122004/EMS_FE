@@ -1,64 +1,64 @@
 'use client'
-import { IBenefitGetAll } from '@/models/Benefit'
+//import { IBenefitGetAll } from '@/models/Benefit'
 import Slider from 'rc-slider'
 import 'rc-slider/assets/index.css'
-import {
+/*import {
     useGetAllBenefitsQuery,
     useChangeStatusBenefitMutation,
     useUpdateBenefitMutation,
     useCreateBenefitMutation,
     useChangeStatusManyBenefitMutation
-} from '@/services/BenefitService'
+} from '@/services/BenefitService'*/
 import {
     Box,
     Select,
-    Pagination,
+    //Pagination,
     Typography,
     MenuItem,
-    SelectChangeEvent,
-    Paper,
+    //SelectChangeEvent,
+    //Paper,
     Checkbox,
-    TableRow,
-    TableBody,
-    Table,
-    TableCell,
-    TableHead,
-    TableContainer,
-    Button,
-    TextField,
-    InputAdornment,
-    IconButton,
-    Tooltip,
-    TableSortLabel,
+    //TableRow,
+    //TableBody,
+    //Table,
+    //TableCell,
+    //TableHead,
+    //TableContainer,
+    //Button,
+    //TextField,
+    //InputAdornment,
+    //IconButton,
+    //Tooltip,
+    //TableSortLabel,
     ListItemText,
     InputLabel,
     FormControl
 } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import SearchIcon from '@mui/icons-material/Search'
-import { CirclePlus, EyeIcon, Pencil, Trash2 } from 'lucide-react'
-import AlertDialog from '@/components/AlertDialog'
-import { IFilterSysConfiguration } from '@/models/SysConfiguration'
+//import SearchIcon from '@mui/icons-material/Search'
+//import { CirclePlus, EyeIcon, Pencil, Trash2 } from 'lucide-react'
+//import AlertDialog from '@/components/AlertDialog'
+//import { IFilterSysConfiguration } from '@/models/SysConfiguration'
 
-import { useRouter } from 'next/navigation'
-import { formatDate } from '@/utils/formatDate'
+//import { useRouter } from 'next/navigation'
+//import { formatDate } from '@/utils/formatDate'
 import { IAspNetRoleGetAll } from '@/models/AspNetRole'
 import { useGetAllRolesQuery } from '@/services/AspNetRoleService'
-import { useGetAllDepartmentQuery } from '@/services/DepartmentService'
-import { IDepartmentGetAll } from '@/models/Department'
+//import { useGetAllDepartmentQuery } from '@/services/DepartmentService'
+//import { IDepartmentGetAll } from '@/models/Department'
 
 function BenefitFilter() {
-    const [isSubmit, setIsSubmit] = useState(false)
+    const [isSubmit] = useState(false)
     const { t } = useTranslation('common')
 
     const [roles, setRoles] = useState<string[]>([])
-    const { data: roleResponse, isLoading: isRoleLoading } = useGetAllRolesQuery()
+    const { data: roleResponse } = useGetAllRolesQuery()
     const role = (roleResponse?.Data?.Records as IAspNetRoleGetAll[]) || []
 
-    const [departments, setDepartments] = useState<string[]>([])
-    const { data: department, isLoading: isBenefitTypesLoading, refetch } = useGetAllDepartmentQuery()
-    const departmentDataRecord = (department?.Data?.Records as IDepartmentGetAll[]) || []
+    //const [departments, setDepartments] = useState<string[]>([])
+    //const { data: department } = useGetAllDepartmentQuery()
+    //const departmentDataRecord = (department?.Data?.Records as IDepartmentGetAll[]) || []
 
     const [gender, setGender] = useState('')
     const [priceRange, setPriceRange] = useState<[number, number]>([0, 26500000])
