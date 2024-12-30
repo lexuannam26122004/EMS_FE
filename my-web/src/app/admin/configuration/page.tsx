@@ -196,7 +196,7 @@ function ConfigurationPage() {
     }
 
     if (!menuLeft['Configuration'].IsAllowView) {
-        return <h1>'Bạn không có quyền truy cập trang này'</h1>
+        return <Box>123</Box>
     }
 
     return (

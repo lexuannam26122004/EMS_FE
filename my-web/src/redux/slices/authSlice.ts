@@ -31,9 +31,6 @@ export const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        clearUser: state => {
-            state = {} // Reset tất cả menu rights
-        },
         // Payload là dữ liệu chứa MenuLeft
         updateAuth: (state, action: PayloadAction<MenuItem[]>) => {
             action.payload.forEach(menu => {
@@ -43,7 +40,7 @@ export const authSlice = createSlice({
     }
 })
 
-export const { clearUser, updateAuth } = authSlice.actions
+export const { updateAuth } = authSlice.actions
 
 export const authSelector = (state: RootState) => state.auth
 

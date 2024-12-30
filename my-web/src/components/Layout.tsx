@@ -7,13 +7,11 @@ import {
     ShieldCheck,
     Calendar,
     CalendarDays,
-    Network,
     Home,
     ScrollText,
     Landmark,
     Gift,
     Scale,
-    Clock,
     CalendarClock,
     SlidersHorizontal
 } from 'lucide-react'
@@ -26,8 +24,6 @@ import Chat from './chat'
 import { useEffect } from 'react'
 import { authSelector, authSlice } from '@/redux/slices/authSlice'
 import { useDispatch, useSelector } from 'react-redux'
-import { IUserData } from '@/models/AuthMe'
-import { useGetAuthMeQuery } from '@/services/AuthService'
 import Loading from './Loading'
 
 const getUserData = async () => {
