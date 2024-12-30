@@ -22,7 +22,8 @@ import { salaryApi } from '@/services/SalaryService'
 import { benefitApi } from '@/services/BenefitService'
 import { eventApi } from '@/services/EventService'
 import { rewardApi } from '@/services/RewardService'
-import { AuthApi } from '@/services/AuthService'; 
+import { AuthApi } from '@/services/AuthService'
+import { authSlice } from './slices/authSlice'
 
 export const store = configureStore({
     reducer: {
@@ -49,7 +50,8 @@ export const store = configureStore({
         [benefitApi.reducerPath]: benefitApi.reducer,
         [eventApi.reducerPath]: eventApi.reducer,
         [rewardApi.reducerPath]: rewardApi.reducer,
-        [AuthApi.reducerPath]: AuthApi.reducer
+        [AuthApi.reducerPath]: AuthApi.reducer,
+        [authSlice.name]: authSlice.reducer
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware().concat(

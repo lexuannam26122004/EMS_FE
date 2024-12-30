@@ -42,7 +42,6 @@ export const fetchUserData = async (): Promise<User | null> => {
     }
 }
 
-
 fetchUserData()
 
 export const getUserData = (): User | null => {
@@ -70,8 +69,8 @@ export const getAvatarPath = (): string => {
     return userData?.AvatarPath || ''
 }
 
-export const userId: string = getUserId()
+export const userId: string = 'CC001'
 export const userSentNotificationId = getUserId()
 export const fullName = getFullName()
 export const roles = getRoles()
-export const avatarPath = 'https://localhost:44381/'+getAvatarPath()
+export const avatarPath = 'https://localhost:44381/' + getAvatarPath()

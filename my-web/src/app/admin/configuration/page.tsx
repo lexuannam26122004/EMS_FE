@@ -35,6 +35,8 @@ import { CirclePlus, EyeIcon, Pencil, Trash2 } from 'lucide-react'
 import AlertDialog from '@/components/AlertDialog'
 import DetailModal from './DetailModal'
 import Loading from '@/components/Loading'
+import { authSelector } from '@/redux/slices/authSlice'
+import { useSelector } from 'react-redux'
 
 function ConfigurationPage() {
     const { t } = useTranslation('common')
@@ -187,8 +189,14 @@ function ConfigurationPage() {
 
     const countRows = selected.length
 
-    if (isFetching) {
+    const menuLeft = useSelector(authSelector)
+
+    if (isFetching || menuLeft === null || Object.keys(menuLeft).length === 0) {
         return <Loading />
+    }
+
+    if (!menuLeft['Configuration'].IsAllowView) {
+        return <h1>'Bạn không có quyền truy cập trang này'</h1>
     }
 
     return (

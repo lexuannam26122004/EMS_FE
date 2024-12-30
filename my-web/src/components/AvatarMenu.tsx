@@ -139,10 +139,10 @@ const AvatarMenu = () => {
                         '&::after': {
                             content: '""',
                             position: 'absolute',
-                            top: '2%',
+                            top: '2.5%',
                             left: '2%',
-                            width: '96%',
-                            height: '96%',
+                            width: '95%',
+                            height: '95%',
                             borderRadius: '50%',
                             backgroundColor: 'var(--background-item)',
                             zIndex: 0
