@@ -27,7 +27,6 @@ import {
     Button,
     TextField,
     InputAdornment,
-    IconButton,
     Tooltip,
     TableSortLabel
 } from '@mui/material'
@@ -37,14 +36,15 @@ import SearchIcon from '@mui/icons-material/Search'
 import { CirclePlus, EyeIcon, Pencil, Trash2 } from 'lucide-react'
 import AlertDialog from '@/components/AlertDialog'
 import { userSentNotificationId } from '@/utils/globalVariables'
-import { useRouter } from 'next/navigation'
+
 import { useCreateNotificationMutation } from '@/services/NotificationsService'
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
+import { useToast } from '@/hooks/useToast'
 
 function HolidayPage() {
     const { t } = useTranslation('common')
     const [selected, setSelected] = useState<number[]>([])
     const [page, setPage] = useState(1)
+    const toast = useToast()
     const [rowsPerPage, setRowsPerPage] = useState('10')
     const [from, setFrom] = useState(1)
     const [to, setTo] = useState(10)
@@ -66,14 +66,19 @@ function HolidayPage() {
 
     const { data: responseData, isFetching, refetch } = useGetAllHolidayQuery(filter)
     const [deleteHoliday, { isSuccess: isSuccessDelete }] = useDeleteHolidayMutation()
-    const [createHoliday, { isSuccess, isLoading, isError }] = useCreateHolidayMutation()
+    const [createHoliday, { isSuccess, isError }] = useCreateHolidayMutation()
     const [updateHoliday] = useUpdateHolidayMutation()
-    const [
-        deleteManyHoliday,
-        { isError: isErrorDeleteMany, isSuccess: isSuccessDeleteMany, isLoading: isLoadingDeleteMany }
-    ] = useDeleteManyHolidayMutation()
-    const [createNotification, { isError: isErrorCreate, isLoading: isLoadingNotify, isSuccess: isSuccessCreate }] =
-        useCreateNotificationMutation()
+    const [deleteManyHoliday, { isSuccess: isSuccessDeleteMany }] = useDeleteManyHolidayMutation()
+    const [createNotification, { isError: isErrorCreate, isSuccess: isSuccessCreate }] = useCreateNotificationMutation()
+
+    useEffect(() => {
+        if (isSuccess === true && isSuccessCreate === true) {
+            toast(t('COMMON.HOLIDAY.ACTION_HOLIDAY.CREATE_SUCCESS'), 'success')
+        }
+        if (isError === true && isErrorCreate === true) {
+            toast(t('COMMON.HOLIDAY.ACTION_HOLIDAY.CREATE_ERROR'), 'error')
+        }
+    }, [isSuccess, isError, isSuccessCreate, isErrorCreate])
 
     const holidayData = responseData?.Data.Records as IHolidayGetAll[]
     const totalRecords = responseData?.Data.TotalRecords as number
@@ -338,7 +343,7 @@ function HolidayPage() {
                                     borderColor: 'var(--selected-field-color)'
                                 }
                             }}
-                            onKeyDown={e => {
+                            onKeyDown={() => {
                                 handleSearchKeyword()
                             }}
                             slotProps={{

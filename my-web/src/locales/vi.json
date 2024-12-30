@@ -253,7 +253,13 @@
             "ACTION_HOLIDAY": {
                 "NAME": "Tên ngày lễ*",
                 "START_DATE": "Ngày bắt đầu*",
-                "END_DATE": "Ngày kết thúc*"
+                "END_DATE": "Ngày kết thúc*",
+                "CREATE_SUCCESS": "Tạo một Ngày lễ mới thành công",
+                "UPDATE_SUCCESS": "Cập nhật Ngày lễ thành công",
+                "DELETE_SUCCESS": "Xóa Ngày lễ thành công",
+                "CREATE_ERROR": "Tạo Ngày lễ thất bại",
+                "UPDATE_ERROR": "Cập nhật Ngày lễ thất bại",
+                "DELETE_ERROR": "Xóa Ngày lễ thất bại"
             }
         },
         "SALARY": {

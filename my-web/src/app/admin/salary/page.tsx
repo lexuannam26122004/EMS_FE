@@ -1,369 +1,317 @@
 'use client'
-import CustomTabs from '@/components/tabs/tabs'
-import { Box, Button, Divider, Typography } from '@mui/material'
-import React from 'react'
-import ReactECharts from 'echarts-for-react'
-import { useTranslation } from 'react-i18next'
-import { useGetAllSalariesQuery } from '@/services/SalaryService'
-import { ISalaryGetAll } from '@/models/salary'
-import { ProgressClock } from 'mdi-material-ui'
-import { Heart, Users, WalletIcon } from 'lucide-react'
-import { ChartNoAxesColumn, ChartNoAxesCombined, Wallet } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 
-function SalaryPage() {
-    const { t } = useTranslation('common')
-    //const { data: responseData, isFetching, refetch } = useGetAllSalariesQuery()
-    const router = useRouter()
+import { Box, Typography } from '@mui/material'
+import { BellPlus, Grid2x2Plus, HandCoins, Sheet } from 'lucide-react'
+import EmployeeSalaryChart from './EmployeeSalaryChart'
+import IncomeStructureChart from './IncomeStructureChart'
+import TotalIncomeChart from './TotalIncomeChart'
+import DepartmentChart from './DepartmentChart'
+import ErrorSalary from './ErrorSalary'
+import { useCreateSalaryMutation, useGetInfoForSalarySummaryQuery } from '@/services/SalaryService'
+import { useEffect } from 'react'
 
-    //const salaryData = responseData?.Data as ISalaryGetAll[]
-    const salaryCycles = [
-        'Cycle 1',
-        'Cycle 2',
-        'Cycle 3',
-        'Cycle 4',
-        'Cycle 5',
-        'Cycle 6',
-        'Cycle 7',
-        'Cycle 8',
-        'Cycle 9',
-        'Cycle 10'
-    ]
-    const option = {
-        tooltip: {
-            trigger: 'axis'
-        },
-        legend: {
-            data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
-        },
-        grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-        },
-        toolbox: {
-            feature: {
-                saveAsImage: {}
-            }
-        },
-        xAxis: {
-            type: 'category',
-            boundaryGap: false,
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        },
-        yAxis: {
-            type: 'value'
-        },
-        series: [
-            {
-                name: 'Email',
-                type: 'line',
-                data: [120, 132, 101, 134, 90, 230, 210]
-            },
-            {
-                name: 'Union Ads',
-                type: 'line',
-                data: [220, 182, 191, 234, 290, 330, 310]
-            },
-            {
-                name: 'Video Ads',
-                type: 'line',
-                data: [150, 232, 201, 154, 190, 330, 410]
-            },
-            {
-                name: 'Direct',
-                type: 'line',
-                data: [320, 332, 301, 334, 390, 330, 320]
-            },
-            {
-                name: 'Search Engine',
-                type: 'line',
-                data: [1300, 932, 901, 934, 1290, 1330, 1320]
-            }
-        ]
-    }
-
+function OverviewSalaryPage() {
+    const [createSalaries, { isSuccess, isError, isLoading }] = useCreateSalaryMutation()
+    const { data } = useGetInfoForSalarySummaryQuery()
+    const { total, PITax, totalInsurance } = data?.Data || {}
+    useEffect(() => {}, [createSalaries, isSuccess, isError])
     return (
-        <Box>
+        <Box
+            sx={{
+                scrollbarGutter: 'stable',
+                overflow: 'auto',
+                '&::-webkit-scrollbar': {
+                    width: '7px',
+                    height: '7px'
+                },
+                '&::-webkit-scrollbar-thumb': {
+                    backgroundColor: 'var(--scrollbar-color)',
+                    borderRadius: '10px'
+                }
+            }}
+        >
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Box
+                    sx={{
+                        width: 'calc(100% / 3)',
+                        backgroundBlendMode: 'overlay',
+                        backgroundImage: 'url("/background/1.jpg")',
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        borderRadius: '15px',
+                        zIndex: 1
+                        //border: '1px solid black'
+                    }}
+                >
+                    <Sheet size={'30px'} style={{ color: 'white', marginLeft: '10px', marginTop: '20px' }}></Sheet>
+                    <Typography
+                        sx={{
+                            color: 'green',
+                            padding: '10px',
+                            marginBottom: '5px',
+                            zIndex: 2
+                        }}
+                    >
+                        xem chi tiết
+                    </Typography>
+                </Box>
+                <Box
+                    // variant='contained'
+                    // color='primary'
+                    // //onClick={handleCreateSalaries}
+                    // disabled={isLoading}
+                    sx={{
+                        marginLeft: '20px',
+                        width: 'calc(100% / 3)',
+                        backgroundBlendMode: 'overlay',
+                        backgroundImage: 'url("/background/1.jpg")',
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        borderRadius: '15px',
+                        zIndex: 1
+                    }}
+                >
+                    <Grid2x2Plus
+                        size={'30px'}
+                        style={{ color: 'white', marginLeft: '10px', marginTop: '20px' }}
+                    ></Grid2x2Plus>
+                    <Typography
+                        sx={{
+                            color: 'green',
+                            padding: '10px',
+                            marginBottom: '5px',
+                            zIndex: 2
+                        }}
+                    >
+                        {isLoading ? 'Đang tạo...' : 'Tạo bảng lương'}
+                    </Typography>
+                </Box>
+                <Box
+                    sx={{
+                        marginLeft: '20px',
+                        width: 'calc(100% / 3)',
+                        backgroundBlendMode: 'overlay',
+                        backgroundImage: 'url("/background/1.jpg")',
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        borderRadius: '15px',
+                        zIndex: 1
+                    }}
+                >
+                    <HandCoins
+                        size={'30px'}
+                        style={{ color: 'white', marginLeft: '10px', marginTop: '20px' }}
+                    ></HandCoins>
+                    <Typography
+                        sx={{
+                            color: 'green',
+                            padding: '10px',
+                            marginBottom: '5px',
+                            zIndex: 2
+                        }}
+                    >
+                        chi trả lương
+                    </Typography>
+                </Box>
+                <Box
+                    sx={{
+                        marginLeft: '20px',
+                        width: 'calc(100% / 3)',
+                        backgroundBlendMode: 'overlay',
+                        backgroundImage: 'url("/background/1.jpg")',
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        borderRadius: '15px',
+                        zIndex: 1
+                    }}
+                >
+                    <BellPlus
+                        size={'30px'}
+                        style={{ color: 'white', marginLeft: '10px', marginTop: '20px' }}
+                    ></BellPlus>
+                    <Typography
+                        sx={{
+                            color: 'green',
+                            padding: '10px',
+                            marginBottom: '5px',
+                            zIndex: 2
+                        }}
+                    >
+                        Gửi thông báo
+                    </Typography>
+                </Box>
+            </Box>
             <Box
                 sx={{
                     display: 'flex',
                     width: '100%',
                     height: '100%',
                     overflow: 'hidden',
-                    marginLeft: '10px'
+                    marginTop: '15px',
+                    gap: '15px'
                 }}
             >
-                <Box
-                    sx={{
-                        width: 'calc(100% / 9 * 5)',
-                        backgroundColor: 'var(--background-item)',
-                        border: '1px solid lightgray',
-                        borderRadius: '5px',
-                        gap: '10px'
-                    }}
-                >
-                    <Typography sx={{ padding: '10px', marginLeft: '10px', fontSize: '24px', fontWeight: 'bold' }}>
-                        {t('COMMON.SALARY.PAYROLL_SCHEDULE')}
-                    </Typography>
-                    <Divider
-                        sx={{ height: '1px', marginLeft: '15px', marginRight: '15px', marginBottom: '15px' }}
-                    ></Divider>
-                    <ReactECharts option={option} style={{ width: '100%', height: '400px' }}></ReactECharts>
-                </Box>
-                <Box
-                    sx={{
-                        width: 'calc(100% / 9 * 4)',
-                        backgroundColor: 'var(--background-item)',
-                        border: '1px solid lightgray',
-                        borderRadius: '5px',
-                        gap: '10px',
-                        marginRight: '20px'
-                    }}
-                >
-                    <Typography sx={{ padding: '10px', marginLeft: '10px', fontSize: '24px', fontWeight: 'bold' }}>
-                        {t('COMMON.SALARY.OVERVIEW')}
-                    </Typography>
-                    <Divider
-                        sx={{ height: '1px', marginLeft: '15px', marginRight: '15px', marginBottom: '15px' }}
-                    ></Divider>
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <Box sx={{ padding: '15px' }}>
-                            <Box>
-                                <Typography sx={{ padding: '10px', marginLeft: '10px', fontSize: '16px' }}>
-                                    {t('COMMON.SALARY.OVERVIEW')}
+                <Box sx={{ width: 'calc(100% / 4 * 3)' }}>
+                    <Box>
+                        <Box
+                            sx={{
+                                backgroundColor: 'var(--background-item)',
+                                width: '100%',
+                                borderRadius: '10px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '15px',
+                                marginRight: '5px',
+                                height: '100%'
+                            }}
+                        >
+                            <Box
+                                sx={{
+                                    width: 'calc(100% / 4)',
+                                    backgroundBlendMode: 'overlay',
+                                    backgroundImage: 'url("/background_salary/tinhluong.png")',
+                                    backgroundSize: 'cover',
+                                    backgroundRepeat: 'no-repeat',
+                                    backgroundPosition: 'center',
+                                    borderTopLeftRadius: '10px',
+                                    borderBottomLeftRadius: '10px',
+                                    height: '155px'
+                                }}
+                            ></Box>
+                            <Box
+                                sx={{
+                                    width: 'calc(100% / 4 * 3)',
+                                    marginLeft: '15px'
+                                }}
+                            >
+                                <Typography
+                                    sx={{
+                                        fontSize: '20px',
+                                        fontWeight: 'bold',
+                                        marginTop: '12px',
+                                        marginBottom: '2px'
+                                    }}
+                                >
+                                    Tổng hợp lương
                                 </Typography>
                                 <Typography
-                                    sx={{ padding: '10px', marginLeft: '10px', fontSize: '26px', fontWeight: 'bold' }}
+                                    sx={{
+                                        fontSize: '16px',
+                                        marginBottom: '15px'
+                                    }}
                                 >
-                                    {t('COMMON.SALARY.OVERVIEW')}
+                                    Lương tháng 12
                                 </Typography>
-                                <Box sx={{ alignItems: 'center', display: 'flex' }}>
-                                    <ChartNoAxesCombined size={16} color='black' style={{ marginLeft: '20px' }} />
-                                    <Typography sx={{ padding: '10px', fontSize: '16px' }}>
-                                        {t('COMMON.SALARY.OVERVIEW')}
-                                    </Typography>
-                                </Box>
-                            </Box>
-                            <Box sx={{ marginTop: '40px' }}>
-                                <Typography sx={{ padding: '10px', marginLeft: '10px', fontSize: '16px' }}>
-                                    {t('COMMON.SALARY.OVERVIEW')}
-                                </Typography>
-                                <Typography
-                                    sx={{ padding: '10px', marginLeft: '10px', fontSize: '26px', fontWeight: 'bold' }}
-                                >
-                                    {t('COMMON.SALARY.OVERVIEW')}
-                                </Typography>
-                                <Box sx={{ alignItems: 'center', display: 'flex' }}>
-                                    <ChartNoAxesCombined size={16} color='black' style={{ marginLeft: '20px' }} />
-                                    <Typography sx={{ padding: '10px', fontSize: '16px' }}>
-                                        {t('COMMON.SALARY.OVERVIEW')}
-                                    </Typography>
-                                </Box>
-                            </Box>
-                        </Box>
-                        <Divider
-                            orientation='vertical'
-                            flexItem
-                            sx={{ marginRight: '-20px', marginLeft: '20px', marginTop: '15px', marginBottom: '15px' }}
-                        />
-                        <Box sx={{ padding: '15px' }}>
-                            <Box>
-                                <Typography sx={{ padding: '10px', marginLeft: '10px', fontSize: '16px' }}>
-                                    {t('COMMON.SALARY.OVERVIEW')}
-                                </Typography>
-                                <Typography
-                                    sx={{ padding: '10px', marginLeft: '10px', fontSize: '26px', fontWeight: 'bold' }}
-                                >
-                                    {t('COMMON.SALARY.OVERVIEW')}
-                                </Typography>
-                                <Box sx={{ alignItems: 'center', display: 'flex' }}>
-                                    <ChartNoAxesCombined size={16} color='black' style={{ marginLeft: '20px' }} />
-                                    <Typography sx={{ padding: '10px', fontSize: '16px' }}>
-                                        {t('COMMON.SALARY.OVERVIEW')}
-                                    </Typography>
-                                </Box>
-                            </Box>
-                            <Box sx={{ marginTop: '40px' }}>
-                                <Typography sx={{ padding: '10px', marginLeft: '10px', fontSize: '16px' }}>
-                                    {t('COMMON.SALARY.OVERVIEW')}
-                                </Typography>
-                                <Typography
-                                    sx={{ padding: '10px', marginLeft: '10px', fontSize: '26px', fontWeight: 'bold' }}
-                                >
-                                    {t('COMMON.SALARY.OVERVIEW')}
-                                </Typography>
-                                <Box sx={{ alignItems: 'center', display: 'flex' }}>
-                                    <ChartNoAxesCombined size={16} color='black' style={{ marginLeft: '20px' }} />
-                                    <Typography sx={{ padding: '10px', fontSize: '16px' }}>
-                                        {t('COMMON.SALARY.OVERVIEW')}
-                                    </Typography>
-                                </Box>
-                            </Box>
-                        </Box>
-                        <Divider
-                            orientation='vertical'
-                            flexItem
-                            sx={{ marginRight: '-20px', marginLeft: '20px', marginTop: '15px', marginBottom: '15px' }}
-                        />
-                        <Box sx={{ padding: '15px' }}>
-                            <Box>
-                                <Typography sx={{ padding: '10px', marginLeft: '10px', fontSize: '16px' }}>
-                                    {t('COMMON.SALARY.OVERVIEW')}
-                                </Typography>
-                                <Typography
-                                    sx={{ padding: '10px', marginLeft: '10px', fontSize: '26px', fontWeight: 'bold' }}
-                                >
-                                    {t('COMMON.SALARY.OVERVIEW')}
-                                </Typography>
-                                <Box sx={{ alignItems: 'center', display: 'flex' }}>
-                                    <ChartNoAxesCombined size={16} color='black' style={{ marginLeft: '20px' }} />
-                                    <Typography sx={{ padding: '10px', fontSize: '16px' }}>
-                                        {t('COMMON.SALARY.OVERVIEW')}
-                                    </Typography>
-                                </Box>
-                            </Box>
-                            <Box sx={{ marginTop: '40px' }}>
-                                <Typography sx={{ padding: '10px', marginLeft: '10px', fontSize: '16px' }}>
-                                    {t('COMMON.SALARY.OVERVIEW')}
-                                </Typography>
-                                <Typography
-                                    sx={{ padding: '10px', marginLeft: '10px', fontSize: '26px', fontWeight: 'bold' }}
-                                >
-                                    {t('COMMON.SALARY.OVERVIEW')}
-                                </Typography>
-                                <Box sx={{ alignItems: 'center', display: 'flex' }}>
-                                    <ChartNoAxesCombined size={16} color='black' style={{ marginLeft: '20px' }} />
-                                    <Typography sx={{ padding: '10px', fontSize: '16px' }}>
-                                        {t('COMMON.SALARY.OVERVIEW')}
-                                    </Typography>
+                                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    <Box sx={{ width: 'calc(100% / 8 * 3)' }}>
+                                        <Typography fontSize={'18px'}>Tổng lương</Typography>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
+                                            <Typography fontWeight={'bold'} fontSize={'24px'}>
+                                                {total > 1000000
+                                                    ? (total / 1000000).toFixed(2)
+                                                    : total > 1000
+                                                      ? (total / 1000).toFixed(2)
+                                                      : total}
+                                            </Typography>
+                                            <Typography fontSize={'16px'} style={{ marginLeft: '5px' }}>
+                                                {total > 1000000
+                                                    ? 'Nghìn tỷ đồng'
+                                                    : total > 1000
+                                                      ? 'Tỷ đồng'
+                                                      : 'Triệu đồng'}
+                                            </Typography>
+                                        </Box>
+                                    </Box>
+                                    <Box sx={{ width: 'calc(100% / 8 * 3)' }}>
+                                        <Typography fontSize={'18px'}>Thuế TNCN</Typography>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
+                                            <Typography fontWeight={'bold'} fontSize={'24px'}>
+                                                {PITax > 1000000
+                                                    ? (PITax / 1000000).toFixed(2)
+                                                    : PITax > 1000
+                                                      ? (PITax / 1000).toFixed(2)
+                                                      : PITax}
+                                            </Typography>
+                                            <Typography fontSize={'16px'} style={{ marginLeft: '5px' }}>
+                                                {PITax > 1000000
+                                                    ? 'Nghìn tỷ đồng'
+                                                    : PITax > 1000
+                                                      ? 'Tỷ đồng'
+                                                      : 'Triệu đồng'}
+                                            </Typography>
+                                        </Box>
+                                    </Box>
+                                    <Box sx={{ width: 'calc(100% / 8 * 2)', marginRight: '-10px' }}>
+                                        <Typography fontSize={'18px'}>Bảo hiểm</Typography>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
+                                            <Typography fontWeight={'bold'} fontSize={'24px'}>
+                                                {totalInsurance > 1000000
+                                                    ? (totalInsurance / 1000000).toFixed(2)
+                                                    : totalInsurance > 1000
+                                                      ? (totalInsurance / 1000).toFixed(2)
+                                                      : totalInsurance}
+                                            </Typography>
+                                            <Typography fontSize={'16px'} style={{ marginLeft: '5px' }}>
+                                                {totalInsurance > 1000000
+                                                    ? 'Nghìn tỷ đồng'
+                                                    : totalInsurance > 1000
+                                                      ? 'Tỷ đồng'
+                                                      : 'Triệu đồng'}
+                                            </Typography>
+                                        </Box>
+                                    </Box>
                                 </Box>
                             </Box>
                         </Box>
                     </Box>
-                </Box>
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
-                <Typography sx={{ padding: '10px', fontSize: '16px' }}>{t('COMMON.SALARY.PAYROLL_CYCLE')}</Typography>
-                <Divider sx={{ flexGrow: 1, alignSelf: 'center', marginRight: '12px' }} />
-            </Box>
-            <Button>hello</Button>
-            <Box
-                sx={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(4, 1fr)', // 4 cột mỗi hàng
-                    gap: '16px' // Khoảng cách giữa các phần tử
-                }}
-            >
-                {salaryCycles.map((cycle, index) => (
-                    <Box
-                        key={index}
-                        sx={{
-                            padding: '10px 20px',
-                            border: '1px solid lightgray',
-                            borderRadius: '5px',
-                            cursor: 'pointer', // Thay đổi con trỏ khi hover
-                            backgroundColor: 'var(--background-item)',
-                            '&:hover': {
-                                backgroundColor: 'var(--hover-box-color)'
-                            },
-                            '&:active': {
-                                // Thêm hiệu ứng gợn sóng khi nhấn
-                                transform: 'scale(0.97)', // Giảm kích thước một chút
-                                transition: 'transform 0.1s ease' // Thêm hiệu ứng chuyển tiếp
-                            },
-                            boxShadow: '0 4px 8px rgba(0,0,0,0.2)'
-                        }}
-                        onClick={() => router.push('/admin/salary/getall-salary')}
-                    >
-                        <Typography style={{ fontWeight: 'bold', fontSize: '20px', color: 'green' }}>
-                            {cycle}
-                        </Typography>
-                        <Typography style={{ fontSize: '16px', marginTop: '10px', color: 'var(--text-color)' }}>
-                            {cycle}
-                        </Typography>
-                        <Divider sx={{ flexGrow: 1, alignSelf: 'center', marginTop: '10px', marginRight: '12px' }} />
-                        <Box>
-                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <WalletIcon style={{ marginTop: '10px' }}></WalletIcon>
-                                <Typography
-                                    style={{
-                                        fontSize: '18px',
-                                        marginLeft: '10px',
-                                        marginTop: '10px',
-                                        color: 'var(--text-color)'
-                                    }}
-                                >
-                                    {cycle}
-                                </Typography>
-                            </Box>
-                            <Typography style={{ fontSize: '18px', marginTop: '10px' }}>{cycle}</Typography>
+
+                    <Box sx={{ gap: '10px', display: 'flex', alignItems: 'center', marginTop: '10px' }}>
+                        <Box
+                            sx={{
+                                backgroundColor: 'var(--background-item)',
+                                borderRadius: '5px',
+                                width: 'calc(100% / 2)'
+                            }}
+                        >
+                            <EmployeeSalaryChart />
                         </Box>
-                        <Box>
-                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <Heart style={{ marginTop: '10px' }}></Heart>
-                                <Typography
-                                    style={{
-                                        fontSize: '18px',
-                                        color: 'var(--text-color)',
-                                        marginLeft: '10px',
-                                        marginTop: '10px'
-                                    }}
-                                >
-                                    {cycle}
-                                </Typography>
-                            </Box>
-                            <Typography style={{ fontSize: '18px', marginTop: '10px' }}>{cycle}</Typography>
-                        </Box>
-                        <Box>
-                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <Users style={{ marginTop: '10px' }}></Users>
-                                <Typography
-                                    style={{
-                                        fontSize: '18px',
-                                        color: 'var(--text-color)',
-                                        marginLeft: '10px',
-                                        marginTop: '10px'
-                                    }}
-                                >
-                                    {cycle}
-                                </Typography>
-                            </Box>
-                            <Typography style={{ fontSize: '18px', marginTop: '10px' }}>{cycle}</Typography>
+                        <Box
+                            sx={{
+                                backgroundColor: 'var(--background-item)',
+                                borderRadius: '5px',
+                                width: 'calc(100% / 2)'
+                            }}
+                        >
+                            <IncomeStructureChart />
                         </Box>
                     </Box>
-                ))}
+                    <Box sx={{ gap: '10px', display: 'flex', alignItems: 'center', marginTop: '10px' }}>
+                        <Box
+                            sx={{
+                                backgroundColor: 'var(--background-item)',
+                                borderRadius: '5px',
+                                width: 'calc(100% / 2)'
+                            }}
+                        >
+                            <TotalIncomeChart />
+                        </Box>
+                        <Box
+                            sx={{
+                                backgroundColor: 'var(--background-item)',
+                                borderRadius: '5px',
+                                width: 'calc(100% / 2)'
+                            }}
+                        >
+                            <DepartmentChart />
+                        </Box>
+                    </Box>
+                </Box>
+                <Box sx={{ width: 'calc(100% / 4)', overflow: 'hidden' }}>
+                    <ErrorSalary />
+                </Box>
             </Box>
         </Box>
     )
-    // Dữ liệu cho các tab
-    // const tabs = [
-    //     {
-    //         label: 'Chu kỳ lương',
-    //         content: (
-    //             <Box>
-    //                 <Typography>Nội dung thông tin lương</Typography>
-    //                 {/* Thêm nội dung cho tab thông tin lương */}
-    //             </Box>
-    //         )
-    //     },
-    //     {
-    //         label: 'Chính sách lương',
-    //         content: (
-    //             <Box>
-    //                 <Typography>Nội dung chính sách lương lương</Typography>
-    //                 {/* Thêm nội dung cho tab bảng lương */}
-    //             </Box>
-    //         )
-    //     }
-    // ]
-
-    // return (
-    //     <Box sx={{ padding: '20px' }}>
-    //         <CustomTabs tabs={tabs} />
-    //     </Box>
-    // )
 }
 
-export default SalaryPage
+export default OverviewSalaryPage

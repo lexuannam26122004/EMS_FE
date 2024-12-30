@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import ReactECharts from 'echarts-for-react'
-import { Box, Paper, Typography } from '@mui/material'
+import { Paper, Typography } from '@mui/material'
 import { useTheme } from 'next-themes'
 export default function GrossTotalByAreas() {
     const { theme } = useTheme()

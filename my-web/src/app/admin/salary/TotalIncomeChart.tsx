@@ -76,7 +76,7 @@ function TotalIncomeChart() {
             },
             itemGap: 30,
             formatter: (name: string) => {
-                const year = name.split(' ')[1] // Lấy năm từ tên
+                //const year = name.split(' ')[1] // Lấy năm từ tên
                 const total = '1.23k' // Thay đổi giá trị tổng theo năm
                 return `${name} (${t('COMMON.DASHBOARD.SUM')}: ${total})` // Thay đổi cách hiển thị
             }

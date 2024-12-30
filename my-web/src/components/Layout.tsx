@@ -106,7 +106,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                     icon={<Wallet />}
                     text={t('COMMON.SIDEBAR.SALARY')}
                     route='/admin/salary/overview'
-                    active={pathname === '/admin/salary/overview'}
+                    active={pathname === '/admin/salary'}
                 />
                 <SidebarItem
                     icon={<CalendarClock />}

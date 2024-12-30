@@ -254,7 +254,13 @@
             "ACTION_HOLIDAY": {
                 "NAME": "Name*",
                 "START_DATE": "Start Date*",
-                "END_DATE": "End Date*"
+                "END_DATE": "End Date*",
+                "CREATE_SUCCESS": "Create a Holiday successfully",
+                "UPDATE_SUCCESS": "Update Holiday successfully",
+                "DELETE_SUCCESS": "Delete Holiday successfully",
+                "CREATE_ERROR": "Create Holiday failed",
+                "UPDATE_ERROR": "Update Holiday failed",
+                "DELETE_ERROR": "Delete Holiday failed"
             }
         },
         "SALARY": {

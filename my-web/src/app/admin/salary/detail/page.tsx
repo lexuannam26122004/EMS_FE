@@ -1,5 +1,6 @@
 'use client'
 import AlertDialog from '@/components/AlertDialog'
+import Loading from '@/components/Loading'
 import { ISalaryGetAll } from '@/models/salary'
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
 import { useGetAllSalariesQuery, useGetPeriodQuery } from '@/services/SalaryService'
@@ -7,7 +8,6 @@ import { formatDate } from '@/utils/formatDate'
 import {
     Box,
     Select,
-    Pagination,
     Typography,
     MenuItem,
     SelectChangeEvent,
@@ -28,17 +28,14 @@ import {
     Divider,
     LinearProgress,
     LinearProgressProps,
-    FormControl,
-    InputLabel
+    FormControl
 } from '@mui/material'
 import {
-    ArrowLeft,
     BadgeCheck,
     BadgeDollarSign,
     BadgeMinus,
     Bitcoin,
     ChevronLeft,
-    CirclePlus,
     EyeIcon,
     Heart,
     LocateFixed,
@@ -83,7 +80,7 @@ function GetAllSalaryPage() {
     })
     const [progress, setProgress] = useState(50)
 
-    const { data: periodData, isLoading, isError } = useGetPeriodQuery()
+    const { data: periodData, isFetching: periodFetching, isError } = useGetPeriodQuery()
     const periodList = periodData?.Data || []
     const [period, setPeriod] = useState<string>()
 
@@ -93,7 +90,7 @@ function GetAllSalaryPage() {
             refetch()
         }
     }, [periodList])
-
+    console.log(period)
     const {
         data: responseData,
         isFetching,
@@ -108,8 +105,27 @@ function GetAllSalaryPage() {
         }
     }, [period, periodList, refetch])
 
-    const salaryData = Array.isArray(responseData?.Data) ? (responseData.Data as ISalaryGetAll[]) : []
+    const salaryData = Array.isArray(responseData?.Data.Records) ? (responseData.Data.Records as ISalaryGetAll[]) : []
+    useEffect(() => {
+        console.log(salaryData)
+    }, [salaryData])
     const totalRecords = responseData?.Data.TotalRecords as number
+
+    useEffect(() => {}, [
+        totalRecords,
+        isError,
+        selectedRow,
+        setIsChangeMany,
+        setSelectedRow,
+        to,
+        from,
+        rowsPerPage,
+        page,
+        setRowsPerPage,
+        setFrom,
+        setTo,
+        setProgress
+    ])
 
     const isSelected = (id: string) => selected.includes(id)
 
@@ -125,27 +141,27 @@ function GetAllSalaryPage() {
         }
     }
 
-    const handleChangePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
-        setPage(newPage)
-        setFilter(prev => {
-            return {
-                ...prev,
-                pageNumber: newPage
-            }
-        })
-    }
+    // const handleChangePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
+    //     setPage(newPage)
+    //     setFilter(prev => {
+    //         return {
+    //             ...prev,
+    //             pageNumber: newPage
+    //         }
+    //     })
+    // }
 
-    const handleChangeRowsPerPage = (event: SelectChangeEvent) => {
-        setPage(1)
-        setRowsPerPage(event.target.value as string)
-        setFilter(prev => {
-            return {
-                ...prev,
-                pageSize: Number(event.target.value),
-                pageNumber: 1
-            }
-        })
-    }
+    // const handleChangeRowsPerPage = (event: SelectChangeEvent) => {
+    //     setPage(1)
+    //     setRowsPerPage(event.target.value as string)
+    //     setFilter(prev => {
+    //         return {
+    //             ...prev,
+    //             pageSize: Number(event.target.value),
+    //             pageNumber: 1
+    //         }
+    //     })
+    // }
 
     const handleSearchKeyword = () => {
         setPage(1)
@@ -208,6 +224,10 @@ function GetAllSalaryPage() {
         'Cycle 9',
         'Cycle 10'
     ]
+
+    if (isFetching || periodFetching) {
+        return <Loading />
+    }
 
     return (
         <Box
