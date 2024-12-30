@@ -3,6 +3,7 @@ import ReactECharts from 'echarts-for-react'
 import { Box, CircularProgress, Paper, Typography } from '@mui/material'
 import { useGetInfoForDepartmentChartQuery } from '@/services/SalaryService'
 
+
 export default function DepartmentChart() {
     const [chartData, setChartData] = useState<{ [key: string]: number }>({})
     const [loading, setLoading] = useState(true)

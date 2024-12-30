@@ -1,23 +1,16 @@
 import { useTranslation } from 'react-i18next'
 import { Paper, Typography } from '@mui/material'
 import { Box } from '@mui/material'
-import { TrendingDown, UserRoundSearch, CircleUserRound, ExternalLink } from 'lucide-react'
+import { UserRoundSearch, CircleUserRound, ExternalLink } from 'lucide-react'
 import { useGetAllDepartmentQuery } from '@/services/DepartmentService'
 import { IDepartmentGetAll } from '@/models/Department'
-
-interface IEmployeeStats {
-    StartCount: number
-    StartPercentChange: number
-    EndCount: number
-    EndPercentChange: number
-}
 
 function DepartmentInfo() {
     const { t } = useTranslation('common')
 
-    const { data: department, isLoading: isBenefitTypesLoading, refetch } = useGetAllDepartmentQuery()
+    const { data: department } = useGetAllDepartmentQuery()
     const departmentDataRecord = (department?.Data?.Records as IDepartmentGetAll[]) || []
-    const departmentDataTotalRecord = (department?.Data?.TotalRecords as IDepartmentGetAll[]) || []
+    //const departmentDataTotalRecord = (department?.Data?.TotalRecords as IDepartmentGetAll[]) || []
 
     const departmentStyles: { [key: number]: { backgroundImage: string; color: string } } = {
         8: {
