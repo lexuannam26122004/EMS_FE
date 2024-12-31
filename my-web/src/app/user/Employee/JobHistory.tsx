@@ -184,18 +184,14 @@ const Timeline: React.FC = () => {
                         }
                     }}
                 >
-                    <Typography sx={{ color: 'var(--text-color)', fontSize: '0.9em', marginBottom: '5px' }}>
+                    <Typography sx={{ color: '#fff', fontSize: '0.9em', marginBottom: '5px' }}>
                         {event.startDate} - {event.endDate} | {event.location}
                     </Typography>
-                    <Typography sx={{ color: 'var(--text-color)', fontSize: '1.1em' }}>
-                        {event.content.jobDescription}
-                    </Typography>
-                    <Typography sx={{ color: 'var(--text-color)', fontSize: '1.1em' }}>
+                    <Typography sx={{ color: '#fff', fontSize: '1.1em' }}>{event.content.jobDescription}</Typography>
+                    <Typography sx={{ color: '#fff', fontSize: '1.1em' }}>
                         Allowance: {event.content.allowance}
                     </Typography>
-                    <Typography sx={{ color: 'var(--text-color)', fontSize: '1.1em' }}>
-                        Note: {event.content.note}
-                    </Typography>
+                    <Typography sx={{ color: '#fff', fontSize: '1.1em' }}>Note: {event.content.note}</Typography>
                 </Box>
             ))}
         </Box>
@@ -245,7 +241,7 @@ const App: React.FC = () => {
                     width: '100%',
                     marginTop: '20px',
                     position: 'relative',
-                    backgroundColor: 'var(--background-color)',
+                    backgroundColor: 'var(--hover-color)',
                     '&::-webkit-scrollbar': {
                         width: '0px',
                         height: '0px',

@@ -7,6 +7,7 @@ import { useGetAuthMeQuery } from '@/services/AuthService'
 import Employee from './Employee/Employee'
 import Contract from './Employee/Contract'
 import JobHistory from './Employee/JobHistory'
+import Test from './Employee/test'
 
 const DetailModal = () => {
     const [backgroundImageUrl, setBackgroundImageUrl] = useState('')
@@ -155,7 +156,7 @@ const DetailModal = () => {
                         sx={{
                             width: '100%',
                             display: 'grid',
-                            gridTemplateColumns: 'calc(50% - 8px) calc(50% - 8px)',
+                            gridTemplateColumns: 'calc(50% - 12px) calc(50% - 12px)',
                             gap: '24px',
                             marginBottom: '24px'
                         }}
@@ -185,11 +186,13 @@ const DetailModal = () => {
                         </Box>
                     </Box>
 
+                    <Test />
+
                     <Box
                         sx={{
                             width: '100%',
                             display: 'grid',
-                            gridTemplateColumns: 'calc(50% - 8px) calc(50% - 8px)',
+                            gridTemplateColumns: 'calc(50% - 12px) calc(50% - 12px)',
                             gap: '24px',
                             marginBottom: '24px'
                         }}
