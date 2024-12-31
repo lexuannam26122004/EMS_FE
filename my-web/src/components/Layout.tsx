@@ -1,4 +1,5 @@
 'use client'
+
 import React from 'react'
 import Sidebar, { SidebarItem, TypographyItem } from '@/components/Sidebar'
 import { Box, Divider } from '@mui/material'
@@ -21,55 +22,12 @@ import Header from './Header'
 import { useTranslation } from 'react-i18next'
 import NotificationRealTime from './NotificationRealTime'
 import Chat from './chat'
-import { useEffect } from 'react'
-import { authSelector, authSlice } from '@/redux/slices/authSlice'
-import { useDispatch, useSelector } from 'react-redux'
+import { authSelector } from '@/redux/slices/authSlice'
+import { useSelector } from 'react-redux'
 import Loading from './Loading'
-
-const getUserData = async () => {
-    const token = sessionStorage.getItem('auth_token')
-
-    if (!token) {
-        console.error('Token not found')
-        return
-    }
-
-    try {
-        const userResponse = await fetch('https://localhost:44381/api/Auth/Me', {
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-
-        if (!userResponse.ok) {
-            throw new Error('Failed to fetch user data')
-        }
-
-        const userData = await userResponse.json()
-
-        if (userData.Data) {
-            const menuLeft = userData.Data.MenuLeft
-            return menuLeft
-        } else {
-            console.error('No data available or request failed')
-        }
-    } catch (error) {
-        console.error('Error fetching user data:', error)
-    }
-}
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const pathname = usePathname()
-    const dispatch = useDispatch()
-
-    useEffect(() => {
-        const fetchMenuLeft = async () => {
-            const data = await getUserData()
-            dispatch(authSlice.actions.updateAuth(data))
-        }
-        fetchMenuLeft()
-    }, [])
 
     const { t } = useTranslation('common')
 
@@ -100,48 +58,55 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                         // route='/statistics'
                         // active={pathname === '/statistics'}
                     >
-                        <SidebarItem
-                            icon={<ChartNoAxesCombined />}
-                            text={t('COMMON.SIDEBAR.EMPLOYEE-CONTRACT')}
-                            route='/admin/statistics/employee-contract'
-                        />
-
-                        <SidebarItem
-                            icon={<ChartNoAxesCombined />}
-                            text={t('COMMON.SIDEBAR.TIMEOFF-ERRORREPORT')}
-                            route='/admin/statistics/timeoff-errorreport'
-                        />
-
-                        <SidebarItem
-                            icon={<ChartNoAxesCombined />}
-                            text={t('COMMON.SIDEBAR.ATTENDANCE')}
-                            route='/admin/statistics/attendance'
-                        />
-                        <SidebarItem
-                            icon={<ChartNoAxesCombined />}
-                            text={t('COMMON.SIDEBAR.BENEFITS')}
-                            route='/admin/statistics/benefits'
-                        />
-                        <SidebarItem
-                            icon={<ChartNoAxesCombined />}
-                            text={t('COMMON.SIDEBAR.REWARDS_DISCIPLINE')}
-                            route='/admin/statistics/rewards-disciplines'
-                        />
-                        <SidebarItem
-                            icon={<ChartNoAxesCombined />}
-                            text={t('COMMON.SIDEBAR.ACTIVITIES_EVENTS')}
-                            route='/admin/statistics/activities-event'
-                        />
-                        <SidebarItem
-                            icon={<ChartNoAxesCombined />}
-                            text={t('COMMON.SIDEBAR.REPORTS_SYSTEM')}
-                            route='/statistics/report-system'
-                        />
-                        <SidebarItem
-                            icon={<ChartNoAxesCombined />}
-                            text={t('COMMON.SIDEBAR.SALARY')}
-                            route='/admin/statistics/salary'
-                        />
+                        {menuLeft['/admin/statistics/attendance'].IsAllowView && (
+                            <SidebarItem
+                                icon={<ChartNoAxesCombined />}
+                                text={t('COMMON.SIDEBAR.ATTENDANCE')}
+                                route='/admin/statistics/attendance'
+                            />
+                        )}
+                        {menuLeft['/admin/statistics/benefits'].IsAllowView && (
+                            <SidebarItem
+                                icon={<ChartNoAxesCombined />}
+                                text={t('COMMON.SIDEBAR.BENEFITS')}
+                                route='/admin/statistics/benefits'
+                            />
+                        )}
+                        {menuLeft['/admin/statistics/salary'].IsAllowView && (
+                            <SidebarItem
+                                icon={<ChartNoAxesCombined />}
+                                text={t('COMMON.SIDEBAR.SALARY')}
+                                route='/admin/statistics/salary'
+                            />
+                        )}
+                        {menuLeft['/admin/statistics/employee-contract'].IsAllowView && (
+                            <SidebarItem
+                                icon={<ChartNoAxesCombined />}
+                                text={t('COMMON.SIDEBAR.EMPLOYEE-CONTRACT')}
+                                route='/admin/statistics/employee-contract'
+                            />
+                        )}
+                        {menuLeft['/admin/statistics/timeoff-errorreport'].IsAllowView && (
+                            <SidebarItem
+                                icon={<ChartNoAxesCombined />}
+                                text={t('COMMON.SIDEBAR.TIMEOFF-ERRORREPORT')}
+                                route='/admin/statistics/timeoff-errorreport'
+                            />
+                        )}
+                        {menuLeft['/admin/statistics/rewards-disciplines'].IsAllowView && (
+                            <SidebarItem
+                                icon={<ChartNoAxesCombined />}
+                                text={t('COMMON.SIDEBAR.REWARDS_DISCIPLINE')}
+                                route='/admin/statistics/rewards-disciplines'
+                            />
+                        )}
+                        {menuLeft['/admin/statistics/notifications-events'].IsAllowView && (
+                            <SidebarItem
+                                icon={<ChartNoAxesCombined />}
+                                text={t('COMMON.SIDEBAR.NOTIFICATIONS_EVENTS')}
+                                route='/admin/statistics/notifications-events'
+                            />
+                        )}
                     </SidebarItem>
                 )}
                 {(menuLeft['Home'].IsAllowView || menuLeft['Statistics'].IsAllowView) && (
@@ -188,13 +153,13 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                         active={pathname === '/admin/schedular'}
                     />
                 )}
-                {menuLeft['Attendance'].IsAllowView && (
+                {menuLeft['/admin/attendance'].IsAllowView && (
                     <SidebarItem
                         icon={<CalendarDays />}
                         text={t('COMMON.SIDEBAR.TIMEKEEPING')}
-                        route='/admin/timekeeping'
+                        route='/admin/attendance'
                         alert={true}
-                        active={pathname === '/admin/timekeeping'}
+                        active={pathname === '/admin/attendance'}
                     />
                 )}
                 {menuLeft['Time off'].IsAllowView && (
@@ -328,6 +293,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                     flex: 1,
                     height: '100%',
                     overflowY: 'auto',
+                    position: 'relative',
                     backgroundColor: 'var(--background-color)'
                 }}
             >
@@ -335,7 +301,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 <Box
                     sx={{
                         flex: 1,
-                        height: 'calc(100vh - 60px)',
+                        height: '100%',
+                        paddingTop: '55px',
                         position: 'relative',
                         scrollbarGutter: 'stable both-edges',
                         '&::-webkit-scrollbar': {

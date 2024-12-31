@@ -43,19 +43,95 @@ function TableRowList({ data, level = 0 }: Props) {
                     <Typography sx={{ paddingLeft: 6 * level }}>{data.Name}</Typography>
                 </TableCell>
 
-                {keyNames.map(item => (
-                    <Fragment key={item}>
-                        {isCheckBox ? (
-                            <CustomTableCellCheckbox
-                                id={Number(data.Id || 0)}
-                                checked={data.Function?.[item] || false}
-                                keyName={item}
-                            />
+                {data.PathTo.includes('statistics') ? (
+                    <>
+                        <Fragment>
+                            <TableCell
+                                size='small'
+                                align='center'
+                                sx={{
+                                    maxWidth: 100,
+                                    minWidth: 100,
+                                    paddingLeft: 1,
+                                    paddingRight: 1
+                                }}
+                            ></TableCell>
+                        </Fragment>
+                        {data.Name === 'Statistics' ? (
+                            <TableCellLabel id={Number(data.Id || 0)} keyName={'IsAllowView'} />
                         ) : (
-                            <TableCellLabel id={Number(data.Id || 0)} keyName={item} />
+                            <Fragment key={'IsAllowView'}>
+                                <CustomTableCellCheckbox
+                                    id={Number(data.Id || 0)}
+                                    checked={data.Function?.['IsAllowView'] || false}
+                                    keyName={'IsAllowView'}
+                                />
+                            </Fragment>
                         )}
-                    </Fragment>
-                ))}
+                        <Fragment>
+                            <TableCell
+                                size='small'
+                                align='center'
+                                sx={{
+                                    maxWidth: 100,
+                                    minWidth: 100,
+                                    paddingLeft: 1,
+                                    paddingRight: 1
+                                }}
+                            ></TableCell>
+                        </Fragment>
+                        <Fragment>
+                            <TableCell
+                                size='small'
+                                align='center'
+                                sx={{
+                                    maxWidth: 100,
+                                    minWidth: 100,
+                                    paddingLeft: 1,
+                                    paddingRight: 1
+                                }}
+                            ></TableCell>
+                        </Fragment>
+                        <Fragment>
+                            <TableCell
+                                size='small'
+                                align='center'
+                                sx={{
+                                    maxWidth: 100,
+                                    minWidth: 100,
+                                    paddingLeft: 1,
+                                    paddingRight: 1
+                                }}
+                            ></TableCell>
+                        </Fragment>
+                        <Fragment>
+                            <TableCell
+                                size='small'
+                                align='center'
+                                sx={{
+                                    maxWidth: 100,
+                                    minWidth: 100,
+                                    paddingLeft: 1,
+                                    paddingRight: 1
+                                }}
+                            ></TableCell>
+                        </Fragment>
+                    </>
+                ) : (
+                    keyNames.map(item => (
+                        <Fragment key={item}>
+                            {isCheckBox ? (
+                                <CustomTableCellCheckbox
+                                    id={Number(data.Id || 0)}
+                                    checked={data.Function?.[item] || false}
+                                    keyName={item}
+                                />
+                            ) : (
+                                <TableCellLabel id={Number(data.Id || 0)} keyName={item} />
+                            )}
+                        </Fragment>
+                    ))
+                )}
             </TableRow>
 
             <CustomListTable data={data?.Children || []} level={level + 1} />

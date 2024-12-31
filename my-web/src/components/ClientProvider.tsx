@@ -6,6 +6,7 @@ import store from '@/redux/store'
 import LayoutAdmin from '@/components/Layout'
 import ToastContainer from '@/components/ToastContainer'
 import { ThemeProvider } from '@/components/theme-provider'
+import ProtectedLayout from '@/components/ProtectedLayout'
 
 export default function ClientProviders({ children }: { children: React.ReactNode }) {
     const pathname = usePathname()
@@ -14,9 +15,11 @@ export default function ClientProviders({ children }: { children: React.ReactNod
         <Provider store={store}>
             <ThemeProvider enableSystem attribute='class' defaultTheme='system' disableTransitionOnChange>
                 {isAdmin ? (
-                    <LayoutAdmin>
-                        <main>{children}</main>
-                    </LayoutAdmin>
+                    <ProtectedLayout>
+                        <LayoutAdmin>
+                            <main>{children}</main>
+                        </LayoutAdmin>
+                    </ProtectedLayout>
                 ) : (
                     <main>{children}</main>
                 )}

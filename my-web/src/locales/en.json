@@ -69,7 +69,8 @@
             "VIEW_DETAIL": "View detail",
             "CLOSE": "Close",
             "SELECT": "Select",
-            "UNSELECT": "Unselect"
+            "UNSELECT": "Unselect",
+            "GO_BACK_HOME": "Go to home"
         },
         "TEXTFIELD": {
             "SEARCH": "Search",
@@ -153,9 +154,9 @@
             "ATTENDANCE_SALARY": "Timekeeping - Salary",
             "EMPLOYEE-CONTRACT": "Employee - Contract",
             "TIMEOFF-ERRORREPORT": "Time off - Error report",
-            "BENEFITS": "Benefits",
+            "BENEFITS": "Insurances - Benefits",
             "REWARDS_DISCIPLINE": "Rewards - Disciplines",
-            "ACTIVITIES_EVENTS": "Activities - Events",
+            "NOTIFICATIONS_EVENTS": "Notifications - Events",
             "REPORTS_SYSTEM": "Reports - System",
             "ATTENDANCE": "Attendance",
             "WORKHISTORY": "Work History",
@@ -629,6 +630,20 @@
             "ATTENDANCE_PERCENT": "{{status}} {{x}}% attendance from yesterday",
             "DETAIL_EMPLOYEE": "Detail Employee",
             "DOWNLOAD_INFO": "Download Infor"
+        },
+        "LOGIN": {
+            "HI": "Hi, Welcome back!",
+            "MORE_EFFECTIVELY": "More effectively with optimized workflows.",
+            "SIGN_IN_TO_YOUR_ACCOUNT": "Sign in to your account",
+            "USERNAME": "Username",
+            "PASSWORD": "Password",
+            "FORGOT_PASSWORD": "Forgot password?",
+            "SIGN_IN": "Sign in"
+        },
+        "USER": {
+            "TOTAL_ATTENDANCE": "Total Attendance",
+            "AVG_CHECK_IN": "Avg Check In Time",
+            "AVG_CHECK_OUT": "Avg Check Out Time"
         }
     }
 }

@@ -30,6 +30,7 @@ body {
     --background-color: #141a21;
     --text-color: #fafafa;
     --border-color: #333e47;
+    --header-maim-color: #141a21dc;
     --text-gray-color: #4b5563;
     --hover-color: rgba(145, 158, 171, 0.08);
     --selected-menu-left-color: #122527;
@@ -107,6 +108,7 @@ body {
     --title-color: #028224;
     --bg-item-attendance: #28323d;
     --box-shadow-paper: 0 0 2px 0 rgba(0 0 0 / 0.2), 0 12px 24px -4px rgba(0 0 0 / 0.12);
+    --palette-background-defaultChannel: rgba(20, 26, 33, 0.92);
 }
 
 .light {
@@ -117,6 +119,7 @@ body {
     --hover-color: rgba(117, 126, 136, 0.08);
     --selected-menu-text-color: #00a76f;
     --selected-menu-left-color: #ebf8f4;
+    --header-maim-color: #ffffffc1;
     --selected-color: #bcd7ff;
     --menu-color: #fff;
     --text-role-color: #ed0000;
@@ -190,6 +193,7 @@ body {
     --title-color: #03d794;
     --bg-item-attendance: #f1f4f982;
     --box-shadow-paper: 0 0 2px 0 rgba(145 158 171 / 0.2), 0 12px 24px -4px rgba(145 158 171 / 0.12);
+    --palette-background-defaultChannel: rgba(255, 255, 255, 0.92);
 }
 
 body {
