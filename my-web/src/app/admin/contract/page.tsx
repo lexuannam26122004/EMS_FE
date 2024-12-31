@@ -300,7 +300,7 @@ const EmployeeTable: React.FC = () => {
                                 whiteSpace: 'nowrap',
                                 textTransform: 'none'
                             }}
-                            onClick={() => router.push('/admin/contract/create-contract')}
+                            onClick={() => router.push('/admin/contract/create')}
                         >
                             {t('COMMON.BUTTON.CREATE')}
                         </Button>
@@ -840,7 +840,7 @@ const EmployeeTable: React.FC = () => {
                                                         }
                                                     }}
                                                     onClick={() =>
-                                                        router.push(`/admin/contract/update-contract?id=${user.Id}`)
+                                                        router.push(`/admin/contract/update?id=${user.Id}`)
                                                     }
                                                 >
                                                     <Pencil />
