@@ -90,7 +90,6 @@ function GetAllSalaryPage() {
             refetch()
         }
     }, [periodList])
-    console.log(period)
     const {
         data: responseData,
         isFetching,
@@ -106,26 +105,8 @@ function GetAllSalaryPage() {
     }, [period, periodList, refetch])
 
     const salaryData = Array.isArray(responseData?.Data.Records) ? (responseData.Data.Records as ISalaryGetAll[]) : []
-    useEffect(() => {
-        console.log(salaryData)
-    }, [salaryData])
+    useEffect(() => {}, [salaryData])
     const totalRecords = responseData?.Data.TotalRecords as number
-
-    useEffect(() => {}, [
-        totalRecords,
-        isError,
-        selectedRow,
-        setIsChangeMany,
-        setSelectedRow,
-        to,
-        from,
-        rowsPerPage,
-        page,
-        setRowsPerPage,
-        setFrom,
-        setTo,
-        setProgress
-    ])
 
     const isSelected = (id: string) => selected.includes(id)
 
