@@ -30,7 +30,6 @@ export const salaryApi = createApi({
                     if (filter.sortBy) params.append('SortBy', filter.sortBy)
                 }
 
-                console.log(period)
                 if (period) params.append('Period', period)
 
                 return `GetAll?${params.toString()}`
