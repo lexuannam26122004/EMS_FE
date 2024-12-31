@@ -1,6 +1,7 @@
 {
     "extends": ["next/core-web-vitals", "next/typescript"],
     "rules": {
-        "@typescript-eslint/no-explicit-any": "off" // Tắt hoàn toàn lỗi kiểu `any`
+        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "@typescript-eslint/no-explicit-any": "off"
     }
 }

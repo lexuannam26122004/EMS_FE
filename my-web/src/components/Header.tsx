@@ -3,11 +3,11 @@
 import * as React from 'react'
 import Stack from '@mui/material/Stack'
 import ColorModeIconDropdown from './ColorModeIconDropdown'
-import Search from './Search'
-import { Box, Divider, Typography } from '@mui/material'
 import LanguageMenu from './LanguageMenu'
 import NotificationMenu from './NotificationMenu'
 import AvatarMenu from './AvatarMenu'
+import Search from './Search'
+import { Box, Divider, Typography } from '@mui/material'
 import { usePathname } from 'next/navigation'
 import { usePathMaps } from '@/utils/usePathMaps'
 export default function Header() {
@@ -23,17 +23,16 @@ export default function Header() {
             direction='row'
             sx={{
                 display: 'flex',
-                width: '100%',
+                right: '24px',
+                left: '24px',
                 alignItems: 'center',
-                maxWidth: { sm: '100%', md: '1700px' },
-                height: '60px',
-                position: 'sticky',
+                height: '70px',
+                position: 'absolute',
                 top: 0,
+                padding: '0 24px',
                 zIndex: 1000,
-                backgroundColor: 'rgba(255, 255, 255, 0.2)', // Tạo nền mờ
-                backdropFilter: 'blur(10px)', // Làm mờ phần nền phía sau header
-                WebkitBackdropFilter: 'blur(10px)', // Hỗ trợ Safari
-                padding: '0 24px'
+                backgroundColor: 'var(--header-maim-color)', // Nền bán trong suốt
+                backdropFilter: 'blur(10px)' // Làm mờ phần nền phía sau header
             }}
             spacing={2}
         >

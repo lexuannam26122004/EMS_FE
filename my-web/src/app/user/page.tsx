@@ -1,12 +1,15 @@
 'use client'
 
-import { Box, TableContainer, Table, TableRow, TableBody, TableCell, Avatar, Tabs, Tab } from '@mui/material'
-import { useTranslation } from 'react-i18next'
+import { Box, Avatar } from '@mui/material'
+
 import React, { useState, useEffect } from 'react'
+import { useGetAuthMeQuery } from '@/services/AuthService'
+import Employee from './Employee/Employee'
+import Contract from './Employee/Contract'
+import JobHistory from './Employee/JobHistory'
+import Test from './Employee/test'
 
 const DetailModal = () => {
-    const { t } = useTranslation('common')
-
     const [backgroundImageUrl, setBackgroundImageUrl] = useState('')
 
     useEffect(() => {
@@ -15,12 +18,8 @@ const DetailModal = () => {
         setBackgroundImageUrl(newBackgroundImageUrl)
     }, [])
 
-    const [selectedTab, setSelectedTab] = useState(0)
-
-    const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-        setSelectedTab(newValue)
-        console.log('Selected Tab:', newValue)
-    }
+    const { data: responseData, isFetching: isFetchingGetMe, refetch } = useGetAuthMeQuery()
+    const user = responseData?.Data || null
 
     return (
         <Box
@@ -63,6 +62,7 @@ const DetailModal = () => {
             >
                 <Box
                     sx={{
+                        width: '100%',
                         borderRadius: '15px',
                         backgroundColor: 'var(--background-item)',
                         overflow: 'auto',
@@ -84,7 +84,7 @@ const DetailModal = () => {
                         <Box
                             sx={{
                                 position: 'absolute',
-                                bottom: '-90px',
+                                bottom: '-80px',
                                 left: '150px',
                                 width: '200px',
                                 height: '200px',
@@ -95,7 +95,10 @@ const DetailModal = () => {
                             }}
                         >
                             <Avatar
-                                src={'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'}
+                                src={
+                                    'https://localhost:44381/' + user?.AvatarPath ||
+                                    'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'
+                                }
                                 alt='Avatar'
                                 sx={{
                                     width: '100%',
@@ -128,7 +131,7 @@ const DetailModal = () => {
                                     color: 'var(--text-color)'
                                 }}
                             >
-                                {'aspnetuser.FullName'}
+                                {user?.FullName || 'N/A'}
                             </h1>
                             <p
                                 style={{
@@ -136,95 +139,88 @@ const DetailModal = () => {
                                     color: 'var(--text-color)'
                                 }}
                             >
-                                {'aspnetuser.Roles'}
+                                {user?.Roles.join(', ') || 'N/A'}
                             </p>
                         </Box>
-                    </Box>
-
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            justifyContent: 'flex-end',
-                            padding: '20px 30px',
-                            marginTop: '-50px'
-                        }}
-                    >
-                        <Tabs
-                            value={selectedTab}
-                            onChange={handleTabChange}
-                            aria-label='right-aligned tabs'
-                        >
-                            <Tab label='Cá Nhân' sx={{ color: 'var(--text-color)' }} />
-                            <Tab label='Hợp Đồng' sx={{ color: 'var(--text-color)' }} />
-                            <Tab label='Phúc Lợi' sx={{ color: 'var(--text-color)' }} />
-                            <Tab label='Kỉ Luật' sx={{ color: 'var(--text-color)' }} />
-                        </Tabs>
                     </Box>
                 </Box>
 
                 <Box
                     sx={{
-                        margin: '20px',
-                        width: '50%',
-                        overflow: 'hidden',
-                        borderRadius: '15px',
-                        backgroundColor: 'var(--background-item)',
-                        marginLeft: 'auto',
-                        padding: '20px'
+                        padding: '24px',
+                        display: 'grid',
+                        gap: '24px'
                     }}
                 >
-                    <TableContainer>
-                        <Table>
-                            <TableBody>
-                                {[
-                                    { label: t('Họ tên đầy đủ'), value: 'aspnetuser.FullName' },
-                                    { label: t('Tên phòng ban'), value: 'aspnetuser.DepartmentName ' },
-                                    { label: t('Tên tài khoản'), value: 'aspnetuser.UserName' },
-                                    {
-                                        label: t('Chức vụ trong công ty'),
-                                        value: 'aspnetuser.Roles'
-                                    },
-                                    {
-                                        label: t('Giới tính'),
-                                        value: 'aspnetuser.Gender '
-                                    },
-                                    { label: t('Địa chỉ thường trú'), value: 'aspnetuser.Address ' },
-                                    {
-                                        label: t('Ngày sinh'),
-                                        value: 'aspnetuser.Birthday'
-                                    },
-                                    { label: t('Email'), value: 'aspnetuser.Email' },
-                                    { label: t('Số điện thoại'), value: 'aspnetuser.PhoneNumber' },
-                                    { label: t('Ghi chú'), value: 'aspnetuser.Note ' }
-                                ].map((item, index) => (
-                                    <TableRow key={index}>
-                                        <TableCell
-                                            sx={{
-                                                fontSize: '16px',
-                                                fontWeight: 'bold',
-                                                whiteSpace: 'nowrap',
-                                                color: 'var(--text-color)',
-                                                borderBottom: 'none',
-                                                paddingLeft: '100px',
-                                                width: '40%'
-                                            }}
-                                        >
-                                            {item.label}:
-                                        </TableCell>
-                                        <TableCell
-                                            sx={{
-                                                color: 'var(--text-color)',
-                                                fontSize: '16px',
-                                                borderBottom: 'none'
-                                            }}
-                                        >
-                                            {item.value}
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                    <Box
+                        sx={{
+                            width: '100%',
+                            display: 'grid',
+                            gridTemplateColumns: 'calc(50% - 12px) calc(50% - 12px)',
+                            gap: '24px',
+                            marginBottom: '24px'
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'space-between',
+                                height: '100%',
+                                gap: '24px'
+                            }}
+                        >
+                            <Employee aspnetUserId={user?.Id || ''} />
+                        </Box>
+
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'space-between',
+                                height: '100%',
+                                gap: '24px'
+                            }}
+                        >
+                            <Contract aspnetUserId={user?.Id || ''} />
+                        </Box>
+                    </Box>
+
+                    <Test />
+
+                    <Box
+                        sx={{
+                            width: '100%',
+                            display: 'grid',
+                            gridTemplateColumns: 'calc(50% - 12px) calc(50% - 12px)',
+                            gap: '24px',
+                            marginBottom: '24px'
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'space-between',
+                                height: '100%',
+                                gap: '24px'
+                            }}
+                        >
+                            <JobHistory />
+                        </Box>
+
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'space-between',
+                                height: '100%',
+                                gap: '24px'
+                            }}
+                        >
+                            <JobHistory />
+                        </Box>
+                    </Box>
                 </Box>
             </Box>
         </Box>

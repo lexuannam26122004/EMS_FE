@@ -86,9 +86,8 @@ const NotificationMenu = () => {
                     onClick={handleClick}
                     sx={{
                         cursor: !hover ? 'pointer' : 'default',
-                        padding: '5px',
-                        borderRadius: '8px',
-                        border: '1px solid var(--border-color)',
+                        padding: '6px',
+                        borderRadius: '50%',
                         ...(hover && {
                             backgroundColor: 'var(--hover-color)',
                             borderColor: 'var(--hover-color)'

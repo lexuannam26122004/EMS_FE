@@ -6,12 +6,17 @@ import { useTheme } from 'next-themes'
 import { useTranslation } from 'react-i18next'
 import { useGetEmployeeCountByAgeQuery } from '@/services/AspNetUserService'
 import { IUserByAgeGetAllDashboard } from '@/models/AspNetUser'
+import Loading from '@/components/Loading'
 
 const SaleByGenderChart = () => {
     const { t } = useTranslation('common')
     const { theme } = useTheme()
-    const { data } = useGetEmployeeCountByAgeQuery()
+    const { data, isFetching } = useGetEmployeeCountByAgeQuery()
     const ages = data?.Data as IUserByAgeGetAllDashboard
+
+    if (isFetching) {
+        return <Loading />
+    }
 
     const option = {
         title: {

@@ -5,10 +5,11 @@ import { IDepartmentGetAllDashboard } from '@/models/Department'
 import { Paper, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'next-themes'
+import Loading from '@/components/Loading'
 import { useGetEmployeeCountByDepartmentQuery } from '@/services/AspNetUserService'
 
 const DepartmentChart = () => {
-    const { data } = useGetEmployeeCountByDepartmentQuery()
+    const { data, isFetching } = useGetEmployeeCountByDepartmentQuery()
     const { t } = useTranslation('common')
     const { theme } = useTheme()
 
@@ -19,6 +20,10 @@ const DepartmentChart = () => {
             value: department.Count, // Tạo số ngẫu nhiên từ 0 đến 99
             name: department.Department
         })) || []
+
+    if (isFetching) {
+        return <Loading />
+    }
 
     const option = {
         tooltip: {

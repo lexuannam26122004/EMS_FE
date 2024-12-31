@@ -17,13 +17,12 @@ export default function ColorModeIconDropdown() {
                 onClick={handleClick}
                 sx={{
                     cursor: 'pointer',
-                    borderRadius: '8px',
-                    width: 40,
-                    height: 40,
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '50%',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    border: '1px solid var(--border-color)',
                     '&:hover': {
                         backgroundColor: 'var(--hover-color)',
                         borderColor: 'var(--hover-color)'

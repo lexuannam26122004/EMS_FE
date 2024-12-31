@@ -47,7 +47,9 @@ function TableCellLabel({ id, keyName }: Props) {
         if (elementHoverSelectors) {
             elementHoverSelectors.forEach(element => {
                 const el = element as HTMLElement
-                el.style.background = 'var(--hover-color-permission)'
+                if (el) {
+                    el.style.background = 'var(--hover-color-permission)'
+                }
             })
         }
     }
@@ -74,6 +76,7 @@ function TableCellLabel({ id, keyName }: Props) {
                     background: 'var(--hover-color-permission)'
                 }
             }}
+            {...(id === 15 ? { 'data-hover': `${id}_${keyName}` } : {})}
             onMouseOver={handleMouseOver}
             onMouseLeave={handleMouseLeave}
             onClick={handleClick}

@@ -241,7 +241,7 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
                                             backgroundColor: 'var(--hover-color)'
                                         }
                                     }}
-                                    onClick={() => router.push(`/admin/employee/update-employee?id=${aspnetuser.Id}`)}
+                                    onClick={() => router.push(`/admin/employee/update?id=${aspnetuser.Id}`)}
                                 >
                                     <Pencil />
                                 </Box>

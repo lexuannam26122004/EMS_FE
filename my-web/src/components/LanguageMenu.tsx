@@ -53,8 +53,7 @@ const LanguageMenu = () => {
                     justifyContent: 'center',
                     width: '40px',
                     height: '40px',
-                    borderRadius: '8px',
-                    border: '1px solid var(--border-color)',
+                    borderRadius: '50%',
                     cursor: 'pointer',
                     '&:hover': {
                         backgroundColor: 'var(--hover-color)',
@@ -101,6 +100,7 @@ const LanguageMenu = () => {
                                 backgroundColor: 'var(--background-item)',
                                 border: '1px solid var(--border-color)',
                                 padding: '0 8px',
+                                width: '168px',
                                 borderRadius: '10px'
                             }}
                         >
@@ -151,8 +151,8 @@ const LanguageMenu = () => {
                                             borderRadius: '6px',
                                             '&:hover': { backgroundColor: 'var(--hover-color)' },
                                             ...(language === 'en' && {
-                                                backgroundColor: 'var(--selected-color)',
-                                                '&:hover': { backgroundColor: 'var(--selected-color)' }
+                                                backgroundColor: 'var(--background-selected-item)',
+                                                '&:hover': { backgroundColor: 'var(--hover-color)' }
                                             }),
                                             padding: '3px 12px 3px 8px'
                                         }}

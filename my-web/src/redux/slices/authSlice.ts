@@ -3,12 +3,12 @@ import { RootState } from '@/redux/store'
 
 // Định nghĩa kiểu dữ liệu cho Function (quyền)
 interface FunctionRights {
-    IsAllowAll: boolean
+    IsAllowAll?: boolean
     IsAllowView: boolean
-    IsAllowEdit: boolean
-    IsAllowCreate: boolean
-    IsAllowPrint: boolean
-    IsAllowDelete: boolean
+    IsAllowEdit?: boolean
+    IsAllowCreate?: boolean
+    IsAllowPrint?: boolean
+    IsAllowDelete?: boolean
 }
 
 // Định nghĩa kiểu dữ liệu cho menu item
@@ -34,7 +34,27 @@ export const authSlice = createSlice({
         // Payload là dữ liệu chứa MenuLeft
         updateAuth: (state, action: PayloadAction<MenuItem[]>) => {
             action.payload.forEach(menu => {
-                state[menu.Name] = menu.Function // Lưu quyền của từng menu vào Redux
+                // Lưu quyền theo Name
+                state[menu.Name] = menu.Function
+
+                if (menu.PathTo) {
+                    state[menu.PathTo] = menu.Function
+                }
+
+                // Tạo menu con có đường dẫn '/create' và '/update' (nếu cần) và chỉ sao chép quyền IsAllowView
+                if (menu.PathTo) {
+                    // Cập nhật quyền cho menu '/create'
+                    const createPath = `${menu.PathTo}/create`
+                    state[createPath] = {
+                        IsAllowView: menu.Function.IsAllowCreate // Chỉ sao chép IsAllowCreate thành IsAllowView
+                    }
+
+                    // Cập nhật quyền cho menu '/update'
+                    const updatePath = `${menu.PathTo}/update`
+                    state[updatePath] = {
+                        IsAllowView: menu.Function.IsAllowEdit // Chỉ sao chép IsAllowEdit thành IsAllowView
+                    }
+                }
             })
         }
     }

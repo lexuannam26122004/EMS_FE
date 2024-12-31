@@ -134,7 +134,7 @@ function ConfigurationPage() {
     }, [filter])
 
     const handleButtonUpdateClick = (id: number) => {
-        router.push(`/admin/configuration/update-configuration?id=${id}`)
+        router.push(`/admin/configuration/update?id=${id}`)
     }
 
     const handleDeleteClick = async (id: number) => {
@@ -322,7 +322,7 @@ function ConfigurationPage() {
                                 whiteSpace: 'nowrap',
                                 textTransform: 'none'
                             }}
-                            onClick={() => router.push('/admin/configuration/create-configuration')}
+                            onClick={() => router.push('/admin/configuration/create')}
                         >
                             {t('COMMON.BUTTON.CREATE')}
                         </Button>

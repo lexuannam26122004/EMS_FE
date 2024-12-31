@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Paper, Typography } from '@mui/material'
 import { Box } from '@mui/material'
 import { TrendingDown } from 'lucide-react'
+import Loading from '@/components/Loading'
 import { useGetEmployeeStatsByMonthAndYearQuery } from '@/services/EmploymentContractService'
 
 interface IEmployeeStats {
@@ -19,7 +20,7 @@ function DisplayInfo() {
     const date = new Date()
     const month = date.getMonth() + 1
     const year = date.getFullYear()
-    const { data: response } = useGetEmployeeStatsByMonthAndYearQuery({ Month: month, Year: year })
+    const { data: response, isFetching } = useGetEmployeeStatsByMonthAndYearQuery({ Month: month, Year: year })
 
     const data = response?.Data as IEmployeeStats
 
@@ -35,6 +36,10 @@ function DisplayInfo() {
     const laborCostsPercent = 14.47
     const promotions = 12
     const promotionPercent = 24
+
+    if (isFetching) {
+        return <Loading />
+    }
 
     return (
         <Box
