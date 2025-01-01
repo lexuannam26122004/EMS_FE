@@ -204,7 +204,7 @@ const Timeline: React.FC = () => {
                     right: 0,
                     top: 112,
                     height: '4px',
-                    backgroundColor: '#333e47',
+                    backgroundColor: 'var(--text-color)',
                     zIndex: 1,
                     width: '100%',
                     '&::after': {
@@ -216,7 +216,7 @@ const Timeline: React.FC = () => {
                         height: '0',
                         borderTop: '10px solid transparent',
                         borderBottom: '10px solid transparent',
-                        borderLeft: '24px solid #333e47'
+                        borderLeft: '24px solid var(--text-color)'
                     }
                 }}
             />
@@ -225,7 +225,7 @@ const Timeline: React.FC = () => {
                 sx={{
                     borderRadius: '12px',
                     marginTop: '24px',
-                    backgroundColor: 'var(--hover-color)',
+                    //backgroundColor: 'var(--hover-color)',
                     position: 'relative',
                     width: '100%',
                     display: 'flex',
@@ -257,7 +257,7 @@ const Timeline: React.FC = () => {
                         justifyContent: 'space-between',
                         marginTop: '-12px',
                         width: '100%',
-                        gap: '80px' // Khoảng cách giữa các sự kiện
+                        gap: '80px' 
                     }}
                 >
                     {events.map((event, index) => (
@@ -278,7 +278,7 @@ const Timeline: React.FC = () => {
                                     height: '20px',
                                     backgroundColor: event.color,
                                     borderRadius: '50%',
-                                    border: '4px solid #333e47',
+                                    border: '4px solid var(--text-color)',
                                     zIndex: 2,
                                     marginBottom: '10px' // Khoảng cách giữa chấm và nội dung
                                 }}
@@ -295,16 +295,16 @@ const Timeline: React.FC = () => {
                                     border: `2px solid ${event.color}`
                                 }}
                             >
-                                <Typography sx={{ fontSize: '0.9em', marginBottom: '5px', color: '#fff' }}>
+                                <Typography sx={{ fontSize: '0.9em', marginBottom: '5px', color: 'var(--text-color)' }}>
                                     {event.startDate}
                                 </Typography>
-                                <Typography sx={{ fontSize: '1.1em', fontWeight: 'bold', color: '#fff' }}>
+                                <Typography sx={{ fontSize: '1.1em', fontWeight: 'bold', color: 'var(--text-color)' }}>
                                     {event.content.jobDescription}
                                 </Typography>
-                                <Typography sx={{ fontSize: '1em', color: '#fff' }}>
+                                <Typography sx={{ fontSize: '1em', color: 'var(--text-color)' }}>
                                     Allowance: {event.content.allowance}
                                 </Typography>
-                                <Typography sx={{ fontSize: '1em', color: '#fff' }}>
+                                <Typography sx={{ fontSize: '1em', color: 'var(--text-color)' }}>
                                     Note: {event.content.note}
                                 </Typography>
                             </Box>

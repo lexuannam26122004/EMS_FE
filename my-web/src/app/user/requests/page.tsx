@@ -55,7 +55,7 @@ const DetailModal = () => {
 
             <Box
                 sx={{
-                    width: '90%',
+                    width: '100%',
                     borderRadius: '15px',
                     margin: '25px auto'
                 }}
@@ -66,7 +66,7 @@ const DetailModal = () => {
                         display: 'grid',
                         gridTemplateColumns: 'calc(70% - 12px) calc(30% - 12px)',
                         gap: '24px',
-                        marginTop: '50px'
+                        marginTop: '24px'
                     }}
                 >
                     <Box
@@ -100,8 +100,8 @@ const DetailModal = () => {
                         display: 'grid',
                         gridTemplateColumns: 'calc(30% - 12px) calc(70% - 12px)',
                         gap: '24px',
-                        marginTop: '50px',
-                        marginBottom: '50px'
+                        marginTop: '24px',
+                        marginBottom: '24px'
                     }}
                 >
                     <Box

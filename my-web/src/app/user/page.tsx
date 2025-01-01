@@ -56,7 +56,7 @@ const DetailModal = () => {
 
             <Box
                 sx={{
-                    width: '90%',
+                    width: '100%',
                     borderRadius: '15px',
                     margin: '25px auto'
                 }}

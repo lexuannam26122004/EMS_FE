@@ -136,7 +136,7 @@ const Timeline: React.FC = () => {
                 sx={{
                     position: 'absolute',
                     width: '4px',
-                    backgroundColor: ' #333e47',
+                    backgroundColor: 'var(--text-color)',
                     top: 25,
                     bottom: 0,
                     left: '50%',
@@ -147,7 +147,7 @@ const Timeline: React.FC = () => {
                         height: 0,
                         borderLeft: '10px solid transparent',
                         borderRight: '10px solid transparent',
-                        borderBottom: '24px solid #333e47',
+                        borderBottom: '24px solid var(--text-color)',
                         top: '-24px',
                         left: '-8px',
                         zIndex: 3
@@ -168,7 +168,7 @@ const Timeline: React.FC = () => {
                         left: index % 2 === 0 ? 'calc(0% - 18px)' : 'calc(50% + 22px)',
                         borderLeft: index % 2 === 0 ? `4px solid ${event.color}` : 'none',
                         borderRight: index % 2 !== 0 ? `4px solid ${event.color}` : 'none',
-                        color: '#fff',
+                        color: 'var(--text-color)',
                         textAlign: index % 2 === 0 ? 'left' : 'right',
                         '&:after': {
                             content: '""',
@@ -176,7 +176,7 @@ const Timeline: React.FC = () => {
                             width: '20px',
                             height: '20px',
                             backgroundColor: event.color,
-                            border: '4px solid #333e47',
+                            border: '4px solid var(--text-color)',
                             borderRadius: '50%',
                             top: '15px',
                             left: index % 2 === 0 ? 'calc(100% + 10px)' : 'auto',
@@ -184,14 +184,14 @@ const Timeline: React.FC = () => {
                         }
                     }}
                 >
-                    <Typography sx={{ color: '#fff', fontSize: '0.9em', marginBottom: '5px' }}>
+                    <Typography sx={{ color: 'var(--text-color)', fontSize: '0.9em', marginBottom: '5px' }}>
                         {event.startDate} - {event.endDate} | {event.location}
                     </Typography>
-                    <Typography sx={{ color: '#fff', fontSize: '1.1em' }}>{event.content.jobDescription}</Typography>
-                    <Typography sx={{ color: '#fff', fontSize: '1.1em' }}>
+                    <Typography sx={{ color: 'var(--text-color)', fontSize: '1.1em' }}>{event.content.jobDescription}</Typography>
+                    <Typography sx={{ color: 'var(--text-color)', fontSize: '1.1em' }}>
                         Allowance: {event.content.allowance}
                     </Typography>
-                    <Typography sx={{ color: '#fff', fontSize: '1.1em' }}>Note: {event.content.note}</Typography>
+                    <Typography sx={{ color: 'var(--text-color)', fontSize: '1.1em' }}>Note: {event.content.note}</Typography>
                 </Box>
             ))}
         </Box>
