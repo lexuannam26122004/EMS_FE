@@ -13,6 +13,7 @@ import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import LanguageMenu from '@/components/LanguageMenu'
 import ColorModeIconDropdown from '@/components/ColorModeIconDropdown'
+import { ChevronLeft } from 'lucide-react'
 
 const LoginForm: React.FC = () => {
     const [email, setEmail] = useState('')
@@ -232,22 +233,40 @@ const LoginForm: React.FC = () => {
                     </Box>
                     <Box
                         sx={{
-                            width: '450px',
+                            width: '435px',
                             display: 'flex',
                             flexDirection: 'column',
                             justifyContent: 'center'
                         }}
                     >
+                        <img
+                            src='/images/forgot-password.svg'
+                            style={{
+                                width: '96px',
+                                height: '96px',
+                                margin: '0 auto',
+                                marginBottom: '24px'
+                            }}
+                        />
                         <Typography
                             sx={{
                                 mt: '15px',
-                                mr: 'auto',
                                 fontSize: '22px',
                                 fontWeight: 'bold',
                                 color: 'var(--text-color)'
                             }}
                         >
-                            {t('COMMON.LOGIN.SIGN_IN_TO_YOUR_ACCOUNT')}
+                            {t('COMMON.REQUEST_PASSWORD.FORGOT_PASSWORD')}
+                        </Typography>
+
+                        <Typography
+                            sx={{
+                                mt: '10px',
+                                fontSize: '16px',
+                                color: 'var(--sub-title-color)'
+                            }}
+                        >
+                            {t('COMMON.REQUEST_PASSWORD.DESC')}
                         </Typography>
 
                         <Box
@@ -261,7 +280,7 @@ const LoginForm: React.FC = () => {
                         >
                             <FormControl sx={{ width: '100%' }} variant='outlined'>
                                 <InputLabel
-                                    htmlFor='outlined-adornment-username'
+                                    htmlFor='outlined-adornment-email'
                                     {...(isSubmit && email === '' && { error: true })}
                                     sx={{
                                         color: 'var(--text-label-color)',
@@ -274,17 +293,17 @@ const LoginForm: React.FC = () => {
                                     }}
                                     shrink
                                 >
-                                    {t('COMMON.LOGIN.USERNAME')}
+                                    {t('COMMON.REQUEST_PASSWORD.EMAIL_ADDRESS')}
                                 </InputLabel>
                                 <OutlinedInput
                                     notched
-                                    placeholder={t('COMMON.LOGIN.USERNAME_PLACEHOLDER')}
-                                    id='outlined-adornment-username'
+                                    id='outlined-adornment-email'
                                     {...(isSubmit && email === '' && { error: true })}
                                     autoComplete='off' // Ngăn tự động điền
+                                    placeholder={t('COMMON.REQUEST_PASSWORD.EMAIL_EXAMPLE')} // Thêm placeholder
                                     sx={{
                                         '& .MuiInputBase-input': {
-                                            padding: '15.5px 0 15.5px 14px',
+                                            padding: '17px 0 17px 14px',
                                             color: 'var(--text-color)',
                                             borderRadius: '8px',
                                             overflow: 'hidden'
@@ -309,7 +328,7 @@ const LoginForm: React.FC = () => {
                                             borderColor: 'var(--error-color) !important'
                                         }
                                     }}
-                                    label={t('COMMON.LOGIN.USERNAME')}
+                                    label={t('COMMON.REQUEST_PASSWORD.EMAIL_ADDRESS')}
                                     onChange={e => setEmail(e.target.value)}
                                 />
                             </FormControl>
@@ -326,121 +345,11 @@ const LoginForm: React.FC = () => {
                             </Typography>
                         </Box>
 
-                        <Link
-                            href='/reset-password'
-                            sx={{
-                                fontSize: '15px',
-                                textDecoration: 'none', // Xóa gạch chân
-                                ml: 'auto',
-                                color: 'var(--text-color)',
-                                mt: '2px',
-                                fontWeight: 'bold',
-                                '&:hover': {
-                                    textDecoration: 'underline' // Xóa gạch chân
-                                }
-                            }}
-                        >
-                            {t('COMMON.LOGIN.FORGOT_PASSWORD')}
-                        </Link>
-
-                        <Box
-                            sx={{
-                                width: '100%',
-                                mt: '10px',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'left'
-                            }}
-                        >
-                            <FormControl sx={{ width: '100%' }} variant='outlined'>
-                                <InputLabel
-                                    {...(isSubmit && password === '' && { error: true })}
-                                    htmlFor='outlined-adornment-password'
-                                    sx={{
-                                        color: 'var(--text-label-color)',
-                                        '&.Mui-focused': {
-                                            color: 'var(--selected-field-color)'
-                                        },
-                                        '&.Mui-error': {
-                                            color: 'var(--error-color) !important' // Màu khi có lỗi
-                                        }
-                                    }}
-                                    shrink
-                                >
-                                    {t('COMMON.LOGIN.PASSWORD')}
-                                </InputLabel>
-                                <OutlinedInput
-                                    placeholder={t('COMMON.LOGIN.8_CHARACTERS')}
-                                    notched
-                                    id='outlined-adornment-password'
-                                    {...(isSubmit && password === '' && { error: true })}
-                                    autoComplete='off' // Ngăn tự động điền
-                                    type={showPassword ? 'text' : 'password'}
-                                    onChange={e => setPassword(e.target.value)}
-                                    sx={{
-                                        '& .MuiInputBase-input': {
-                                            padding: '15.5px 0 15.5px 14px',
-                                            color: 'var(--text-color)',
-                                            borderRadius: '8px',
-                                            overflow: 'hidden'
-                                        },
-                                        '& fieldset': {
-                                            borderColor: 'var(--border-color)',
-                                            borderWidth: '1px',
-                                            borderRadius: '8px',
-                                            overflow: 'hidden'
-                                        },
-                                        '&:hover fieldset': {
-                                            borderColor: 'var(--hover-field-color) !important' // Đảm bảo không bị ghi đè
-                                        },
-                                        '&.Mui-focused fieldset': {
-                                            borderColor: 'var(--selected-field-color) !important',
-                                            borderWidth: '2px' // Độ dày viền
-                                        },
-                                        '&.Mui-error:hover fieldset': {
-                                            borderColor: 'var(--error-color) !important'
-                                        },
-                                        '&.Mui-error fieldset': {
-                                            borderColor: 'var(--error-color) !important'
-                                        }
-                                    }}
-                                    endAdornment={
-                                        <InputAdornment position='end'>
-                                            <IconButton
-                                                aria-label={showPassword ? 'hide the password' : 'display the password'}
-                                                onClick={handleClickShowPassword}
-                                                onMouseDown={handleMouseDownPassword}
-                                                onMouseUp={handleMouseUpPassword}
-                                                edge='end'
-                                                sx={{
-                                                    color: 'var(--text-label-color)'
-                                                }}
-                                            >
-                                                {showPassword ? <VisibilityOff /> : <Visibility />}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    }
-                                    label={t('COMMON.LOGIN.PASSWORD')}
-                                />
-                            </FormControl>
-                            <Typography
-                                sx={{
-                                    color: 'var(--error-color)',
-                                    margin: '3px auto 0 12px',
-                                    width: 'auto',
-                                    fontSize: '12px',
-                                    visibility: isSubmit && password === '' ? 'visible' : 'hidden'
-                                }}
-                            >
-                                {t('COMMON.TEXTFIELD.REQUIRED')}
-                            </Typography>
-                        </Box>
-
                         <Button
                             variant='contained'
                             color='primary'
                             sx={{
-                                mt: '30px',
+                                mt: '15px',
                                 height: '100%',
                                 fontSize: '18px',
                                 padding: '9px',
@@ -457,69 +366,37 @@ const LoginForm: React.FC = () => {
                             }}
                             onClick={handleSubmit}
                         >
-                            {t('COMMON.LOGIN.SIGN_IN')}
+                            {t('COMMON.REQUEST_PASSWORD.SEND_REQUEST')}
                         </Button>
+
+                        <Box
+                            sx={{
+                                mt: '24px',
+                                display: 'flex',
+                                gap: '6px',
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}
+                        >
+                            <ChevronLeft size={18} />
+                            <Link
+                                href='/login'
+                                sx={{
+                                    fontSize: '15px',
+                                    textDecoration: 'none',
+                                    fontWeight: 'bold',
+                                    color: 'var(--text-color)',
+                                    '&:hover': {
+                                        textDecoration: 'underline'
+                                    }
+                                }}
+                            >
+                                {t('COMMON.REQUEST_PASSWORD.RETURN_LOGIN')}
+                            </Link>
+                        </Box>
                     </Box>
                 </Box>
             </Box>
-            {/* <form
-                onSubmit={handleSubmit}
-                style={{
-                    backgroundColor: 'white',
-                    padding: '40px',
-                    borderRadius: '12px',
-                    boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.2)',
-                    maxWidth: '400px',
-                    textAlign: 'center'
-                }}
-            >
-                <TextField
-                    label='Tên đăng nhập'
-                    variant='outlined'
-                    fullWidth
-                    margin='normal'
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    required
-                />
-                <TextField
-                    label='Mật khẩu'
-                    type='password'
-                    variant='outlined'
-                    fullWidth
-                    margin='normal'
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                    required
-                />
-                <Button
-                    type='submit'
-                    variant='contained'
-                    fullWidth
-                    sx={{
-                        padding: '15px',
-                        backgroundColor: loading ? '#bbb' : '#00b049',
-                        color: 'white',
-                        borderRadius: '8px',
-                        fontSize: '18px'
-                    }}
-                    disabled={loading}
-                >
-                    {loading ? 'Đang xử lý...' : 'Đăng nhập'}
-                </Button>
-                <a
-                    href='#'
-                    style={{
-                        textDecoration: 'none',
-                        color: '#00b049',
-                        marginTop: '10px',
-                        display: 'block',
-                        fontSize: '16px'
-                    }}
-                >
-                    Quên mật khẩu?
-                </a>
-            </form> */}
         </Box>
     )
 }

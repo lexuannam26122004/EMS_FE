@@ -139,13 +139,10 @@ const convertToVietnamTime = (date: Date) => {
         throw new Error('Invalid Date')
     }
 
-    // Múi giờ Việt Nam
     const timeZone = 'Asia/Ho_Chi_Minh'
 
-    // Chuyển thời gian từ UTC sang thời gian theo múi giờ Việt Nam
     const vietnamTime = toZonedTime(date, timeZone)
 
-    // Định dạng thời gian theo kiểu ISO (YYYY-MM-DDTHH:mm:ss)
     const formattedDate = format(vietnamTime, "yyyy-MM-dd'T'HH:mm:ss")
 
     return formattedDate // Trả về thời gian đã được định dạng

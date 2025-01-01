@@ -1,8 +1,11 @@
 export interface IHolidayCreate {
-    Name: string
-    StartDate: Date
-    EndDate: Date
-    Note: string
+    Title: string
+    StartDate: string
+    EndDate: string
+    IsHoliday: boolean
+    Description: string
+    Color: string
+    AllDay: boolean
 }
 
 export interface IHolidayGetAll extends IHolidayCreate {
