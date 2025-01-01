@@ -13,7 +13,7 @@ import {
     TableSortLabel,
     Avatar
 } from '@mui/material'
-import { ClipboardCheck } from 'lucide-react'
+import { ClipboardCheck, Clock } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ITimekeeping } from '@/models/Timekeeping'
@@ -41,16 +41,16 @@ import { ITimekeeping } from '@/models/Timekeeping'
 // ]
 
 function convertTimeFormat(time: string): string {
-    // Tách chuỗi thời gian thành giờ và phút
-    const [hours, minutes] = time.split(':').map(Number)
+    // Tách chuỗi thời gian thành giờ, phút và giây
+    const [hours = 0, minutes = 0, seconds = 0] = time.split(':').map(Number)
 
-    // Xây dựng chuỗi kết quả
-    let result = `${hours}h`
-    if (minutes > 0) {
-        result += ` ${minutes}p`
-    }
+    // Format từng phần thành chuỗi 2 chữ số
+    const formattedHours = String(hours).padStart(2, '0')
+    const formattedMinutes = String(minutes).padStart(2, '0')
+    const formattedSeconds = String(seconds).padStart(2, '0')
 
-    return result
+    // Kết quả format thành hh:mm:ss
+    return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`
 }
 
 interface IGetAll extends ITimekeeping {
@@ -92,6 +92,8 @@ function TableErrorReport({ attendanceData }: IProps) {
     return (
         <TableContainer
             sx={{
+                maxHeight: '540px',
+                scrollbarGutter: 'stable',
                 '&::-webkit-scrollbar': {
                     width: '7px',
                     height: '7px'
@@ -106,72 +108,16 @@ function TableErrorReport({ attendanceData }: IProps) {
                 <TableHead>
                     <TableRow
                         sx={{
-                            backgroundColor: 'var(--header-table-dashboard)',
+                            backgroundColor: 'var(--header-table-dashboard) !important',
+                            position: 'sticky', // Giữ cố định
+                            top: 0, // Vị trí cố định ở trên cùng
+                            zIndex: 2, // Ưu tiên header trên các phần tử khác
                             '&:last-child td, &:last-child th': {
                                 border: 'none'
                             }
                         }}
                     >
-                        <TableCell sx={{ borderColor: 'var(--border-color)', padding: '16px 30px 16px 24px' }}>
-                            <TableSortLabel
-                                active={'FullName' === orderBy}
-                                direction={orderBy === 'FullName' ? order : 'asc'}
-                                onClick={() => handleSort('FullName')}
-                                sx={{
-                                    '& .MuiTableSortLabel-icon': {
-                                        color: 'var(--text-color) !important'
-                                    }
-                                }}
-                            >
-                                <Typography
-                                    sx={{
-                                        fontWeight: 'bold',
-                                        color: 'var(--text-color)',
-                                        fontSize: '16px',
-                                        overflow: 'hidden',
-                                        maxWidth: '300px',
-                                        textOverflow: 'ellipsis',
-                                        whiteSpace: 'nowrap'
-                                    }}
-                                >
-                                    {t('COMMON.REWARD_DISCIPLINE.FULLNAME')}
-                                </Typography>
-                            </TableSortLabel>
-                        </TableCell>
-
-                        <TableCell sx={{ borderColor: 'var(--border-color)' }}>
-                            <TableSortLabel
-                                active={'Department' === orderBy}
-                                direction={orderBy === 'Department' ? order : 'asc'}
-                                onClick={() => handleSort('Department')}
-                                sx={{
-                                    '& .MuiTableSortLabel-icon': {
-                                        color: 'var(--text-color) !important'
-                                    },
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center'
-                                }}
-                            >
-                                <Typography
-                                    sx={{
-                                        fontWeight: 'bold',
-                                        color: 'var(--text-color)',
-                                        fontSize: '16px',
-                                        textAlign: 'center',
-                                        maxWidth: '280px',
-                                        overflow: 'hidden',
-                                        ml: '8px',
-                                        textOverflow: 'ellipsis',
-                                        whiteSpace: 'nowrap'
-                                    }}
-                                >
-                                    {t('COMMON.REWARD_DISCIPLINE.DEPARTMENT')}
-                                </Typography>
-                            </TableSortLabel>
-                        </TableCell>
-
-                        <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                        <TableCell sx={{ borderColor: 'var(--border-color)', padding: '0 35px !important' }}>
                             <TableSortLabel
                                 active={'Date' === orderBy}
                                 direction={orderBy === 'Date' ? order : 'asc'}
@@ -231,6 +177,33 @@ function TableErrorReport({ attendanceData }: IProps) {
                         </TableCell>
 
                         <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                            <TableSortLabel
+                                active={'hours' === orderBy}
+                                direction={orderBy === 'hours' ? order : 'asc'}
+                                onClick={() => handleSort('hours')}
+                                sx={{
+                                    '& .MuiTableSortLabel-icon': {
+                                        color: 'var(--text-color) !important'
+                                    }
+                                }}
+                            >
+                                <Typography
+                                    sx={{
+                                        fontWeight: 'bold',
+                                        color: 'var(--text-color)',
+                                        maxWidth: '400px',
+                                        fontSize: '16px',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        whiteSpace: 'nowrap'
+                                    }}
+                                >
+                                    {t('COMMON.USER.WORKING_HOURS')}
+                                </Typography>
+                            </TableSortLabel>
+                        </TableCell>
+
+                        <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                             <Typography
                                 sx={{
                                     fontWeight: 'bold',
@@ -245,7 +218,7 @@ function TableErrorReport({ attendanceData }: IProps) {
                             </Typography>
                         </TableCell>
 
-                        <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                        <TableCell sx={{ borderColor: 'var(--border-color)', width: '70px' }}>
                             <Typography
                                 sx={{
                                     fontWeight: 'bold',
@@ -261,7 +234,7 @@ function TableErrorReport({ attendanceData }: IProps) {
                             </Typography>
                         </TableCell>
 
-                        <TableCell sx={{ borderColor: 'var(--border-color)', padding: '16px 24px' }}>
+                        <TableCell sx={{ borderColor: 'var(--border-color)', padding: '16px 35px' }}>
                             <Typography
                                 sx={{
                                     fontWeight: 'bold',
@@ -292,75 +265,8 @@ function TableErrorReport({ attendanceData }: IProps) {
                             >
                                 <TableCell
                                     sx={{
-                                        borderColor: 'var(--border-color)',
                                         borderStyle: 'dashed',
-                                        padding: '16px 24px 16px 24px'
-                                    }}
-                                >
-                                    <Box
-                                        sx={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: '14px'
-                                        }}
-                                    >
-                                        <Avatar
-                                            sx={{
-                                                mt: '-2px'
-                                            }}
-                                            src={
-                                                row.AvatarPath ||
-                                                'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'
-                                            }
-                                        />
-
-                                        <Box>
-                                            <Typography
-                                                sx={{
-                                                    color: 'var(--text-color)',
-                                                    fontSize: '16px',
-                                                    maxWidth: '260px',
-                                                    overflow: 'hidden',
-                                                    textOverflow: 'ellipsis',
-                                                    whiteSpace: 'nowrap'
-                                                }}
-                                            >
-                                                {row.FullName}
-                                            </Typography>
-                                            <Typography
-                                                sx={{
-                                                    color: 'var(--created-date-color)',
-                                                    fontSize: '16px',
-                                                    mt: '-0px',
-                                                    overflow: 'hidden',
-                                                    textOverflow: 'ellipsis',
-                                                    whiteSpace: 'nowrap'
-                                                }}
-                                            >
-                                                {row.UserId}
-                                            </Typography>
-                                        </Box>
-                                    </Box>
-                                </TableCell>
-
-                                <TableCell sx={{ borderColor: 'var(--border-color)', borderStyle: 'dashed' }}>
-                                    <Typography
-                                        sx={{
-                                            color: 'var(--text-color)',
-                                            fontSize: '16px',
-                                            maxWidth: '280px',
-                                            overflow: 'hidden',
-                                            textOverflow: 'ellipsis',
-                                            whiteSpace: 'nowrap'
-                                        }}
-                                    >
-                                        {row.Department}
-                                    </Typography>
-                                </TableCell>
-
-                                <TableCell
-                                    sx={{
-                                        borderStyle: 'dashed',
+                                        padding: '0 35px !important',
                                         borderColor: 'var(--border-color)'
                                     }}
                                 >
@@ -369,6 +275,7 @@ function TableErrorReport({ attendanceData }: IProps) {
                                             color: 'var(--text-color)',
                                             fontSize: '16px',
                                             maxWidth: '280px',
+                                            textAlign: 'center',
                                             overflow: 'hidden',
                                             textOverflow: 'ellipsis',
                                             whiteSpace: 'nowrap'
@@ -384,17 +291,70 @@ function TableErrorReport({ attendanceData }: IProps) {
                                         borderColor: 'var(--border-color)'
                                     }}
                                 >
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            gap: '15px',
+                                            alignItems: 'center',
+                                            justifyContent: 'left'
+                                        }}
+                                    >
+                                        <Clock size={24} color='var(--text-color)' />
+                                        <Box
+                                            sx={{
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                maxWidth: '280px',
+                                                display: 'flex',
+                                                gap: '15px',
+                                                alignItems: 'center',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            <Box
+                                                sx={{
+                                                    color: '#ffda97',
+                                                    fontWeight: 'bold'
+                                                }}
+                                            >
+                                                {row.CheckInTime}
+                                            </Box>
+                                            -
+                                            <Box
+                                                sx={{
+                                                    color: '#ff9a9a',
+                                                    fontWeight: 'bold'
+                                                }}
+                                            >
+                                                {row.CheckOutTime}
+                                            </Box>
+                                        </Box>
+                                    </Box>
+                                </TableCell>
+
+                                <TableCell
+                                    sx={{
+                                        borderStyle: 'dashed',
+                                        borderColor: 'var(--border-color)'
+                                    }}
+                                >
                                     <Typography
                                         sx={{
-                                            color: 'var(--text-color)',
+                                            color: '#1eff9c',
                                             fontSize: '16px',
-                                            maxWidth: '280px',
+                                            width: '88px',
+                                            padding: '8px 10px',
+                                            borderRadius: '10px',
+                                            border: '1px solid var(--border-color)',
+                                            fontWeight: 'bold',
                                             overflow: 'hidden',
                                             textOverflow: 'ellipsis',
                                             whiteSpace: 'nowrap'
                                         }}
                                     >
-                                        {row.CheckInTime} - {row.CheckOutTime}
+                                        {convertTimeFormat(row.WorkingHours)}
                                     </Typography>
                                 </TableCell>
 
@@ -406,8 +366,9 @@ function TableErrorReport({ attendanceData }: IProps) {
                                 >
                                     <Typography
                                         sx={{
-                                            color: 'var(--text-color)',
+                                            color: '#52f2d8',
                                             fontSize: '16px',
+                                            fontStyle: 'italic',
                                             maxWidth: '280px',
                                             overflow: 'hidden',
                                             textOverflow: 'ellipsis',
@@ -420,6 +381,7 @@ function TableErrorReport({ attendanceData }: IProps) {
                                 <TableCell
                                     sx={{
                                         borderStyle: 'dashed',
+                                        width: '70px',
                                         borderColor: 'var(--border-color)',
                                         padding: '11px'
                                     }}

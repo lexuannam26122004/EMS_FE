@@ -629,7 +629,7 @@
             "MEMBER_ATTENDANCE": "Attendance Overview",
             "ATTENDANCE_PERCENT": "{{status}} {{x}}% attendance from yesterday",
             "DETAIL_EMPLOYEE": "Detail Employee",
-            "DOWNLOAD_INFO": "Download Infor"
+            "DOWNLOAD_INFO": "Download Info"
         },
         "LOGIN": {
             "HI": "Hi, Welcome back!",
@@ -638,12 +638,35 @@
             "USERNAME": "Username",
             "PASSWORD": "Password",
             "FORGOT_PASSWORD": "Forgot password?",
-            "SIGN_IN": "Sign in"
+            "SIGN_IN": "Sign in",
+            "8_CHARACTERS": "+8 characters",
+            "USERNAME_PLACEHOLDER": "Enter your username or email"
         },
         "USER": {
             "TOTAL_ATTENDANCE": "Total Attendance",
+            "TOTAL_LATE": "Total Late",
             "AVG_CHECK_IN": "Avg Check In Time",
-            "AVG_CHECK_OUT": "Avg Check Out Time"
+            "AVG_CHECK_OUT": "Avg Check Out Time",
+            "THIS_MONTH": "This Month",
+            "THIS_WEEK": "This Week",
+            "THIS_YEAR": "This Year",
+            "ATTENDANCE_HISTORY": "Attendance History",
+            "FILTER": "Filter",
+            "START_DATE": "Start Date",
+            "END_DATE": "End Date",
+            "CHECK_IN_TIME": "Check In Time",
+            "CHECK_OUT_TIME": "Check Out Time",
+            "OVERTIME": "Overtime",
+            "WORKING_HOURS": "Working Hours",
+            "FILTER_V": "Filter"
+        },
+        "REQUEST_PASSWORD": {
+            "FORGOT_PASSWORD": "Forgot your password?",
+            "DESC": "Please enter the email address associated with your account and we'll email you a link to reset your password.",
+            "EMAIL_ADDRESS": "Email Address",
+            "SEND_REQUEST": "Send Request",
+            "RETURN_LOGIN": "Return to sign in",
+            "EMAIL_EXAMPLE": "example@gmail.com"
         }
     }
 }

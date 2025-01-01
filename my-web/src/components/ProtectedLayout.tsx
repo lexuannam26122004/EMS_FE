@@ -73,11 +73,10 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
 
     useEffect(() => {
         if (!isChecking) {
-            // Nếu menuLeft đã có dữ liệu, kiểm tra quyền
             if (menuLeft[pathname]?.IsAllowView === false) {
-                router.push('/403') // Chuyển hướng nếu không có quyền
+                router.push('/403')
             } else {
-                setHasAccess(true) // Người dùng có quyền
+                setHasAccess(true)
             }
         }
     }, [isChecking, pathname, menuLeft, router])

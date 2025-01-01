@@ -11,7 +11,7 @@ function Layout({ children }: { children: React.ReactNode }) {
     const router = useRouter()
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <Box component='main' sx={{ height: '100vh', overflowY: 'auto', position: 'relative' }}>
             <Box
                 sx={{
                     display: 'flex',
@@ -56,7 +56,6 @@ function Layout({ children }: { children: React.ReactNode }) {
 
             <Box
                 sx={{
-                    flex: 1,
                     height: '100%',
                     paddingTop: '60px',
                     position: 'relative',
