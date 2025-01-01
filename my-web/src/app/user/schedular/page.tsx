@@ -4,7 +4,6 @@ import React, { useState, useRef, useEffect } from 'react'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction' // Dùng plugin này để hỗ trợ kéo và thả
-import { EventDropArg } from '@fullcalendar/core'
 import dayjs from 'dayjs'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
@@ -13,14 +12,12 @@ import CheckIcon from '@mui/icons-material/Check'
 import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers'
 import { styled } from '@mui/material/styles'
 import { SwitchProps } from '@mui/material/Switch'
-import equal from 'fast-deep-equal'
 import {
     Paper,
     Dialog,
     DialogTitle,
     DialogContent,
     TextField,
-    DialogActions,
     Button,
     FormControlLabel,
     Switch,
@@ -37,18 +34,13 @@ import {
 import CircleIcon from '@mui/icons-material/Circle'
 import './styles.css'
 import { useTranslation } from 'react-i18next'
-import { CalendarRange, ChevronLeft, ChevronRight, Trash2 } from 'lucide-react'
-import Layout from '@/app/user/Layout'
+import { CalendarRange, ChevronLeft, ChevronRight } from 'lucide-react'
 import { RootState } from '@/redux/store'
 import { useSelector } from 'react-redux'
-import {
-    useSearchEventQuery,
-    useCreateEventMutation,
-    useDeleteEventMutation,
-    useUpdateEventMutation
-} from '@/services/EventService'
-import { IEventGetAll, IFilterEvent, IEventCreate, IEventUpdate } from '@/models/Event'
+import { useSearchEventQuery } from '@/services/EventService'
+import { IEventGetAll, IFilterEvent } from '@/models/Event'
 import { parseISO } from 'date-fns'
+import ListEvent from './ListEvent'
 
 const IOSSwitch = styled((props: SwitchProps) => (
     <Switch focusVisibleClassName='.Mui-focusVisible' disableRipple {...props} />
@@ -59,6 +51,7 @@ const IOSSwitch = styled((props: SwitchProps) => (
     '& .MuiSwitch-switchBase': {
         padding: 0,
         margin: 2,
+        cursor: 'default', // Con trỏ mặc định
         transitionDuration: '300ms',
         '&.Mui-checked': {
             transform: 'translateX(16px)',
@@ -110,26 +103,6 @@ const IOSSwitch = styled((props: SwitchProps) => (
     }
 }))
 
-import { toZonedTime, format } from 'date-fns-tz'
-
-const convertToVietnamTime = (date: Date) => {
-    // Đảm bảo date là hợp lệ
-    if (isNaN(date.getTime())) {
-        throw new Error('Invalid Date')
-    }
-
-    // Múi giờ Việt Nam
-    const timeZone = 'Asia/Ho_Chi_Minh'
-
-    // Chuyển thời gian từ UTC sang thời gian theo múi giờ Việt Nam
-    const vietnamTime = toZonedTime(date, timeZone)
-
-    // Định dạng thời gian theo kiểu ISO (YYYY-MM-DDTHH:mm:ss)
-    const formattedDate = format(vietnamTime, "yyyy-MM-dd'T'HH:mm:ss")
-
-    return formattedDate // Trả về thời gian đã được định dạng
-}
-
 interface Event {
     id: string
     title: string
@@ -141,6 +114,8 @@ interface Event {
     color: string
 }
 
+const colors = ['#00a76f', '#8e33ff', '#00b8d9', '#003768', '#22c55e', '#ffcc00', '#ff5630', '#7a0916']
+
 const MyCalendar = () => {
     const { t } = useTranslation('common')
 
@@ -151,9 +126,6 @@ const MyCalendar = () => {
         keyword: ''
     })
 
-    const [createEvent, { isLoading: isLoadingCreate }] = useCreateEventMutation()
-    const [deleteEvent, { isLoading: isLoadingDelete }] = useDeleteEventMutation()
-    const [updateEvent, { isLoading: isLoadingUpdate }] = useUpdateEventMutation()
     const { data: responseData, refetch } = useSearchEventQuery(filter)
 
     const eventData = responseData?.Data.Records as IEventGetAll[]
@@ -176,15 +148,7 @@ const MyCalendar = () => {
         setEvents(eventRecords || [])
     }, [eventData])
 
-    useEffect(() => {
-        if (isLoadingCreate || isLoadingDelete || isLoadingUpdate) {
-            return
-        }
-        refetch()
-    }, [isLoadingCreate, isLoadingDelete, isLoadingUpdate])
-
     const [calendarView, setCalendarView] = useState('dayGridMonth')
-    const [isSubmit, setIsSubmit] = useState(false)
     const expanded = useSelector((state: RootState) => state.sidebar.expanded)
 
     useEffect(() => {
@@ -196,11 +160,6 @@ const MyCalendar = () => {
 
         return () => clearTimeout(timer)
     }, [expanded])
-
-    const handleCancel = () => {
-        setModalOpen(false)
-        setIsSubmit(false)
-    }
 
     const [modalOpen, setModalOpen] = useState(false)
     const [newEvent, setNewEvent] = useState<Event>({
@@ -214,77 +173,8 @@ const MyCalendar = () => {
         color: '#00a76f'
     })
 
-    const colors = ['#00a76f', '#8e33ff', '#00b8d9', '#003768', '#22c55e', '#ffcc00', '#ff5630', '#7a0916']
-
-    const [isNewEvent, setIsNewEvent] = useState(false)
-
-    const handleSelect = (info: { start: Date; end: Date }) => {
-        const newEventId = 'new_' + Date.now() // Tạo ID mới cho sự kiện mới
-
-        setNewEvent({
-            id: newEventId,
-            title: '',
-            description: '',
-            start: info.start,
-            isHoliday: false,
-            end: info.end,
-            allDay: false,
-            color: '#00a76f'
-        })
-        setModalOpen(true)
-        setIsNewEvent(true)
-        setIsSubmit(false)
-    }
-
-    const handleSaveEvent = () => {
-        setIsSubmit(true)
-        if (
-            newEvent.title.trim() === '' ||
-            newEvent.start === null ||
-            newEvent.end === null ||
-            newEvent.start > newEvent.end ||
-            newEvent.description.trim() === ''
-        ) {
-            return
-        }
-
-        const startTime = convertToVietnamTime(newEvent.start)
-        const endTime = convertToVietnamTime(newEvent.end)
-
-        if (isNewEvent) {
-            setEvents([...events, newEvent])
-            const eventCreate = {
-                Title: newEvent.title,
-                StartDate: startTime,
-                EndDate: endTime,
-                IsHoliday: false,
-                Description: newEvent.description,
-                Color: newEvent.color,
-                AllDay: newEvent.allDay
-            } as IEventCreate
-            createEvent(eventCreate)
-        } else {
-            const eventUpdate = {
-                Title: newEvent.title,
-                StartDate: startTime,
-                EndDate: endTime,
-                Description: newEvent.description,
-                Color: newEvent.color,
-                AllDay: newEvent.allDay,
-                Id: parseInt(newEvent.id)
-            } as IEventUpdate
-            updateEvent(eventUpdate)
-        }
-
-        setModalOpen(false)
-    }
-
     const handleEventClick = (info: any) => {
         const event = info.event
-
-        setIsNewEvent(false)
-
-        console.log(event.start, event.end)
 
         setNewEvent({
             id: event.id,
@@ -298,41 +188,6 @@ const MyCalendar = () => {
         })
 
         setModalOpen(true)
-        setIsSubmit(false)
-    }
-
-    const handleAllDayChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setNewEvent(prevEvent => ({
-            ...prevEvent,
-            allDay: event.target.checked
-        }))
-    }
-
-    const handleEventDrop = async (info: EventDropArg) => {
-        const newStart = info.event.start instanceof Date ? info.event.start : new Date()
-        const newEnd = info.event.end instanceof Date ? info.event.end : new Date()
-
-        const updatedEvents = events.map(event =>
-            event.id === info.event.id ? { ...event, start: newStart, end: newEnd } : event
-        )
-
-        const startTime = convertToVietnamTime(newStart)
-        const endTime = convertToVietnamTime(newEnd)
-
-        const eventUpdate = {
-            Title: info.event.title,
-            StartDate: startTime,
-            EndDate: endTime,
-            Description: info.event.extendedProps.description || '',
-            Color: info.event.backgroundColor,
-            AllDay: info.event.allDay,
-            Id: parseInt(info.event.id)
-        } as IEventUpdate
-
-        if (!equal(events, updatedEvents)) {
-            await updateEvent(eventUpdate).unwrap()
-            refetch()
-        }
     }
 
     const calendarRef = useRef<FullCalendar | null>(null)
@@ -341,14 +196,13 @@ const MyCalendar = () => {
         const newView = event.target.value
         setCalendarView(newView)
 
-        // Sử dụng API của FullCalendar để thay đổi view
         if (calendarRef.current) {
             const calendarApi = calendarRef.current.getApi()
             calendarApi.changeView(newView)
         }
     }
 
-    const [currentTitle, setCurrentTitle] = useState('') // Lưu trữ tiêu đề hiện tại
+    const [currentTitle, setCurrentTitle] = useState('')
 
     const updateTitle = () => {
         const calendarApi = calendarRef.current?.getApi()
@@ -369,12 +223,27 @@ const MyCalendar = () => {
         }
     }
 
+    const paperRef = useRef(null)
+    const [paperHeight, setPaperHeight] = useState(0)
+
+    useEffect(() => {
+        if (paperRef.current) {
+            setPaperHeight(paperRef.current.offsetHeight)
+        }
+    }, [])
+
     return (
-        <Layout>
+        <Box
+            sx={{
+                display: 'flex',
+                gap: '30px'
+            }}
+        >
             <Paper
+                ref={paperRef}
                 sx={{
                     borderRadius: '15px',
-                    width: '100%',
+                    width: '66%',
                     boxShadow: 'var(--box-shadow-paper)',
                     overflow: 'hidden',
                     backgroundColor: 'var(--background-item)',
@@ -606,25 +475,27 @@ const MyCalendar = () => {
                     plugins={[dayGridPlugin, interactionPlugin]}
                     initialView={calendarView}
                     events={events}
-                    eventDrop={handleEventDrop}
-                    editable
-                    droppable
+                    eventDrop={info => {
+                        // Đoạn mã này giúp ngừng thay đổi vị trí sự kiện khi kéo thả
+                        info.revert() // Trả lại vị trí ban đầu
+                    }}
                     eventTimeFormat={{
                         hour: 'numeric',
                         minute: '2-digit',
                         meridiem: 'short'
                     }}
-                    select={handleSelect}
-                    selectable
                     contentHeight={500}
                     headerToolbar={{
                         left: '',
                         center: '',
                         right: ''
                     }}
+                    selectable={false}
+                    editable
+                    droppable={false}
                     datesSet={updateTitle}
                     dragScroll={true}
-                    eventClick={info => handleEventClick(info)} // Thêm sự kiện eventClick
+                    eventClick={info => handleEventClick(info)}
                 />
 
                 <Dialog
@@ -641,7 +512,7 @@ const MyCalendar = () => {
                             margin: 0,
                             borderRadius: '16px',
                             maxWidth: 'none',
-                            height: '90vh'
+                            maxHeight: '82vh'
                         }
                     }}
                     onClose={() => setModalOpen(false)}
@@ -650,15 +521,17 @@ const MyCalendar = () => {
                         sx={{
                             padding: '24px',
                             fontSize: '18px',
+                            fontWeight: 'bold',
                             color: 'var(--text-color)',
                             backgroundColor: 'var(--header-dialog)'
                         }}
                     >
-                        {t('COMMON.CALENDAR.ADD_EVENT')}
+                        {t('COMMON.USER_SCHEDULAR.EVENT_DETAIL')}
                     </DialogTitle>
                     <DialogContent
                         sx={{
                             pr: '17px',
+                            pb: '24px',
                             scrollbarGutter: 'stable',
                             '&::-webkit-scrollbar': {
                                 width: '7px',
@@ -673,12 +546,16 @@ const MyCalendar = () => {
                         <Box
                             width='100%'
                             sx={{
-                                mt: '24px'
+                                mt: '30px'
                             }}
                         >
                             <TextField
                                 label={t('COMMON.CALENDAR.TITLE')}
-                                {...(isSubmit === true && newEvent.title === '' && { error: true })}
+                                slotProps={{
+                                    input: {
+                                        readOnly: true
+                                    }
+                                }}
                                 sx={{
                                     width: '100%',
                                     '& fieldset': {
@@ -721,11 +598,10 @@ const MyCalendar = () => {
                                     }
                                 }}
                                 value={newEvent.title}
-                                onChange={e => setNewEvent({ ...newEvent, title: e.target.value })}
                             />
                             <Typography
                                 sx={{
-                                    visibility: isSubmit === true && newEvent.title === '' ? 'visible' : 'hidden',
+                                    visibility: 'hidden',
                                     color: 'var(--error-color)',
                                     margin: '1px 0 0 10px',
                                     fontSize: '12px'
@@ -742,8 +618,12 @@ const MyCalendar = () => {
                         >
                             <TextField
                                 label={t('COMMON.CALENDAR.DESCRIPTION')}
-                                {...(isSubmit === true && newEvent.description === '' && { error: true })}
                                 multiline
+                                slotProps={{
+                                    input: {
+                                        readOnly: true
+                                    }
+                                }}
                                 rows={3}
                                 sx={{
                                     width: '100%',
@@ -787,11 +667,10 @@ const MyCalendar = () => {
                                     }
                                 }}
                                 value={newEvent.description}
-                                onChange={e => setNewEvent({ ...newEvent, description: e.target.value })}
                             />
                             <Typography
                                 sx={{
-                                    visibility: isSubmit === true && newEvent.description === '' ? 'visible' : 'hidden',
+                                    visibility: 'hidden',
                                     color: 'var(--error-color)',
                                     margin: '1px 0 0 10px',
                                     fontSize: '12px'
@@ -804,6 +683,7 @@ const MyCalendar = () => {
                         <FormControlLabel
                             sx={{
                                 mt: '0px',
+                                cursor: 'default',
                                 ml: '-8px',
                                 mb: '20px',
                                 '& .MuiFormControlLabel-label': {
@@ -811,13 +691,7 @@ const MyCalendar = () => {
                                     fontSize: '16px'
                                 }
                             }}
-                            control={
-                                <IOSSwitch
-                                    sx={{ m: 1, mr: 2 }}
-                                    onChange={handleAllDayChange}
-                                    checked={newEvent.allDay}
-                                />
-                            }
+                            control={<IOSSwitch sx={{ m: 1, mr: 2 }} checked={newEvent.allDay} />}
                             label={t('COMMON.CALENDAR.ALL_DAY')}
                         />
 
@@ -826,16 +700,21 @@ const MyCalendar = () => {
                                 <DateTimePicker
                                     label='Ngày bắt đầu'
                                     value={dayjs(newEvent.start)}
-                                    onChange={value =>
-                                        setNewEvent({ ...newEvent, start: value?.toDate() || new Date() })
-                                    }
                                     viewRenderers={{
                                         hours: renderTimeViewClock,
                                         minutes: renderTimeViewClock,
                                         seconds: renderTimeViewClock
                                     }}
+                                    slotProps={{
+                                        textField: {
+                                            inputProps: { onKeyDown: e => e.preventDefault(), readOnly: true } // Vô hiệu hóa sự kiện bàn phím
+                                        }
+                                    }}
                                     sx={{
                                         width: '100%',
+                                        '& .MuiInputAdornment-root': {
+                                            pointerEvents: 'none' // Vô hiệu hóa sự kiện click trên icon
+                                        },
                                         '& .MuiInputBase-root': {
                                             color: 'var(--text-color)'
                                         },
@@ -874,14 +753,21 @@ const MyCalendar = () => {
                                 <DateTimePicker
                                     label='Ngày kết thúc'
                                     value={dayjs(newEvent.end)}
-                                    onChange={value => setNewEvent({ ...newEvent, end: value?.toDate() || new Date() })}
                                     viewRenderers={{
                                         hours: renderTimeViewClock,
                                         minutes: renderTimeViewClock,
                                         seconds: renderTimeViewClock
                                     }}
+                                    slotProps={{
+                                        textField: {
+                                            inputProps: { onKeyDown: e => e.preventDefault(), readOnly: true } // Vô hiệu hóa sự kiện bàn phím
+                                        }
+                                    }}
                                     sx={{
                                         width: '100%',
+                                        '& .MuiInputAdornment-root': {
+                                            pointerEvents: 'none' // Vô hiệu hóa sự kiện click trên icon
+                                        },
                                         '& .MuiInputBase-root': {
                                             color: 'var(--text-color)'
                                         },
@@ -916,10 +802,10 @@ const MyCalendar = () => {
                                 {colors.map(color => (
                                     <Box key={color}>
                                         <IconButton
-                                            onClick={() => setNewEvent({ ...newEvent, color })}
                                             sx={{
                                                 padding: '0px',
                                                 color: color,
+                                                cursor: 'default',
                                                 boxShadow: newEvent.color === color ? `0px 2px 6px ${color}` : 'none',
                                                 transition: 'transform 0.2s, box-shadow 0.2s',
                                                 position: 'relative'
@@ -948,85 +834,18 @@ const MyCalendar = () => {
                             </Box>
                         )}
                     </DialogContent>
-                    <DialogActions
-                        sx={{
-                            display: 'flex',
-                            justifyContent: isNewEvent === true ? 'right' : 'space-between',
-                            alignItems: 'center',
-                            backgroundColor: 'var(--header-dialog)',
-                            padding: '24px'
-                        }}
-                    >
-                        {isNewEvent === false && (
-                            <Tooltip title={t('COMMON.CALENDAR.DELETE_EVENT')} placement='top'>
-                                <IconButton
-                                    sx={{
-                                        padding: '10px',
-                                        borderRadius: '50%',
-                                        '&:hover': {
-                                            backgroundColor: 'var(--hover-color)'
-                                        }
-                                    }}
-                                    onClick={() => {
-                                        deleteEvent(parseInt(newEvent.id))
-                                        setModalOpen(false)
-                                    }}
-                                >
-                                    <Trash2 width='21px' height='21px' color='var(--placeholder-color)' />
-                                </IconButton>
-                            </Tooltip>
-                        )}
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                justifyContent: 'content',
-                                alignItems: 'center',
-                                gap: '16px'
-                            }}
-                        >
-                            <Button
-                                variant='contained'
-                                color='error'
-                                sx={{
-                                    fontSize: '14px',
-                                    fontWeight: 'bold',
-                                    height: '36x',
-                                    color: 'var(--text-button-reject)',
-                                    backgroundColor: 'var(--bg-button-reject)',
-                                    borderRadius: '8px',
-                                    '&:hover': {
-                                        backgroundColor: 'var(--bg-button-reject-hover)'
-                                    },
-                                    textTransform: 'none'
-                                }}
-                                onClick={handleCancel}
-                            >
-                                {t('COMMON.BUTTON.CANCEL')}
-                            </Button>
-                            <Button
-                                variant='contained'
-                                color='primary'
-                                sx={{
-                                    fontSize: '14px',
-                                    fontWeight: 'bold',
-                                    height: '36x',
-                                    color: 'var(--text-button-accept)',
-                                    backgroundColor: 'var(--bg-button-accept)',
-                                    borderRadius: '8px',
-                                    '&:hover': {
-                                        backgroundColor: 'var(--bg-button-accept-hover)'
-                                    },
-                                    textTransform: 'none'
-                                }}
-                                onClick={handleSaveEvent}
-                            >
-                                {t('COMMON.BUTTON.SAVE_CHANGES')}
-                            </Button>
-                        </Box>
-                    </DialogActions>
                 </Dialog>
             </Paper>
-        </Layout>
+
+            <Box
+                sx={{
+                    width: '34%',
+                    height: `${paperHeight}px` // Đồng bộ chiều cao
+                }}
+            >
+                <ListEvent />
+            </Box>
+        </Box>
     )
 }
 

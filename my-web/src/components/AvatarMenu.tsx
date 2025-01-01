@@ -86,6 +86,11 @@ const AvatarMenu = () => {
         router.push('/admin/notification/create')
     }
 
+    const handleSchedular = () => {
+        setOpen(false)
+        router.push('/user/schedular')
+    }
+
     const handleCreateTasks = () => {
         setOpen(false)
         router.push('/admin/tasks/create')
@@ -273,7 +278,7 @@ const AvatarMenu = () => {
                                         {t('COMMON.AVATAR_MENU.CREATE_NOTIFICATION')}
                                     </MenuItem>
                                     <MenuItem
-                                        onClick={handleClose}
+                                        onClick={handleSchedular}
                                         sx={{
                                             color: 'var(--text-color)',
                                             borderRadius: '6px',

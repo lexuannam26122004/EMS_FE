@@ -10,14 +10,34 @@ import FormControl from '@mui/material/FormControl'
 import LanguageMenu from '@/components/LanguageMenu'
 import ColorModeIconDropdown from '@/components/ColorModeIconDropdown'
 import { ChevronLeft } from 'lucide-react'
+import InputAdornment from '@mui/material/InputAdornment'
+import Visibility from '@mui/icons-material/Visibility'
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
+import IconButton from '@mui/material/IconButton'
 
 const LoginForm: React.FC = () => {
-    const [email, setEmail] = useState('')
+    const [newPassword, setNewPassword] = useState('')
+    const [password, setPassword] = useState('')
     const [isSubmit, setIsSubmit] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const toast = useToast()
     const router = useRouter()
     const { t } = useTranslation('common')
+    const [showPassword, setShowPassword] = React.useState(false)
+    const [showNewPassword, setShowNewPassword] = React.useState(false)
+
+    const handleClickShowPassword = () => setShowPassword(show => !show)
+
+    const handleClickShowNewPassword = () => setShowNewPassword(show => !show)
+
+    const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault()
+    }
+
+    const handleMouseUpPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault()
+    }
+
     const handleClick = () => {
         router.push('/')
     }
@@ -25,14 +45,14 @@ const LoginForm: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setIsSubmit(true)
-        if (email === '') {
+        if (newPassword === '' || password === '') {
             return
         }
         setIsLoading(true)
 
         const loginData = {
-            Email: email,
-            Password: 123
+            NewPassword: newPassword,
+            Password: password
         }
 
         try {
@@ -223,7 +243,7 @@ const LoginForm: React.FC = () => {
                         }}
                     >
                         <img
-                            src='/images/forgot-password.svg'
+                            src='/images/request-sent.svg'
                             style={{
                                 width: '96px',
                                 height: '96px',
@@ -239,7 +259,7 @@ const LoginForm: React.FC = () => {
                                 color: 'var(--text-color)'
                             }}
                         >
-                            {t('COMMON.REQUEST_PASSWORD.FORGOT_PASSWORD')}
+                            {t('COMMON.UPDATE_PASSWORD.TITLE')}
                         </Typography>
 
                         <Typography
@@ -249,7 +269,7 @@ const LoginForm: React.FC = () => {
                                 color: 'var(--sub-title-color)'
                             }}
                         >
-                            {t('COMMON.REQUEST_PASSWORD.DESC')}
+                            {t('COMMON.UPDATE_PASSWORD.DESC')}
                         </Typography>
 
                         <Box
@@ -263,8 +283,8 @@ const LoginForm: React.FC = () => {
                         >
                             <FormControl sx={{ width: '100%' }} variant='outlined'>
                                 <InputLabel
-                                    htmlFor='outlined-adornment-email'
-                                    {...(isSubmit && email === '' && { error: true })}
+                                    {...(isSubmit && password === '' && { error: true })}
+                                    htmlFor='outlined-adornment-password'
                                     sx={{
                                         color: 'var(--text-label-color)',
                                         '&.Mui-focused': {
@@ -276,17 +296,19 @@ const LoginForm: React.FC = () => {
                                     }}
                                     shrink
                                 >
-                                    {t('COMMON.REQUEST_PASSWORD.EMAIL_ADDRESS')}
+                                    {t('COMMON.LOGIN.PASSWORD')}
                                 </InputLabel>
                                 <OutlinedInput
+                                    placeholder={t('COMMON.LOGIN.8_CHARACTERS')}
                                     notched
-                                    id='outlined-adornment-email'
-                                    {...(isSubmit && email === '' && { error: true })}
+                                    id='outlined-adornment-password'
+                                    {...(isSubmit && password === '' && { error: true })}
                                     autoComplete='off' // Ngăn tự động điền
-                                    placeholder={t('COMMON.REQUEST_PASSWORD.EMAIL_EXAMPLE')} // Thêm placeholder
+                                    type={showPassword ? 'text' : 'password'}
+                                    onChange={e => setNewPassword(e.target.value)}
                                     sx={{
                                         '& .MuiInputBase-input': {
-                                            padding: '17px 0 17px 14px',
+                                            padding: '15.5px 0 15.5px 14px',
                                             color: 'var(--text-color)',
                                             borderRadius: '8px',
                                             overflow: 'hidden'
@@ -311,8 +333,23 @@ const LoginForm: React.FC = () => {
                                             borderColor: 'var(--error-color) !important'
                                         }
                                     }}
-                                    label={t('COMMON.REQUEST_PASSWORD.EMAIL_ADDRESS')}
-                                    onChange={e => setEmail(e.target.value)}
+                                    endAdornment={
+                                        <InputAdornment position='end'>
+                                            <IconButton
+                                                aria-label={showPassword ? 'hide the password' : 'display the password'}
+                                                onClick={handleClickShowPassword}
+                                                onMouseDown={handleMouseDownPassword}
+                                                onMouseUp={handleMouseUpPassword}
+                                                edge='end'
+                                                sx={{
+                                                    color: 'var(--text-label-color)'
+                                                }}
+                                            >
+                                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    }
+                                    label={t('COMMON.LOGIN.PASSWORD')}
                                 />
                             </FormControl>
                             <Typography
@@ -321,7 +358,101 @@ const LoginForm: React.FC = () => {
                                     margin: '3px auto 0 12px',
                                     width: 'auto',
                                     fontSize: '12px',
-                                    visibility: isSubmit && email === '' ? 'visible' : 'hidden'
+                                    visibility: isSubmit && password === '' ? 'visible' : 'hidden'
+                                }}
+                            >
+                                {t('COMMON.TEXTFIELD.REQUIRED')}
+                            </Typography>
+                        </Box>
+
+                        <Box
+                            sx={{
+                                width: '100%',
+                                mt: '15px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'left'
+                            }}
+                        >
+                            <FormControl sx={{ width: '100%' }} variant='outlined'>
+                                <InputLabel
+                                    {...(isSubmit && newPassword === '' && { error: true })}
+                                    htmlFor='outlined-adornment-newPassword'
+                                    sx={{
+                                        color: 'var(--text-label-color)',
+                                        '&.Mui-focused': {
+                                            color: 'var(--selected-field-color)'
+                                        },
+                                        '&.Mui-error': {
+                                            color: 'var(--error-color) !important' // Màu khi có lỗi
+                                        }
+                                    }}
+                                    shrink
+                                >
+                                    {t('COMMON.UPDATE_PASSWORD.CONFIRM')}
+                                </InputLabel>
+                                <OutlinedInput
+                                    notched
+                                    id='outlined-adornment-newPassword'
+                                    {...(isSubmit && newPassword === '' && { error: true })}
+                                    autoComplete='off' // Ngăn tự động điền
+                                    type={showPassword ? 'text' : 'password'}
+                                    onChange={e => setPassword(e.target.value)}
+                                    sx={{
+                                        '& .MuiInputBase-input': {
+                                            padding: '15.5px 0 15.5px 14px',
+                                            color: 'var(--text-color)',
+                                            borderRadius: '8px',
+                                            overflow: 'hidden'
+                                        },
+                                        '& fieldset': {
+                                            borderColor: 'var(--border-color)',
+                                            borderWidth: '1px',
+                                            borderRadius: '8px',
+                                            overflow: 'hidden'
+                                        },
+                                        '&:hover fieldset': {
+                                            borderColor: 'var(--hover-field-color) !important' // Đảm bảo không bị ghi đè
+                                        },
+                                        '&.Mui-focused fieldset': {
+                                            borderColor: 'var(--selected-field-color) !important',
+                                            borderWidth: '2px' // Độ dày viền
+                                        },
+                                        '&.Mui-error:hover fieldset': {
+                                            borderColor: 'var(--error-color) !important'
+                                        },
+                                        '&.Mui-error fieldset': {
+                                            borderColor: 'var(--error-color) !important'
+                                        }
+                                    }}
+                                    endAdornment={
+                                        <InputAdornment position='end'>
+                                            <IconButton
+                                                aria-label={
+                                                    showNewPassword ? 'hide the password' : 'display the password'
+                                                }
+                                                onClick={handleClickShowNewPassword}
+                                                onMouseDown={handleMouseDownPassword}
+                                                onMouseUp={handleMouseUpPassword}
+                                                edge='end'
+                                                sx={{
+                                                    color: 'var(--text-label-color)'
+                                                }}
+                                            >
+                                                {showNewPassword ? <VisibilityOff /> : <Visibility />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    }
+                                    label={t('COMMON.UPDATE_PASSWORD.CONFIRM')}
+                                />
+                            </FormControl>
+                            <Typography
+                                sx={{
+                                    color: 'var(--error-color)',
+                                    margin: '3px auto 0 12px',
+                                    width: 'auto',
+                                    fontSize: '12px',
+                                    visibility: isSubmit && password === '' ? 'visible' : 'hidden'
                                 }}
                             >
                                 {t('COMMON.TEXTFIELD.REQUIRED')}
@@ -332,7 +463,7 @@ const LoginForm: React.FC = () => {
                             variant='contained'
                             color='primary'
                             sx={{
-                                mt: '15px',
+                                mt: '20px',
                                 height: '100%',
                                 fontSize: '18px',
                                 padding: '9px',
@@ -349,7 +480,7 @@ const LoginForm: React.FC = () => {
                             }}
                             onClick={handleSubmit}
                         >
-                            {t('COMMON.REQUEST_PASSWORD.SEND_REQUEST')}
+                            {t('COMMON.UPDATE_PASSWORD.UPDATE_PASSWORD')}
                         </Button>
 
                         <Box
