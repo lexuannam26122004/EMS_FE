@@ -199,6 +199,30 @@ const Timeline: React.FC = () => {
             </Box>
             <Box
                 sx={{
+                    position: 'sticky',
+                    left: 0,
+                    right: 0,
+                    top: 112,
+                    height: '4px',
+                    backgroundColor: '#333e47',
+                    zIndex: 1,
+                    width: '100%',
+                    '&::after': {
+                        content: '""',
+                        position: 'absolute',
+                        top: '-8px',
+                        right: '-21px',
+                        width: '0',
+                        height: '0',
+                        borderTop: '10px solid transparent',
+                        borderBottom: '10px solid transparent',
+                        borderLeft: '24px solid #333e47'
+                    }
+                }}
+            />
+
+            <Box
+                sx={{
                     borderRadius: '12px',
                     marginTop: '24px',
                     backgroundColor: 'var(--hover-color)',
@@ -213,6 +237,7 @@ const Timeline: React.FC = () => {
                     overflowX: 'auto',
                     scrollBehavior: 'smooth',
                     touchAction: 'pan-x',
+                    direction: 'rtl',
                     '&::-webkit-scrollbar': {
                         height: '8px' // Độ cao thanh cuộn
                     },
@@ -225,29 +250,6 @@ const Timeline: React.FC = () => {
                     }
                 }}
             >
-                <Box
-                    sx={{
-                        position: 'sticky',
-                        left: 0,
-                        right: 0,
-                        height: '4px',
-                        backgroundColor: '#333e47',
-                        zIndex: 1,
-                        width: '100%',
-                        '&::after': {
-                            content: '""',
-                            position: 'absolute',
-                            top: '-8px',
-                            right: '-21px', // Adjust to position the arrow properly
-                            width: '0',
-                            height: '0',
-                            borderTop: '10px solid transparent',
-                            borderBottom: '10px solid transparent',
-                            borderLeft: '24px solid #333e47' // Color matches the background color of the box
-                        }
-                    }}
-                />
-
                 <Box
                     sx={{
                         display: 'flex',
@@ -276,7 +278,7 @@ const Timeline: React.FC = () => {
                                     height: '20px',
                                     backgroundColor: event.color,
                                     borderRadius: '50%',
-                                    border: '2px solid #333e47',
+                                    border: '4px solid #333e47',
                                     zIndex: 2,
                                     marginBottom: '10px' // Khoảng cách giữa chấm và nội dung
                                 }}

@@ -4,10 +4,11 @@ import { Box, Avatar } from '@mui/material'
 
 import React, { useState, useEffect } from 'react'
 import { useGetAuthMeQuery } from '@/services/AuthService'
-import Employee from './Employee/Employee'
-import Contract from './Employee/Contract'
-import JobHistory from './Employee/JobHistory'
-import Test from './Employee/test'
+import Employee from './employee/Employee'
+import Contract from './employee/Contract'
+import JobHistory from './employee/JobHistory'
+import Department from './employee/Department'
+import Career from './employee/Career'
 
 const DetailModal = () => {
     const [backgroundImageUrl, setBackgroundImageUrl] = useState('')
@@ -186,7 +187,7 @@ const DetailModal = () => {
                         </Box>
                     </Box>
 
-                    <Test />
+                    <Department />
 
                     <Box
                         sx={{
@@ -218,7 +219,7 @@ const DetailModal = () => {
                                 gap: '24px'
                             }}
                         >
-                            <JobHistory />
+                            <Career />
                         </Box>
                     </Box>
                 </Box>

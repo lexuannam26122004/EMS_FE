@@ -229,7 +229,7 @@ const App: React.FC = () => {
                     borderRadius: '12px'
                 }}
             >
-                {t('COMMON.SIDEBAR.WORKHISTORY')}
+                {t('Lịch sử thăng tiến')}
             </Box>
 
             <Box
