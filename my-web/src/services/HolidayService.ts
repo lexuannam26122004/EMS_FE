@@ -1,8 +1,8 @@
-import { IHolidayCreate, IHolidayGetAll } from '@/models/Holiday'
-import { IFilterSysConfiguration } from '@/models/SysConfiguration'
+import { IEventCreate, IEventUpdate, IFilterEvent } from '@/models/Event'
+
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-interface HolidayResponse {
+interface IEventResponse {
     Success: boolean
     Data: any
 }
@@ -30,25 +30,21 @@ export const holidayApi = createApi({
         // }),
 
         // Mutation endpoint to create a new holiday
-        createHoliday: builder.mutation<void, IHolidayCreate>({
-            // Makes POST request to /Create with holiday data
-            query: holiday => ({
-                url: 'Create',
+        createHoliday: builder.mutation<void, IEventCreate>({
+            query: body => ({
+                url: `Create`,
                 method: 'POST',
-                body: holiday
+                body: body
             }),
-            // Invalidates 'Holiday' cache so list refreshes
             invalidatesTags: ['Holiday']
         }),
 
         // Mutation endpoint to delete a holiday by ID
         deleteHoliday: builder.mutation<void, number>({
-            // Makes DELETE request to /Remove/{id}
             query: id => ({
                 url: `Remove/${id}`,
                 method: 'DELETE'
             }),
-            // Invalidates 'Holiday' cache so list refreshes
             invalidatesTags: ['Holiday']
         }),
         deleteManyHoliday: builder.mutation<void, number[]>({
@@ -61,24 +57,25 @@ export const holidayApi = createApi({
             // Invalidates 'Holiday' cache so list refreshes
             invalidatesTags: ['Holiday']
         }),
-        updateHoliday: builder.mutation<void, IHolidayGetAll>({
-            query: holiday => ({
-                url: 'Update',
-                method: 'Put',
-                body: holiday
+        updateHoliday: builder.mutation<void, IEventUpdate>({
+            query: body => ({
+                url: `Update`,
+                method: 'PUT',
+                body: body
             }),
             invalidatesTags: ['Holiday']
         }),
-        getAllHoliday: builder.query<HolidayResponse, IFilterSysConfiguration>({
+        getByIdEvent: builder.query<IEventResponse, number>({
+            query: id => `GetById?id=${id}`,
+            providesTags: ['Holiday']
+        }),
+        getAllHoliday: builder.query<IEventResponse, IFilterEvent>({
             query: filter => {
                 const params = new URLSearchParams()
 
                 if (filter) {
-                    if (filter.createdBy) params.append('CreatedBy', filter.createdBy)
-                    if (filter.createdDate) params.append('CreatedDate', filter.createdDate.toDateString())
                     if (filter.pageSize) params.append('PageSize', filter.pageSize.toString())
                     if (filter.pageNumber) params.append('PageNumber', filter.pageNumber.toString())
-                    if (filter.isActive !== undefined) params.append('IsActive', filter.isActive.toString())
                     if (filter.keyword) params.append('Keyword', filter.keyword)
                     if (filter.isDescending !== undefined) params.append('IsDescending', filter.isDescending.toString())
                     if (filter.sortBy) params.append('SortBy', filter.sortBy)
@@ -86,7 +83,7 @@ export const holidayApi = createApi({
 
                 return `GetAll?${params.toString()}`
             },
-            providesTags: ['Holiday'] // Thêm providesTags để cập nhật cache
+            providesTags: ['Holiday']
         })
     })
 })

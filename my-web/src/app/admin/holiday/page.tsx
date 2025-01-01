@@ -28,7 +28,15 @@ import {
     TextField,
     InputAdornment,
     Tooltip,
-    TableSortLabel
+    TableSortLabel,
+    FormControlLabel,
+    Switch,
+    SwitchProps,
+    styled,
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    DialogActions
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -39,6 +47,93 @@ import { userSentNotificationId } from '@/utils/globalVariables'
 
 import { useCreateNotificationMutation } from '@/services/NotificationsService'
 import { useToast } from '@/hooks/useToast'
+import { IFilterEvent } from '@/models/Event'
+import { format, toZonedTime } from 'date-fns-tz'
+import dayjs from 'dayjs'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers'
+import { useSelector } from 'react-redux'
+import { authSelector } from '@/redux/slices/authSlice'
+
+const IOSSwitch = styled((props: SwitchProps) => (
+    <Switch focusVisibleClassName='.Mui-focusVisible' disableRipple {...props} />
+))(({ theme }) => ({
+    width: 40,
+    height: 24,
+    padding: 0,
+    '& .MuiSwitch-switchBase': {
+        padding: 0,
+        margin: 2,
+        transitionDuration: '300ms',
+        '&.Mui-checked': {
+            transform: 'translateX(16px)',
+            color: '#fff',
+            '& + .MuiSwitch-track': {
+                backgroundColor: '#65C466',
+                opacity: 1,
+                border: 0,
+                ...theme.applyStyles('dark', {
+                    backgroundColor: '#2ECA45'
+                })
+            },
+            '&.Mui-disabled + .MuiSwitch-track': {
+                opacity: 0.5
+            }
+        },
+        '&.Mui-focusVisible .MuiSwitch-thumb': {
+            color: '#33cf4d',
+            border: '6px solid #fff'
+        },
+        '&.Mui-disabled .MuiSwitch-thumb': {
+            color: theme.palette.grey[100],
+            ...theme.applyStyles('dark', {
+                color: theme.palette.grey[600]
+            })
+        },
+        '&.Mui-disabled + .MuiSwitch-track': {
+            opacity: 0.7,
+            ...theme.applyStyles('dark', {
+                opacity: 0.3
+            })
+        }
+    },
+    '& .MuiSwitch-thumb': {
+        boxSizing: 'border-box',
+        width: 20,
+        height: 20
+    },
+    '& .MuiSwitch-track': {
+        borderRadius: 26 / 2,
+        backgroundColor: 'var(--background-switch)',
+        opacity: 1,
+        transition: theme.transitions.create(['background-color'], {
+            duration: 500
+        }),
+        ...theme.applyStyles('dark', {
+            backgroundColor: '#39393D'
+        })
+    }
+}))
+
+const convertToVietnamTime = (date: Date) => {
+    // Đảm bảo date là hợp lệ
+    if (isNaN(date.getTime())) {
+        throw new Error('Invalid Date')
+    }
+
+    // Múi giờ Việt Nam
+    const timeZone = 'Asia/Ho_Chi_Minh'
+
+    // Chuyển thời gian từ UTC sang thời gian theo múi giờ Việt Nam
+    const vietnamTime = toZonedTime(date, timeZone)
+
+    // Định dạng thời gian theo kiểu ISO (YYYY-MM-DDTHH:mm:ss)
+    const formattedDate = format(vietnamTime, "yyyy-MM-dd'T'HH:mm:ss")
+
+    return formattedDate // Trả về thời gian đã được định dạng
+}
 
 function HolidayPage() {
     const { t } = useTranslation('common')
@@ -56,12 +151,21 @@ function HolidayPage() {
     const [order, setOrder] = useState<'asc' | 'desc'>('asc')
     const [orderBy, setOrderBy] = useState<string>('')
     const [name, setName] = useState('')
-    const [startDate, setStartDate] = useState('')
-    const [endDate, setEndDate] = useState('')
+    const [startDate, setStartDate] = useState<Date | null>(null)
+    const [endDate, setEndDate] = useState<Date | null>(null)
     const [note, setNote] = useState('')
-    const [filter, setFilter] = useState<IFilterSysConfiguration>({
+    const [allDay, setAllDay] = useState(false)
+    const [color] = useState('#ea0000')
+    const [isHoliday] = useState(true)
+    const [isOpenModalDetail, setIsOpenModalDetail] = useState(false)
+    const menuLeft = useSelector(authSelector)
+
+    const [filter, setFilter] = useState<IFilterEvent>({
         pageSize: 10,
-        pageNumber: 1
+        pageNumber: 1,
+        sortBy: 'Id',
+        isDescending: false,
+        keyword: ''
     })
 
     const { data: responseData, isFetching, refetch } = useGetAllHolidayQuery(filter)
@@ -72,13 +176,13 @@ function HolidayPage() {
     const [createNotification, { isError: isErrorCreate, isSuccess: isSuccessCreate }] = useCreateNotificationMutation()
 
     useEffect(() => {
-        if (isSuccess === true && isSuccessCreate === true) {
+        if (isSuccessCreate === true) {
             toast(t('COMMON.HOLIDAY.ACTION_HOLIDAY.CREATE_SUCCESS'), 'success')
         }
-        if (isError === true && isErrorCreate === true) {
+        if (isErrorCreate === true) {
             toast(t('COMMON.HOLIDAY.ACTION_HOLIDAY.CREATE_ERROR'), 'error')
         }
-    }, [isSuccess, isError, isSuccessCreate, isErrorCreate])
+    }, [isSuccessCreate, isErrorCreate])
 
     const holidayData = responseData?.Data.Records as IHolidayGetAll[]
     const totalRecords = responseData?.Data.TotalRecords as number
@@ -91,46 +195,38 @@ function HolidayPage() {
 
     const handleSave = async () => {
         setIsSubmit(true)
-        if (name === '' || startDate === '' || endDate === '' || new Date(endDate) < new Date(startDate)) {
-            alert('Ngày kết thúc phải lớn hơn hoặc bằng ngày bắt đầu.')
+        if (name.trim() === '' || startDate === null || endDate === null || startDate > endDate || note.trim() === '') {
             return
         }
 
         try {
-            const StartDate = new Date(startDate)
-            const EndDate = new Date(endDate)
-            const formattedStartDate = StartDate.toLocaleDateString() // Định dạng ngày
-            const formattedEndDate = EndDate.toLocaleDateString() // Định dạng ngày
-            const Note =
-                StartDate > EndDate
-                    ? String(note) +
-                      ' ' +
-                      t('COMMON.HOLIDAY.FROM') +
-                      formattedStartDate +
-                      ' ' +
-                      t('COMMON.HOLIDAY.TO') +
-                      formattedEndDate
-                    : String(note) + ' ' + t('COMMON.HOLIDAY.LEAVE') + formattedStartDate
+            const startTime = convertToVietnamTime(startDate)
+            const endTime = convertToVietnamTime(endDate)
 
             if (selectedRow) {
                 await updateHoliday({
                     Id: selectedRow, // ID của bản ghi cần cập nhật
-                    Name: name,
-                    StartDate: StartDate,
-                    EndDate: EndDate,
-                    Note: note || ''
+                    Title: name,
+                    StartDate: startTime,
+                    EndDate: endTime,
+                    Description: note,
+                    Color: color,
+                    AllDay: allDay
                 }).unwrap() // unwrap để xử lý lỗi nếu có
             } else {
                 // Nếu không có selectedRow, tức là đang tạo mới
                 await createHoliday({
-                    Name: name,
-                    StartDate: StartDate,
-                    EndDate: EndDate,
-                    Note: note || ''
+                    Title: name,
+                    StartDate: startTime,
+                    EndDate: endTime,
+                    IsHoliday: isHoliday,
+                    Description: note,
+                    Color: color,
+                    AllDay: allDay
                 }).unwrap()
                 const data = {
                     Type: 'Holiday',
-                    Content: Note,
+                    Content: note,
                     Title: name,
                     ListUser: [],
                     ListFile: [],
@@ -154,9 +250,10 @@ function HolidayPage() {
 
     const setDialog = () => {
         setName('')
-        setStartDate('')
-        setEndDate('')
+        setStartDate(null)
+        setEndDate(null)
         setNote('')
+        setAllDay(false)
     }
 
     useEffect(() => {
@@ -168,12 +265,28 @@ function HolidayPage() {
     const handleUpdate = async (holiday: IHolidayGetAll) => {
         const startDate = typeof holiday.StartDate === 'string' ? new Date(holiday.StartDate) : holiday.StartDate
         const endDate = typeof holiday.EndDate === 'string' ? new Date(holiday.EndDate) : holiday.EndDate
-        setName(holiday.Name)
-        setStartDate(startDate.toISOString().split('T')[0]) // Chuyển đổi sang định dạng YYYY-MM-DD
-        setEndDate(endDate.toISOString().split('T')[0]) // Chuyển đổi sang định dạng YYYY-MM-DD
-        setNote(holiday.Note || '') // Ghi chú có thể null
+        setName(holiday.Title)
+        setStartDate(startDate) // Chuyển đổi sang định dạng YYYY-MM-DD
+        setEndDate(endDate) // Chuyển đổi sang định dạng YYYY-MM-DD
+        setNote(holiday.Description || '')
+        setAllDay(false)
         setSelectedRow(holiday.Id) // Lưu ID của bản ghi đang chỉnh sửa
         setIsOpen(true) // Mở dialog
+    }
+
+    const handleDetail = async (holiday: IHolidayGetAll) => {
+        const startDate = typeof holiday.StartDate === 'string' ? new Date(holiday.StartDate) : holiday.StartDate
+        const endDate = typeof holiday.EndDate === 'string' ? new Date(holiday.EndDate) : holiday.EndDate
+        setIsOpenModalDetail(true)
+        setName(holiday.Title)
+        setStartDate(startDate)
+        setEndDate(endDate)
+        setNote(holiday.Description || '')
+    }
+
+    const handleCloseModalDetail = () => {
+        setIsOpenModalDetail(false)
+        setDialog()
     }
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -183,7 +296,9 @@ function HolidayPage() {
             setSelected([])
         }
     }
-
+    const handleAllDayChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setAllDay(event.target.checked)
+    }
     const handleChangePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
         setPage(newPage)
         setFilter(prev => {
@@ -404,26 +519,28 @@ function HolidayPage() {
                             {t('COMMON.BUTTON.DELETE')}
                         </Button>
 
-                        <Button
-                            variant='contained'
-                            startIcon={<CirclePlus />}
-                            sx={{
-                                height: '53px',
-                                backgroundColor: 'var(--button-color)',
-                                width: 'auto',
-                                padding: '0px 30px',
-                                '&:hover': {
-                                    backgroundColor: 'var(--hover-button-color)'
-                                },
-                                fontSize: '16px',
-                                fontWeight: 'bold',
-                                whiteSpace: 'nowrap',
-                                textTransform: 'none'
-                            }}
-                            onClick={() => handleOpenCreateDialog()}
-                        >
-                            {t('COMMON.BUTTON.CREATE')}
-                        </Button>
+                        {menuLeft['/admin/holiday'].IsAllowCreate && (
+                            <Button
+                                variant='contained'
+                                startIcon={<CirclePlus />}
+                                sx={{
+                                    height: '53px',
+                                    backgroundColor: 'var(--button-color)',
+                                    width: 'auto',
+                                    padding: '0px 30px',
+                                    '&:hover': {
+                                        backgroundColor: 'var(--hover-button-color)'
+                                    },
+                                    fontSize: '16px',
+                                    fontWeight: 'bold',
+                                    whiteSpace: 'nowrap',
+                                    textTransform: 'none'
+                                }}
+                                onClick={() => handleOpenCreateDialog()}
+                            >
+                                {t('COMMON.BUTTON.CREATE')}
+                            </Button>
+                        )}
                     </Box>
                 </Box>
 
@@ -594,7 +711,7 @@ function HolidayPage() {
                                         />
                                     </TableCell>
                                     <TableCell>{row.Id}</TableCell>
-                                    <TableCell>{row.Name}</TableCell>
+                                    <TableCell>{row.Title}</TableCell>
                                     <TableCell>{formatDate(row.StartDate.toString())}</TableCell>
                                     <TableCell>{formatDate(row.EndDate.toString())}</TableCell>
                                     <TableCell
@@ -607,7 +724,7 @@ function HolidayPage() {
                                             whiteSpace: 'nowrap'
                                         }}
                                     >
-                                        {row.Note}
+                                        {row.Description}
                                     </TableCell>
                                     <TableCell>
                                         <Box
@@ -631,6 +748,7 @@ function HolidayPage() {
                                                             backgroundColor: 'var(--hover-color)'
                                                         }
                                                     }}
+                                                    onClick={() => handleDetail(row)}
                                                 >
                                                     <EyeIcon />
                                                 </Box>
@@ -879,99 +997,108 @@ function HolidayPage() {
                                     {t('COMMON.TEXTFIELD.REQUIRED')}
                                 </Typography>
                             </Box>
-                            <Box>
-                                <TextField
-                                    variant='outlined'
-                                    label={t('COMMON.HOLIDAY.ACTION_HOLIDAY.START_DATE')}
-                                    fullWidth
-                                    type='date'
-                                    InputLabelProps={{ shrink: true }}
-                                    {...(isSubmit && startDate === '' && { error: true })}
-                                    sx={{
+                            <FormControlLabel
+                                sx={{
+                                    mt: '0px',
+                                    ml: '-8px',
+                                    mb: '20px',
+                                    '& .MuiFormControlLabel-label': {
                                         color: 'var(--text-color)',
-                                        '& fieldset': {
-                                            borderRadius: '8px',
-                                            color: 'var(--text-color)',
-                                            borderColor: 'var(--border-color)'
-                                        },
-                                        '& .MuiInputBase-root': { paddingRight: '0px' },
-                                        '& .MuiInputBase-input': {
-                                            color: 'var(--text-color)',
-                                            fontSize: '16px'
-                                        },
-                                        '& .MuiOutlinedInput-root:hover fieldset': {
-                                            borderColor: 'var(--hover-color)'
-                                        },
-                                        '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                            borderColor: 'var(--selected-color)'
-                                        },
-                                        '& .MuiInputLabel-root': {
-                                            color: 'var(--text-label-color)'
-                                        },
-                                        '& .MuiInputLabel-root.Mui-focused': {
-                                            color: 'var(--selected-color)'
-                                        }
-                                    }}
-                                    value={startDate}
-                                    onChange={e => setStartDate(e.target.value)}
-                                />
-                                <Typography
-                                    sx={{
-                                        color: 'red',
-                                        margin: '1px 0 0 10px',
-                                        fontSize: '12px',
-                                        visibility: isSubmit && startDate === '' ? 'visible' : 'hidden'
-                                    }}
-                                >
-                                    {t('COMMON.TEXTFIELD.REQUIRED')}
-                                </Typography>
+                                        fontSize: '16px'
+                                    }
+                                }}
+                                control={
+                                    <IOSSwitch sx={{ m: 1, mr: 2 }} onChange={handleAllDayChange} checked={allDay} />
+                                }
+                                label={t('COMMON.CALENDAR.ALL_DAY')}
+                            />
+
+                            <Box>
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DateTimePicker
+                                        label={t('COMMON.HOLIDAY.START_DATE')}
+                                        value={dayjs(startDate)}
+                                        onChange={value => setStartDate(value?.toDate() || new Date())}
+                                        viewRenderers={{
+                                            hours: renderTimeViewClock,
+                                            minutes: renderTimeViewClock,
+                                            seconds: renderTimeViewClock
+                                        }}
+                                        sx={{
+                                            width: '100%',
+                                            '& .MuiInputBase-root': {
+                                                color: 'var(--text-color)'
+                                            },
+                                            '& .MuiInputLabel-root': {
+                                                color: 'var(--text-label-color)'
+                                            },
+                                            '& .MuiOutlinedInput-notchedOutline': {
+                                                borderRadius: '8px',
+                                                borderColor: 'var(--border-dialog)'
+                                            },
+                                            '& .MuiSvgIcon-root': {
+                                                color: 'var(--text-label-color)' // Màu của icon (lịch)
+                                            },
+                                            '& .MuiOutlinedInput-root': {
+                                                '&:hover .MuiOutlinedInput-notchedOutline': {
+                                                    borderColor: 'var(--hover-field-color)' // Màu viền khi hover
+                                                },
+                                                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                    borderColor: 'var(--selected-field-color) !important' // Màu viền khi focus, thêm !important để ghi đè
+                                                }
+                                            },
+                                            '& .MuiInputLabel-root.Mui-focused': {
+                                                color: 'var(--selected-field-color)'
+                                            }
+                                        }}
+                                    />
+                                </LocalizationProvider>
                             </Box>
-                            <Box>
-                                <TextField
-                                    variant='outlined'
-                                    label={t('COMMON.HOLIDAY.ACTION_HOLIDAY.END_DATE')}
-                                    fullWidth
-                                    type='date'
-                                    InputLabelProps={{ shrink: true }}
-                                    {...(isSubmit && endDate === '' && { error: true })}
-                                    sx={{
-                                        color: 'var(--text-color)',
-                                        '& fieldset': {
-                                            borderRadius: '8px',
-                                            color: 'var(--text-color)',
-                                            borderColor: 'var(--border-color)'
-                                        },
-                                        '& .MuiInputBase-root': { paddingRight: '0px' },
-                                        '& .MuiInputBase-input': {
-                                            color: 'var(--text-color)',
-                                            fontSize: '16px'
-                                        },
-                                        '& .MuiOutlinedInput-root:hover fieldset': {
-                                            borderColor: 'var(--hover-color)'
-                                        },
-                                        '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                            borderColor: 'var(--selected-color)'
-                                        },
-                                        '& .MuiInputLabel-root': {
-                                            color: 'var(--text-label-color)'
-                                        },
-                                        '& .MuiInputLabel-root.Mui-focused': {
-                                            color: 'var(--selected-color)'
-                                        }
-                                    }}
-                                    value={endDate}
-                                    onChange={e => setEndDate(e.target.value)}
-                                />
-                                <Typography
-                                    sx={{
-                                        color: 'red',
-                                        margin: '1px 0 0 10px',
-                                        fontSize: '12px',
-                                        visibility: isSubmit && endDate === '' ? 'visible' : 'hidden'
-                                    }}
-                                >
-                                    {t('COMMON.TEXTFIELD.REQUIRED')}
-                                </Typography>
+
+                            <Box
+                                sx={{
+                                    mt: '26px'
+                                }}
+                            >
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DateTimePicker
+                                        label={t('COMMON.HOLIDAY.END_DATE')}
+                                        value={dayjs(endDate)}
+                                        onChange={value => setEndDate(value?.toDate() || new Date())}
+                                        viewRenderers={{
+                                            hours: renderTimeViewClock,
+                                            minutes: renderTimeViewClock,
+                                            seconds: renderTimeViewClock
+                                        }}
+                                        sx={{
+                                            width: '100%',
+                                            '& .MuiInputBase-root': {
+                                                color: 'var(--text-color)'
+                                            },
+                                            '& .MuiInputLabel-root': {
+                                                color: 'var(--text-label-color)'
+                                            },
+                                            '& .MuiOutlinedInput-notchedOutline': {
+                                                borderRadius: '8px',
+                                                borderColor: 'var(--border-dialog)'
+                                            },
+                                            '& .MuiSvgIcon-root': {
+                                                color: 'var(--text-label-color)' // Màu của icon (lịch)
+                                            },
+                                            '& .MuiOutlinedInput-root': {
+                                                '&:hover .MuiOutlinedInput-notchedOutline': {
+                                                    borderColor: 'var(--hover-field-color)' // Màu viền khi hover
+                                                },
+                                                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                    borderColor: 'var(--selected-field-color) !important' // Màu viền khi focus, thêm !important để ghi đè
+                                                }
+                                            },
+                                            '& .MuiInputLabel-root.Mui-focused': {
+                                                color: 'var(--selected-field-color)'
+                                            }
+                                        }}
+                                    />
+                                </LocalizationProvider>
                             </Box>
                             <TextField
                                 variant='outlined'
@@ -1061,6 +1188,26 @@ function HolidayPage() {
                     </Box>
                 </Box>
             )}
+
+            <Dialog open={isOpenModalDetail} onClose={() => handleCloseModalDetail()}>
+                <DialogTitle style={{ color: color }}>{name}</DialogTitle>
+                <DialogContent>
+                    <Typography>
+                        <strong>Start Date:</strong> {new Date(startDate).toLocaleDateString()}
+                    </Typography>
+                    <Typography>
+                        <strong>End Date:</strong> {new Date(endDate).toLocaleDateString()}
+                    </Typography>
+                    <Typography sx={{ whiteSpace: 'normal', wordWrap: 'break-word' }}>
+                        <strong>Description:</strong> {note}
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => handleCloseModalDetail()} color='primary'>
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     )
 }
