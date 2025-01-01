@@ -18,7 +18,7 @@ const DetailModal = () => {
         setBackgroundImageUrl(newBackgroundImageUrl)
     }, [])
 
-    const { data: responseData, isFetching: isFetchingGetMe, refetch } = useGetAuthMeQuery()
+    const { data: responseData } = useGetAuthMeQuery()
     const user = responseData?.Data || null
 
     return (

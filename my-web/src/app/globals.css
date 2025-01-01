@@ -112,6 +112,8 @@ body {
     --attendance-bg1: #1c252e;
     --attendance-bg2: #2d3945;
     --attendance-bg3: #3f5060;
+    --loader0: #132025;
+    --loader1: #0f3132;
 }
 
 .light {
@@ -197,9 +199,11 @@ body {
     --bg-item-attendance: #f1f4f982;
     --box-shadow-paper: 0 0 2px 0 rgba(145 158 171 / 0.2), 0 12px 24px -4px rgba(145 158 171 / 0.12);
     --palette-background-defaultChannel: rgba(255, 255, 255, 0.92);
-    --attendance-bg1: #212327;
-    --attendance-bg2: #37393d;
-    --attendance-bg3: #4b4d50;
+    --attendance-bg1: #fff; /* #f3fffc;*/
+    --attendance-bg2: #d9fef1;
+    --attendance-bg3: #a0ffde;
+    --loader0: #cdf0ed;
+    --loader1: #9aebdf;
 }
 
 body {

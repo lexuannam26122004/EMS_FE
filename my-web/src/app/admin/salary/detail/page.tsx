@@ -71,16 +71,34 @@ function GetAllSalaryPage() {
     const [keyword, setKeyword] = useState('')
     const [isChangeMany, setIsChangeMany] = useState(false)
     const [openDialog, setOpenDialog] = useState(false)
-    const [selectedRow, setSelectedRow] = useState<string | null>(null)
+    // const [selectedRow, setSelectedRow] = useState<string | null>(null)
     const [order, setOrder] = useState<'asc' | 'desc'>('asc')
     const [orderBy, setOrderBy] = useState<string>('')
     const [filter, setFilter] = useState<IFilterSysConfiguration>({
         pageSize: 10,
         pageNumber: 1
     })
-    const [progress, setProgress] = useState(50)
+    const [progress] = useState(50)
 
-    const { data: periodData, isFetching: periodFetching, isError } = useGetPeriodQuery()
+    useEffect(() => {}, [
+        progress,
+        page,
+        rowsPerPage,
+        from,
+        setRowsPerPage,
+        setIsChangeMany,
+        setFrom,
+        setTo,
+        to,
+        keyword,
+        isChangeMany,
+        openDialog,
+        order,
+        orderBy,
+        filter
+    ])
+
+    const { data: periodData, isFetching: periodFetching } = useGetPeriodQuery()
     const periodList = periodData?.Data || []
     const [period, setPeriod] = useState<string>()
 
@@ -106,7 +124,7 @@ function GetAllSalaryPage() {
 
     const salaryData = Array.isArray(responseData?.Data.Records) ? (responseData.Data.Records as ISalaryGetAll[]) : []
     useEffect(() => {}, [salaryData])
-    const totalRecords = responseData?.Data.TotalRecords as number
+    // const totalRecords = responseData?.Data.TotalRecords as number
 
     const isSelected = (id: string) => selected.includes(id)
 

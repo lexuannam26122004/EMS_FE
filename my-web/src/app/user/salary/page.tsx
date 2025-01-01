@@ -13,7 +13,7 @@ interface EmployeeSalaryProps {
     department: string
 }
 
-const StyledCard = styled(Card)(({ theme }) => ({}))
+const StyledCard = styled(Card)(() => ({}))
 
 const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({
     avatarUrl,

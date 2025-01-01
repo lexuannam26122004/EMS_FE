@@ -7,7 +7,6 @@ import {
     useCreateHolidayMutation,
     useDeleteManyHolidayMutation
 } from '@/services/HolidayService'
-import { IFilterSysConfiguration } from '@/models/SysConfiguration'
 import { formatDate } from '@/utils/formatDate'
 import {
     Box,
@@ -170,7 +169,7 @@ function HolidayPage() {
 
     const { data: responseData, isFetching, refetch } = useGetAllHolidayQuery(filter)
     const [deleteHoliday, { isSuccess: isSuccessDelete }] = useDeleteHolidayMutation()
-    const [createHoliday, { isSuccess, isError }] = useCreateHolidayMutation()
+    const [createHoliday, { isSuccess }] = useCreateHolidayMutation()
     const [updateHoliday] = useUpdateHolidayMutation()
     const [deleteManyHoliday, { isSuccess: isSuccessDeleteMany }] = useDeleteManyHolidayMutation()
     const [createNotification, { isError: isErrorCreate, isSuccess: isSuccessCreate }] = useCreateNotificationMutation()

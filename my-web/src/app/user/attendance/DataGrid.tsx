@@ -200,7 +200,7 @@ function DataGrid(props: DataGridProps) {
                             <Typography sx={{ fontSize: '14px', color: 'var(--sub-title-color)' }}>
                                 {t('COMMON.USER.CHECK_IN_TIME')}
                             </Typography>
-                            <Typography sx={{ mt: '5px', fontSize: '16px', color: '#ffda97', fontWeight: 'bold' }}>
+                            <Typography sx={{ mt: '5px', fontSize: '16px', color: '#ffbc42', fontWeight: 'bold' }}>
                                 {row.CheckInTime}
                             </Typography>
                         </Box>
@@ -208,7 +208,7 @@ function DataGrid(props: DataGridProps) {
                             <Typography sx={{ fontSize: '14px', color: 'var(--sub-title-color)' }}>
                                 {t('COMMON.USER.CHECK_OUT_TIME')}
                             </Typography>
-                            <Typography sx={{ mt: '5px', fontSize: '16px', color: '#ff9a9a', fontWeight: 'bold' }}>
+                            <Typography sx={{ mt: '5px', fontSize: '16px', color: '#ff7373', fontWeight: 'bold' }}>
                                 {row.CheckOutTime}
                             </Typography>
                         </Box>
@@ -219,7 +219,7 @@ function DataGrid(props: DataGridProps) {
                             <Typography
                                 sx={{
                                     mt: '5px',
-                                    color: '#52f2d8',
+                                    color: '#2ef2d2',
                                     fontSize: '16px',
                                     fontStyle: 'italic',
                                     fontWeight: 'bold'
