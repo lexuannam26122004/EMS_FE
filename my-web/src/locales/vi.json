@@ -605,12 +605,34 @@
             "USERNAME": "Tên người dùng",
             "PASSWORD": "Mật khẩu",
             "FORGOT_PASSWORD": "Quên mật khẩu?",
-            "SIGN_IN": "Đăng nhập"
+            "SIGN_IN": "Đăng nhập",
+            "8_CHARACTERS": "+8 ký tự",
+            "USERNAME_PLACEHOLDER": "Nhập username hoặc email"
         },
         "USER": {
-            "TOTAL_ATTENDANCE": "Tổng số chấm công",
+            "TOTAL_ATTENDANCE": "Tổng số lần chấm công",
+            "TOTAL_LATE": "Tổng số lần đi trễ",
             "AVG_CHECK_IN": "Trung bình giờ vào",
-            "AVG_CHECK_OUT": "Trung bình giờ ra"
+            "AVG_CHECK_OUT": "Trung bình giờ ra",
+            "THIS_MONTH": "Tháng này",
+            "THIS_YEAR": "Năm nay",
+            "THIS_WEEK": "Tuần này",
+            "ATTENDANCE_HISTORY": "Lịch sử chấm công",
+            "FILTER": "Bộ lọc",
+            "START_DATE": "Từ ngày",
+            "END_DATE": "Đến ngày",
+            "CHECK_IN_TIME": "Thời gian vào",
+            "CHECK_OUT_TIME": "Thời gian ra",
+            "OVERTIME": "Làm thêm giờ",
+            "WORKING_HOURS": "Số giờ làm việc",
+            "FILTER_V": "Lọc"
+        },
+        "REQUEST_PASSWORD": {
+            "FORGOT_PASSWORD": "Bạn quên mật khẩu?",
+            "DESC": "Nhập địa chỉ email của bạn và chúng tôi sẽ gửi cho bạn một liên kết để đặt lại mật khẩu của bạn.",
+            "EMAIL_ADDRESS": "Địa chỉ Email",
+            "SEND_REQUEST": "Gửi yêu cầu",
+            "RETURN_LOGIN": "Quay lại đăng nhập"
         }
     }
 }

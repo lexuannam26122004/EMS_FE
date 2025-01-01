@@ -984,7 +984,7 @@ function Page() {
                     </Box>
                 </Box>
 
-                <TableData disciplineData={filteredData} totalRecords={totalRecords} type={currentTab} />
+                <TableData attendanceData={filteredData} type={currentTab} />
 
                 <Box display='flex' alignItems='center' justifyContent='space-between' padding='24px'>
                     <Box display='flex' alignItems='center'>
