@@ -688,7 +688,7 @@
         "UPDATE_PASSWORD": {
             "TITLE": "Request sent successfully!",
             "DESC": "Update your password to ensure your account stays secure.",
-            "PASSWORD": "Password",
+            "PASSWORD": "New Password",
             "CONFIRM": "Confirm new password",
             "UPDATE_PASSWORD": "Update password",
             "EQUAL": "Password and confirm password must match",

@@ -289,60 +289,67 @@ const LoginForm: React.FC = () => {
                                 alignItems: 'left'
                             }}
                         >
-                            <FormControl sx={{ width: '100%' }} variant='outlined'>
-                                <InputLabel
-                                    htmlFor='outlined-adornment-email'
-                                    {...(isSubmit && email === '' && { error: true })}
-                                    sx={{
-                                        color: 'var(--text-label-color)',
-                                        '&.Mui-focused': {
-                                            color: 'var(--selected-field-color)'
-                                        },
-                                        '&.Mui-error': {
-                                            color: 'var(--error-color) !important' // Màu khi có lỗi
-                                        }
-                                    }}
-                                    shrink
-                                >
-                                    {t('COMMON.REQUEST_PASSWORD.EMAIL_ADDRESS')}
-                                </InputLabel>
-                                <OutlinedInput
-                                    notched
-                                    id='outlined-adornment-email'
-                                    {...(isSubmit && email === '' && { error: true })}
-                                    autoComplete='off' // Ngăn tự động điền
-                                    placeholder={t('COMMON.REQUEST_PASSWORD.EMAIL_EXAMPLE')} // Thêm placeholder
-                                    sx={{
-                                        '& .MuiInputBase-input': {
-                                            padding: '17px 0 17px 14px',
-                                            color: 'var(--text-color)',
-                                            borderRadius: '8px',
-                                            overflow: 'hidden'
-                                        },
-                                        '& fieldset': {
-                                            borderColor: 'var(--border-color)',
-                                            borderWidth: '1px',
-                                            borderRadius: '8px',
-                                            overflow: 'hidden'
-                                        },
-                                        '&:hover fieldset': {
-                                            borderColor: 'var(--hover-field-color) !important' // Đảm bảo không bị ghi đè
-                                        },
-                                        '&.Mui-focused fieldset': {
-                                            borderColor: 'var(--selected-field-color) !important',
-                                            borderWidth: '2px' // Độ dày viền
-                                        },
-                                        '&.Mui-error:hover fieldset': {
-                                            borderColor: 'var(--error-color) !important'
-                                        },
-                                        '&.Mui-error fieldset': {
-                                            borderColor: 'var(--error-color) !important'
-                                        }
-                                    }}
-                                    label={t('COMMON.REQUEST_PASSWORD.EMAIL_ADDRESS')}
-                                    onChange={e => setEmail(e.target.value)}
-                                />
-                            </FormControl>
+                            <form autoComplete='off'>
+                                <FormControl sx={{ width: '100%' }} variant='outlined'>
+                                    <InputLabel
+                                        htmlFor='outlined-adornment-email'
+                                        {...(isSubmit && email === '' && { error: true })}
+                                        sx={{
+                                            color: 'var(--text-label-color)',
+                                            '&.Mui-focused': {
+                                                color: 'var(--selected-field-color)'
+                                            },
+                                            '&.Mui-error': {
+                                                color: 'var(--error-color) !important' // Màu khi có lỗi
+                                            }
+                                        }}
+                                        shrink
+                                    >
+                                        {t('COMMON.REQUEST_PASSWORD.EMAIL_ADDRESS')}
+                                    </InputLabel>
+                                    <OutlinedInput
+                                        notched
+                                        onKeyDown={e => {
+                                            if (e.key === 'Enter') {
+                                                handleSubmit(e)
+                                            }
+                                        }}
+                                        id='outlined-adornment-email'
+                                        {...(isSubmit && email === '' && { error: true })}
+                                        autoComplete='off' // Ngăn tự động điền
+                                        placeholder={t('COMMON.REQUEST_PASSWORD.EMAIL_EXAMPLE')} // Thêm placeholder
+                                        sx={{
+                                            '& .MuiInputBase-input': {
+                                                padding: '17px 0 17px 14px',
+                                                color: 'var(--text-color)',
+                                                borderRadius: '8px',
+                                                overflow: 'hidden'
+                                            },
+                                            '& fieldset': {
+                                                borderColor: 'var(--border-color)',
+                                                borderWidth: '1px',
+                                                borderRadius: '8px',
+                                                overflow: 'hidden'
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: 'var(--hover-field-color) !important' // Đảm bảo không bị ghi đè
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: 'var(--selected-field-color) !important',
+                                                borderWidth: '2px' // Độ dày viền
+                                            },
+                                            '&.Mui-error:hover fieldset': {
+                                                borderColor: 'var(--error-color) !important'
+                                            },
+                                            '&.Mui-error fieldset': {
+                                                borderColor: 'var(--error-color) !important'
+                                            }
+                                        }}
+                                        label={t('COMMON.REQUEST_PASSWORD.EMAIL_ADDRESS')}
+                                        onChange={e => setEmail(e.target.value)}
+                                    />
+                                </FormControl>
+                            </form>
                             <Typography
                                 sx={{
                                     color: 'var(--error-color)',
@@ -380,9 +387,14 @@ const LoginForm: React.FC = () => {
                                     }}
                                     shrink
                                 >
-                                    {t('COMMON.LOGIN.PASSWORD')}
+                                    {t('COMMON.UPDATE_PASSWORD.PASSWORD')}
                                 </InputLabel>
                                 <OutlinedInput
+                                    onKeyDown={e => {
+                                        if (e.key === 'Enter') {
+                                            handleSubmit(e)
+                                        }
+                                    }}
                                     placeholder={t('COMMON.LOGIN.8_CHARACTERS')}
                                     notched
                                     id='outlined-adornment-password'
@@ -433,7 +445,7 @@ const LoginForm: React.FC = () => {
                                             </IconButton>
                                         </InputAdornment>
                                     }
-                                    label={t('COMMON.LOGIN.PASSWORD')}
+                                    label={t('COMMON.UPDATE_PASSWORD.PASSWORD')}
                                 />
                             </FormControl>
                             <Typography
@@ -478,6 +490,11 @@ const LoginForm: React.FC = () => {
                                 </InputLabel>
                                 <OutlinedInput
                                     notched
+                                    onKeyDown={e => {
+                                        if (e.key === 'Enter') {
+                                            handleSubmit(e)
+                                        }
+                                    }}
                                     id='outlined-adornment-newPassword'
                                     {...(isSubmit &&
                                         (newPassword === '' || password !== newPassword) && { error: true })}

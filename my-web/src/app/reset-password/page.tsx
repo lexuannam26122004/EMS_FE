@@ -306,6 +306,11 @@ const LoginForm: React.FC = () => {
                                 </InputLabel>
                                 <OutlinedInput
                                     notched
+                                    onKeyDown={e => {
+                                        if (e.key === 'Enter') {
+                                            handleSubmit(e)
+                                        }
+                                    }}
                                     id='outlined-adornment-email'
                                     {...(isSubmit && email === '' && { error: true })}
                                     autoComplete='off' // Ngăn tự động điền

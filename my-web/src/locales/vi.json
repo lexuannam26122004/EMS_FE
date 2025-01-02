@@ -655,7 +655,7 @@
         "UPDATE_PASSWORD": {
             "TITLE": "Yêu cầu đã được gửi thành công!",
             "DESC": "Cập nhật mật khẩu của bạn để đảm bảo tài khoản của bạn được an toàn.",
-            "PASSWORD": "Mật khẩu",
+            "PASSWORD": "Mật khẩu mới",
             "CONFIRM": "Xác nhận mật khẩu mới",
             "UPDATE_PASSWORD": "Cập nhật mật khẩu",
             "EQUAL": "Mật khẩu và xác nhận mật khẩu phải trùng khớp",
