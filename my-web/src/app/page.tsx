@@ -2,34 +2,46 @@
 import { Box } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import React, { useState, useEffect } from 'react'
-import Image from 'next/image'
+
+
+const sections = [
+    { label: 'Trang chủ', scrollPercentage: 0 },       
+    { label: 'Giới thiệu', scrollPercentage: 30 },     
+    { label: 'Lợi ích', scrollPercentage: 60 },        
+    { label: 'Liên hệ', scrollPercentage: 100 }         
+];
 
 const Navbar: React.FC = () => {
-    const [isVisible, setIsVisible] = useState(true)
-    const [prevScrollPos, setPrevScrollPos] = useState(0)
-    const router = useRouter()
+    const [isVisible, setIsVisible] = useState(true);
+    const [prevScrollPos, setPrevScrollPos] = useState(0);
+    const router = useRouter();
+
     useEffect(() => {
         const handleScroll = () => {
-            const currentScrollPos = window.pageYOffset
-            if (currentScrollPos > prevScrollPos) {
-                setIsVisible(false)
-            } else {
-                setIsVisible(true)
-            }
-            setPrevScrollPos(currentScrollPos)
-        }
-        window.addEventListener('scroll', handleScroll)
-        return () => {
-            window.removeEventListener('scroll', handleScroll)
-        }
-    }, [prevScrollPos])
+            const currentScrollPos = window.pageYOffset;
+            setIsVisible(currentScrollPos <= prevScrollPos);
+            setPrevScrollPos(currentScrollPos);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [prevScrollPos]);
+
+    const handleScrollToSection = (percentage: number) => {
+        const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const targetScrollPos = (scrollHeight * percentage) / 100;
+        window.scrollTo({
+            top: targetScrollPos,
+            behavior: 'smooth'
+        });
+    };
 
     return (
         <div
             style={{
                 position: 'fixed',
                 top: isVisible ? '30px' : '-100px',
-                left: 700,
+                left: '700px',
                 width: '50%',
                 height: '80px',
                 backgroundColor: 'white',
@@ -70,89 +82,25 @@ const Navbar: React.FC = () => {
                     gap: '30px'
                 }}
             >
-                <li>
-                    <a
-                        style={{
-                            textDecoration: 'none',
-                            color: '#333',
-                            fontSize: '16px',
-                            fontWeight: '500',
-                            borderRadius: '8px',
-                            cursor: 'pointer'
-                        }}
-                        onClick={() => {
-                            window.scrollTo({
-                                top: 0,
-                                behavior: 'smooth'
-                            })
-                        }}
-                    >
-                        Trang chủ
-                    </a>
-                </li>
-                <li>
-                    <a
-                        style={{
-                            textDecoration: 'none',
-                            color: '#333',
-                            fontSize: '16px',
-                            fontWeight: '500',
-                            borderRadius: '8px',
-                            cursor: 'pointer'
-                        }}
-                        onClick={() => {
-                            window.scrollTo({
-                                top: 850,
-                                behavior: 'smooth'
-                            })
-                        }}
-                    >
-                        Giới thiệu
-                    </a>
-                </li>
-
-                <li>
-                    <a
-                        style={{
-                            textDecoration: 'none',
-                            color: '#333',
-                            fontSize: '16px',
-                            fontWeight: '500',
-                            borderRadius: '8px',
-                            cursor: 'pointer'
-                        }}
-                        onClick={() => {
-                            window.scrollTo({
-                                top: 1750,
-                                behavior: 'smooth'
-                            })
-                        }}
-                    >
-                        Lợi ích
-                    </a>
-                </li>
-
-                <li>
-                    <a
-                        style={{
-                            textDecoration: 'none',
-                            color: '#333',
-                            fontSize: '16px',
-                            fontWeight: '500',
-                            borderRadius: '8px',
-                            cursor: 'pointer'
-                        }}
-                        onClick={() => {
-                            window.scrollTo({
-                                top: 3000,
-                                behavior: 'smooth'
-                            })
-                        }}
-                    >
-                        Liên hệ
-                    </a>
-                </li>
+                {sections.map((section, index) => (
+                    <li key={index}>
+                        <a
+                            style={{
+                                textDecoration: 'none',
+                                color: '#333',
+                                fontSize: '16px',
+                                fontWeight: '500',
+                                borderRadius: '8px',
+                                cursor: 'pointer'
+                            }}
+                            onClick={() => handleScrollToSection(section.scrollPercentage)}
+                        >
+                            {section.label}
+                        </a>
+                    </li>
+                ))}
             </ul>
+
             <div
                 style={{
                     display: 'flex',
@@ -177,8 +125,8 @@ const Navbar: React.FC = () => {
                 </button>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default function Home() {
     return (
@@ -193,5 +141,5 @@ export default function Home() {
         >
             <Navbar />
         </Box>
-    )
+    );
 }
