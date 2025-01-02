@@ -79,7 +79,7 @@ function SalaryTablePage() {
     const [orderBy, setOrderBy] = useState<string>('')
     // const [selectedConfig, setSelectedConfig] = useState<IGetAllSysConfiguration | null>(null)
     //const [openModal, setOpenModal] = useState(false)
-    const [period, setPeriod] = useState<string>('')
+    const [period] = useState<string>('')
     const { data: responseData, isFetching, refetch } = useGetAllSalariesQuery({ filter, period })
 
     const salaryData = responseData?.Data as ISalaryGetAll[]

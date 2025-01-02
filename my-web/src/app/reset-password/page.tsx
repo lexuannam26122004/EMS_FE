@@ -4,72 +4,81 @@ import { Box, Button, Typography, Link } from '@mui/material'
 import { useToast } from '@/hooks/useToast'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
-import IconButton from '@mui/material/IconButton'
 import OutlinedInput from '@mui/material/OutlinedInput'
 import InputLabel from '@mui/material/InputLabel'
-import InputAdornment from '@mui/material/InputAdornment'
 import FormControl from '@mui/material/FormControl'
-import Visibility from '@mui/icons-material/Visibility'
-import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import LanguageMenu from '@/components/LanguageMenu'
 import ColorModeIconDropdown from '@/components/ColorModeIconDropdown'
 import { ChevronLeft } from 'lucide-react'
+import { useEffect } from 'react'
 
 const LoginForm: React.FC = () => {
     const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
     const [isSubmit, setIsSubmit] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const toast = useToast()
     const router = useRouter()
     const { t } = useTranslation('common')
-    const [showPassword, setShowPassword] = React.useState(false)
-
-    const handleClickShowPassword = () => setShowPassword(show => !show)
-
-    const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault()
-    }
-
-    const handleMouseUpPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault()
-    }
-
     const handleClick = () => {
         router.push('/')
     }
+    const [countdown, setCountdown] = useState(0)
+
+    useEffect(() => {
+        let timer
+        if (countdown > 0) {
+            timer = setInterval(() => {
+                setCountdown(prev => {
+                    if (prev <= 1) {
+                        clearInterval(timer)
+                        return 0
+                    }
+                    return prev - 1
+                })
+            }, 1000)
+        }
+        return () => clearInterval(timer) // Cleanup interval on unmount
+    }, [countdown])
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setIsSubmit(true)
-        if (email === '' || password === '') {
+        if (email === '') {
             return
         }
+
+        if (countdown > 0) {
+            toast(t('COMMON.REQUEST_PASSWORD.WAIT_BEFORE_RETRY', { countdown }), 'warning')
+            return
+        }
+
         setIsLoading(true)
 
-        const loginData = {
-            Email: email,
-            Password: password
+        const request = {
+            Email: email
         }
 
         try {
-            const response = await fetch('https://localhost:44381/api/Auth/Login', {
+            const response = await fetch('https://localhost:44381/api/Auth/RequestPasswordReset', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json-patch+json'
                 },
-                body: JSON.stringify(loginData)
+                body: JSON.stringify(request)
             })
 
-            const data = await response.json()
+            if (response.status === 400) {
+                const data = await response?.json()
+                if (data.detail === 'AspNetUser not found!') {
+                    toast(t('COMMON.REQUEST_PASSWORD.NOT_FOUND'), 'warning')
+                    return
+                }
+            }
 
-            if (response.ok) {
-                const token = data.Data.auth_token
-                sessionStorage.setItem('auth_token', token)
-                router.push('/admin')
-                toast('Đăng nhập thành công!', 'success')
-            } else {
-                toast(data?.message || 'Đăng nhập thất bại!', 'error')
+            if (response.status === 204) {
+                toast(t('COMMON.REQUEST_PASSWORD.SEND_SUCCESS'), 'success')
+                setCountdown(60)
+                return
             }
         } catch {
             toast('Đã xảy ra lỗi. Vui lòng thử lại sau!', 'error')
@@ -297,6 +306,11 @@ const LoginForm: React.FC = () => {
                                 </InputLabel>
                                 <OutlinedInput
                                     notched
+                                    onKeyDown={e => {
+                                        if (e.key === 'Enter') {
+                                            handleSubmit(e)
+                                        }
+                                    }}
                                     id='outlined-adornment-email'
                                     {...(isSubmit && email === '' && { error: true })}
                                     autoComplete='off' // Ngăn tự động điền

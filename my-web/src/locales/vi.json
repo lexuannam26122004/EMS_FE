@@ -617,7 +617,7 @@
             "USERNAME_PLACEHOLDER": "Nhập username hoặc email"
         },
         "USER": {
-            "TOTAL_ATTENDANCE": "Tổng số lần chấm công",
+            "TOTAL_ATTENDANCE": "Số lần chấm công",
             "TOTAL_LATE": "Tổng số lần đi trễ",
             "AVG_CHECK_IN": "Trung bình giờ vào",
             "AVG_CHECK_OUT": "Trung bình giờ ra",
@@ -632,14 +632,52 @@
             "CHECK_OUT_TIME": "Thời gian ra",
             "OVERTIME": "Làm thêm giờ",
             "WORKING_HOURS": "Số giờ làm việc",
-            "FILTER_V": "Lọc"
+            "FILTER_V": "Lọc",
+            "TODAY_ATTENDANCE": "Chấm công hôm nay",
+            "DETAIL": "Chi tiết chấm công",
+            "LOGIN_COUNT": "Số lần đăng nhập",
+            "INVALID_ATTEMPTS": "Số lần không hợp lệ",
+            "CURRENT_STATUS": "Trạng thái hiện tại",
+            "EARLIER_THAN_YESTERDAY": "Sớm hơn",
+            "LATER_THAN_YESTERDAY": "Muộn hơn"
         },
         "REQUEST_PASSWORD": {
             "FORGOT_PASSWORD": "Bạn quên mật khẩu?",
             "DESC": "Nhập địa chỉ email của bạn và chúng tôi sẽ gửi cho bạn một liên kết để đặt lại mật khẩu của bạn.",
             "EMAIL_ADDRESS": "Địa chỉ Email",
             "SEND_REQUEST": "Gửi yêu cầu",
-            "RETURN_LOGIN": "Quay lại đăng nhập"
+            "RETURN_LOGIN": "Quay lại đăng nhập",
+            "NOT_FOUND": "Không tìm thấy email",
+            "SEND_SUCCESS": "Gửi yêu cầu thành công",
+
+            "WAIT_BEFORE_RETRY": "Vui lòng chờ {{countdown}} giây trước khi thử lại!"
+        },
+        "VERIFY": {
+            "TITLE": "Vui lòng kiểm tra email!",
+            "DESC": "Chúng tôi đã gửi email mã xác nhận gồm 6 chữ số. Vui lòng nhập mã vào ô bên dưới để xác minh email của bạn.",
+            "DON'T_HAVE_A_CODE": "Chưa nhận được mã?",
+            "RESEND": "Gửi lại",
+            "VERIFY": "Xác minh"
+        },
+        "UPDATE_PASSWORD": {
+            "TITLE": "Yêu cầu đã được gửi thành công!",
+            "DESC": "Cập nhật mật khẩu của bạn để đảm bảo tài khoản của bạn được an toàn.",
+            "PASSWORD": "Mật khẩu mới",
+            "CONFIRM": "Xác nhận mật khẩu mới",
+            "UPDATE_PASSWORD": "Cập nhật mật khẩu",
+            "EQUAL": "Mật khẩu và xác nhận mật khẩu phải trùng khớp",
+            "UPDATE_SUCCESS": "Cập nhật mật khẩu thành công!"
+        },
+        "USER_SCHEDULAR": {
+            "TITLE": "Danh sách sự kiện",
+            "EVENT_DETAIL": "Chi tiết sự kiện",
+            "SEARCH_PLACEHOLDER": "Tìm kiếm theo tên sự kiện",
+            "FILTER_LABEL": "Loại sự kiện",
+            "FILTER_OPTIONS": {
+                "ALL": "Tất cả",
+                "HOLIDAY": "Ngày lễ",
+                "NON_HOLIDAY": "Khác"
+            }
         }
     }
 }

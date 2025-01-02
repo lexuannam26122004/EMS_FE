@@ -33,7 +33,7 @@ import { useTranslation } from 'react-i18next'
 import AlertDialog from '@/components/AlertDialog'
 import DetailModal from './DetailModal'
 
-const EmployeeTable: React.FC = () => {
+function EmployeeTable() {
     const [selectedRow, setSelectedRow] = useState<string | null>(null)
     const [openDialog, setOpenDialog] = useState(false)
     const [isChangeMany, setIsChangeMany] = useState(false)
@@ -734,9 +734,7 @@ const EmployeeTable: React.FC = () => {
                                                             backgroundColor: 'var(--hover-color)'
                                                         }
                                                     }}
-                                                    onClick={() =>
-                                                        router.push(`/admin/employee/update?id=${user.Id}`)
-                                                    }
+                                                    onClick={() => router.push(`/admin/employee/update?id=${user.Id}`)}
                                                 >
                                                     <Pencil />
                                                 </Box>

@@ -665,7 +665,14 @@
             "CHECK_OUT_TIME": "Check Out Time",
             "OVERTIME": "Overtime",
             "WORKING_HOURS": "Working Hours",
-            "FILTER_V": "Filter"
+            "FILTER_V": "Filter",
+            "TODAY_ATTENDANCE": "Today's attendance",
+            "DETAIL": "Detail attendance",
+            "LOGIN_COUNT": "Login Count",
+            "INVALID_ATTEMPTS": "Invalid Attempts",
+            "CURRENT_STATUS": "Current Status Login",
+            "EARLIER_THAN_YESTERDAY": "Earlier",
+            "LATER_THAN_YESTERDAY": "Later"
         },
         "REQUEST_PASSWORD": {
             "FORGOT_PASSWORD": "Forgot your password?",
@@ -673,7 +680,37 @@
             "EMAIL_ADDRESS": "Email Address",
             "SEND_REQUEST": "Send Request",
             "RETURN_LOGIN": "Return to sign in",
-            "EMAIL_EXAMPLE": "example@gmail.com"
+            "EMAIL_EXAMPLE": "example@gmail.com",
+            "NOT_FOUND": "Email not found",
+            "SEND_SUCCESS": "Request sent successfully!",
+            "WAIT_BEFORE_RETRY": "Please wait {{countdown}} seconds before trying again!"
+        },
+        "VERIFY": {
+            "TITLE": "Please check your email!",
+            "DESC": "We've emailed a 6-digit confirmation code. Please enter the code in the box below to verify your email.",
+            "DON'T_HAVE_A_CODE": "Don't have a code?",
+            "RESEND": "Resend",
+            "VERIFY": "Verify"
+        },
+        "UPDATE_PASSWORD": {
+            "TITLE": "Request sent successfully!",
+            "DESC": "Update your password to ensure your account stays secure.",
+            "PASSWORD": "New Password",
+            "CONFIRM": "Confirm new password",
+            "UPDATE_PASSWORD": "Update password",
+            "EQUAL": "Password and confirm password must match",
+            "UPDATE_SUCCESS": "Password updated successfully!"
+        },
+        "USER_SCHEDULAR": {
+            "TITLE": "Event List",
+            "EVENT_DETAIL": "Event Detail",
+            "SEARCH_PLACEHOLDER": "Search by event name",
+            "FILTER_LABEL": "Event Type",
+            "FILTER_OPTIONS": {
+                "ALL": "All",
+                "HOLIDAY": "Holiday",
+                "NON_HOLIDAY": "Other"
+            }
         }
     }
 }

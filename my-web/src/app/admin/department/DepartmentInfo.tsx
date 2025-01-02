@@ -13,43 +13,47 @@ function DepartmentInfo() {
     //const departmentDataTotalRecord = (department?.Data?.TotalRecords as IDepartmentGetAll[]) || []
 
     const departmentStyles: { [key: number]: { backgroundImage: string; color: string } } = {
-        8: {
+        1: {
             backgroundImage: 'linear-gradient(135deg, rgb(147, 155, 163), #34495e)',
             color: '#FFFFFF'
         },
-        9: {
+        2: {
             backgroundImage: 'linear-gradient(135deg, rgb(255, 100, 100), rgb(255, 150, 150))',
             color: '#000000'
         },
-        10: {
+        3: {
             backgroundImage: 'linear-gradient(135deg, rgb(34, 193, 195), rgb(253, 187, 45))',
             color: '#FF6347'
         },
-        11: {
+        4: {
             backgroundImage: 'linear-gradient(135deg, rgb(100, 200, 255), rgb(50, 150, 255))',
             color: '#1E90FF'
         },
-        12: {
+        5: {
             backgroundImage: 'linear-gradient(135deg, rgb(255, 204, 255), rgb(255, 102, 204))',
             color: '#8A2BE2'
         },
-        13: {
+        6: {
             backgroundImage: 'linear-gradient(135deg, rgb(255, 223, 186), rgb(255, 165, 0))',
             color: '#FFD700'
         },
-        14: {
+        7: {
             backgroundImage: 'linear-gradient(135deg, rgb(93, 109, 126), rgb(48, 63, 77))',
             color: '#2F4F4F'
         },
-        15: {
+        8: {
             backgroundImage: 'linear-gradient(135deg, rgb(204, 255, 204), rgb(0, 204, 102))',
             color: '#32CD32'
         },
-        16: {
+        9: {
             backgroundImage: 'linear-gradient(135deg, rgb(252, 85, 85), rgb(255, 112, 67))',
             color: '#DC143C'
         },
-        17: {
+        10: {
+            backgroundImage: 'linear-gradient(135deg, rgb(72, 61, 139), rgb(255, 99, 71))',
+            color: '#800080'
+        },
+        11: {
             backgroundImage: 'linear-gradient(135deg, rgb(72, 61, 139), rgb(255, 99, 71))',
             color: '#800080'
         }
@@ -75,15 +79,16 @@ function DepartmentInfo() {
             }}
         >
             {departmentDataRecord.map(department => {
-                const departmentStyle = departmentStyles[department.Id] || {}
+                const departmentStyle = departmentStyles[department.Id] || {
+                    backgroundImage: 'linear-gradient(135deg, rgb(147, 155, 163), #34495e)',
+                    color: '#FFFFFF'
+                }
                 return (
                     <Paper
                         key={department.Id}
                         elevation={0}
                         sx={{
-                            backgroundImage:
-                                departmentStyle.backgroundImage ||
-                                'linear-gradient(135deg, rgb(147, 155, 163), #34495e)',
+                            backgroundImage: departmentStyle.backgroundImage,
                             backgroundSize: 'cover',
                             flexShrink: 0,
                             backgroundRepeat: 'no-repeat',

@@ -71,7 +71,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                 Thông tin hợp đồng
             </Box>
 
-            <TableContainer
+            <Box
                 sx={{
                     boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
                     borderRadius: '12px',
@@ -79,102 +79,120 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                     height: '480px',
                     width: '100%',
                     '&::-webkit-scrollbar': {
-                        width: '0px',
-                        height: '0px',
-                        backgroundColor: 'var(--hover-color)'
+                        width: '10px' // Độ cao thanh cuộn
                     },
                     '&::-webkit-scrollbar-thumb': {
-                        backgroundColor: '#888',
-                        borderRadius: '10px',
-                        transition: 'background-color 0.3s ease'
+                        background: '#555', // Màu thanh cuộn
+                        borderRadius: '4px'
                     },
                     '&::-webkit-scrollbar-thumb:hover': {
-                        backgroundColor: '#555'
-                    },
-                    '&::-webkit-scrollbar-corner': {
-                        borderRadius: '10px'
-                    },
-                    color: 'var(--text-color)'
+                        background: '#333'
+                    }
                 }}
             >
-                <Table sx={{ borderRadius: '12px', overflow: 'hidden', backgroundColor: 'var(--background-color)' }}>
-                    <TableBody>
-                        {[
-                            { label: t('ID'), value: userscontract?.Id },
-                            {
-                                label: t('COMMON.CONTRACT.INFORMATION'),
-                                value: `${matchedEmployee?.EmployeeId || 'N/A'} ${matchedEmployee?.FullName || 'N/A'}`
-                            },
+                <TableContainer
+                    sx={{
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                        overflow: 'auto',
+                        height: '480px',
+                        width: '100%',
+                        color: 'var(--text-color)'
+                    }}
+                >
+                    <Table
+                        sx={{
+                            overflow: 'hidden',
+                            backgroundColor: 'var(--background-color)'
+                        }}
+                    >
+                        <TableBody>
+                            {[
+                                { label: t('ID'), value: userscontract?.Id },
+                                {
+                                    label: t('COMMON.CONTRACT.INFORMATION'),
+                                    value: `${matchedEmployee?.EmployeeId || 'N/A'} ${matchedEmployee?.FullName || 'N/A'}`
+                                },
 
-                            {
-                                label: t('COMMON.CONTRACT.INFORMATIONMANAGER'),
-                                value: `${matchedManager?.EmployeeId || 'N/A'} ${matchedManager?.FullName || 'N/A'}`
-                            },
+                                {
+                                    label: t('COMMON.CONTRACT.INFORMATIONMANAGER'),
+                                    value: `${matchedManager?.EmployeeId || 'N/A'} ${matchedManager?.FullName || 'N/A'}`
+                                },
 
-                            { label: t('COMMON.CONTRACT.CONTRACTNAME'), value: userscontract?.ContractName || 'N/A' },
-                            {
-                                label: t('COMMON.CONTRACT.STARTDATE'),
-                                value:
-                                    userscontract?.StartDate && !isNaN(new Date(userscontract?.StartDate).getTime())
-                                        ? new Date(userscontract?.StartDate).toLocaleDateString()
-                                        : 'N/A'
-                            },
-                            {
-                                label: t('COMMON.CONTRACT.ENDDATE'),
-                                value:
-                                    userscontract?.EndDate && !isNaN(new Date(userscontract?.EndDate).getTime())
-                                        ? new Date(userscontract?.EndDate).toLocaleDateString()
-                                        : 'N/A'
-                            },
-                            { label: t('COMMON.CONTRACT.CLAUSE'), value: userscontract?.Clause || 'N/A' },
-                            { label: t('COMMON.CONTRACT.BASICSALARY'), value: userscontract?.BasicSalary || 'N/A' },
-                            {
-                                label: t('COMMON.CONTRACT.PROBATIONPERIOD'),
-                                value: userscontract?.ProbationPeriod || 'N/A'
-                            },
-                            { label: t('COMMON.CONTRACT.WORKINGHOURS'), value: userscontract?.WorkingHours || 'N/A' },
-                            { label: t('COMMON.CONTRACT.TYPECONTRACT'), value: userscontract?.TypeContract || 'N/A' },
-                            {
-                                label: t('COMMON.CONTRACT.TERMINATIONCLAUSE'),
-                                value: userscontract?.TerminationClause || 'N/A'
-                            },
-                            { label: t('COMMON.CONTRACT.APPENDIX'), value: userscontract?.Appendix || 'N/A' }
-                        ].map((item, index) => (
-                            <TableRow
-                                key={index}
-                                sx={{
-                                    color: 'var(--text-color)',
-                                    backgroundColor: index % 2 === 0 ? 'var(--hover-color)' : 'var(--background-color)',
-                                    transition: 'background-color 0.3s ease'
-                                }}
-                            >
-                                <TableCell
+                                {
+                                    label: t('COMMON.CONTRACT.CONTRACTNAME'),
+                                    value: userscontract?.ContractName || 'N/A'
+                                },
+                                {
+                                    label: t('COMMON.CONTRACT.STARTDATE'),
+                                    value:
+                                        userscontract?.StartDate && !isNaN(new Date(userscontract?.StartDate).getTime())
+                                            ? new Date(userscontract?.StartDate).toLocaleDateString()
+                                            : 'N/A'
+                                },
+                                {
+                                    label: t('COMMON.CONTRACT.ENDDATE'),
+                                    value:
+                                        userscontract?.EndDate && !isNaN(new Date(userscontract?.EndDate).getTime())
+                                            ? new Date(userscontract?.EndDate).toLocaleDateString()
+                                            : 'N/A'
+                                },
+                                { label: t('COMMON.CONTRACT.CLAUSE'), value: userscontract?.Clause || 'N/A' },
+                                { label: t('COMMON.CONTRACT.BASICSALARY'), value: userscontract?.BasicSalary || 'N/A' },
+                                {
+                                    label: t('COMMON.CONTRACT.PROBATIONPERIOD'),
+                                    value: userscontract?.ProbationPeriod || 'N/A'
+                                },
+                                {
+                                    label: t('COMMON.CONTRACT.WORKINGHOURS'),
+                                    value: userscontract?.WorkingHours || 'N/A'
+                                },
+                                {
+                                    label: t('COMMON.CONTRACT.TYPECONTRACT'),
+                                    value: userscontract?.TypeContract || 'N/A'
+                                },
+                                {
+                                    label: t('COMMON.CONTRACT.TERMINATIONCLAUSE'),
+                                    value: userscontract?.TerminationClause || 'N/A'
+                                },
+                                { label: t('COMMON.CONTRACT.APPENDIX'), value: userscontract?.Appendix || 'N/A' }
+                            ].map((item, index) => (
+                                <TableRow
+                                    key={index}
                                     sx={{
-                                        fontSize: '18px',
-                                        fontWeight: '600',
-                                        paddingLeft: '30px',
-                                        paddingRight: '20px',
-                                        width: '40%',
-                                        color: 'var(--text-color)'
+                                        color: 'var(--text-color)',
+                                        backgroundColor:
+                                            index % 2 === 0 ? 'var(--hover-color)' : 'var(--background-color)',
+                                        transition: 'background-color 0.3s ease'
                                     }}
                                 >
-                                    {item.label}:
-                                </TableCell>
-                                <TableCell
-                                    sx={{
-                                        fontSize: '16px',
-                                        paddingLeft: '20px',
-                                        paddingRight: '30px',
-                                        color: 'var(--text-color)'
-                                    }}
-                                >
-                                    {item.value}
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                                    <TableCell
+                                        sx={{
+                                            fontSize: '18px',
+                                            fontWeight: '600',
+                                            paddingLeft: '30px',
+                                            paddingRight: '20px',
+                                            width: '40%',
+                                            color: 'var(--text-color)'
+                                        }}
+                                    >
+                                        {item.label}:
+                                    </TableCell>
+                                    <TableCell
+                                        sx={{
+                                            fontSize: '16px',
+                                            paddingLeft: '20px',
+                                            paddingRight: '30px',
+                                            color: 'var(--text-color)'
+                                        }}
+                                    >
+                                        {item.value}
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Box>
         </Box>
     )
 }

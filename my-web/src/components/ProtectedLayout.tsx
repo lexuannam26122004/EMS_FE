@@ -4,7 +4,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useSelector, useDispatch } from 'react-redux'
 import { authSelector, authSlice } from '@/redux/slices/authSlice'
 import { useEffect, useState } from 'react'
-import Loading from '@/components/Loading'
+import MainLoader from '@/components/MainLoader'
 import { Box, keyframes } from '@mui/material'
 
 const slide = keyframes`
@@ -32,7 +32,7 @@ const getUserData = async router => {
             }
         })
 
-        if (!userResponse.ok) {
+        if (!userResponse.ok || userResponse.status !== 200) {
             router.push('/login')
             return null
         }
@@ -82,10 +82,9 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
     }, [isChecking, pathname, menuLeft, router])
 
     if (isChecking || !hasAccess) {
-        return <Loading />
+        return <MainLoader />
     }
 
-    // Render nội dung nếu đã kiểm tra xong và người dùng có quyền
     return (
         <>
             <Box

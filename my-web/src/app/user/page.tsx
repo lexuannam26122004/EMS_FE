@@ -4,10 +4,11 @@ import { Box, Avatar } from '@mui/material'
 
 import React, { useState, useEffect } from 'react'
 import { useGetAuthMeQuery } from '@/services/AuthService'
-import Employee from './Employee/Employee'
-import Contract from './Employee/Contract'
-import JobHistory from './Employee/JobHistory'
-import Test from './Employee/test'
+import Employee from './employee/Employee'
+import Contract from './employee/Contract'
+import JobHistory from './employee/JobHistory'
+import Department from './employee/Department'
+import Career from './employee/Career'
 
 const DetailModal = () => {
     const [backgroundImageUrl, setBackgroundImageUrl] = useState('')
@@ -18,7 +19,7 @@ const DetailModal = () => {
         setBackgroundImageUrl(newBackgroundImageUrl)
     }, [])
 
-    const { data: responseData, isFetching: isFetchingGetMe, refetch } = useGetAuthMeQuery()
+    const { data: responseData } = useGetAuthMeQuery()
     const user = responseData?.Data || null
 
     return (
@@ -58,7 +59,7 @@ const DetailModal = () => {
 
             <Box
                 sx={{
-                    width: '90%',
+                    width: '100%',
                     borderRadius: '15px',
                     margin: '25px auto'
                 }}
@@ -71,7 +72,8 @@ const DetailModal = () => {
                         overflow: 'auto',
                         '&::-webkit-scrollbar-corner': {
                             borderRadius: '10px'
-                        }
+                        },
+                        border: '1px solid #e0e0e0',
                     }}
                 >
                     <Box
@@ -189,7 +191,7 @@ const DetailModal = () => {
                         </Box>
                     </Box>
 
-                    <Test />
+                    <Department />
 
                     <Box
                         sx={{
@@ -221,7 +223,7 @@ const DetailModal = () => {
                                 gap: '24px'
                             }}
                         >
-                            <JobHistory />
+                            <Career />
                         </Box>
                     </Box>
                 </Box>

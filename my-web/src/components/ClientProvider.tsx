@@ -8,6 +8,7 @@ import LayoutUser from '@/app/user/Layout'
 import ToastContainer from '@/components/ToastContainer'
 import { ThemeProvider } from '@/components/theme-provider'
 import ProtectedLayout from '@/components/ProtectedLayout'
+import ProtectedLayoutUser from '@/components/ProtectedLayoutUser'
 
 export default function ClientProviders({ children }: { children: React.ReactNode }) {
     const pathname = usePathname()
@@ -23,9 +24,11 @@ export default function ClientProviders({ children }: { children: React.ReactNod
                         </LayoutAdmin>
                     </ProtectedLayout>
                 ) : isUser ? (
-                    <LayoutUser>
-                        <main>{children}</main>
-                    </LayoutUser>
+                    <ProtectedLayoutUser>
+                        <LayoutUser>
+                            <main>{children}</main>
+                        </LayoutUser>
+                    </ProtectedLayoutUser>
                 ) : (
                     <main>{children}</main>
                 )}
