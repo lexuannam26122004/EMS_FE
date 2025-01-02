@@ -290,7 +290,13 @@
             "SALARY_LEVEL": "Salary Level (Million VND)",
             "NUMBER_OF_EMPLOYEES": "Number of Employees",
             "UNPAID": "Unpaid Salary List",
-            "BIRTHDAY": "Birthday"
+            "BIRTHDAY": "Birthday",
+            "HIGHEST": "The highest paid employee",
+            "LOWEST": "The lowest paid employee",
+            "BILLION": "billion VND",
+            "MILLION": "million VND",
+            "THOUSAND": "hundred thousand VND",
+            "VND": "VND"
         },
         "BENEFIT": {
             "NAME": "Name",
@@ -576,6 +582,7 @@
             "STATUS": "Status",
             "MONEY_REWARD": "Reward Amount",
             "MONEY_DISCIPLINE": "Penalty Amount",
+            "NOTE": "Note",
             "VIEW_DETAIL": "View detail",
             "DEPARTMENT": "Department",
             "TIMES": "times",

@@ -1,10 +1,11 @@
+'use client'
 import { MenuItem, FormControl, Select, Box, Paper, Typography, SelectChangeEvent } from '@mui/material'
 import ReactECharts from 'echarts-for-react'
 import { useTheme } from 'next-themes'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-export default function Chart() {
+export default function SalaryCompare() {
     const { t } = useTranslation('common')
     const { theme } = useTheme()
     const currentYear = new Date().getFullYear()
@@ -30,7 +31,6 @@ export default function Chart() {
             }
         },
         legend: {
-            data: [t('Nhân viên mới'), t('Nhân viên nghỉ việc'), t('Nhân viên trong công ty')],
             textStyle: {
                 color: theme === 'light' ? '#000000' : '#ffffff',
                 fontFamily: 'Arial, sans-serif'
@@ -45,15 +45,17 @@ export default function Chart() {
             }
         },
         grid: {
-            left: '2%',
-            right: '5.5%',
+            left: '3%',
+            right: '4%',
             bottom: '3%',
             containLabel: true
         },
-        calculable: true,
         xAxis: [
             {
                 type: 'category',
+                axisTick: {
+                    alignWithLabel: true
+                },
                 boundaryGap: true, // Để cột không chạm vào nhau
                 axisLine: {
                     lineStyle: {
@@ -88,88 +90,23 @@ export default function Chart() {
         ],
         series: [
             {
-                name: t('Nhân viên mới'),
+                name: 'Direct',
                 type: 'bar',
-                data: [selectedYear * 0 + 76, 75, 19, 48, 78, 31, 51, 78, 20, 6, 30, 70],
-                markPoint: {
-                    data: [
-                        { type: 'max', name: 'Max' },
-                        { type: 'min', name: 'Min' }
-                    ]
-                },
-                barWidth: '22%', // Điều chỉnh độ rộng của cột
+                barWidth: '60%',
+                data: [10, 52, 200, 334, 390, 330, 220],
                 itemStyle: {
-                    color: '#0BF4A6',
-                    borderRadius: [6, 6, 0, 0] // Bo tròn đỉnh cột
-                },
-                markLine: {
-                    data: [{ type: 'average', name: 'Avg' }],
-                    label: {
-                        color: theme === 'light' ? '#000000' : '#ffffff',
-                        fontSize: 11,
-                        fontWeight: 'bold'
-                    }
-                }
-            },
-            {
-                name: t('Nhân viên nghỉ việc'),
-                type: 'bar',
-                data: [49, 31, 53, 88, 16, 74, 85, 73, 68, 93, 62, 89],
-                barWidth: '22%', // Điều chỉnh độ rộng của cột
-                itemStyle: {
-                    color: '#FF6F91',
-                    borderRadius: [6, 6, 0, 0] // Bo tròn đỉnh cột
-                },
-                markPoint: {
-                    data: [
-                        { type: 'max', name: 'Max' },
-                        { type: 'min', name: 'Min' }
-                    ]
-                },
-                markLine: {
-                    data: [{ type: 'average', name: 'Avg' }],
-                    label: {
-                        color: theme === 'light' ? '#000000' : '#ffffff',
-                        fontSize: 11,
-                        fontWeight: 'bold'
-                    }
-                }
-            },
-
-            {
-                name: t('Nhân viên trong công ty'),
-                type: 'bar',
-                data: [50, 80, 60, 100, 70, 110, 90, 130, 110, 140, 120, 160],
-                markPoint: {
-                    data: [
-                        { type: 'max', name: 'Max' },
-                        { type: 'min', name: 'Min' }
-                    ]
-                },
-                barWidth: '22%', // Điều chỉnh độ rộng của cột
-                itemStyle: {
-                    color: '#FFC8A0',
-                    borderRadius: [6, 6, 0, 0] // Bo tròn đỉnh cột
-                },
-                markLine: {
-                    data: [{ type: 'average', name: 'Avg' }],
-                    label: {
-                        color: theme === 'light' ? '#000000' : '#ffffff',
-                        fontSize: 11,
-                        fontWeight: 'bold'
-                    }
+                    color: '#FF6600'
                 }
             }
         ]
     }
-
     return (
         <Paper
             elevation={0}
             sx={{
                 width: '100%',
                 mt: '24px',
-                padding: '24px 24px 15px',
+                padding: '15px 15px 15px',
                 overflow: 'hidden',
                 borderRadius: '20px',
                 backgroundColor: 'var(--background-item)'
@@ -190,7 +127,7 @@ export default function Chart() {
                             color: 'var(--text-color)'
                         }}
                     >
-                        {t('Biểu đồ thống kê nhân viên')}
+                        {t('So sánh lương thực lĩnh qua các tháng')}
                     </Typography>
                 </Box>
                 <FormControl sx={{ width: '90px' }}>
@@ -252,7 +189,7 @@ export default function Chart() {
                             }
                         }}
                     >
-                        {[...Array(currentYear - 2022)].map((_, index) => {
+                        {[...Array(currentYear - 2021)].map((_, index) => {
                             const year = currentYear - index
                             return (
                                 <MenuItem
@@ -272,7 +209,7 @@ export default function Chart() {
                     </Select>
                 </FormControl>
             </Box>
-            <ReactECharts option={option} style={{ height: 450 }} />
+            <ReactECharts option={option} style={{ height: '400px', width: '100%' }} />
         </Paper>
     )
 }

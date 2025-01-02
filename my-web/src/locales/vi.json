@@ -288,7 +288,13 @@
             "SALARY_LEVEL": "Mức lương (Triệu VND)",
             "NUMBER_OF_EMPLOYEES": "Số lượng nhân viên",
             "UNPAID": "Danh sách lương chưa trả",
-            "BIRTHDAY": "Sinh nhật"
+            "BIRTHDAY": "Sinh nhật",
+            "HIGHEST": "Nhân viên có lương cao nhất",
+            "LOWEST": "Nhân viên có lương thấp nhất",
+            "BILLION": "tỷ VND",
+            "MILLION": "triệu VND",
+            "THOUSAND": "trăm nghìn VND",
+            "VND": "VND"
         },
         "CREATE_NOTIFICATION": {
             "TITLE_PAGE": "Tạo thông báo mới",
@@ -526,6 +532,7 @@
             "STATUS": "Trạng thái",
             "MONEY_REWARD": "Số tiền thưởng",
             "MONEY_DISCIPLINE": "Số tiền phạt",
+            "NOTE": "Ghi chú",
             "PUNISHMENT": "Hình thức kỷ luật",
             "DATE": "Ngày",
             "VIEW_DETAIL": "Xem chi tiết",
