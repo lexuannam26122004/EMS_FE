@@ -639,7 +639,11 @@
             "DESC": "Nhập địa chỉ email của bạn và chúng tôi sẽ gửi cho bạn một liên kết để đặt lại mật khẩu của bạn.",
             "EMAIL_ADDRESS": "Địa chỉ Email",
             "SEND_REQUEST": "Gửi yêu cầu",
-            "RETURN_LOGIN": "Quay lại đăng nhập"
+            "RETURN_LOGIN": "Quay lại đăng nhập",
+            "NOT_FOUND": "Không tìm thấy email",
+            "SEND_SUCCESS": "Gửi yêu cầu thành công",
+
+            "WAIT_BEFORE_RETRY": "Vui lòng chờ {{countdown}} giây trước khi thử lại!"
         },
         "VERIFY": {
             "TITLE": "Vui lòng kiểm tra email!",
@@ -653,7 +657,9 @@
             "DESC": "Cập nhật mật khẩu của bạn để đảm bảo tài khoản của bạn được an toàn.",
             "PASSWORD": "Mật khẩu",
             "CONFIRM": "Xác nhận mật khẩu mới",
-            "UPDATE_PASSWORD": "Cập nhật mật khẩu"
+            "UPDATE_PASSWORD": "Cập nhật mật khẩu",
+            "EQUAL": "Mật khẩu và xác nhận mật khẩu phải trùng khớp",
+            "UPDATE_SUCCESS": "Cập nhật mật khẩu thành công!"
         },
         "USER_SCHEDULAR": {
             "TITLE": "Danh sách sự kiện",

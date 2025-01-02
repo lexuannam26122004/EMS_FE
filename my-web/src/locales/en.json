@@ -673,7 +673,10 @@
             "EMAIL_ADDRESS": "Email Address",
             "SEND_REQUEST": "Send Request",
             "RETURN_LOGIN": "Return to sign in",
-            "EMAIL_EXAMPLE": "example@gmail.com"
+            "EMAIL_EXAMPLE": "example@gmail.com",
+            "NOT_FOUND": "Email not found",
+            "SEND_SUCCESS": "Request sent successfully!",
+            "WAIT_BEFORE_RETRY": "Please wait {{countdown}} seconds before trying again!"
         },
         "VERIFY": {
             "TITLE": "Please check your email!",
@@ -687,7 +690,9 @@
             "DESC": "Update your password to ensure your account stays secure.",
             "PASSWORD": "Password",
             "CONFIRM": "Confirm new password",
-            "UPDATE_PASSWORD": "Update password"
+            "UPDATE_PASSWORD": "Update password",
+            "EQUAL": "Password and confirm password must match",
+            "UPDATE_SUCCESS": "Password updated successfully!"
         },
         "USER_SCHEDULAR": {
             "TITLE": "Event List",
