@@ -24,6 +24,7 @@ import { eventApi } from '@/services/EventService'
 import { rewardApi } from '@/services/RewardService'
 import { AuthApi } from '@/services/AuthService'
 import { authSlice } from './slices/authSlice'
+import { messageApi } from '@/services/MessageService'
 
 export const store = configureStore({
     reducer: {
@@ -47,6 +48,7 @@ export const store = configureStore({
         [selectedDepartmentsToNotifySlice.name]: selectedDepartmentsToNotifySlice.reducer,
         [workShiftApis.reducerPath]: workShiftApis.reducer,
         [salaryApi.reducerPath]: salaryApi.reducer,
+        [messageApi.reducerPath]: messageApi.reducer,
         [benefitApi.reducerPath]: benefitApi.reducer,
         [eventApi.reducerPath]: eventApi.reducer,
         [rewardApi.reducerPath]: rewardApi.reducer,
@@ -70,7 +72,8 @@ export const store = configureStore({
             benefitApi.middleware,
             eventApi.middleware,
             rewardApi.middleware,
-            AuthApi.middleware
+            AuthApi.middleware,
+            messageApi.middleware
         )
 })
 
