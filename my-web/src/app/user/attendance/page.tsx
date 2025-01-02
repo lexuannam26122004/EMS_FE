@@ -17,7 +17,6 @@ import {
     Typography
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import Layout from '@/app/user/Layout'
 import { useState, useRef, useEffect } from 'react'
 import { useGetAuthMeQuery } from '@/services/AuthService'
 import { SelectChangeEvent } from '@mui/material'
@@ -31,6 +30,7 @@ import {
     Download,
     Filter,
     LayoutGrid,
+    ListCollapse,
     ScanBarcode
 } from 'lucide-react'
 import dayjs from 'dayjs'
@@ -44,6 +44,7 @@ import TableData from './TableData'
 import Grow from '@mui/material/Grow'
 import ClickAwayListener from '@mui/material/ClickAwayListener'
 import MenuList from '@mui/material/MenuList'
+import DisplayInfo from './DisplayInfo'
 
 const convertToVietnamTime = (date: Date) => {
     if (isNaN(date.getTime())) {
@@ -459,7 +460,7 @@ function Page() {
         })
     }
 
-    const { data: responseGetMeData, isFetching: isFetchingGetMe, refetch } = useGetAuthMeQuery()
+    const { data: responseGetMeData, isFetching: isFetchingGetMe } = useGetAuthMeQuery()
     const infoMe = responseGetMeData?.Data
 
     const dataAttendance = responseData.Data.Records
@@ -475,6 +476,7 @@ function Page() {
                 elevation={1}
                 sx={{
                     width: '100%',
+                    boxShadow: 'var(--box-shadow-paper)',
                     borderRadius: '30px',
                     padding: '35px',
                     backgroundColor: 'var(--attendance-bg1)'
@@ -963,10 +965,87 @@ function Page() {
             <Paper
                 elevation={1}
                 sx={{
+                    width: '100%',
+                    boxShadow: 'var(--box-shadow-paper)',
                     mt: '40px',
+                    borderRadius: '30px',
+                    padding: '35px',
+                    backgroundColor: 'var(--attendance-bg1)'
+                }}
+            >
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between'
+                    }}
+                >
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            mb: '35px'
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                width: '5px',
+                                height: '42px',
+                                backgroundColor: '#4effca',
+                                borderRadius: '4px',
+                                mr: '14px'
+                            }}
+                        />
+                        <Typography
+                            sx={{
+                                color: 'var(--text-color)',
+                                fontSize: '21px',
+                                fontWeight: 'bold'
+                            }}
+                        >
+                            {t('COMMON.USER.TODAY_ATTENDANCE')}
+                        </Typography>
+                    </Box>
+
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '18px'
+                        }}
+                    >
+                        <Button
+                            sx={{
+                                padding: '8px 12px',
+                                borderRadius: '8px',
+                                height: '41.5px',
+                                mb: 'auto',
+                                fontWeight: 'bold',
+                                display: 'flex',
+                                gap: '10px',
+                                color: '#040506',
+                                backgroundColor: '#4effca',
+                                textTransform: 'none',
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}
+                        >
+                            <ListCollapse size={20} />
+                            {t('COMMON.USER.DETAIL')}
+                        </Button>
+                    </Box>
+                </Box>
+
+                <DisplayInfo />
+            </Paper>
+
+            <Paper
+                elevation={0}
+                sx={{
+                    mt: '40px',
+                    boxShadow: 'var(--box-shadow-paper)',
                     width: '100%',
                     borderRadius: '30px',
-                    backgroundColor: 'var(--background-item)'
+                    backgroundColor: 'var(--attendance-bg1)'
                 }}
             >
                 <Box

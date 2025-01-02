@@ -54,6 +54,13 @@ export const authSlice = createSlice({
                     state[updatePath] = {
                         IsAllowView: menu.Function.IsAllowEdit // Chỉ sao chép IsAllowEdit thành IsAllowView
                     }
+
+                    if (menu.PathTo == '/admin/benefit') {
+                        const updatePath = `${menu.PathTo}/add-employee-benefits`
+                        state[updatePath] = {
+                            IsAllowView: menu.Function.IsAllowCreate // Chỉ sao chép IsAllowCreate thành IsAllowView
+                        }
+                    }
                 }
             })
         }

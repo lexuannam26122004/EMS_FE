@@ -1,8 +1,8 @@
 'use client'
 
-import { usePathname, useRouter } from 'next/navigation'
-import { useSelector, useDispatch } from 'react-redux'
-import { authSelector, authSlice } from '@/redux/slices/authSlice'
+import { useRouter } from 'next/navigation'
+import { useDispatch } from 'react-redux'
+import { authSlice } from '@/redux/slices/authSlice'
 import { useEffect, useState } from 'react'
 import MainLoader from '@/components/MainLoader'
 import { Box, keyframes } from '@mui/material'
@@ -52,36 +52,23 @@ const getUserData = async router => {
 }
 
 export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
-    const pathname = usePathname() // Đường dẫn hiện tại
     const router = useRouter() // Dùng để chuyển hướng
-    const menuLeft = useSelector(authSelector) // Lấy thông tin phân quyền từ Redux
     const dispatch = useDispatch()
 
     const [isChecking, setIsChecking] = useState(true) // Trạng thái kiểm tra quyền
-    const [hasAccess, setHasAccess] = useState(false) // Trạng thái có quyền truy cập
 
     useEffect(() => {
         const fetchMenuLeft = async () => {
             const data = await getUserData(router)
             if (data) {
-                dispatch(authSlice.actions.updateAuth(data)) // Cập nhật menuLeft vào Redux
+                dispatch(authSlice.actions.updateAuth(data))
+                setIsChecking(false)
             }
-            setIsChecking(false) // Hoàn tất kiểm tra
         }
         fetchMenuLeft()
     }, [dispatch, router])
 
-    useEffect(() => {
-        if (!isChecking) {
-            if (menuLeft[pathname]?.IsAllowView === false) {
-                router.push('/403')
-            } else {
-                setHasAccess(true)
-            }
-        }
-    }, [isChecking, pathname, menuLeft, router])
-
-    if (isChecking || !hasAccess) {
+    if (isChecking) {
         return <MainLoader />
     }
 
@@ -101,9 +88,9 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
             >
                 <Box
                     sx={{
-                        width: '100%', // Chiều dài của "đường chạy"
+                        width: '100%',
                         height: '100%',
-                        backgroundColor: '#19c346', // Đổi màu tùy ý
+                        backgroundColor: '#19c346',
                         animation: `${slide} 0.5s forwards`
                     }}
                 />

@@ -14,8 +14,8 @@ export default function ChartBenefit() {
         setSelectedYear(event.target.value as number)
     }
 
-    const disciplineData = [76, 75, 19, 48, 78, 31, 51, 78, 20, 6, 30, 70]
-    const rewardData = [49, 31, 53, 88, 16, 74, 85, 93, 68, 93, 62, 89]
+    const benefitData = [76, 75, 19, 48, 78, 31, 51, 78, 20, 6, 30, 70]
+    const insuranceData = [49, 31, 53, 88, 16, 74, 85, 93, 68, 93, 62, 89]
 
     useEffect(() => {}, [selectedYear])
 
@@ -33,7 +33,7 @@ export default function ChartBenefit() {
             }
         },
         legend: {
-            data: [t('COMMON.REWARD_DISCIPLINE.DISCIPLINE'), t('COMMON.REWARD_DISCIPLINE.REWARD')],
+            data: [t('COMMON.INSURANCE_BENEFIT.INSURANCE'), t('COMMON.INSURANCE_BENEFIT.BENEFIT')],
             textStyle: {
                 color: theme === 'light' ? '#000000' : '#ffffff',
                 fontFamily: 'Arial, sans-serif'
@@ -92,16 +92,16 @@ export default function ChartBenefit() {
         ],
         series: [
             {
-                name: t('COMMON.REWARD_DISCIPLINE.DISCIPLINE'),
+                name: t('COMMON.INSURANCE_BENEFIT.INSURANCE'),
                 type: 'bar',
-                data: disciplineData,
+                data: insuranceData,
                 barWidth: '22%',
                 itemStyle: {
                     color: '#d24c2f',
                     borderRadius: [6, 6, 0, 0]
                 },
                 markPoint: {
-                    data: findExtremes(disciplineData), // Hàm tìm giá trị max, min
+                    data: findExtremes(insuranceData), // Hàm tìm giá trị max, min
                     label: {
                         show: true,
                         formatter: param => param.value, // Hiển thị giá trị tại điểm đánh dấu
@@ -124,16 +124,16 @@ export default function ChartBenefit() {
                 }
             },
             {
-                name: t('COMMON.REWARD_DISCIPLINE.REWARD'),
+                name: t('COMMON.INSURANCE_BENEFIT.BENEFIT'),
                 type: 'bar',
-                data: rewardData,
+                data: benefitData,
                 barWidth: '22%',
                 itemStyle: {
                     color: '#00a76f',
                     borderRadius: [6, 6, 0, 0]
                 },
                 markPoint: {
-                    data: findExtremes(rewardData), // Áp dụng tương tự cho rewardData
+                    data: findExtremes(benefitData), // Áp dụng tương tự cho rewardData
                     label: {
                         show: true,
                         formatter: param => param.value, // Hiển thị giá trị

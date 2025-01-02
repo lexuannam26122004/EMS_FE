@@ -67,7 +67,9 @@ export function middleware(request: NextRequest) {
         '/admin/statistics/rewards-disciplines',
         '/admin/statistics/salary',
         '/admin/statistics/benefits',
-        '/admin/statistics/timeoff-errorreport'
+        '/admin/statistics/timeoff-errorreport',
+
+        '/admin/benefit/add-employee-benefits'
     ]
     if (!validPaths.includes(pathname)) {
         return NextResponse.redirect(new URL('/404', request.url))

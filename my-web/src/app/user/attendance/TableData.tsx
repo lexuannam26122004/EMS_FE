@@ -10,8 +10,7 @@ import {
     TableCell,
     TableHead,
     TableContainer,
-    TableSortLabel,
-    Avatar
+    TableSortLabel
 } from '@mui/material'
 import { ClipboardCheck, Clock } from 'lucide-react'
 import { useState } from 'react'
@@ -315,7 +314,7 @@ function TableErrorReport({ attendanceData }: IProps) {
                                         >
                                             <Box
                                                 sx={{
-                                                    color: '#ffda97',
+                                                    color: '#ffbc42',
                                                     fontWeight: 'bold'
                                                 }}
                                             >
@@ -324,7 +323,7 @@ function TableErrorReport({ attendanceData }: IProps) {
                                             -
                                             <Box
                                                 sx={{
-                                                    color: '#ff9a9a',
+                                                    color: '#ff7373',
                                                     fontWeight: 'bold'
                                                 }}
                                             >
@@ -342,7 +341,7 @@ function TableErrorReport({ attendanceData }: IProps) {
                                 >
                                     <Typography
                                         sx={{
-                                            color: '#1eff9c',
+                                            color: '#00ec84',
                                             fontSize: '16px',
                                             width: '88px',
                                             padding: '8px 10px',
@@ -366,7 +365,7 @@ function TableErrorReport({ attendanceData }: IProps) {
                                 >
                                     <Typography
                                         sx={{
-                                            color: '#52f2d8',
+                                            color: '#2ef2d2',
                                             fontSize: '16px',
                                             fontStyle: 'italic',
                                             maxWidth: '280px',

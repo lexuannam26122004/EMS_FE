@@ -306,26 +306,28 @@ function ConfigurationPage() {
                             {t('COMMON.BUTTON.DELETE')}
                         </Button>
 
-                        <Button
-                            variant='contained'
-                            startIcon={<CirclePlus />}
-                            sx={{
-                                height: '53px',
-                                backgroundColor: 'var(--button-color)',
-                                width: 'auto',
-                                padding: '0px 30px',
-                                '&:hover': {
-                                    backgroundColor: 'var(--hover-button-color)'
-                                },
-                                fontSize: '16px',
-                                fontWeight: 'bold',
-                                whiteSpace: 'nowrap',
-                                textTransform: 'none'
-                            }}
-                            onClick={() => router.push('/admin/configuration/create')}
-                        >
-                            {t('COMMON.BUTTON.CREATE')}
-                        </Button>
+                        {menuLeft['Configuration'].IsAllowCreate && (
+                            <Button
+                                variant='contained'
+                                startIcon={<CirclePlus />}
+                                sx={{
+                                    height: '53px',
+                                    backgroundColor: 'var(--button-color)',
+                                    width: 'auto',
+                                    padding: '0px 30px',
+                                    '&:hover': {
+                                        backgroundColor: 'var(--hover-button-color)'
+                                    },
+                                    fontSize: '16px',
+                                    fontWeight: 'bold',
+                                    whiteSpace: 'nowrap',
+                                    textTransform: 'none'
+                                }}
+                                onClick={() => router.push('/admin/configuration/create')}
+                            >
+                                {t('COMMON.BUTTON.CREATE')}
+                            </Button>
+                        )}
                     </Box>
                 </Box>
                 <TableContainer
