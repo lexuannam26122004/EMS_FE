@@ -103,7 +103,7 @@ const Chart: React.FC = () => {
         <Paper
             elevation={0}
             sx={{
-                width: '100%',
+                width: '100%',boxShadow: 'var(--box-shadow-paper)',
                 mt: '24px',
                 padding: '24px 24px 15px',
                 overflow: 'hidden',

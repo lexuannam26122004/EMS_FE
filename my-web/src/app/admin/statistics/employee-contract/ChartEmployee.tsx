@@ -171,7 +171,7 @@ export default function Chart() {
                 mt: '24px',
                 padding: '24px 24px 15px',
                 overflow: 'hidden',
-                borderRadius: '20px',
+                borderRadius: '20px',boxShadow: 'var(--box-shadow-paper)',
                 backgroundColor: 'var(--background-item)'
             }}
         >
