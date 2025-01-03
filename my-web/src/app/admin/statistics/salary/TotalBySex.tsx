@@ -46,7 +46,8 @@ export default function TotalBySex() {
                     height: '100%',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center'
+                    justifyContent: 'center',
+                    boxShadow: 'var(--box-shadow-paper)'
                 }}
             >
                 <Typography color='red'>Có lỗi xảy ra khi tải dữ liệu.</Typography> {/* Thông báo lỗi */}

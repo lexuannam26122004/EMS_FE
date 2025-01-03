@@ -8,7 +8,7 @@ import GrossTotalByAreas from './departments/GrossTotal'
 import SpecialInfo from './SpecialInfo'
 import PayrollShares from './departments/PayrollShares'
 import PayrollOvertime from './departments/PayrollOvertime'
-import SalaryTablePage from './SalaryTable'
+//import SalaryTablePage from './SalaryTable'
 
 export default function SalaryStatistic() {
     return (
@@ -27,7 +27,7 @@ export default function SalaryStatistic() {
                     <GrossTotal />
                 </Box>
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', marginTop: '20px', gap: '20px' }}>
+            <Box sx={{ display: 'flex', alignItems: 'stretch', marginTop: '20px', gap: '20px' }}>
                 <Box sx={{ width: 'calc(100% / 3)' }}>
                     <GrossTotalByAreas />
                 </Box>
@@ -38,9 +38,9 @@ export default function SalaryStatistic() {
                     <PayrollOvertime />
                 </Box>
             </Box>
-            <Box sx={{ width: '100%', marginTop: '20px' }}>
+            {/* <Box sx={{ width: '100%', marginTop: '20px' }}>
                 <SalaryTablePage />
-            </Box>
+            </Box> */}
         </Box>
     )
 }

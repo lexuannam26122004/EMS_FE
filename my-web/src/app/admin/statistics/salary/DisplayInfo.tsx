@@ -1,4 +1,6 @@
 'use client'
+import Loading from '@/components/Loading'
+import { useGetDisplayInfoQuery } from '@/services/SalaryService'
 import {
     Paper,
     Typography,
@@ -9,8 +11,9 @@ import {
     linearProgressClasses,
     Tooltip
 } from '@mui/material'
-import { ArrowUp, BadgeHelp } from 'lucide-react'
+import { BadgeHelp } from 'lucide-react'
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
     return (
@@ -42,8 +45,63 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
         })
     }
 }))
+
+interface DisplayInfo {
+    grossTotal: number
+    bGross: number
+    grossPercent: number
+    grossProgress: number
+    netTotal: number
+    bTotal: number
+    netPercent: number
+    netProgress: number
+    netPerPerson: number
+    basicTotal: number
+    bBasic: number
+    basicPercent: number
+    basicProgress: number
+    basicPerPerson: number
+}
 export default function DisplayInfo() {
-    const [progress] = useState(50)
+    const { t } = useTranslation()
+    const { data: responseData, isLoading, isError } = useGetDisplayInfoQuery()
+    const data = responseData?.Data as DisplayInfo
+    const isBGrossNegative = data?.bGross < 0
+    const isNet = data?.bTotal < 0
+    const isBasic = data?.bBasic < 0
+    if (isLoading) {
+        return <Loading />
+    }
+    if (isError) {
+        return (
+            <Paper
+                elevation={0}
+                sx={{
+                    width: '100%',
+                    padding: '24px',
+                    backgroundColor: 'var(--background-item)',
+                    borderRadius: '15px',
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+            >
+                <Typography color='red'>Có lỗi xảy ra khi tải dữ liệu.</Typography> {/* Thông báo lỗi */}
+            </Paper>
+        )
+    }
+    const formatValue = value => {
+        if (value >= 1e9) {
+            return (value / 1e9).toFixed(1) + ' ' + t('COMMON.SALARY.BILLION')
+        } else if (value >= 1e6) {
+            return (value / 1e6).toFixed(1) + ' ' + t('COMMON.SALARY.MILLION')
+        } else if (value >= 1e3) {
+            return (value / 1e3).toFixed(1) + ' ' + t('COMMON.SALARY.THOUSAND')
+        } else {
+            return value + ' ' + t('COMMON.SALARY.VND')
+        }
+    }
     return (
         <Box
             sx={{
@@ -75,7 +133,8 @@ export default function DisplayInfo() {
                         justifyContent: 'space-between',
                         borderRadius: '15px',
                         padding: '24px',
-                        position: 'relative'
+                        position: 'relative',
+                        boxShadow: 'var(--box-shadow-paper)'
                     }}
                 >
                     <Box width={'100%'}>
@@ -83,10 +142,10 @@ export default function DisplayInfo() {
                             sx={{
                                 fontSize: '16px',
                                 fontWeight: 'bold',
-                                color: '#637381'
+                                color: 'var(--reward-title-color)'
                             }}
                         >
-                            GROSS PAYROLL TOTAL
+                            {t('GROSS_PAYROLL_TOTAL')}
                         </Typography>
                         <Box
                             sx={{
@@ -103,7 +162,7 @@ export default function DisplayInfo() {
                                     fontWeight: 'bold'
                                 }}
                             >
-                                đ1.03B
+                                {formatValue(data?.grossTotal)}
                             </Typography>
                             <Box
                                 sx={{
@@ -113,17 +172,37 @@ export default function DisplayInfo() {
                                     alignItems: 'center'
                                 }}
                             >
-                                <ArrowUp color='#33FF33'></ArrowUp>
-                                <Typography fontWeight={'bold'} color='#33FF33' style={{ marginLeft: '10px' }}>
-                                    320.01M
-                                </Typography>
-                                <Tooltip title={'tăng 3 triệu so với tháng trước'}>
-                                    <BadgeHelp color='#33FF33' style={{ marginLeft: '10px' }}></BadgeHelp>
-                                </Tooltip>
+                                {isBGrossNegative ? (
+                                    <>
+                                        <Tooltip
+                                            title={
+                                                t('COMMON.SALARY.DECREASE') +
+                                                Math.abs(data?.grossPercent).toFixed(2) +
+                                                '%' +
+                                                t('COMMON.SALARY.COMPARE')
+                                            }
+                                        >
+                                            <BadgeHelp color='#33FF33' style={{ marginLeft: '10px' }}></BadgeHelp>
+                                        </Tooltip>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Tooltip
+                                            title={
+                                                t('COMMON.SALARY.INCREASE') +
+                                                Math.abs(data?.grossPercent).toFixed(2) +
+                                                '%' +
+                                                t('COMMON.SALARY.COMPARE')
+                                            }
+                                        >
+                                            <BadgeHelp color='#33FF33' style={{ marginLeft: '10px' }}></BadgeHelp>
+                                        </Tooltip>
+                                    </>
+                                )}
                             </Box>
                         </Box>
                         <Box sx={{ width: '100%' }}>
-                            <LinearProgressWithLabel value={progress} />
+                            <LinearProgressWithLabel value={data?.grossProgress} />
                         </Box>
                         <Box
                             sx={{
@@ -144,7 +223,7 @@ export default function DisplayInfo() {
                                     mt: '5px'
                                 }}
                             >
-                                đ818.47M take-homes
+                                {formatValue(data?.netTotal) + t('COMMON.SALARY.TAKE_HOME')}
                             </Typography>
                         </Box>
                     </Box>
@@ -176,10 +255,10 @@ export default function DisplayInfo() {
                             sx={{
                                 fontSize: '16px',
                                 fontWeight: 'bold',
-                                color: '#637381'
+                                color: 'var(--reward-title-color)'
                             }}
                         >
-                            NET PAYROLL TOTAL
+                            {t('COMMON.SALARY.NET_PAYROLL_TOTAL')}
                         </Typography>
                         <Box
                             sx={{
@@ -196,7 +275,7 @@ export default function DisplayInfo() {
                                     fontWeight: 'bold'
                                 }}
                             >
-                                đ1.03B
+                                {formatValue(data?.netTotal)}
                             </Typography>
                             <Box
                                 sx={{
@@ -206,17 +285,37 @@ export default function DisplayInfo() {
                                     alignItems: 'center'
                                 }}
                             >
-                                <ArrowUp color='#33FF33'></ArrowUp>
-                                <Typography fontWeight={'bold'} color='#33FF33' style={{ marginLeft: '10px' }}>
-                                    320.01M
-                                </Typography>
-                                <Tooltip title={'tăng 3 triệu so với tháng trước'}>
-                                    <BadgeHelp color='#33FF33' style={{ marginLeft: '10px' }}></BadgeHelp>
-                                </Tooltip>
+                                {isNet ? (
+                                    <>
+                                        <Tooltip
+                                            title={
+                                                t('COMMON.SALARY.DECREASE') +
+                                                Math.abs(data?.netPercent).toFixed(2) +
+                                                '%' +
+                                                t('COMMON.SALARY.COMPARE')
+                                            }
+                                        >
+                                            <BadgeHelp color='#33FF33' style={{ marginLeft: '10px' }}></BadgeHelp>
+                                        </Tooltip>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Tooltip
+                                            title={
+                                                t('COMMON.SALARY.INCREASE') +
+                                                Math.abs(data?.netPercent).toFixed(2) +
+                                                '%' +
+                                                t('COMMON.SALARY.COMPARE')
+                                            }
+                                        >
+                                            <BadgeHelp color='#33FF33' style={{ marginLeft: '10px' }}></BadgeHelp>
+                                        </Tooltip>
+                                    </>
+                                )}
                             </Box>
                         </Box>
                         <Box sx={{ width: '100%' }}>
-                            <LinearProgressWithLabel value={progress} />
+                            <LinearProgressWithLabel value={data?.netProgress} />
                         </Box>
                         <Box
                             sx={{
@@ -237,7 +336,7 @@ export default function DisplayInfo() {
                                     mt: '5px'
                                 }}
                             >
-                                Net RPE: đ8.47M
+                                Net RPE {formatValue(data?.netPerPerson)}
                             </Typography>
                         </Box>
                     </Box>
@@ -269,10 +368,10 @@ export default function DisplayInfo() {
                             sx={{
                                 fontSize: '16px',
                                 fontWeight: 'bold',
-                                color: '#637381'
+                                color: 'var(--reward-title-color)'
                             }}
                         >
-                            BASIC TOTAL
+                            {t('COMMON.SALARY.TOTAL_BASIC')}
                         </Typography>
                         <Box
                             sx={{
@@ -289,7 +388,7 @@ export default function DisplayInfo() {
                                     fontWeight: 'bold'
                                 }}
                             >
-                                đ1.03B
+                                {formatValue(data?.basicTotal)}
                             </Typography>
                             <Box
                                 sx={{
@@ -299,17 +398,37 @@ export default function DisplayInfo() {
                                     alignItems: 'center'
                                 }}
                             >
-                                <ArrowUp color='#33FF33'></ArrowUp>
-                                <Typography fontWeight={'bold'} color='#33FF33' style={{ marginLeft: '10px' }}>
-                                    320.01M
-                                </Typography>
-                                <Tooltip title={'tăng 3 triệu so với tháng trước'}>
-                                    <BadgeHelp color='#33FF33' style={{ marginLeft: '10px' }}></BadgeHelp>
-                                </Tooltip>
+                                {isBasic ? (
+                                    <>
+                                        <Tooltip
+                                            title={
+                                                t('COMMON.SALARY.DECREASE') +
+                                                Math.abs(data?.basicPercent).toFixed(2) +
+                                                '%' +
+                                                t('COMMON.SALARY.COMPARE')
+                                            }
+                                        >
+                                            <BadgeHelp color='#33FF33' style={{ marginLeft: '10px' }}></BadgeHelp>
+                                        </Tooltip>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Tooltip
+                                            title={
+                                                t('COMMON.SALARY.INCREASE') +
+                                                Math.abs(data?.basicPercent).toFixed(2) +
+                                                '%' +
+                                                t('COMMON.SALARY.COMPARE')
+                                            }
+                                        >
+                                            <BadgeHelp color='#33FF33' style={{ marginLeft: '10px' }}></BadgeHelp>
+                                        </Tooltip>
+                                    </>
+                                )}
                             </Box>
                         </Box>
                         <Box sx={{ width: '100%' }}>
-                            <LinearProgressWithLabel value={progress} />
+                            <LinearProgressWithLabel value={data?.basicProgress} />
                         </Box>
                         <Box
                             sx={{
@@ -330,7 +449,7 @@ export default function DisplayInfo() {
                                     mt: '5px'
                                 }}
                             >
-                                Basic Salary RPE: đ8.47M
+                                Basic Salary RPE {formatValue(data?.basicPerPerson)}
                             </Typography>
                         </Box>
                     </Box>

@@ -11,15 +11,13 @@ import {
     Button
 } from '@mui/material'
 import { Clock, MailWarning } from 'lucide-react'
-import { useTheme } from 'next-themes'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import EmployeeSalaryPage from './detail/page'
 import { useRouter } from 'next/navigation'
 
 export default function SalaryCycle() {
     const { t } = useTranslation('common')
-    const { theme } = useTheme()
+    // const { theme } = useTheme()
     const currentYear = new Date().getFullYear()
     const [selectedYear, setSelectedYear] = useState(currentYear)
     const router = useRouter()
@@ -27,6 +25,7 @@ export default function SalaryCycle() {
     const handleYearChange = (event: SelectChangeEvent<number>) => {
         setSelectedYear(event.target.value as number)
     }
+    useEffect(() => {}, [selectedYear])
     const data = [
         '01-2024',
         '02-2024',
@@ -67,7 +66,7 @@ export default function SalaryCycle() {
                             color: 'var(--text-color)'
                         }}
                     >
-                        {t('Các chu kỳ lương')}
+                        {t('COMMON.SALARY.CYCLE')}
                     </Typography>
                 </Box>
                 <FormControl sx={{ width: '90px' }}>
@@ -172,6 +171,7 @@ export default function SalaryCycle() {
             >
                 {data?.map((period, index) => (
                     <Box
+                        onClick={() => router.push('/user/salary/detail')}
                         key={index}
                         sx={{
                             position: 'relative', // Đảm bảo có thể dùng pseudo-element
@@ -287,11 +287,15 @@ export default function SalaryCycle() {
                                 }}
                             >
                                 <Box sx={{ flex: 1 }}>
-                                    <Typography sx={{ color: 'var(--sub-title-color)' }}>Thời gian làm việc</Typography>
+                                    <Typography sx={{ color: 'var(--sub-title-color)' }}>
+                                        {t('COMMON.SALARY.WORKING_TIME')}
+                                    </Typography>
                                     <Typography sx={{ color: '#FFCC99', marginTop: '10px' }}>265 H</Typography>
                                 </Box>
                                 <Box sx={{ flex: 1, justifyContent: 'center' }}>
-                                    <Typography sx={{ color: 'var(--sub-title-color)' }}>Tổng thực lĩnh</Typography>
+                                    <Typography sx={{ color: 'var(--sub-title-color)' }}>
+                                        {t('COMMON.SALARY.TOTAL_SALARY')}
+                                    </Typography>
                                     <Typography sx={{ color: '#FFCC99', marginTop: '10px' }}>20000000</Typography>
                                 </Box>
                             </Box>

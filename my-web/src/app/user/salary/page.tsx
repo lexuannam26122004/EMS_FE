@@ -4,31 +4,10 @@ import { Mail, MapPinHouse, NotepadText, RefreshCw, Smartphone } from 'lucide-re
 import React from 'react'
 import SalaryCompare from './SalaryCompare'
 import SalaryCycle from './SalaryCycle'
-export default function UserSalaryPage() {
-import { Box, Card, CardContent, Typography, Grid, Divider, Avatar, Button } from '@mui/material'
-import { styled } from '@mui/system'
+import { useTranslation } from 'react-i18next'
 
-interface EmployeeSalaryProps {
-    avatarUrl: string
-    employeeName: string
-    position: string
-    baseSalary: number
-    bonus: number
-    totalSalary: number
-    department: string
-}
-
-const StyledCard = styled(Card)(() => ({}))
-
-const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({
-    avatarUrl,
-    employeeName,
-    position,
-    baseSalary,
-    bonus,
-    totalSalary,
-    department
-}) => {
+export default function EmployeeSalary() {
+    const { t } = useTranslation()
     return (
         <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: '30px' }}>
             <Paper
@@ -64,7 +43,7 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({
                                 marginTop: '10px'
                             }}
                         >
-                            FullName
+                            Lê Xuân Nam
                         </Typography>
                         <Typography
                             sx={{
@@ -73,7 +52,7 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({
                                 color: 'var(--text-color)'
                             }}
                         >
-                            Roles
+                            Administrator
                         </Typography>
                         <Typography
                             sx={{
@@ -82,26 +61,26 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({
                                 color: 'var(--text-color)'
                             }}
                         >
-                            Departments
+                            Human Resources
                         </Typography>
                     </Box>
                     <Box sx={{ marginRight: '20px', marginTop: '15px', gap: '15px' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <Smartphone size={'24px'} color='orange'></Smartphone>
                             <Typography fontSize={'14px'} color='var(--text-color)' style={{ marginLeft: '10px' }}>
-                                0999.999.999
+                                0833.367.548
                             </Typography>
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', marginTop: '15px' }}>
                             <Mail size={'24px'} color='blue'></Mail>
                             <Typography fontSize={'14px'} color='var(--text-color)' style={{ marginLeft: '10px' }}>
-                                hehe@gmail.com
+                                lexuannam6426@gmail.com
                             </Typography>
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', marginTop: '15px' }}>
                             <MapPinHouse size={'24px'} color='green'></MapPinHouse>
                             <Typography fontSize={'14px'} color='var(--text-color)' style={{ marginLeft: '10px' }}>
-                                Thủ Đức, Thành phố Hồ Chí Minh
+                                Gia Nghĩa, ĐăkNông
                             </Typography>
                         </Box>
                     </Box>
@@ -137,7 +116,7 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({
                                     11-1-2022
                                 </Typography>
                                 <Typography sx={{ fontSize: '15px', mt: '5px', color: 'var(--text-color)' }}>
-                                    Ngày bắt đầu làm việc
+                                    {t('COMMON.EMPLOYEE.STARTDATEWORK')}
                                 </Typography>
                             </Box>
                         </Box>
@@ -172,7 +151,7 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({
                                     24
                                 </Typography>
                                 <Typography sx={{ fontSize: '15px', mt: '5px', color: 'var(--text-color)' }}>
-                                    chu kỳ lương{' '}
+                                    {t('COMMON.SALARY.CYCLE')}
                                 </Typography>
                             </Box>
                         </Box>

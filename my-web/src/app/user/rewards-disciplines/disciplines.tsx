@@ -1,7 +1,5 @@
 'use client'
-import { IRewardGetAll } from '@/models/Reward'
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
-import { formatDate } from '@/utils/formatDate'
 import {
     Box,
     Table,
@@ -20,8 +18,8 @@ import {
     SelectChangeEvent,
     FormControl
 } from '@mui/material'
-import { ClipboardCheck, Clock } from 'lucide-react'
-import React, { useState } from 'react'
+import { ClipboardCheck } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export default function Discipline() {
@@ -87,6 +85,7 @@ export default function Discipline() {
         setSelectedYear(event.target.value as number)
     }
     const data = ['1', '2']
+    useEffect(() => {}, [from, to, filter, selectedYear])
 
     return (
         <Box>
