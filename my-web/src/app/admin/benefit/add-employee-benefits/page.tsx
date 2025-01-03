@@ -364,7 +364,7 @@ function BenefitPage() {
                             alignItems: 'center'
                         }}
                     >
-                        <Typography variant='body1' sx={{ color: 'black', fontWeight: 'bold' }}>
+                        <Typography variant='body1' sx={{ fontWeight: 'bold', color: 'var(--text-color)' }}>
                             Selected Roles:
                             <span style={{ color: 'green' }}>
                                 {roles.join(', ')} {/* Hiển thị danh sách role đã chọn */}
@@ -375,12 +375,13 @@ function BenefitPage() {
                                 onClick={toggleListRole}
                                 style={{
                                     borderRadius: '6px',
-                                    color: 'black',
+                                    color: 'var(--text-color)',
                                     padding: '4px 4px', // Thu nhỏ padding
-                                    minWidth: 'auto'
+                                    minWidth: 'auto',
+                                    border: '2px solid var(--text-color)'
                                 }}
                                 className={`
-                                absolute ${isOpenRole ? 'right-3' : 'right-[21.5px]'}
+                                absolute right-3
                                 bg-[var(--background-color)]
                                 border border-[var(--border-color)]
                                 hover:bg-[var(--hover-color)]
@@ -487,7 +488,7 @@ function BenefitPage() {
                             alignItems: 'center'
                         }}
                     >
-                        <Typography variant='body1' sx={{ color: 'black', fontWeight: 'bold' }}>
+                        <Typography variant='body1' sx={{ color: 'var(--text-color)', fontWeight: 'bold' }}>
                             Selected Departments:
                             <span style={{ color: 'green' }}>
                                 {departments.join(', ')} {/* Hiển thị danh sách role đã chọn */}
@@ -498,12 +499,13 @@ function BenefitPage() {
                                 onClick={toggleListDepartment}
                                 style={{
                                     borderRadius: '6px',
-                                    color: 'black',
+                                    color: 'var(--text-color)',
                                     padding: '4px 4px', // Thu nhỏ padding
-                                    minWidth: 'auto'
+                                    minWidth: 'auto',
+                                    border: '2px solid var(--text-color)'
                                 }}
                                 className={`
-                                absolute ${isOpenDepartment ? 'right-3' : 'right-[21.5px]'}
+                                absolute right-3
                                 bg-[var(--background-color)]
                                 border border-[var(--border-color)]
                                 hover:bg-[var(--hover-color)]
@@ -561,7 +563,7 @@ function BenefitPage() {
                             alignItems: 'center'
                         }}
                     >
-                        <Typography variant='body1' sx={{ color: 'black', fontWeight: 'bold' }}>
+                        <Typography variant='body1' sx={{ color: 'var(--text-color)', fontWeight: 'bold' }}>
                             Selected Gender:
                             <span style={{ color: 'green' }}>
                                 {gender === '' ? '' : gender === 1 ? 'Nam' : 'Nữ'}
@@ -573,12 +575,13 @@ function BenefitPage() {
                                 onClick={toggleListGender}
                                 style={{
                                     borderRadius: '6px',
-                                    color: 'black',
+                                    color: 'var(--text-color)',
                                     padding: '4px 4px', // Thu nhỏ padding
-                                    minWidth: 'auto'
+                                    minWidth: 'auto',
+                                    border: '2px solid var(--text-color)'
                                 }}
                                 className={`
-                                absolute ${isOpenGender ? 'right-3' : 'right-[21.5px]'}
+                                absolute right-3
                                 bg-[var(--background-color)]
                                 border border-[var(--border-color)]
                                 hover:bg-[var(--hover-color)]
@@ -657,16 +660,26 @@ function BenefitPage() {
                                     min={0}
                                     max={100000000}
                                     onChange={e => setPriceRange([Number(e.target.value), priceRange[1]])}
-                                    style={{ width: '45%', padding: '5px', textAlign: 'center' }}
+                                    style={{
+                                        width: '45%',
+                                        padding: '5px',
+                                        textAlign: 'center',
+                                        border: '2px solid var(--text-color)'
+                                    }}
                                 />
-                                <span style={{ margin: '0 10px' }}>-</span>
+                                <span style={{ margin: '0 0px' }}>-</span>
                                 <input
                                     type='number'
                                     value={priceRange[1]}
                                     min={0}
                                     max={100000000}
                                     onChange={e => setPriceRange([priceRange[0], Number(e.target.value)])}
-                                    style={{ width: '45%', padding: '5px', textAlign: 'center' }}
+                                    style={{
+                                        width: '45%',
+                                        padding: '5px',
+                                        textAlign: 'center',
+                                        border: '2px solid var(--text-color)'
+                                    }}
                                 />
                             </div>
                             <Slider
@@ -884,9 +897,7 @@ function BenefitPage() {
                                             </Typography>
                                         </TableSortLabel>
                                     </TableCell>
-                                    <TableCell
-                                        sx={{ borderColor: 'var(--border-color)', minWidth: '49px', maxWidth: '60px' }}
-                                    >
+                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                         <TableSortLabel
                                             active={orderBy === 'Name'}
                                             direction={orderBy === 'Name' ? order : 'asc'}
@@ -894,7 +905,9 @@ function BenefitPage() {
                                             sx={{
                                                 '& .MuiTableSortLabel-icon': {
                                                     color: 'var(--text-color) !important'
-                                                }
+                                                },
+                                                width: '200px',
+                                                height: '100%'
                                             }}
                                         >
                                             <Typography
@@ -1017,7 +1030,7 @@ function BenefitPage() {
                                         </TableCell>
                                         <TableCell sx={{ fontWeight: 'bold' }}>{row.Id}</TableCell>
                                         <TableCell sx={{ width: '200px' }}>{row.NameOfBenefitType}</TableCell>
-                                        <TableCell>{row.Name}</TableCell>
+                                        <TableCell sx={{ width: '200px' }}>{row.Name}</TableCell>
                                         <TableCell>{row.BenefitContribution}</TableCell>
                                         <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                             <Typography
