@@ -11,18 +11,15 @@ import {
     Button
 } from '@mui/material'
 import { Clock, MailWarning } from 'lucide-react'
-import { useTheme } from 'next-themes'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import EmployeeSalaryPage from './detail/page'
-import { useRouter } from 'next/navigation'
 
 export default function SalaryCycle() {
     const { t } = useTranslation('common')
-    const { theme } = useTheme()
     const currentYear = new Date().getFullYear()
     const [selectedYear, setSelectedYear] = useState(currentYear)
-    const router = useRouter()
+
+    useEffect(() => {}, [selectedYear])
 
     const handleYearChange = (event: SelectChangeEvent<number>) => {
         setSelectedYear(event.target.value as number)

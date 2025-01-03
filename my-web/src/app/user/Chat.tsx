@@ -1,10 +1,10 @@
 import { MessageCircleMore } from 'lucide-react'
-import { Box, Button, Tooltip, Typography, TextField, IconButton } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { Box, Tooltip, TextField, IconButton } from '@mui/material'
+import { useState } from 'react'
 import { Close as CloseIcon, Send as SendIcon } from '@mui/icons-material'
 import { useCreateMessageMutation, useGetAllMessageQuery } from '@/services/MessageService'
-import { IMessageCreate, IMessageGetAll } from '@/models/Message'
-const { GoogleGenerativeAI } = require('@google/generative-ai')
+import { IMessageGetAll } from '@/models/Message'
+import { GoogleGenerativeAI } from '@google/generative-ai'
 
 // Access your API key as an environment variable (see "Set up your API key" above)
 const genAI = new GoogleGenerativeAI('AIzaSyAGW_ofMFvk9YoadeM9eq9j931Bb_58l5s')

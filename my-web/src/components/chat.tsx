@@ -1,5 +1,5 @@
 import { MessageCircleMore } from 'lucide-react'
-import { Box, Button, Tooltip, Typography, TextField, IconButton } from '@mui/material'
+import { Box, Tooltip, TextField, IconButton } from '@mui/material'
 import { useState } from 'react'
 import { Close as CloseIcon, Send as SendIcon } from '@mui/icons-material'
 

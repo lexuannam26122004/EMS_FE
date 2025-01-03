@@ -1,6 +1,6 @@
 'use client'
-import { Box, CircularProgress, Paper, Tooltip, Typography } from '@mui/material'
-import { BadgeDollarSign, BadgeHelp } from 'lucide-react'
+import { Box, CircularProgress, Paper, Typography } from '@mui/material'
+import { BadgeDollarSign } from 'lucide-react'
 import React from 'react'
 import TotalBySex from './TotalBySex'
 import TotalByLevel from './TotalByLevel'

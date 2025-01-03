@@ -4,31 +4,8 @@ import { Mail, MapPinHouse, NotepadText, RefreshCw, Smartphone } from 'lucide-re
 import React from 'react'
 import SalaryCompare from './SalaryCompare'
 import SalaryCycle from './SalaryCycle'
-export default function UserSalaryPage() {
-import { Box, Card, CardContent, Typography, Grid, Divider, Avatar, Button } from '@mui/material'
-import { styled } from '@mui/system'
 
-interface EmployeeSalaryProps {
-    avatarUrl: string
-    employeeName: string
-    position: string
-    baseSalary: number
-    bonus: number
-    totalSalary: number
-    department: string
-}
-
-const StyledCard = styled(Card)(() => ({}))
-
-const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({
-    avatarUrl,
-    employeeName,
-    position,
-    baseSalary,
-    bonus,
-    totalSalary,
-    department
-}) => {
+export default function EmployeeSalary() {
     return (
         <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: '30px' }}>
             <Paper

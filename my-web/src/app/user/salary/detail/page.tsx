@@ -5,10 +5,7 @@ import {
     Card,
     CardContent,
     Typography,
-    Grid,
-    Divider,
     Avatar,
-    Button,
     TableCell,
     TableRow,
     TableBody,
@@ -27,17 +24,9 @@ interface EmployeeSalaryProps {
     department: string
 }
 
-const StyledCard = styled(Card)(({ theme }) => ({}))
+const StyledCard = styled(Card)(({}) => ({}))
 
-const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({
-    avatarUrl,
-    employeeName,
-    position,
-    baseSalary,
-    bonus,
-    totalSalary,
-    department
-}) => {
+const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName, position, department }) => {
     return (
         <Box sx={{ maxWidth: 1000, mx: 'auto', mt: 4, p: 2 }}>
             <StyledCard>

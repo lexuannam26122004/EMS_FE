@@ -1,7 +1,5 @@
 'use client'
-import { IRewardGetAll } from '@/models/Reward'
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
-import { formatDate } from '@/utils/formatDate'
 import {
     Box,
     Table,
@@ -20,8 +18,8 @@ import {
     SelectChangeEvent,
     FormControl
 } from '@mui/material'
-import { ClipboardCheck, Clock } from 'lucide-react'
-import React, { useState } from 'react'
+import { ClipboardCheck } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export default function Detail() {
@@ -82,6 +80,8 @@ export default function Detail() {
 
     const currentYear = new Date().getFullYear()
     const [selectedYear, setSelectedYear] = useState(currentYear)
+
+    useEffect(() => {}, [selectedYear, from, to, order, orderBy, filter])
 
     const handleYearChange = (event: SelectChangeEvent<number>) => {
         setSelectedYear(event.target.value as number)

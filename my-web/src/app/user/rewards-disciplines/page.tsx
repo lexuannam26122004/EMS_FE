@@ -1,9 +1,8 @@
 'use client'
-import { Avatar, Box, FormControl, InputLabel, MenuItem, Paper, Select, Typography } from '@mui/material'
+import { Avatar, Box, Paper, Typography } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import Detail from './reward'
-import Descipline from './disciplines'
 import Discipline from './disciplines'
 export default function Page() {
     const { t } = useTranslation()
