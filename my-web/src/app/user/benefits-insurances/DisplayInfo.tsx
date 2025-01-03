@@ -1,19 +1,13 @@
 import { TrendingUp } from '@mui/icons-material'
-import formatNumberWithUnit from '@/utils/formatNumberWithUnit'
+//import formatNumberWithUnit from '@/utils/formatNumberWithUnit'
 import { useTranslation } from 'react-i18next'
 import { Divider, Paper, Typography } from '@mui/material'
 import { Box } from '@mui/material'
-import { FileX, TrendingDown } from 'lucide-react'
-import Loading from '@/components/Loading'
+import { TrendingDown } from 'lucide-react'
+//import Loading from '@/components/Loading'
 
 function DisplayInfo() {
     const { t } = useTranslation('common')
-    const totalEmployee = 109
-    const employeePercent = 5.2
-    //const timeOff = 56
-    //const timeOffPercent = 10
-    const newEmployees = 10
-    const newEmployeePercent = 10
     const totalBenefit = 10
     const benefitPercent = 11.11
     const totalBenefitMoney = '5.600.000 VNĐ'

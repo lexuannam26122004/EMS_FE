@@ -1,26 +1,25 @@
 'use client'
-import { IFilterEmploymentContract } from '@/models/EmploymentContract'
 import {
     Box,
-    Select,
-    Pagination,
+    //Select,
+    //Pagination,
     Typography,
-    MenuItem,
-    SelectChangeEvent,
+    //MenuItem,
+    //SelectChangeEvent,
     Paper,
-    InputLabel,
-    FormControl,
-    TextField,
-    InputAdornment,
+    // InputLabel,
+    // FormControl,
+    //TextField,
+    // InputAdornment,
     Divider,
     Button,
     Collapse
 } from '@mui/material'
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
 import { AlignJustify, ChevronDown, ChevronUp, Smile } from 'lucide-react'
-import { SizeIcon } from '@radix-ui/react-icons'
+//import { SizeIcon } from '@radix-ui/react-icons'
 interface IBenefitType {
     Name: string
     Description: string
@@ -110,6 +109,7 @@ function Page() {
     const benefitData = responseData?.Data.Records as IBenefitType[]
 
     const totalRecords = (responseData?.Data.TotalRecords as number) || 0
+    useEffect(() => {}, [t, router, benefitData, totalRecords])
     const [openState1, setOpenState1] = useState<Record<number, boolean>>({})
     const toggleCollapse1 = (index: number) => {
         setOpenState1(prev => ({

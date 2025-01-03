@@ -2,7 +2,6 @@
 import { Box } from '@mui/material'
 import DepartmentInfo from './DepartmentInfo'
 import DepartmentTable from './DepartmentTable'
-import ReactECharts from 'echarts-for-react'
 
 function DepartmentPage() {
     return (

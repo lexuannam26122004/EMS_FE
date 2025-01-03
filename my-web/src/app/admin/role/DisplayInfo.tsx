@@ -46,17 +46,6 @@ function Page() {
     const { t } = useTranslation('common')
 
     const RoleDataRecord = (responseData?.Data?.Records as IRoleInfo[]) || []
-    const contractsCount = 20
-    const contractsPercent = 33.33
-
-    const newEmployeesCount = 2
-    const newEmployeesPercent = 0
-
-    const resignedEmployeesCount = 10
-    const resignedEmployeesPercent = 11.11
-
-    const currentEmployeesCount = 100
-    const currentEmployeesPercent = 25
 
     const rolesTypes = {
         1: {
@@ -108,6 +97,7 @@ function Page() {
                     }
                     return (
                         <Paper
+                            key={role.RoleStype}
                             sx={{
                                 flexShrink: 0,
                                 width: '400px',
