@@ -43,7 +43,7 @@ const responseData = {
                 Content:
                     'Báo cáo công việc của bạn bị thiếu và cần được bổ sung đầy đủ trước ngày 2024-12-10. Vui lòng kiểm tra và gửi lại thông tin chính xác để hệ thống cập nhật.',
                 SentTime: '2024-12-01T08:00:00.000',
-                Type: 'System',
+                Type: 'Discipline',
                 UserId: 'U001',
                 FullName: 'Nguyen Van A',
                 AvatarPath: null
@@ -54,7 +54,7 @@ const responseData = {
                 Content:
                     'Hệ thống yêu cầu bạn cập nhật hồ sơ cá nhân để đảm bảo thông tin đầy đủ và chính xác. Vui lòng truy cập trang cá nhân để hoàn thành các mục còn thiếu.',
                 SentTime: '2024-12-01T09:00:00.000Z',
-                Type: 'Update',
+                Type: 'Public',
                 UserId: 'U002',
                 FullName: 'Tran Thi B',
                 AvatarPath: null
@@ -65,7 +65,7 @@ const responseData = {
                 Content:
                     'Quản lý đã phản hồi yêu cầu của bạn về báo cáo tuần. Vui lòng bổ sung thêm chi tiết về tiến độ công việc và gửi lại trước ngày 2024-12-07.',
                 SentTime: '2024-12-02T07:30:00.000Z',
-                Type: 'Feedback',
+                Type: 'Timekeeping',
                 UserId: 'U003',
                 FullName: 'Pham Van C',
                 AvatarPath: '/images/workforce.png'
@@ -76,7 +76,7 @@ const responseData = {
                 Content:
                     'Chúng tôi phát hiện hoạt động đăng nhập bất thường từ một thiết bị lạ. Vui lòng đổi mật khẩu ngay để đảm bảo an toàn tài khoản của bạn.',
                 SentTime: '2024-12-02T10:00:00.000Z',
-                Type: 'Security',
+                Type: 'Public',
                 UserId: 'U004',
                 FullName: 'Nguyen Thi D',
                 AvatarPath: null
@@ -87,7 +87,7 @@ const responseData = {
                 Content:
                     'Quy định mới về giờ làm việc sẽ có hiệu lực từ ngày 2024-12-15. Vui lòng đọc kỹ thông báo và chuẩn bị điều chỉnh lịch trình cá nhân nếu cần.',
                 SentTime: '2024-12-03T08:45:00.000Z',
-                Type: 'Policy',
+                Type: 'Public',
                 UserId: 'U005',
                 FullName: 'Le Van E',
                 AvatarPath: '/images/avatar5.jpg'
@@ -98,7 +98,7 @@ const responseData = {
                 Content:
                     'Hạn chót nộp báo cáo tháng 12 là ngày 2024-12-05. Hãy đảm bảo báo cáo được hoàn thành đúng thời hạn để tránh ảnh hưởng đến kết quả đánh giá.',
                 SentTime: '2024-12-04T09:00:00.000Z',
-                Type: 'Reminder',
+                Type: 'Timekeeping',
                 UserId: 'U006',
                 FullName: 'Tran Van F',
                 AvatarPath: '/images/workforce.png'
@@ -109,7 +109,7 @@ const responseData = {
                 Content:
                     'Bạn được mời tham dự hội thảo công nghệ tổ chức vào ngày 2024-12-12 tại phòng họp chính. Đây là cơ hội để cập nhật kiến thức và mở rộng mối quan hệ chuyên môn.',
                 SentTime: '2024-12-04T11:30:00.000Z',
-                Type: 'Event',
+                Type: 'Public',
                 UserId: 'U007',
                 FullName: 'Pham Thi G',
                 AvatarPath: null
@@ -131,7 +131,7 @@ const responseData = {
                 Content:
                     'Buổi kiểm tra định kỳ sẽ diễn ra vào ngày 2024-12-10. Vui lòng hoàn thành các mục chuẩn bị được gửi qua email để đạt kết quả tốt nhất.',
                 SentTime: '2024-12-05T14:00:00.000Z',
-                Type: 'Audit',
+                Type: 'Public',
                 UserId: 'U009',
                 FullName: 'Le Thi I',
                 AvatarPath: null
@@ -142,7 +142,7 @@ const responseData = {
                 Content:
                     'Hệ thống đã ghi nhận và xử lý phản hồi của bạn thành công. Cảm ơn bạn đã hợp tác để cải thiện quy trình làm việc.',
                 SentTime: '2024-12-06T10:30:00.000Z',
-                Type: 'Confirmation',
+                Type: 'Public',
                 UserId: 'U010',
                 FullName: 'Tran Van J',
                 AvatarPath: '/images/workforce.png'
@@ -256,13 +256,21 @@ function ContractExpPage() {
             case 0: // All
                 return notifyData
             case 1: // Pending
-                return notifyData.filter(item => item.Type === 'Pending')
+                return notifyData.filter(item => item.Type === 'Public')
             case 2: // In Progress
-                return notifyData.filter(item => item.Type === 'In Progress')
-            case 3: // Resolved
-                return notifyData.filter(item => item.Type === 'Resolved')
-            case 4: // Rejected
-                return notifyData.filter(item => item.Type === 'Rejected')
+                return notifyData.filter(item => item.Type === 'Benefit')
+            case 3: // Rejected
+                return notifyData.filter(item => item.Type === 'Salary')
+            case 4: // Resolved
+                return notifyData.filter(item => item.Type === 'Reward')
+            case 5: // Rejected
+                return notifyData.filter(item => item.Type === 'Insurance')
+            case 6: // Rejected
+                return notifyData.filter(item => item.Type === 'Holiday')
+            case 7: // Rejected
+                return notifyData.filter(item => item.Type === 'Discipline')
+            case 8: // Rejected
+                return notifyData.filter(item => item.Type === 'Timekeeping')
             default:
                 return notifyData
         }
@@ -271,10 +279,14 @@ function ContractExpPage() {
     const counts = useMemo(
         () => ({
             0: notifyData.length,
-            1: notifyData.filter(item => item.Type === 'Pending').length,
-            2: notifyData.filter(item => item.Type === 'In Progress').length,
-            3: notifyData.filter(item => item.Type === 'Resolved').length,
-            4: notifyData.filter(item => item.Type === 'Rejected').length
+            1: notifyData.filter(item => item.Type === 'Public').length,
+            2: notifyData.filter(item => item.Type === 'Benefit').length,
+            3: notifyData.filter(item => item.Type === 'Salary').length,
+            4: notifyData.filter(item => item.Type === 'Reward').length,
+            5: notifyData.filter(item => item.Type === 'Insurance').length,
+            6: notifyData.filter(item => item.Type === 'Holiday').length,
+            7: notifyData.filter(item => item.Type === 'Discipline').length,
+            8: notifyData.filter(item => item.Type === 'Timekeeping').length
         }),
         [notifyData]
     )
@@ -446,7 +458,7 @@ function ContractExpPage() {
                             }}
                             label={
                                 <Box style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    {t('COMMON.ERROR_REPORT.PENDING')}
+                                    {t('COMMON.NOTIFICATION_TYPE.PUBLIC')}
                                     <Box
                                         style={{
                                             ...badgeStyle,
@@ -478,7 +490,7 @@ function ContractExpPage() {
                             }}
                             label={
                                 <Box style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    {t('COMMON.ERROR_REPORT.IN_PROGRESS')}
+                                    {t('COMMON.NOTIFICATION_TYPE.BENEFIT')}
                                     <Box
                                         style={{
                                             ...badgeStyle,
@@ -508,7 +520,7 @@ function ContractExpPage() {
                             }}
                             label={
                                 <Box style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    {t('COMMON.ERROR_REPORT.RESOLVED')}
+                                    {t('COMMON.NOTIFICATION_TYPE.SALARY')}
                                     <Box
                                         style={{
                                             ...badgeStyle,
@@ -540,7 +552,7 @@ function ContractExpPage() {
                             }}
                             label={
                                 <Box style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    {t('COMMON.ERROR_REPORT.REJECTED')}
+                                    {t('COMMON.NOTIFICATION_TYPE.REWARD')}
                                     <Box
                                         style={{
                                             ...badgeStyle,
@@ -557,6 +569,134 @@ function ContractExpPage() {
                                 </Box>
                             }
                             {...a11yProps(4)}
+                        />
+                        <Tab
+                            sx={{
+                                textTransform: 'none',
+                                color: 'var(--text-rejected-color1)',
+                                fontWeight: '600',
+                                '&.Mui-selected': {
+                                    color: 'var(--text-color)',
+                                    fontWeight: '600'
+                                }
+                            }}
+                            label={
+                                <Box style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    {t('COMMON.NOTIFICATION_TYPE.INSURANCE')}
+                                    <Box
+                                        style={{
+                                            ...badgeStyle,
+                                            backgroundColor:
+                                                currentTab === 5
+                                                    ? 'var(--bg-insurance-color)'
+                                                    : 'var(--bg-insurance-color1)',
+                                            color:
+                                                currentTab === 5
+                                                    ? 'var(--text-insurance-color)'
+                                                    : 'var(--text-insurance-color1)'
+                                        }}
+                                    >
+                                        {counts[5]}
+                                    </Box>
+                                </Box>
+                            }
+                            {...a11yProps(5)}
+                        />
+                        <Tab
+                            sx={{
+                                textTransform: 'none',
+                                color: 'var(--text-rejected-color1)',
+                                fontWeight: '600',
+                                '&.Mui-selected': {
+                                    color: 'var(--text-color)',
+                                    fontWeight: '600'
+                                }
+                            }}
+                            label={
+                                <Box style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    {t('COMMON.NOTIFICATION_TYPE.HOLIDAY')}
+                                    <Box
+                                        style={{
+                                            ...badgeStyle,
+                                            backgroundColor:
+                                                currentTab === 6
+                                                    ? 'var(--bg-holiday-color)'
+                                                    : 'var(--bg-holiday-color1)',
+                                            color:
+                                                currentTab === 6
+                                                    ? 'var(--text-holiday-color)'
+                                                    : 'var(--text-holiday-color1)'
+                                        }}
+                                    >
+                                        {counts[6]}
+                                    </Box>
+                                </Box>
+                            }
+                            {...a11yProps(6)}
+                        />
+                        <Tab
+                            sx={{
+                                textTransform: 'none',
+                                color: 'var(--text-rejected-color1)',
+                                fontWeight: '600',
+                                '&.Mui-selected': {
+                                    color: 'var(--text-color)',
+                                    fontWeight: '600'
+                                }
+                            }}
+                            label={
+                                <Box style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    {t('COMMON.NOTIFICATION_TYPE.DISCIPLINE')}
+                                    <Box
+                                        style={{
+                                            ...badgeStyle,
+                                            backgroundColor:
+                                                currentTab === 7
+                                                    ? 'var(--bg-discipline-color)'
+                                                    : 'var(--bg-discipline-color1)',
+                                            color:
+                                                currentTab === 7
+                                                    ? 'var(--text-discipline-color)'
+                                                    : 'var(--text-discipline-color1)'
+                                        }}
+                                    >
+                                        {counts[7]}
+                                    </Box>
+                                </Box>
+                            }
+                            {...a11yProps(7)}
+                        />
+                        <Tab
+                            sx={{
+                                textTransform: 'none',
+                                color: 'var(--text-rejected-color1)',
+                                fontWeight: '600',
+                                '&.Mui-selected': {
+                                    color: 'var(--text-color)',
+                                    fontWeight: '600'
+                                }
+                            }}
+                            label={
+                                <Box style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    {t('COMMON.NOTIFICATION_TYPE.TIMEKEEPING')}
+                                    <Box
+                                        style={{
+                                            ...badgeStyle,
+                                            backgroundColor:
+                                                currentTab === 8
+                                                    ? 'var(--bg-attendance-color)'
+                                                    : 'var(--bg-attendance-color1)',
+                                            color:
+                                                currentTab === 8
+                                                    ? 'var(--text-attendance-color)'
+                                                    : 'var(--text-attendance-color1)'
+                                        }}
+                                    >
+                                        {counts[8]}
+                                    </Box>
+                                </Box>
+                            }
+                            {...a11yProps(8)}
                         />
                     </Tabs>
                 </Box>

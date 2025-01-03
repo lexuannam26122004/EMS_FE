@@ -289,7 +289,7 @@ function Page({ notifications }: Props) {
                                                 fontSize: '14px'
                                             }}
                                         >
-                                            1233
+                                            100
                                         </Typography>
                                     </Box>
                                     <Box
@@ -315,7 +315,7 @@ function Page({ notifications }: Props) {
                                                 fontSize: '14px'
                                             }}
                                         >
-                                            1233
+                                            100
                                         </Typography>
                                     </Box>
                                 </Box>
@@ -341,7 +341,7 @@ function Page({ notifications }: Props) {
                                 }}
                             ></img>
 
-                            <Tooltip title={chunk[1].FullName}>
+                            <Tooltip title={chunk[0].FullName}>
                                 <Avatar
                                     src={chunk[0].AvatarPath ?? avatars[(chunkIndex * 2) % 20]}
                                     sx={{
@@ -424,218 +424,220 @@ function Page({ notifications }: Props) {
                         </Popper>
                     </Paper>
 
-                    <Paper
-                        sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            boxShadow: 'var(--box-shadow-paper)',
-                            borderRadius: '15px',
-                            flex: 1,
-                            backgroundColor: 'var(--background-item)',
-                            justifyContent: 'space-between'
-                        }}
-                    >
-                        <Box
+                    {chunk[1] && (
+                        <Paper
                             sx={{
                                 display: 'flex',
+                                alignItems: 'center',
+                                boxShadow: 'var(--box-shadow-paper)',
+                                borderRadius: '15px',
                                 flex: 1,
-                                flexDirection: 'column',
-                                padding: '24px 24px 16px'
+                                backgroundColor: 'var(--background-item)',
+                                justifyContent: 'space-between'
                             }}
                         >
                             <Box
                                 sx={{
                                     display: 'flex',
-                                    alignItems: 'center',
-                                    mb: '20px',
-                                    justifyContent: 'space-between'
-                                }}
-                            >
-                                <Typography
-                                    variant='h6'
-                                    sx={{
-                                        padding: '2px 6px',
-                                        backgroundColor: '#f5f5f5',
-                                        borderRadius: '6px',
-                                        fontSize: '14px',
-                                        fontWeight: 'bold'
-                                    }}
-                                >
-                                    {chunk[1].Type}
-                                </Typography>
-
-                                <Typography
-                                    sx={{
-                                        color: 'var(--created-date-color)',
-                                        fontSize: '14px'
-                                    }}
-                                >
-                                    {formatDateToTime(chunk[1].SentTime)}
-                                </Typography>
-                            </Box>
-
-                            <Box>
-                                <Typography
-                                    variant='h5'
-                                    sx={{
-                                        color: 'var(--text-color)',
-                                        fontSize: '16px',
-                                        display: '-webkit-box',
-                                        overflow: 'hidden',
-                                        WebkitBoxOrient: 'vertical',
-                                        WebkitLineClamp: 2,
-                                        textOverflow: 'ellipsis',
-                                        fontWeight: 'bold'
-                                    }}
-                                >
-                                    {chunk[1].Title}
-                                </Typography>
-
-                                <Typography
-                                    sx={{
-                                        color: 'var(--text-label-color)',
-                                        fontSize: '14px',
-                                        display: '-webkit-box',
-                                        overflow: 'hidden',
-                                        WebkitBoxOrient: 'vertical',
-                                        WebkitLineClamp: 2,
-                                        textOverflow: 'ellipsis',
-                                        mt: '10px'
-                                    }}
-                                >
-                                    {chunk[1].Content}
-                                </Typography>
-                            </Box>
-
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    mt: '16px',
-                                    justifyContent: 'space-between'
+                                    flex: 1,
+                                    flexDirection: 'column',
+                                    padding: '24px 24px 16px'
                                 }}
                             >
                                 <Box
                                     sx={{
                                         display: 'flex',
-                                        justifyContent: 'center',
                                         alignItems: 'center',
-                                        width: '38px',
-                                        height: '38px',
-                                        cursor: 'pointer',
-                                        '&:hover': {
-                                            backgroundColor: 'var(--hover-color)'
-                                        },
-                                        borderRadius: '50%'
+                                        mb: '20px',
+                                        justifyContent: 'space-between'
                                     }}
-                                    onClick={event => handleClick(event)}
                                 >
-                                    <EllipsisIcon
-                                        style={{
+                                    <Typography
+                                        variant='h6'
+                                        sx={{
+                                            padding: '2px 6px',
+                                            backgroundColor: '#f5f5f5',
+                                            borderRadius: '6px',
+                                            fontSize: '14px',
+                                            fontWeight: 'bold'
+                                        }}
+                                    >
+                                        {chunk[1].Type}
+                                    </Typography>
+
+                                    <Typography
+                                        sx={{
+                                            color: 'var(--created-date-color)',
+                                            fontSize: '14px'
+                                        }}
+                                    >
+                                        {formatDateToTime(chunk[1].SentTime)}
+                                    </Typography>
+                                </Box>
+
+                                <Box>
+                                    <Typography
+                                        variant='h5'
+                                        sx={{
                                             color: 'var(--text-color)',
-                                            width: '20px',
-                                            height: '20px'
+                                            fontSize: '16px',
+                                            display: '-webkit-box',
+                                            overflow: 'hidden',
+                                            WebkitBoxOrient: 'vertical',
+                                            WebkitLineClamp: 2,
+                                            textOverflow: 'ellipsis',
+                                            fontWeight: 'bold'
+                                        }}
+                                    >
+                                        {chunk[1].Title}
+                                    </Typography>
+
+                                    <Typography
+                                        sx={{
+                                            color: 'var(--text-label-color)',
+                                            fontSize: '14px',
+                                            display: '-webkit-box',
+                                            overflow: 'hidden',
+                                            WebkitBoxOrient: 'vertical',
+                                            WebkitLineClamp: 2,
+                                            textOverflow: 'ellipsis',
+                                            mt: '10px'
+                                        }}
+                                    >
+                                        {chunk[1].Content}
+                                    </Typography>
+                                </Box>
+
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        mt: '16px',
+                                        justifyContent: 'space-between'
+                                    }}
+                                >
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            width: '38px',
+                                            height: '38px',
+                                            cursor: 'pointer',
+                                            '&:hover': {
+                                                backgroundColor: 'var(--hover-color)'
+                                            },
+                                            borderRadius: '50%'
+                                        }}
+                                        onClick={event => handleClick(event)}
+                                    >
+                                        <EllipsisIcon
+                                            style={{
+                                                color: 'var(--text-color)',
+                                                width: '20px',
+                                                height: '20px'
+                                            }}
+                                        />
+                                    </Box>
+
+                                    <Box
+                                        sx={{
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            display: 'flex',
+                                            gap: '15px'
+                                        }}
+                                    >
+                                        <Box
+                                            sx={{
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                display: 'flex',
+                                                gap: '5px'
+                                            }}
+                                        >
+                                            <Tooltip title={t('COMMON.STAT_NOTIFY.NUMBER_OF_RECIPIENTS')}>
+                                                <PeopleRoundedIcon
+                                                    sx={{
+                                                        color: 'var(--created-date-color)',
+                                                        width: '18px',
+                                                        height: '18px'
+                                                    }}
+                                                />
+                                            </Tooltip>
+                                            <Typography
+                                                sx={{
+                                                    color: 'var(--created-date-color)',
+                                                    fontSize: '14px'
+                                                }}
+                                            >
+                                                100
+                                            </Typography>
+                                        </Box>
+                                        <Box
+                                            sx={{
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                display: 'flex',
+                                                gap: '5px'
+                                            }}
+                                        >
+                                            <Tooltip title={t('COMMON.STAT_NOTIFY.READ')}>
+                                                <VisibilityIcon
+                                                    sx={{
+                                                        color: 'var(--created-date-color)',
+                                                        width: '18px',
+                                                        height: '18px'
+                                                    }}
+                                                />
+                                            </Tooltip>
+                                            <Typography
+                                                sx={{
+                                                    color: 'var(--created-date-color)',
+                                                    fontSize: '14px'
+                                                }}
+                                            >
+                                                100
+                                            </Typography>
+                                        </Box>
+                                    </Box>
+                                </Box>
+                            </Box>
+
+                            <Box
+                                sx={{
+                                    width: '185px',
+                                    height: '214px',
+                                    padding: '8px 8px 8px 3px',
+                                    flexShrink: 0,
+                                    overflow: 'hidden',
+                                    position: 'relative'
+                                }}
+                            >
+                                <img
+                                    src={covers[(chunkIndex * 2 + 1) % 20]}
+                                    style={{
+                                        width: '100%',
+                                        borderRadius: '10px',
+                                        height: '100%'
+                                    }}
+                                ></img>
+
+                                <Tooltip title={chunk[1].FullName}>
+                                    <Avatar
+                                        src={chunk[1].AvatarPath ?? avatars[(chunkIndex * 2 + 1) % 20]}
+                                        sx={{
+                                            position: 'absolute',
+                                            top: '15px',
+                                            right: '15px',
+                                            width: '40px',
+                                            height: '40px'
                                         }}
                                     />
-                                </Box>
-
-                                <Box
-                                    sx={{
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        display: 'flex',
-                                        gap: '15px'
-                                    }}
-                                >
-                                    <Box
-                                        sx={{
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                            display: 'flex',
-                                            gap: '5px'
-                                        }}
-                                    >
-                                        <Tooltip title={t('COMMON.STAT_NOTIFY.NUMBER_OF_RECIPIENTS')}>
-                                            <PeopleRoundedIcon
-                                                sx={{
-                                                    color: 'var(--created-date-color)',
-                                                    width: '18px',
-                                                    height: '18px'
-                                                }}
-                                            />
-                                        </Tooltip>
-                                        <Typography
-                                            sx={{
-                                                color: 'var(--created-date-color)',
-                                                fontSize: '14px'
-                                            }}
-                                        >
-                                            1233
-                                        </Typography>
-                                    </Box>
-                                    <Box
-                                        sx={{
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                            display: 'flex',
-                                            gap: '5px'
-                                        }}
-                                    >
-                                        <Tooltip title={t('COMMON.STAT_NOTIFY.READ')}>
-                                            <VisibilityIcon
-                                                sx={{
-                                                    color: 'var(--created-date-color)',
-                                                    width: '18px',
-                                                    height: '18px'
-                                                }}
-                                            />
-                                        </Tooltip>
-                                        <Typography
-                                            sx={{
-                                                color: 'var(--created-date-color)',
-                                                fontSize: '14px'
-                                            }}
-                                        >
-                                            1233
-                                        </Typography>
-                                    </Box>
-                                </Box>
+                                </Tooltip>
                             </Box>
-                        </Box>
-
-                        <Box
-                            sx={{
-                                width: '185px',
-                                height: '214px',
-                                padding: '8px 8px 8px 3px',
-                                flexShrink: 0,
-                                overflow: 'hidden',
-                                position: 'relative'
-                            }}
-                        >
-                            <img
-                                src={covers[(chunkIndex * 2 + 1) % 20]}
-                                style={{
-                                    width: '100%',
-                                    borderRadius: '10px',
-                                    height: '100%'
-                                }}
-                            ></img>
-
-                            <Tooltip title={chunk[1].FullName}>
-                                <Avatar
-                                    src={chunk[1].AvatarPath ?? avatars[(chunkIndex * 2 + 1) % 20]}
-                                    sx={{
-                                        position: 'absolute',
-                                        top: '15px',
-                                        right: '15px',
-                                        width: '40px',
-                                        height: '40px'
-                                    }}
-                                />
-                            </Tooltip>
-                        </Box>
-                    </Paper>
+                        </Paper>
+                    )}
                 </Box>
             ))}
         </Box>

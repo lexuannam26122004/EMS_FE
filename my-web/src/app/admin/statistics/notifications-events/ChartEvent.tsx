@@ -24,7 +24,8 @@ export default function ChartSalary() {
             backgroundColor: theme === 'light' ? 'rgba(250, 250, 250, 0.98)' : 'rgba(20, 26, 25, 0.98)',
             borderColor: theme === 'light' ? 'rgba(250, 250, 250, 0.98)' : 'rgba(20, 26, 25, 0.98)',
             textStyle: {
-                color: theme === 'light' ? '#000000' : '#ffffff'
+                color: theme === 'light' ? '#000000' : '#ffffff',
+                fontFamily: 'Arial, sans-serif'
             }
         },
         legend: {
