@@ -75,7 +75,6 @@ export const store = configureStore({
             eventApi.middleware,
             rewardApi.middleware,
             disciplineApi.middleware,
-            AuthApi.middleware
             AuthApi.middleware,
             messageApi.middleware
         )
