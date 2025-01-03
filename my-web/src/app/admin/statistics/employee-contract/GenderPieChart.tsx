@@ -61,7 +61,7 @@ const GenderPieChart: React.FC = () => {
             elevation={0}
             sx={{
                 width: '100%',
-                padding: '24px',
+                padding: '24px',boxShadow: 'var(--box-shadow-paper)',
                 backgroundColor: 'var(--background-item)',
                 borderRadius: '15px',
                 height: '100%'
