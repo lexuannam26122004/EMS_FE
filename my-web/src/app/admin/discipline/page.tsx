@@ -39,7 +39,6 @@ import { IDisciplineGetAll } from '@/models/Discipline'
 import { formatNumberToMoney } from '@/utils/formatNumberWithUnit'
 import { CirclePlus, ClipboardCheck } from 'lucide-react'
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
-import { use } from 'i18next'
 
 function a11yProps(index: number) {
     return {

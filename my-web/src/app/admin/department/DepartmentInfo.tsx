@@ -5,13 +5,14 @@ import { UserRoundSearch, CircleUserRound, ExternalLink } from 'lucide-react'
 import { useGetAllDepartmentQuery } from '@/services/DepartmentService'
 import { IDepartmentGetAll } from '@/models/Department'
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 function DepartmentInfo() {
     const { t } = useTranslation('common')
     const [filter, setFilter] = useState<IFilterSysConfiguration>({
         isDescending: false
     })
+    useEffect(() => {}, [setFilter])
 
     const { data: department } = useGetAllDepartmentQuery(filter)
     const departmentDataRecord = (department?.Data?.Records as IDepartmentGetAll[]) || []

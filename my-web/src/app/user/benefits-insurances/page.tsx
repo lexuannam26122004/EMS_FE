@@ -3,12 +3,12 @@ import {
     Box,
     //Select,
     //Pagination,
-    Typography,
+    //Typography,
     // MenuItem,
     //SelectChangeEvent,
-    Paper,
-    Button,
-    Tooltip
+    Paper
+    //Button,
+    // Tooltip
     //Checkbox,
     //TableRow,
     //TableBody,
@@ -24,14 +24,16 @@ import {
     //TableSortLabel,
     //Chip
 } from '@mui/material'
-import { AlarmClock, CirclePlus, Pencil, Trash2 } from 'lucide-react'
+//import { AlarmClock, CirclePlus, Pencil, Trash2 } from 'lucide-react'
 
 import { useTranslation } from 'react-i18next'
 import DisplayInfo from './DisplayInfo'
 import Page from './ListBenefit_1'
+import { useEffect } from 'react'
 
 function Benefit_Insurance() {
     const { t } = useTranslation('common')
+    useEffect(() => {}, [t])
     return (
         <Box sx={{ gap: '24px', display: 'flex', flexDirection: 'column' }}>
             <Paper

@@ -31,7 +31,7 @@ function Page() {
             <Paper
                 sx={{
                     width: 'calc(100%)',
-                    backgroundImage: 'url(/images/Subtract_green.svg)',
+                    backgroundImage: 'url(/images/Subtract_orange.svg)',
                     backgroundColor: 'var(--background-color-after)',
                     backgroundSize: 'cover',
                     borderRadius: '38px',
@@ -60,14 +60,14 @@ function Page() {
                 <Box
                     sx={{
                         position: 'absolute',
-                        backgroundImage: 'url(/images/reward-image.svg)',
+                        backgroundImage: 'url(/images/benefittotal.png)',
                         backgroundSize: '50% auto',
                         backgroundRepeat: 'no-repeat',
                         backgroundPosition: 'right -10px bottom -20px',
                         right: '24px',
-                        top: '24px',
-                        width: 'calc(100% - 50px)',
-                        height: 'calc(100% - 48px)'
+                        bottom: '24px',
+                        width: '60%',
+                        height: '60%'
                     }}
                 ></Box>
                 <Typography
@@ -120,7 +120,7 @@ function Page() {
             <Paper
                 sx={{
                     width: 'calc(100%)',
-                    backgroundImage: 'url(/images/Subtract_orange.svg)',
+                    backgroundImage: 'url(/images/Subtract_green.svg)',
                     backgroundColor: 'var(--background-color-after)',
                     backgroundSize: 'cover',
                     borderRadius: '38px',
@@ -150,14 +150,14 @@ function Page() {
                 <Box
                     sx={{
                         position: 'absolute',
-                        backgroundImage: 'url(/images/discipline.png)',
+                        backgroundImage: 'url(/images/Human-Resources.png)',
                         backgroundSize: 'contain', // Đảm bảo hình hiển thị đầy đủ và tỷ lệ gốc
                         backgroundRepeat: 'no-repeat',
                         backgroundPosition: 'right -10px bottom -20px',
                         right: '24px',
                         bottom: '24px',
-                        width: '36%',
-                        height: '100%'
+                        width: '60%',
+                        height: '60%'
                     }}
                 ></Box>
 
@@ -241,14 +241,14 @@ function Page() {
                 <Box
                     sx={{
                         position: 'absolute',
-                        backgroundImage: 'url(/images/discipline.png)',
+                        backgroundImage: 'url(/images/insurance.png)',
                         backgroundSize: 'contain', // Đảm bảo hình hiển thị đầy đủ và tỷ lệ gốc
                         backgroundRepeat: 'no-repeat',
                         backgroundPosition: 'right -10px bottom -20px',
                         right: '24px',
                         bottom: '24px',
-                        width: '36%',
-                        height: '100%'
+                        width: '60%',
+                        height: '60%'
                     }}
                 ></Box>
 
