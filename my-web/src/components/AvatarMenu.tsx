@@ -12,13 +12,13 @@ import {
 } from '@mui/material'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined'
-import { ChevronDown, CalendarClock, ChevronUp, BriefcaseBusiness } from 'lucide-react'
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
+// import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined'
+import { ChevronDown, CalendarClock, ChevronUp, User } from 'lucide-react'
+// import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined'
 import { PencilLine } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { keyframes } from '@emotion/react'
 import { useGetAuthMeQuery } from '@/services/AuthService'
 
@@ -32,6 +32,7 @@ const rotate = keyframes`
 `
 
 const AvatarMenu = () => {
+    const pathName = usePathname()
     const router = useRouter()
     const { t } = useTranslation('common')
     const anchorRef = useRef<HTMLDivElement | null>(null)
@@ -86,15 +87,20 @@ const AvatarMenu = () => {
         router.push('/admin/notification/create')
     }
 
+    const handlePersonal = () => {
+        setOpen(false)
+        router.push('/user')
+    }
+
     const handleSchedular = () => {
         setOpen(false)
         router.push('/user/schedular')
     }
 
-    const handleCreateTasks = () => {
-        setOpen(false)
-        router.push('/admin/tasks/create')
-    }
+    // const handleCreateTasks = () => {
+    //     setOpen(false)
+    //     router.push('/admin/tasks/create')
+    // }
 
     const handleLogout = () => {
         setOpen(false)
@@ -264,6 +270,22 @@ const AvatarMenu = () => {
                                     </MenuItem>
                                     <Divider sx={{ margin: '0 -8px', borderColor: 'var(--border-color)' }} /> */}
 
+                                    {pathName.includes('/admin') && (
+                                        <MenuItem
+                                            onClick={handlePersonal}
+                                            sx={{
+                                                color: 'var(--text-color)',
+                                                borderRadius: '6px',
+                                                '&:hover': {
+                                                    backgroundColor: 'var(--hover-color)'
+                                                }
+                                            }}
+                                        >
+                                            <User style={{ marginRight: '16px' }} />
+                                            {t('COMMON.AVATAR_MENU.PERSONAL')}
+                                        </MenuItem>
+                                    )}
+
                                     <MenuItem
                                         onClick={handleCreateNotification}
                                         sx={{
@@ -291,7 +313,7 @@ const AvatarMenu = () => {
                                         {t('COMMON.SIDEBAR.SCHEDULAR')}
                                     </MenuItem>
 
-                                    <MenuItem
+                                    {/* <MenuItem
                                         onClick={handleCreateTasks}
                                         sx={{
                                             color: 'var(--text-color)',
@@ -303,8 +325,8 @@ const AvatarMenu = () => {
                                     >
                                         <BriefcaseBusiness style={{ marginRight: '16px' }} />
                                         {t('COMMON.SIDEBAR.CREATETASKS')}
-                                    </MenuItem>
-                                    <MenuItem
+                                    </MenuItem> */}
+                                    {/* <MenuItem
                                         onClick={handleClose}
                                         sx={{
                                             color: 'var(--text-color)',
@@ -316,7 +338,7 @@ const AvatarMenu = () => {
                                     >
                                         <AccessTimeOutlinedIcon sx={{ mr: 2 }} />
                                         {t('COMMON.AVATAR_MENU.LOGIN_HISTORY')}
-                                    </MenuItem>
+                                    </MenuItem> */}
                                     <MenuItem
                                         onClick={handleClose}
                                         sx={{
@@ -330,6 +352,7 @@ const AvatarMenu = () => {
                                         <SettingsOutlinedIcon sx={{ mr: 2 }} />
                                         {t('COMMON.AVATAR_MENU.SETTINGS')}
                                     </MenuItem>
+                                    {/* 
                                     <MenuItem
                                         onClick={handleClose}
                                         sx={{
@@ -342,7 +365,7 @@ const AvatarMenu = () => {
                                     >
                                         <HelpOutlineIcon sx={{ mr: 2 }} />
                                         {t('COMMON.AVATAR_MENU.HELP')}
-                                    </MenuItem>
+                                    </MenuItem> */}
                                     <Divider sx={{ margin: '0 -8px', borderColor: 'var(--border-color)' }} />
                                     <MenuItem
                                         onClick={handleLogout}

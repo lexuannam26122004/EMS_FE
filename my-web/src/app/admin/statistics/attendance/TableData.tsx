@@ -18,28 +18,6 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ITimekeeping } from '@/models/Timekeeping'
 
-// const avatars = [
-//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-1.webp',
-//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-2.webp',
-//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-3.webp',
-//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-4.webp',
-//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-5.webp',
-//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-6.webp',
-//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-7.webp',
-//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-8.webp',
-//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-9.webp',
-//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-10.webp',
-//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-11.webp',
-//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-12.webp',
-//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-13.webp',
-//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-14.webp',
-//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-15.webp',
-//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-16.webp',
-//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-17.webp',
-//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-18.webp',
-//     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-19.webp'
-// ]
-
 function convertTimeFormat(time: string): string {
     // Tách chuỗi thời gian thành giờ và phút
     const [hours, minutes] = time.split(':').map(Number)
@@ -63,6 +41,28 @@ interface IProps {
     attendanceData: IGetAll[]
     type?: number
 }
+
+const avatars = [
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-1.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-2.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-3.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-4.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-5.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-6.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-7.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-8.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-9.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-10.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-11.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-12.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-13.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-14.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-15.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-16.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-17.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-18.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-19.webp'
+]
 
 function TableErrorReport({ attendanceData }: IProps) {
     const { t } = useTranslation('common')
@@ -309,7 +309,7 @@ function TableErrorReport({ attendanceData }: IProps) {
                                                 mt: '-2px'
                                             }}
                                             src={
-                                                row.AvatarPath ||
+                                                avatars[row.Id] ||
                                                 'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'
                                             }
                                         />

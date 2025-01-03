@@ -84,7 +84,10 @@ export default function ChartSalary() {
             {
                 name: t('COMMON.DASHBOARD.YEAR') + ' ' + selectedYear.toString(),
                 type: 'line',
-                data: [40, 45, 40, 50, 50, 60, 70, 90, 150, 40, 50, 50],
+                data: [
+                    700000000, 905000000, 1310000000, 720000000, 535000000, 950000000, 1365000000, 970000000, 480000000,
+                    1290000000, 1100000000, 1105000000
+                ],
                 smooth: true,
                 symbol: 'circle', // Hiển thị biểu tượng tròn
                 symbolSize: 8, // Kích thước biểu tượng
@@ -117,7 +120,10 @@ export default function ChartSalary() {
             {
                 name: t('COMMON.DASHBOARD.YEAR') + ' ' + (selectedYear - 1).toString(),
                 type: 'line',
-                data: [10, 30, 15, 50, 80, 90, 100, 70, 40, 15, 80, 80],
+                data: [
+                    1020000000, 950000000, 1200000000, 820000000, 1235000000, 1200000000, 1000000000, 1070000000,
+                    1280000000, 859000000, 930000000, 1305000000
+                ],
                 smooth: true,
                 symbol: 'circle', // Hiển thị biểu tượng tròn
                 symbolSize: 8, // Kích thước biểu tượng
