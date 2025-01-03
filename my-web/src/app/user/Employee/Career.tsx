@@ -65,60 +65,40 @@ const Timeline: React.FC = () => {
         return `rgba(${r}, ${g}, ${b}, ${alpha})`
     }
 
-    const events = [
+    const promotion = [
         {
-            startDate: '24 Dec 2024 - 9:47 PM',
-            endDate: '24 Dec 2024 - 10:47 PM',
-            location: 'New York',
-            content: {
-                jobDescription: 'Software Developer',
-                allowance: '$2000',
-                note: 'Completed annual review'
-            },
+            PromotionDate: '24 Dec 2024',
+            Role: 'Software Developer',
+            Salary: '$2000',
+            Reason: 'Completed annual review',
             color: getRandomColor()
         },
         {
-            startDate: '23 Dec 2024 - 8:47 PM',
-            endDate: '23 Dec 2024 - 9:47 PM',
-            location: 'San Francisco',
-            content: {
-                jobDescription: 'Senior Developer',
-                allowance: '$3000',
-                note: 'Promoted to Senior Developer'
-            },
+            PromotionDate: '23 Dec 2024',
+            Role: 'Senior Developer',
+            Salary: '$3000',
+            Reason: 'Promoted to Senior Developer',
             color: getRandomColor()
         },
         {
-            startDate: '22 Dec 2024 - 7:47 PM',
-            endDate: '22 Dec 2024 - 8:47 PM',
-            location: 'Los Angeles',
-            content: {
-                jobDescription: 'Project Manager',
-                allowance: '$2500',
-                note: 'Project completed on time'
-            },
+            PromotionDate: '22 Dec 2024',
+            Role: 'Project Manager',
+            Salary: '$2500',
+            Reason: 'Project completed on time',
             color: getRandomColor()
         },
         {
-            startDate: '21 Dec 2024 - 6:47 PM',
-            endDate: '21 Dec 2024 - 7:47 PM',
-            location: 'Chicago',
-            content: {
-                jobDescription: 'Data Analyst',
-                allowance: '$1800',
-                note: 'Analyzed quarterly data'
-            },
+            PromotionDate: '21 Dec 2024',
+            Role: 'Data Analyst',
+            Salary: '$1800',
+            Reason: 'Analyzed quarterly data',
             color: getRandomColor()
         },
         {
-            startDate: '20 Dec 2024 - 5:47 PM',
-            endDate: '20 Dec 2024 - 6:47 PM',
-            location: 'Boston',
-            content: {
-                jobDescription: 'System Architect',
-                allowance: '$2200',
-                note: 'Designing system architecture for new project'
-            },
+            PromotionDate: '20 Dec 2024',
+            Role: 'System Architect',
+            Salary: '$2200',
+            Reason: 'Designed system architecture for a new project',
             color: getRandomColor()
         }
     ]
@@ -155,7 +135,7 @@ const Timeline: React.FC = () => {
                 }}
             />
 
-            {events.map((event, index) => (
+            {promotion.map((event, index) => (
                 <Box
                     key={index}
                     sx={{
@@ -184,18 +164,10 @@ const Timeline: React.FC = () => {
                         }
                     }}
                 >
-                    <Typography sx={{ color: 'var(--text-color)', fontSize: '0.9em', marginBottom: '5px' }}>
-                        {event.startDate} - {event.endDate} | {event.location}
-                    </Typography>
-                    <Typography sx={{ color: 'var(--text-color)', fontSize: '1.1em' }}>
-                        {event.content.jobDescription}
-                    </Typography>
-                    <Typography sx={{ color: 'var(--text-color)', fontSize: '1.1em' }}>
-                        Allowance: {event.content.allowance}
-                    </Typography>
-                    <Typography sx={{ color: 'var(--text-color)', fontSize: '1.1em' }}>
-                        Note: {event.content.note}
-                    </Typography>
+                    <Typography sx={{ fontSize: '0.9em', marginBottom: '5px' }}>{event.PromotionDate}</Typography>
+                    <Typography sx={{ fontSize: '1.1em' }}>Role: {event.Role}</Typography>
+                    <Typography sx={{ fontSize: '1.1em' }}>Salary: {event.Salary}</Typography>
+                    <Typography sx={{ fontSize: '1.1em' }}>Reason: {event.Reason}</Typography>
                 </Box>
             ))}
         </Box>
@@ -208,44 +180,52 @@ const App: React.FC = () => {
         <Box
             sx={{
                 padding: '20px',
-                backgroundColor: 'var(--hover-color)',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                borderRadius: '12px',
+                backgroundColor: 'var(--attendance-bg1)',
+                boxShadow: 'var(--box-shadow-paper)',
+                borderRadius: '30px',
                 overflow: 'hidden',
                 height: '100%',
-                border: '1px solid #e0e0e0',
+                //border: '1px solid #e0e0e0',
                 width: '100%'
             }}
         >
             <Box
                 sx={{
-                    position: 'sticky',
-                    top: 0,
-                    backgroundColor: 'var(--background-color)',
-                    padding: '15px 20px',
-                    fontSize: '24px',
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                    color: 'var(--text-color)',
-                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                    border: '1px solid #e0e0e0',
-                    zIndex: 2,
-                    borderRadius: '12px'
+                    display: 'flex',
+                    alignItems: 'center',
+                    mb: '35px'
                 }}
             >
-                {t('Lịch sử thăng tiến')}
+                <Box
+                    sx={{
+                        width: '5px',
+                        height: '42px',
+                        backgroundColor: '#4effca',
+                        borderRadius: '4px',
+                        mr: '14px'
+                    }}
+                />
+                <Typography
+                    sx={{
+                        color: 'var(--text-color)',
+                        fontSize: '21px',
+                        fontWeight: 'bold'
+                    }}
+                >
+                    {t('Lịch sử thăng tiến')}
+                </Typography>
             </Box>
 
             <Box
                 sx={{
-                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                    borderRadius: '12px',
+                    // boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                    borderRadius: '30px',
                     overflow: 'auto',
                     height: '600px',
                     width: '100%',
                     marginTop: '20px',
                     position: 'relative',
-                    backgroundColor: 'var(--hover-color)',
+                    backgroundColor: 'var(--attendance-bg1)',
                     '&::-webkit-scrollbar': {
                         width: '10px' // Độ cao thanh cuộn
                     },

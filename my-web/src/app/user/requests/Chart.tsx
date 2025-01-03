@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactECharts from 'echarts-for-react'
-import { Box } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'next-themes'
 
@@ -66,33 +66,40 @@ const Chart = () => {
         <Box
             sx={{
                 padding: '20px',
-                backgroundColor: 'var(--hover-color)',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                borderRadius: '12px',
+                boxShadow: 'var(--box-shadow-paper)',
+                borderRadius: '30px',
+                backgroundColor: 'var(--attendance-bg1)',
                 overflow: 'hidden',
                 height: '100%',
-                border: '1px solid #e0e0e0',
+               // border: '1px solid #e0e0e0',
                 width: '100%'
             }}
         >
             <Box
                 sx={{
-                    position: 'sticky',
-                    top: 0,
-                    backgroundColor: 'var(--background-color)',
-                    padding: '15px 20px',
-                    fontSize: '24px',
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                    color: 'var(--text-color)',
-                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                    border: '1px solid #e0e0e0',
-                    zIndex: 2,
-                    marginBottom: '10px',
-                    borderRadius: '12px'
+                    display: 'flex',
+                    alignItems: 'center',
+                    mb: '35px'
                 }}
             >
-                {t('Thông kê loại báo cáo lỗi')}
+                <Box
+                    sx={{
+                        width: '5px',
+                        height: '42px',
+                        backgroundColor: '#4effca',
+                        borderRadius: '4px',
+                        mr: '14px'
+                    }}
+                />
+                <Typography
+                    sx={{
+                        color: 'var(--text-color)',
+                        fontSize: '21px',
+                        fontWeight: 'bold'
+                    }}
+                >
+                    {t('Thông kê loại báo cáo lỗi')}
+                </Typography>
             </Box>
 
             <Box
