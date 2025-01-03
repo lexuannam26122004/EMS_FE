@@ -4,18 +4,23 @@ import { Box } from '@mui/material'
 import { UserRoundSearch, CircleUserRound, ExternalLink } from 'lucide-react'
 import { useGetAllDepartmentQuery } from '@/services/DepartmentService'
 import { IDepartmentGetAll } from '@/models/Department'
+import { IFilterSysConfiguration } from '@/models/SysConfiguration'
+import { useState } from 'react'
 
 function DepartmentInfo() {
     const { t } = useTranslation('common')
+    const [filter, setFilter] = useState<IFilterSysConfiguration>({
+        isDescending: false
+    })
 
-    const { data: department } = useGetAllDepartmentQuery()
+    const { data: department } = useGetAllDepartmentQuery(filter)
     const departmentDataRecord = (department?.Data?.Records as IDepartmentGetAll[]) || []
     //const departmentDataTotalRecord = (department?.Data?.TotalRecords as IDepartmentGetAll[]) || []
 
     const departmentStyles: { [key: number]: { backgroundImage: string; color: string } } = {
         1: {
             backgroundImage: 'linear-gradient(135deg, rgb(147, 155, 163), #34495e)',
-            color: '#FFFFFF'
+            color: 'rgb(255,255,255)'
         },
         2: {
             backgroundImage: 'linear-gradient(135deg, rgb(255, 100, 100), rgb(255, 150, 150))',
@@ -23,11 +28,11 @@ function DepartmentInfo() {
         },
         3: {
             backgroundImage: 'linear-gradient(135deg, rgb(34, 193, 195), rgb(253, 187, 45))',
-            color: '#FF6347'
+            color: 'rgb(66, 26, 226)'
         },
         4: {
             backgroundImage: 'linear-gradient(135deg, rgb(100, 200, 255), rgb(50, 150, 255))',
-            color: '#1E90FF'
+            color: 'rgb(255, 221, 0)'
         },
         5: {
             backgroundImage: 'linear-gradient(135deg, rgb(255, 204, 255), rgb(255, 102, 204))',
@@ -35,11 +40,11 @@ function DepartmentInfo() {
         },
         6: {
             backgroundImage: 'linear-gradient(135deg, rgb(255, 223, 186), rgb(255, 165, 0))',
-            color: '#FFD700'
+            color: 'rgb(159, 16, 231)'
         },
         7: {
             backgroundImage: 'linear-gradient(135deg, rgb(93, 109, 126), rgb(48, 63, 77))',
-            color: '#2F4F4F'
+            color: 'rgb(226, 212, 222)'
         },
         8: {
             backgroundImage: 'linear-gradient(135deg, rgb(204, 255, 204), rgb(0, 204, 102))',
@@ -229,7 +234,7 @@ function DepartmentInfo() {
                             <Typography
                                 sx={{
                                     ml: '6px',
-                                    color: '#C6E2FF',
+                                    color: departmentStyle.color || '#C6E2FF',
                                     fontSize: '16px',
                                     mt: '7px'
                                 }}

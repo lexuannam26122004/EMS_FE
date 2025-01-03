@@ -259,24 +259,24 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 {menuLeft['Benefit'].IsAllowView && (
                     <SidebarItem
                         icon={<Gift />}
-                        text={t('COMMON.SIDEBAR.BENEFIT')}
-                        //route='/admin/benefit'
-                        //active={pathname === '/admin/benefit'}
+                        text={t('Phúc lợi')}
+                        route='/admin/benefit'
+                        active={pathname === '/admin/benefit'}
                     >
-                        {menuLeft['/admin/benefit'].IsAllowView && (
+                        {/* {menuLeft['/admin/benefit'].IsAllowView && (
                             <SidebarItem
                                 icon={<ChartNoAxesCombined />}
-                                text={t('COMMON.SIDEBAR.ATTENDANCE')}
+                                text={t('Danh sách phúc lợi')}
                                 route='/admin/benefit'
                             />
-                        )}
-                        {menuLeft['/admin/benefit/add-employee-benefits'].IsAllowView && (
+                        )} */}
+                        {/* {menuLeft['/admin/benefit/add-employee-benefits'].IsAllowView && (
                             <SidebarItem
                                 icon={<ChartNoAxesCombined />}
-                                text={t('COMMON.SIDEBAR.BENEFITS')}
+                                text={t('Phúc lợi nhân viên')}
                                 route='/admin/benefit/add-employee-benefits'
                             />
-                        )}
+                        )} */}
                     </SidebarItem>
                 )}
                 {menuLeft['Discipline'].IsAllowView && (

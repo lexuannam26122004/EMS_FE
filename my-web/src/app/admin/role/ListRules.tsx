@@ -177,7 +177,7 @@ function TableErrorReport({ rewardsData, totalRecords }: IProps) {
                                         color: 'var(--text-color)',
                                         fontSize: '16px',
                                         textAlign: 'center',
-                                        maxWidth: '280px',
+                                        maxWidth: '100px',
                                         overflow: 'hidden',
                                         ml: '8px',
                                         textOverflow: 'ellipsis',
@@ -323,11 +323,11 @@ function TableErrorReport({ rewardsData, totalRecords }: IProps) {
                                         sx={{
                                             color: 'var(--text-color)',
                                             fontSize: '16px',
-                                            maxWidth: '280px',
+                                            maxWidth: '100px',
                                             overflow: 'hidden',
                                             textOverflow: 'ellipsis',
                                             whiteSpace: 'nowrap',
-                                            ml: '60px'
+                                            ml: '40px'
                                         }}
                                     >
                                         {row.SalaryCoefficident}

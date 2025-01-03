@@ -16,7 +16,7 @@ import {
 import { useEffect, useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
-import TableReward from './ListRules'
+import TableErrorReport from './ListRules'
 
 interface IGetAllRules {
     Id: string
@@ -137,7 +137,7 @@ function Page() {
                     {t('Danh sách chức vụ')}
                 </Typography>
 
-                <TableReward rewardsData={rewardData} totalRecords={totalRecords} />
+                <TableErrorReport rewardsData={rewardData} totalRecords={totalRecords} />
             </Paper>
         </Box>
     )

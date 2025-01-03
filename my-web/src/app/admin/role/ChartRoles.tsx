@@ -13,6 +13,10 @@ const Chart: React.FC = () => {
             trigger: 'item'
         },
         legend: {
+            textStyle: {
+                color: theme === 'light' ? '#000000' : '#ffffff',
+                fontFamily: 'Arial, sans-serif'
+            },
             top: '5%',
             left: 'center'
         },
@@ -59,10 +63,14 @@ const Chart: React.FC = () => {
                 padding: '24px',
                 backgroundColor: 'var(--background-item)',
                 borderRadius: '15px',
-                height: '100%'
+                height: '100%',
+                border: '2px solid black',
+                display: 'flex',
+                justifyContent: 'center',
+                flexDirection: 'column'
             }}
         >
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'top' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'top' }}>
                 <Typography
                     sx={{
                         fontSize: '18px',

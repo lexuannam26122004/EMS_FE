@@ -114,6 +114,7 @@ body {
     --attendance-bg3: #3f5060;
     --loader0: #132025;
     --loader1: #0f3132;
+    --roles: rgb(255, 255, 255);
 }
 
 .light {
@@ -204,6 +205,7 @@ body {
     --attendance-bg3: #a0ffde;
     --loader0: #cdf0ed;
     --loader1: #9aebdf;
+    --roles: rgb(134, 90, 200);
 }
 
 body {
