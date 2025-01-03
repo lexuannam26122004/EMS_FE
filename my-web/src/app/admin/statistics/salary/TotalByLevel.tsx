@@ -136,7 +136,8 @@ export default function TotalByLevel() {
                 padding: '24px',
                 backgroundColor: 'var(--background-item)',
                 borderRadius: '15px',
-                height: '100%'
+                height: '100%',
+                boxShadow: 'var(--box-shadow-paper)'
             }}
         >
             <Typography fontSize={'20px'} fontWeight={'bold'} color='var(--text-color)'>

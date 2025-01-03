@@ -1,10 +1,49 @@
 'use client'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 import { Paper, Typography } from '@mui/material'
 import { useTheme } from 'next-themes'
+import { useGetGrossTotalByDepartmentsQuery } from '@/services/SalaryService'
+import Loading from '@/components/Loading'
 export default function PayrollShares() {
     const { theme } = useTheme()
+    const [chartData, setChartData] = useState<{ [key: string]: number }>({})
+    const [loading, setLoading] = useState(true)
+    const { data, isLoading, error } = useGetGrossTotalByDepartmentsQuery()
+    useEffect(() => {
+        if (data) {
+            setChartData(data.Data.salaryPercent) // Giả sử dữ liệu trả về có cấu trúc như bạn đã định nghĩa
+            setLoading(false)
+        }
+    }, [data])
+
+    if (isLoading || loading) {
+        return <Loading />
+    }
+    if (error) {
+        return (
+            <Paper
+                elevation={0}
+                sx={{
+                    width: '100%',
+                    padding: '24px',
+                    backgroundColor: 'var(--background-item)',
+                    borderRadius: '15px',
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+            >
+                <Typography color='red'>Có lỗi xảy ra khi tải dữ liệu.</Typography> {/* Thông báo lỗi */}
+            </Paper>
+        )
+    }
+
+    const chartDataArray = Object.entries(chartData).map(([name, value]) => ({
+        value,
+        name
+    }))
     const option = {
         tooltip: {
             trigger: 'item'
@@ -40,15 +79,9 @@ export default function PayrollShares() {
                     }
                 },
                 labelLine: {
-                    show: false
+                    show: true
                 },
-                data: [
-                    { value: 1048, name: 'Search Engine' },
-                    { value: 735, name: 'Direct' },
-                    { value: 580, name: 'Email' },
-                    { value: 484, name: 'Union Ads' },
-                    { value: 300, name: 'Video Ads' }
-                ]
+                data: chartDataArray
             }
         ]
     }
@@ -60,7 +93,8 @@ export default function PayrollShares() {
                 padding: '24px',
                 backgroundColor: 'var(--background-item)',
                 borderRadius: '15px',
-                height: '100%'
+                height: '100%',
+                boxShadow: 'var(--box-shadow-paper)'
             }}
         >
             <Typography fontSize={'20px'} fontWeight={'bold'} color='var(--text-color)'>

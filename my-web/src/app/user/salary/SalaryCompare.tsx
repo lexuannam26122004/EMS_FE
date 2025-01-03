@@ -2,7 +2,8 @@
 import { MenuItem, FormControl, Select, Box, Paper, Typography, SelectChangeEvent } from '@mui/material'
 import ReactECharts from 'echarts-for-react'
 import { useTheme } from 'next-themes'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
+
 import { useTranslation } from 'react-i18next'
 
 export default function SalaryCompare() {
@@ -15,6 +16,7 @@ export default function SalaryCompare() {
     const handleYearChange = (event: SelectChangeEvent<number>) => {
         setSelectedYear(event.target.value as number)
     }
+    useEffect(() => {}, [selectedYear])
 
     const option = {
         textStyle: {
@@ -128,7 +130,7 @@ export default function SalaryCompare() {
                             color: 'var(--text-color)'
                         }}
                     >
-                        {t('So sánh lương thực lĩnh qua các tháng')}
+                        {t('COMMON.SALARY.COMPARE_TAKE_HOMES')}
                     </Typography>
                 </Box>
                 <FormControl sx={{ width: '90px' }}>

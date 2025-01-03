@@ -87,6 +87,7 @@ export default function Detail() {
         setSelectedYear(event.target.value as number)
     }
     const data = ['1', '2']
+    useEffect(() => {}, [from, to, filter, selectedYear])
 
     return (
         <Box>

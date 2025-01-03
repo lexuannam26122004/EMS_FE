@@ -90,7 +90,8 @@ export default function SpecialInfo() {
                         padding: '24px',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
-                        position: 'relative'
+                        position: 'relative',
+                        boxShadow: 'var(--box-shadow-paper)'
                     }}
                 >
                     <Box width={'100%'}>
@@ -98,7 +99,7 @@ export default function SpecialInfo() {
                             sx={{
                                 fontSize: '16px',
                                 fontWeight: 'bold',
-                                color: '#637381'
+                                color: 'var(--reward-title-color)'
                             }}
                         >
                             {t('COMMON.SALARY.HIGHEST')}
