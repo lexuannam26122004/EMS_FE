@@ -7,11 +7,13 @@ import { Box } from '@mui/material'
 const App: React.FC = () => {
     return (
         <Box>
+            <DisplayInfo />
             <Box
                 sx={{
                     display: 'grid',
                     gridTemplateColumns: 'calc(100% / 3 * 2 - 8px) calc(100% / 3 - 16px)',
-                    gap: '24px'
+                    gap: '24px',
+                    mt: '24px'
                 }}
             >
                 {/* Cột bên trái */}
@@ -24,7 +26,7 @@ const App: React.FC = () => {
                         gap: '24px'
                     }}
                 >
-                    <DisplayInfo />
+                    <Page />
                 </Box>
                 <Box>
                     <Chart />
@@ -32,7 +34,6 @@ const App: React.FC = () => {
 
                 {/* Cột bên phải */}
             </Box>
-            <Page />
         </Box>
     )
 }

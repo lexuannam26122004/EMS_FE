@@ -62,7 +62,8 @@ function DepartmentTable() {
     const [isChangeMany, setIsChangeMany] = useState(false)
     const [filter, setFilter] = useState<IFilterSysConfiguration>({
         pageSize: 10,
-        pageNumber: 1
+        pageNumber: 1,
+        isDescending: false
     })
 
     const { data: responseData, isFetching, refetch } = useGetAllDepartmentQuery(filter)
@@ -395,7 +396,7 @@ function DepartmentTable() {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {t('Name')} {/* Cập nhật khóa dịch này */}
+                                            {t('Tên phòng ban')} {/* Cập nhật khóa dịch này */}
                                         </Typography>
                                     </TableSortLabel>
                                 </TableCell>
@@ -422,7 +423,7 @@ function DepartmentTable() {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {t('DepartmentHeadName')}
+                                            {t('Tên trưởng phòng')}
                                         </Typography>
                                     </TableSortLabel>
                                 </TableCell>
@@ -491,7 +492,7 @@ function DepartmentTable() {
                                             width: '150px'
                                         }}
                                     >
-                                        {t('COMMON.BENEFIT.ACTION')}
+                                        {t('Hành động')}
                                     </Typography>
                                 </TableCell>
                             </TableRow>
@@ -501,13 +502,53 @@ function DepartmentTable() {
                                 <TableRow key={row.Id} selected={isSelected(row.Id)}>
                                     <TableCell padding='checkbox'>
                                         <Checkbox
+                                            sx={{
+                                                ml: '5px',
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
                                             checked={isSelected(row.Id)}
                                             onChange={() => handleCheckboxClick(row.Id)}
                                         />
                                     </TableCell>
-                                    <TableCell sx={{ fontWeight: 'bold' }}>{row.Id}</TableCell>
-                                    <TableCell sx={{ width: '200px' }}>{row.Name}</TableCell>
-                                    <TableCell>{row.DepartmentHeadName}</TableCell>
+                                    <TableCell
+                                        sx={{
+                                            fontWeight: 'bold',
+                                            color: 'var(--text-color)',
+                                            fontSize: '16px',
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                            whiteSpace: 'nowrap'
+                                        }}
+                                    >
+                                        {row.Id}
+                                    </TableCell>
+                                    <TableCell
+                                        sx={{
+                                            width: '200px',
+                                            color: 'var(--text-color)',
+                                            fontSize: '16px',
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                            whiteSpace: 'nowrap'
+                                        }}
+                                    >
+                                        {row.Name}
+                                    </TableCell>
+                                    <TableCell
+                                        sx={{
+                                            color: 'var(--text-color)',
+                                            fontSize: '16px',
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                            whiteSpace: 'nowrap'
+                                        }}
+                                    >
+                                        {row.DepartmentHeadName}
+                                    </TableCell>
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                         <Typography
                                             sx={{
@@ -521,7 +562,18 @@ function DepartmentTable() {
                                             {formatDate(row.CreatedDate)}
                                         </Typography>
                                     </TableCell>
-                                    <TableCell sx={{ width: '100px' }}>{row.CreatedBy}</TableCell>
+                                    <TableCell
+                                        sx={{
+                                            width: '100px',
+                                            color: 'var(--text-color)',
+                                            fontSize: '16px',
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                            whiteSpace: 'nowrap'
+                                        }}
+                                    >
+                                        {row.CreatedBy}
+                                    </TableCell>
                                     <TableCell>
                                         <Box
                                             display='flex'
@@ -599,7 +651,18 @@ function DepartmentTable() {
 
                 <Box display='flex' alignItems='center' justifyContent='space-between' padding='15px'>
                     <Box display='flex' alignItems='center'>
-                        <Typography sx={{ mr: '10px' }}>{t('COMMON.PAGINATION.ROWS_PER_PAGE')}</Typography>
+                        <Typography
+                            sx={{
+                                mr: '10px',
+                                color: 'var(--text-color)',
+                                fontSize: '16px',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap'
+                            }}
+                        >
+                            {t('COMMON.PAGINATION.ROWS_PER_PAGE')}
+                        </Typography>
                         <Select
                             id='select'
                             sx={{
@@ -654,7 +717,16 @@ function DepartmentTable() {
                                 </MenuItem>
                             ))}
                         </Select>
-                        <Typography sx={{ ml: '30px' }}>
+                        <Typography
+                            sx={{
+                                ml: '30px',
+                                color: 'var(--text-color)',
+                                fontSize: '16px',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap'
+                            }}
+                        >
                             {t('COMMON.PAGINATION.FROM_TO', { from, to, totalRecords })}
                         </Typography>
                     </Box>
