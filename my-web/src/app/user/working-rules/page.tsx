@@ -6,9 +6,8 @@ import {
     Typography,
     // MenuItem,
     //SelectChangeEvent,
-    Paper,
-    Button,
-    Tooltip
+    Paper
+
     //Checkbox,
     //TableRow,
     //TableBody,
@@ -24,7 +23,7 @@ import {
     //TableSortLabel,
     //Chip
 } from '@mui/material'
-import { AlarmClock, CirclePlus, Pencil, Trash2 } from 'lucide-react'
+import { AlarmClock } from 'lucide-react'
 
 import { useTranslation } from 'react-i18next'
 
@@ -126,33 +125,11 @@ function WorkingRolesPage() {
                         width: '100%',
                         height: '500px',
                         backgroundImage: 'url(/images/backgroundWorkingRules.svg)',
-                        position: 'relative'
+                        position: 'relative',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundSize: '100%'
                     }}
                 >
-                    <Button
-                        variant='contained'
-                        startIcon={<CirclePlus />}
-                        sx={{
-                            height: '44px',
-                            backgroundColor: 'rgb(134, 90, 200)',
-                            width: 'auto',
-                            padding: '0px 24px',
-                            '&:hover': {
-                                backgroundColor: 'rgb(134, 90, 200)'
-                            },
-                            fontSize: '16px',
-                            fontWeight: 'bold',
-                            whiteSpace: 'nowrap',
-                            textTransform: 'none',
-                            position: 'absolute',
-                            top: 20,
-                            right: 20
-                        }}
-                        //onClick={() => router.push('/admin/benefit/create-benefit')}
-                        //onClick={() => handleOpenCreateDialog()}
-                    >
-                        {t('COMMON.BUTTON.CREATE')}
-                    </Button>
                     <img
                         src='/images/backgroundBottomWorkingRules_White.svg'
                         alt=''
@@ -584,7 +561,7 @@ function WorkingRolesPage() {
                                         justifyContent: 'flex-start',
                                         height: '100%',
                                         gap: '24px',
-                                        border: '2px solid var(--bg-all-color1)',
+                                        //border: '2px solid var(--bg-all-color1)',
                                         borderRadius: '15px'
                                     }}
                                 >
@@ -612,10 +589,13 @@ function WorkingRolesPage() {
                                         sx={{
                                             display: 'flex',
                                             alignItems: 'center',
-                                            width: '100%'
+                                            width: '100%',
+                                            mt: '24px',
+                                            mb: '24px',
+                                            mr: '50px'
                                         }}
                                     >
-                                        <Box sx={{ textAlign: 'left' }}>
+                                        <Box sx={{ textAlign: 'justify' }}>
                                             <Box>
                                                 <Typography
                                                     sx={{
@@ -632,53 +612,6 @@ function WorkingRolesPage() {
                                                 {t('Lưu ý: ') + item.Note}
                                             </Typography>
                                         </Box>
-                                    </Box>
-                                    <Box
-                                        sx={{ marginLeft: 'auto' }}
-                                        display='flex'
-                                        alignItems='center'
-                                        justifyContent='flex-end'
-                                    >
-                                        <Tooltip title={t('COMMON.BUTTON.EDIT')}>
-                                            <Box
-                                                display='flex'
-                                                alignItems='center'
-                                                justifyContent='center'
-                                                sx={{
-                                                    cursor: 'pointer',
-                                                    color: '#00d4ff',
-                                                    borderRadius: '50%',
-                                                    width: '42px',
-                                                    height: '42px',
-                                                    '&:hover': {
-                                                        backgroundColor: 'var(--hover-color)'
-                                                    }
-                                                }}
-                                                //onClick={() => handleUpdate(row)}
-                                            >
-                                                <Pencil />
-                                            </Box>
-                                        </Tooltip>
-                                        <Tooltip title={t('COMMON.BUTTON.DELETE')}>
-                                            <Box
-                                                display='flex'
-                                                alignItems='center'
-                                                justifyContent='center'
-                                                sx={{
-                                                    cursor: 'pointer',
-                                                    color: 'red',
-                                                    borderRadius: '50%',
-                                                    width: '42px',
-                                                    height: '42px',
-                                                    '&:hover': {
-                                                        backgroundColor: 'var(--hover-color)'
-                                                    }
-                                                }}
-                                                //onClick={() => handleDeleteClick(row.Id)}
-                                            >
-                                                <Trash2 />
-                                            </Box>
-                                        </Tooltip>
                                     </Box>
                                 </Box>
                             </Box>

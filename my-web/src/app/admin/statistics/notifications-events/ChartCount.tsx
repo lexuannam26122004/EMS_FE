@@ -24,21 +24,21 @@ export default function Chart() {
             backgroundColor: theme === 'light' ? 'rgba(250, 250, 250, 0.98)' : 'rgba(20, 26, 25, 0.98)',
             borderColor: theme === 'light' ? 'rgba(250, 250, 250, 0.98)' : 'rgba(20, 26, 25, 0.98)',
             textStyle: {
-                color: theme === 'light' ? '#000000' : '#ffffff'
+                color: theme === 'light' ? '#000000' : '#ffffff',
+                fontFamily: 'Arial, sans-serif'
             }
         },
         dataset: {
             source: [
                 ['score', 'amount', 'product'],
-                [12, 12, 'Matcha Latte'],
-                [24, 13, 'Milk Tea'],
-                [17, 10, 'Cheese Cocoa'],
-                [44, 24, 'Cheese Brownie'],
-                [98, 98, 'Matcha Cocoa'],
-                [46, 67, 'Tea'],
-                [34, 34, 'Orange Juice'],
-                [23, 23, 'Lemon Juice'],
-                [3, 3, 'Walnut Brownie']
+                [55, 55, t('COMMON.NOTIFICATION_TYPE.PUBLIC')],
+                [15, 15, t('COMMON.NOTIFICATION_TYPE.SALARY')],
+                [24, 24, t('COMMON.NOTIFICATION_TYPE.BENEFIT')],
+                [45, 45, t('COMMON.NOTIFICATION_TYPE.REWARD')],
+                [28, 28, t('COMMON.NOTIFICATION_TYPE.INSURANCE')],
+                [10, 10, t('COMMON.NOTIFICATION_TYPE.HOLIDAY')],
+                [39, 39, t('COMMON.NOTIFICATION_TYPE.DISCIPLINE')],
+                [5, 5, t('COMMON.NOTIFICATION_TYPE.TIMEKEEPING')]
             ]
         },
         calculable: true,
@@ -188,6 +188,9 @@ export default function Chart() {
                                     color: 'var(--text-color)',
                                     border: '1px solid var(--border-color)',
                                     '& .MuiMenuItem-root': {
+                                        '&:not(:first-child)': {
+                                            mt: '3px'
+                                        },
                                         '&:hover': { backgroundColor: 'var(--hover-color)' },
                                         '&.Mui-selected': {
                                             backgroundColor: 'var(--background-selected-item)',
@@ -213,10 +216,7 @@ export default function Chart() {
                                     key={year}
                                     value={year}
                                     sx={{
-                                        borderRadius: '6px',
-                                        '&:last-child': {
-                                            mt: '3px'
-                                        }
+                                        borderRadius: '6px'
                                     }}
                                 >
                                     {year}

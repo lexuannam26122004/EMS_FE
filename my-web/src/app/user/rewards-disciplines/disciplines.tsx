@@ -39,6 +39,8 @@ export default function Discipline() {
         pageNumber: 1
     })
 
+    useEffect(() => {}, [from, to, filter])
+
     const handleChangePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
         setPage(newPage)
         setFilter(prev => {
@@ -80,6 +82,8 @@ export default function Discipline() {
 
     const currentYear = new Date().getFullYear()
     const [selectedYear, setSelectedYear] = useState(currentYear)
+
+    useEffect(() => {}, [selectedYear])
 
     const handleYearChange = (event: SelectChangeEvent<number>) => {
         setSelectedYear(event.target.value as number)

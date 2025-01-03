@@ -51,8 +51,8 @@ const responseData = {
         Records: [
             {
                 Id: 1,
-                FullNameReported: 'Nguyen Van A',
-                EmployeeIdReported: 'CC001',
+                FullNameReported: 'Lê Xuân Nam',
+                EmployeeIdReported: 'CC-001',
                 ReportedDate: '2024-11-27 00:00:00.0000000',
                 Type: 'Salary',
                 TypeId: 'S0001',
@@ -64,8 +64,8 @@ const responseData = {
             },
             {
                 Id: 2,
-                FullNameReported: 'Tran Thi B',
-                EmployeeIdReported: 'CC002',
+                FullNameReported: 'Nguyễn Văn Thành',
+                EmployeeIdReported: 'CC-002',
                 ReportedDate: '2024-11-28 00:00:00.0000000',
                 Type: 'Benefit',
                 TypeId: 'L0001',
@@ -77,8 +77,8 @@ const responseData = {
             },
             {
                 Id: 3,
-                FullNameReported: 'Le Van C',
-                EmployeeIdReported: 'CC003',
+                FullNameReported: 'Trần Thị Hải Yến',
+                EmployeeIdReported: 'CC-003',
                 ReportedDate: '2024-11-29 00:00:00.0000000',
                 Type: 'Discipline',
                 TypeId: 'O0001',
@@ -90,8 +90,8 @@ const responseData = {
             },
             {
                 Id: 4,
-                FullNameReported: 'Pham Thi E',
-                EmployeeIdReported: 'CC004',
+                FullNameReported: 'Lê Văn Việt',
+                EmployeeIdReported: 'CC-004',
                 ReportedDate: '2024-11-30 00:00:00.0000000',
                 Type: 'Salary',
                 TypeId: 'S0002',
@@ -103,8 +103,8 @@ const responseData = {
             },
             {
                 Id: 5,
-                FullNameReported: 'Hoang Van F',
-                EmployeeIdReported: 'CC005',
+                FullNameReported: 'Nguyễn Trọng Tất Thành',
+                EmployeeIdReported: 'CC-005',
                 ReportedDate: '2024-12-01 00:00:00.0000000',
                 Type: 'Reward',
                 TypeId: 'L0002',
@@ -116,8 +116,8 @@ const responseData = {
             },
             {
                 Id: 6,
-                FullNameReported: 'Vo Thi H',
-                EmployeeIdReported: 'CC006',
+                FullNameReported: 'Lê Minh Vũ Nam',
+                EmployeeIdReported: 'CC-006',
                 ReportedDate: '2024-12-02 00:00:00.0000000',
                 Type: 'Timekeeping',
                 TypeId: 'O0002',
@@ -129,8 +129,8 @@ const responseData = {
             },
             {
                 Id: 7,
-                FullNameReported: 'Tran Van I',
-                EmployeeIdReported: 'CC007',
+                FullNameReported: 'Trần Thị Tuyết Phương',
+                EmployeeIdReported: 'CC-007',
                 ReportedDate: '2024-12-03 00:00:00.0000000',
                 Type: 'Salary',
                 TypeId: 'S0003',
@@ -143,7 +143,7 @@ const responseData = {
             {
                 Id: 8,
                 FullNameReported: 'Nguyen Thi K',
-                EmployeeIdReported: 'CC008',
+                EmployeeIdReported: 'CC-008',
                 ReportedDate: '2024-12-04 00:00:00.0000000',
                 Type: 'Insurance',
                 TypeId: 'L0003',
@@ -156,7 +156,7 @@ const responseData = {
             {
                 Id: 9,
                 FullNameReported: 'Hoang Thi M',
-                EmployeeIdReported: 'CC009',
+                EmployeeIdReported: 'CC-009',
                 ReportedDate: '2024-12-05 00:00:00.0000000',
                 Type: 'Contract',
                 TypeId: 'O0003',
@@ -169,7 +169,7 @@ const responseData = {
             {
                 Id: 10,
                 FullNameReported: 'Le Van N',
-                EmployeeIdReported: 'CC010',
+                EmployeeIdReported: 'CC-010',
                 ReportedDate: '2024-12-06 00:00:00.0000000',
                 Type: 'All',
                 TypeId: 'S0004',

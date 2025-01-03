@@ -20,12 +20,13 @@ function Page() {
         <Box
             sx={{
                 padding: '20px',
-                backgroundColor: 'var(--hover-color)',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                borderRadius: '12px',
+                boxShadow: 'var(--box-shadow-paper)',
+                borderRadius: '30px',
+                backgroundColor: 'var(--attendance-bg1)',
+                //borderRadius: '12px',
                 overflow: 'hidden',
                 height: '100%',
-                border: '1px solid #e0e0e0',
+                //border: '1px solid #e0e0e0',
                 width: '100%'
             }}
         >
@@ -36,8 +37,7 @@ function Page() {
                     alignItems: 'center',
                     gap: '24px',
                     height: '190px',
-                    marginBottom: '24px',
-                    
+                    marginBottom: '24px'
                 }}
             >
                 <Paper

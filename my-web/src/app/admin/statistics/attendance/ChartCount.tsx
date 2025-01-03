@@ -3,18 +3,16 @@ import ReactECharts from 'echarts-for-react'
 import { useTheme } from 'next-themes'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { InputLabel } from '@mui/material'
 
 export default function Chart() {
     const { t } = useTranslation('common')
     const { theme } = useTheme()
-    const currentYear = new Date().getFullYear()
-    const [selectedYear, setSelectedYear] = useState(currentYear)
+    const [type, setType] = useState(0)
 
-    const handleYearChange = (event: SelectChangeEvent<number>) => {
-        setSelectedYear(event.target.value as number)
+    const handleTypeChange = (event: SelectChangeEvent<number>) => {
+        setType(event.target.value as number)
     }
-
-    const percent = 43
 
     const option = {
         animation: true, // Bật hiệu ứng chuyển tiếp
@@ -31,15 +29,13 @@ export default function Chart() {
         dataset: {
             source: [
                 ['department', t('COMMON.ATTENDANCE.JOIN'), t('COMMON.ATTENDANCE.STATUS_ABSENT')], // Cột đầu tiên là danh mục, sau đó là các giá trị
-                ['Matcha Latte', 12, 3],
-                ['Milk Tea', 24, 5],
-                ['Cheese Cocoa', 17, 8],
-                ['Cheese Brownie', 44, 2],
-                ['Matcha Cocoa', 98, 4],
-                ['Tea', 46, 9],
-                ['Orange Juice', 34, 6],
-                ['Lemon Juice', 23, 7],
-                ['Walnut Brownie', 3, 1]
+                ['Human Resources', 5, 2],
+                ['Finance', 24, 5],
+                ['IT Services', 17, 8],
+                ['Marketing', 20, 2],
+                ['Sales', 5, 3],
+                ['Operations', 20, 4],
+                ['Customer Support', 14, 6]
             ]
         },
         calculable: true,
@@ -121,7 +117,7 @@ export default function Chart() {
             <Box
                 sx={{
                     display: 'flex',
-                    mb: '24px',
+                    mb: '10px',
                     justifyContent: 'space-between'
                 }}
             >
@@ -133,27 +129,49 @@ export default function Chart() {
                             color: 'var(--text-color)'
                         }}
                     >
-                        {t('COMMON.STAT_NOTIFY.CHART_TYPE')}
-                    </Typography>
-                    <Typography
-                        sx={{
-                            fontSize: '14px',
-                            mt: '4px',
-                            color: theme === 'dark' ? '#919EAB' : '#637381'
-                        }}
-                    >
-                        {t('COMMON.STAT_NOTIFY.CHART_TYPE_RATE', {
-                            status:
-                                percent >= 0 ? t('COMMON.STAT_NOTIFY.INCREASED') : t('COMMON.STAT_NOTIFY.DECREASED'),
-                            x: percent,
-                            year: selectedYear - 1
-                        })}
+                        {t('COMMON.ATTENDANCE.BY_DEPARTMENT')}
                     </Typography>
                 </Box>
-                <FormControl sx={{ width: '90px' }}>
+                <FormControl
+                    sx={{
+                        width: '140px',
+                        mb: 'auto',
+                        '& fieldset': {
+                            borderRadius: '8px',
+                            borderColor: 'var(--border-color)' // Viền mặc định
+                        },
+                        '& .MuiOutlinedInput-root:hover fieldset': {
+                            borderColor: 'var(--hover-field-color)' // Màu hover khi không lỗi
+                        },
+                        '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                            borderColor: 'var(--error-color)' // Màu hover khi lỗi
+                        },
+                        '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                            borderColor: 'var(--error-color)' // Màu viền khi lỗi
+                        },
+                        '& .MuiOutlinedInput-root.Mui-focused fieldset': {
+                            borderColor: 'var(--selected-field-color)' // Màu viền khi focus
+                        },
+                        '& .MuiOutlinedInput-root.Mui-error.Mui-focused fieldset': {
+                            borderColor: 'var(--error-color)' // Màu viền khi lỗi và focus
+                        },
+                        '& .MuiInputLabel-root': {
+                            color: 'var(--text-label-color)' // Label mặc định
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'var(--selected-field-color)' // Label khi focus
+                        },
+                        '& .MuiInputLabel-root.Mui-error': {
+                            color: 'var(--error-color)' // Label khi lỗi
+                        }
+                    }}
+                >
+                    <InputLabel id='select-label'>{t('COMMON.STAT_NOTIFY.BY')}</InputLabel>
                     <Select
-                        defaultValue={currentYear}
-                        onChange={handleYearChange}
+                        label={t('COMMON.STAT_NOTIFY.BY')}
+                        defaultValue={1}
+                        value={type}
+                        onChange={handleTypeChange}
                         sx={{
                             '&:hover .MuiOutlinedInput-notchedOutline': {
                                 borderColor: 'var(--border-color)'
@@ -170,15 +188,15 @@ export default function Chart() {
                             },
                             '& .MuiInputBase-input': {
                                 color: 'var(--text-color)',
-                                padding: '10px'
+                                padding: '9.5px 14px'
                             }
                         }}
                         MenuProps={{
                             PaperProps: {
                                 elevation: 0,
                                 sx: {
-                                    width: '120px',
-                                    mt: '2px',
+                                    width: '140px',
+                                    mt: '4px',
                                     borderRadius: '8px',
                                     padding: '0 8px',
                                     backgroundImage:
@@ -209,23 +227,34 @@ export default function Chart() {
                             }
                         }}
                     >
-                        {[...Array(currentYear - 2022)].map((_, index) => {
-                            const year = currentYear - index
-                            return (
-                                <MenuItem
-                                    key={year}
-                                    value={year}
-                                    sx={{
-                                        borderRadius: '6px',
-                                        '&:last-child': {
-                                            mt: '3px'
-                                        }
-                                    }}
-                                >
-                                    {year}
-                                </MenuItem>
-                            )
-                        })}
+                        <MenuItem
+                            value={0}
+                            sx={{
+                                borderRadius: '6px'
+                            }}
+                        >
+                            {t('COMMON.USER.THIS_WEEK')}
+                        </MenuItem>
+
+                        <MenuItem
+                            value={1}
+                            sx={{
+                                borderRadius: '6px',
+                                mt: '3px'
+                            }}
+                        >
+                            {t('COMMON.USER.THIS_MONTH')}
+                        </MenuItem>
+
+                        <MenuItem
+                            value={2}
+                            sx={{
+                                borderRadius: '6px',
+                                mt: '3px'
+                            }}
+                        >
+                            {t('COMMON.USER.THIS_YEAR')}
+                        </MenuItem>
                     </Select>
                 </FormControl>
             </Box>

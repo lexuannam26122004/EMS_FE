@@ -18,9 +18,13 @@ import { useRouter } from 'next/navigation'
 export default function SalaryCycle() {
     const { t } = useTranslation('common')
     // const { theme } = useTheme()
+
+
+
     const currentYear = new Date().getFullYear()
     const [selectedYear, setSelectedYear] = useState(currentYear)
-    const router = useRouter()
+
+    useEffect(() => {}, [selectedYear])
 
     const handleYearChange = (event: SelectChangeEvent<number>) => {
         setSelectedYear(event.target.value as number)
