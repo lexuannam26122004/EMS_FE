@@ -904,7 +904,7 @@ function Page() {
                                                     top: '-70px'
                                                 }}
                                             >
-                                                {nameTop2}
+                                                {'Hoàng'}
                                             </Typography>
 
                                             <Typography
@@ -1013,7 +1013,7 @@ function Page() {
                                                     top: '-70px'
                                                 }}
                                             >
-                                                {nameTop1}
+                                                {'Anh'}
                                             </Typography>
 
                                             <Typography
@@ -1111,7 +1111,7 @@ function Page() {
                                                     top: '-70px'
                                                 }}
                                             >
-                                                {nameTop3}
+                                                {'Hà'}
                                             </Typography>
 
                                             <Typography
