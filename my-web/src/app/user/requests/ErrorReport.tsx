@@ -11,8 +11,10 @@ import {
     InputLabel,
     FormControl,
     TextField,
-    InputAdornment
+    InputAdornment,
+    Button
 } from '@mui/material'
+import { CirclePlus } from 'lucide-react'
 import { useEffect, useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import SearchIcon from '@mui/icons-material/Search'
@@ -351,7 +353,7 @@ function ContractExpPage() {
                 backgroundColor: 'var(--attendance-bg1)',
                 overflow: 'hidden',
                 height: '100%',
-               // border: '1px solid #e0e0e0',
+                // border: '1px solid #e0e0e0',
                 width: '100%'
             }}
         >
@@ -745,6 +747,36 @@ function ContractExpPage() {
                                 <MenuItem value={'Timekeeping'}>{t('COMMON.NOTIFICATION_TYPE.TIMEKEEPING')}</MenuItem>
                             </Select>
                         </FormControl>
+                    </Box>
+
+                    <Box
+                        display='flex'
+                        alignItems='center'
+                        justifyContent='flex-end' // Căn phải
+                        gap='20px'
+                        width='100%'
+                        borderRadius='10px' // Đảm bảo Box chiếm toàn bộ chiều rộng
+                    >
+                        <Button
+                            variant='contained'
+                            startIcon={<CirclePlus />}
+                            sx={{
+                                height: '53px',
+                                backgroundColor: 'var(--button-color)',
+                                width: 'auto',
+                                padding: '0px 30px',
+                                '&:hover': {
+                                    backgroundColor: 'var(--hover-button-color)'
+                                },
+                                fontSize: '16px',
+                                fontWeight: 'bold',
+                                whiteSpace: 'nowrap',
+                                textTransform: 'none',
+                                borderRadius: '10px'
+                            }}
+                        >
+                            {t('COMMON.BUTTON.CREATE')}
+                        </Button>
                     </Box>
                 </Box>
 

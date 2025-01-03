@@ -9,8 +9,10 @@ import {
     SelectChangeEvent,
     Paper,
     TextField,
-    InputAdornment
+    InputAdornment,
+    Button
 } from '@mui/material'
+import { CirclePlus } from 'lucide-react'
 import { useEffect, useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import SearchIcon from '@mui/icons-material/Search'
@@ -489,6 +491,28 @@ function ContractExpPage() {
                                 }
                             }}
                         />
+                    </Box>
+                    <Box display='flex' alignItems='center' justifyContent='flex-end' gap='20px' width='100%'>
+                        <Button
+                            variant='contained'
+                            startIcon={<CirclePlus />}
+                            sx={{
+                                height: '53px',
+                                backgroundColor: 'var(--button-color)',
+                                width: 'auto',
+                                padding: '0px 30px',
+                                '&:hover': {
+                                    backgroundColor: 'var(--hover-button-color)'
+                                },
+                                fontSize: '16px',
+                                fontWeight: 'bold',
+                                whiteSpace: 'nowrap',
+                                textTransform: 'none',
+                                borderRadius: '10px'
+                            }}
+                        >
+                            {t('COMMON.BUTTON.CREATE')}
+                        </Button>
                     </Box>
                 </Box>
 
