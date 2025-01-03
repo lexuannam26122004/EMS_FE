@@ -179,7 +179,7 @@ const App: React.FC = () => {
     return (
         <Box
             sx={{
-                padding: '20px',
+                padding: '35px',
                 backgroundColor: 'var(--attendance-bg1)',
                 boxShadow: 'var(--box-shadow-paper)',
                 borderRadius: '30px',

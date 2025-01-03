@@ -345,7 +345,7 @@ function ContractExpPage() {
     return (
         <Box
             sx={{
-                padding: '20px',
+                padding: '35px',
                 boxShadow: 'var(--box-shadow-paper)',
                 borderRadius: '30px',
                 backgroundColor: 'var(--attendance-bg1)',

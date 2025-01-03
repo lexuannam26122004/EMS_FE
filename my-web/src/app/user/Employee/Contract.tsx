@@ -111,7 +111,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                             color: 'var(--text-color)'
                         }}
                     >
-                        {'Quản lý : Lê Ngọc Ngà'}
+                        {'Phụ trách : Lê Ngọc Ngà'}
                     </Typography>
 
                     <Box

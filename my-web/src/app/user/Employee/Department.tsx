@@ -118,12 +118,13 @@ const Timeline: React.FC = () => {
     return (
         <Box
             sx={{
-                padding: '20px',
+                //padding: '20px',
                 backgroundColor: 'var(--attendance-bg1)',
                 boxShadow: 'var(--box-shadow-paper)',
                 borderRadius: '30px',
                 overflow: 'hidden',
                 height: '100%',
+                padding: '35px',
                 //border: '1px solid #e0e0e0',
                 width: '100%'
             }}
