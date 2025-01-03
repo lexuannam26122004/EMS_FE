@@ -28,7 +28,10 @@ const DetailModal = () => {
                 width: '100%',
                 borderRadius: '10px',
                 position: 'relative',
-                overflow: 'hidden'
+                overflow: 'hidden',
+                '&::-webkit-scrollbar': {
+                    display: 'none' // Ẩn thanh cuộn
+                }
             }}
         >
             <Box

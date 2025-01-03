@@ -6,12 +6,21 @@ import ColorModeIconDropdown from '@/components/ColorModeIconDropdown'
 import LanguageMenu from '@/components/LanguageMenu'
 import NotificationMenu from '@/components/NotificationMenu'
 import AvatarMenu from '@/components/AvatarMenu'
+import Chat from './Chat'
 
 function Layout({ children }: { children: React.ReactNode }) {
     const router = useRouter()
 
     return (
-        <Box component='main' sx={{ height: '100vh', overflowY: 'auto', position: 'relative' }}>
+        <Box
+            component='main'
+            sx={{
+                height: '100vh',
+                overflowY: 'auto',
+                position: 'relative',
+                overflow: 'hidden'
+            }}
+        >
             <Box
                 sx={{
                     display: 'flex',
@@ -82,6 +91,7 @@ function Layout({ children }: { children: React.ReactNode }) {
                     {children}
                 </Box>
             </Box>
+            <Chat />
         </Box>
     )
 }
