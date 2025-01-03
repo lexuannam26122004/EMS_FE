@@ -28,7 +28,10 @@ const DetailModal = () => {
                 width: '100%',
                 borderRadius: '10px',
                 position: 'relative',
-                overflow: 'hidden'
+                overflow: 'hidden',
+                '&::-webkit-scrollbar': {
+                    display: 'none' // Ẩn thanh cuộn
+                }
             }}
         >
             <Box
@@ -69,7 +72,8 @@ const DetailModal = () => {
                         overflow: 'auto',
                         '&::-webkit-scrollbar-corner': {
                             borderRadius: '10px'
-                        }
+                        },
+                        border: '1px solid #e0e0e0'
                     }}
                 >
                     <Box
@@ -96,10 +100,7 @@ const DetailModal = () => {
                             }}
                         >
                             <Avatar
-                                src={
-                                    'https://localhost:44381/' + user?.AvatarPath ||
-                                    'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'
-                                }
+                                src='https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-3.webp'
                                 alt='Avatar'
                                 sx={{
                                     width: '100%',
@@ -153,39 +154,9 @@ const DetailModal = () => {
                         gap: '24px'
                     }}
                 >
-                    <Box
-                        sx={{
-                            width: '100%',
-                            display: 'grid',
-                            gridTemplateColumns: 'calc(50% - 12px) calc(50% - 12px)',
-                            gap: '24px',
-                            marginBottom: '24px'
-                        }}
-                    >
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                justifyContent: 'space-between',
-                                height: '100%',
-                                gap: '24px'
-                            }}
-                        >
-                            <Employee aspnetUserId={user?.Id || ''} />
-                        </Box>
+                    <Employee aspnetUserId={user?.Id || ''} />
 
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                justifyContent: 'space-between',
-                                height: '100%',
-                                gap: '24px'
-                            }}
-                        >
-                            <Contract aspnetUserId={user?.Id || ''} />
-                        </Box>
-                    </Box>
+                    <Contract aspnetUserId={user?.Id || ''} />
 
                     <Department />
 

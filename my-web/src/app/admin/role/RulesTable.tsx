@@ -1,19 +1,7 @@
 'use client'
 import { IFilterEmploymentContract } from '@/models/EmploymentContract'
-import {
-    Box,
-    Select,
-    Pagination,
-    Typography,
-    MenuItem,
-    SelectChangeEvent,
-    Paper,
-    InputLabel,
-    FormControl,
-    TextField,
-    InputAdornment
-} from '@mui/material'
-import { useEffect, useState, useMemo } from 'react'
+import { Box, Typography, Paper } from '@mui/material'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
 import TableErrorReport from './ListRules'
@@ -75,7 +63,8 @@ function Page() {
         pageNumber: 1,
         daysUntilExpiration: 60
     })
-    const [keyword, setKeyword] = useState('')
+
+    const [keyword] = useState('')
     // const [openDialog, setOpenDialog] = useState(false)
     // const [selectedRow, setSelectedRow] = useState<number | null>(null)
     // const [order, setOrder] = useState<'asc' | 'desc'>('asc')
@@ -84,6 +73,20 @@ function Page() {
     // const [openModal, setOpenModal] = useState(false)
 
     useEffect(() => {}, [page, rowsPerPage, from, to, filter, keyword, selected, router, setSelected, setFrom, setTo])
+
+    useEffect(() => {}, [
+        page,
+        setPage,
+        from,
+        to,
+        filter,
+        setFilter,
+        selected,
+        setRowsPerPage,
+        setSelected,
+        setFrom,
+        setTo
+    ])
 
     // const { data: responseD, isFetching, refetch } = useGetContractsExpiringSoonQuery(filter)
 

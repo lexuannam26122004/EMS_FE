@@ -59,7 +59,7 @@ function ConfigurationPage() {
     const [selectedConfig, setSelectedConfig] = useState<IGetAllSysConfiguration | null>(null)
     const [openModal, setOpenModal] = useState(false)
 
-    const { data: responseData, isFetching, refetch } = useSearchSysConfigurationQuery(filter)
+    const { data: responseData, isLoading, isFetching, refetch } = useSearchSysConfigurationQuery(filter)
     const [changeSysConfiguration, { isSuccess: isSuccessChange }] = useChangeStatusSysConfigurationMutation()
     const [changeManySysConfiguration, { isSuccess: isSuccessChangeMany }] =
         useChangeStatusManySysConfigurationMutation()
@@ -108,16 +108,17 @@ function ConfigurationPage() {
         })
     }
 
-    const handleSearchKeyword = () => {
+    const handleSearchKeyword = value => {
         setPage(1)
-        setFilter(prev => {
-            return {
-                ...prev,
-                keyword: keyword,
-                pageNumber: 1
-            }
-        })
+        setKeyword(value)
+        setFilter(prev => ({
+            ...prev,
+            keyword: value,
+            pageNumber: 1
+        }))
     }
+
+    // const debouncedHandleSearch = useCallback(debounce(handleSearchKeyword, 200), [])
 
     useEffect(() => {
         if (!isFetching && responseData?.Data) {
@@ -191,12 +192,15 @@ function ConfigurationPage() {
 
     const menuLeft = useSelector(authSelector)
 
-    if (isFetching || menuLeft === null || Object.keys(menuLeft).length === 0) {
-        return <Loading />
-    }
+    // Cleanup debounce on unmount
+    // useEffect(() => {
+    //     return () => {
+    //         debouncedHandleSearch.cancel()
+    //     }
+    // }, [debouncedHandleSearch])
 
-    if (!menuLeft['Configuration'].IsAllowView) {
-        return <Box>123</Box>
+    if (isLoading || menuLeft === null || Object.keys(menuLeft).length === 0) {
+        return <Loading />
     }
 
     return (
@@ -219,7 +223,7 @@ function ConfigurationPage() {
                             variant='outlined'
                             required
                             value={keyword}
-                            onChange={e => setKeyword(e.target.value)}
+                            onChange={e => handleSearchKeyword(e.target.value)}
                             sx={{
                                 color: 'var(--text-color)',
                                 padding: '0px',
@@ -244,9 +248,6 @@ function ConfigurationPage() {
                                 '& .MuiOutlinedInput-root.Mui-focused fieldset': {
                                     borderColor: 'var(--selected-field-color)'
                                 }
-                            }}
-                            onKeyDown={() => {
-                                handleSearchKeyword()
                             }}
                             slotProps={{
                                 input: {
@@ -283,28 +284,30 @@ function ConfigurationPage() {
                         >
                             {t('COMMON.COUNT_ROWS_SELECTED', { countRows })}
                         </Typography>
-                        <Button
-                            variant='contained'
-                            startIcon={<Trash2 />}
-                            sx={{
-                                mr: '5px',
-                                height: '53px',
-                                visibility: countRows > 0 ? 'visible' : 'hidden',
-                                backgroundColor: 'var(--button-color)',
-                                width: 'auto',
-                                padding: '0px 30px',
-                                '&:hover': {
-                                    backgroundColor: 'var(--hover-button-color)'
-                                },
-                                fontSize: '16px',
-                                fontWeight: 'bold',
-                                whiteSpace: 'nowrap',
-                                textTransform: 'none'
-                            }}
-                            onClick={() => handleDeleteManyClick()}
-                        >
-                            {t('COMMON.BUTTON.DELETE')}
-                        </Button>
+                        {menuLeft['Configuration'].IsAllowDelete && (
+                            <Button
+                                variant='contained'
+                                startIcon={<Trash2 />}
+                                sx={{
+                                    mr: '5px',
+                                    height: '53px',
+                                    visibility: countRows > 0 ? 'visible' : 'hidden',
+                                    backgroundColor: 'var(--button-color)',
+                                    width: 'auto',
+                                    padding: '0px 30px',
+                                    '&:hover': {
+                                        backgroundColor: 'var(--hover-button-color)'
+                                    },
+                                    fontSize: '16px',
+                                    fontWeight: 'bold',
+                                    whiteSpace: 'nowrap',
+                                    textTransform: 'none'
+                                }}
+                                onClick={() => handleDeleteManyClick()}
+                            >
+                                {t('COMMON.BUTTON.DELETE')}
+                            </Button>
+                        )}
 
                         {menuLeft['Configuration'].IsAllowCreate && (
                             <Button
@@ -521,7 +524,7 @@ function ConfigurationPage() {
                                         </Typography>
                                     </TableSortLabel>
                                 </TableCell>
-                                <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                {/* <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                     <TableSortLabel
                                         active={'CreatedBy' === orderBy}
                                         direction={orderBy === 'CreatedBy' ? order : 'asc'}
@@ -546,7 +549,7 @@ function ConfigurationPage() {
                                             {t('COMMON.SYS_CONFIGURATION.CREATED_BY')}
                                         </Typography>
                                     </TableSortLabel>
-                                </TableCell>
+                                </TableCell> */}
 
                                 <TableCell
                                     sx={{
@@ -675,7 +678,7 @@ function ConfigurationPage() {
                                                 {formatDate(row.CreatedDate)}
                                             </Typography>
                                         </TableCell>
-                                        <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                        {/* <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
@@ -688,7 +691,7 @@ function ConfigurationPage() {
                                             >
                                                 {row.CreateBy}
                                             </Typography>
-                                        </TableCell>
+                                        </TableCell> */}
 
                                         <TableCell
                                             sx={{
@@ -697,12 +700,7 @@ function ConfigurationPage() {
                                                 width: '146px'
                                             }}
                                         >
-                                            <Box
-                                                display='flex'
-                                                alignItems='center'
-                                                justifyContent='space-between'
-                                                gap='10px'
-                                            >
+                                            <Box display='flex' alignItems='center' justifyContent='center' gap='10px'>
                                                 <Tooltip title={t('COMMON.BUTTON.VIEW_DETAIL')}>
                                                     <Box
                                                         display='flex'
@@ -723,46 +721,50 @@ function ConfigurationPage() {
                                                         <EyeIcon />
                                                     </Box>
                                                 </Tooltip>
-                                                <Tooltip title={t('COMMON.BUTTON.EDIT')}>
-                                                    <Box
-                                                        display='flex'
-                                                        alignItems='center'
-                                                        justifyContent='center'
-                                                        sx={{
-                                                            cursor: 'pointer',
-                                                            color: '#00d4ff',
-                                                            borderRadius: '50%',
-                                                            width: '42px',
-                                                            height: '42px',
-                                                            '&:hover': {
-                                                                backgroundColor: 'var(--hover-color)'
-                                                            }
-                                                        }}
-                                                        onClick={() => handleButtonUpdateClick(row.Id)}
-                                                    >
-                                                        <Pencil />
-                                                    </Box>
-                                                </Tooltip>
-                                                <Tooltip title={t('COMMON.BUTTON.DELETE')}>
-                                                    <Box
-                                                        display='flex'
-                                                        alignItems='center'
-                                                        justifyContent='center'
-                                                        sx={{
-                                                            cursor: 'pointer',
-                                                            color: 'red',
-                                                            borderRadius: '50%',
-                                                            width: '42px',
-                                                            height: '42px',
-                                                            '&:hover': {
-                                                                backgroundColor: 'var(--hover-color)'
-                                                            }
-                                                        }}
-                                                        onClick={() => handleDeleteClick(row.Id)}
-                                                    >
-                                                        <Trash2 />
-                                                    </Box>
-                                                </Tooltip>
+                                                {menuLeft['Configuration'].IsAllowEdit && (
+                                                    <Tooltip title={t('COMMON.BUTTON.EDIT')}>
+                                                        <Box
+                                                            display='flex'
+                                                            alignItems='center'
+                                                            justifyContent='center'
+                                                            sx={{
+                                                                cursor: 'pointer',
+                                                                color: '#00d4ff',
+                                                                borderRadius: '50%',
+                                                                width: '42px',
+                                                                height: '42px',
+                                                                '&:hover': {
+                                                                    backgroundColor: 'var(--hover-color)'
+                                                                }
+                                                            }}
+                                                            onClick={() => handleButtonUpdateClick(row.Id)}
+                                                        >
+                                                            <Pencil />
+                                                        </Box>
+                                                    </Tooltip>
+                                                )}
+                                                {menuLeft['Configuration'].IsAllowDelete && (
+                                                    <Tooltip title={t('COMMON.BUTTON.DELETE')}>
+                                                        <Box
+                                                            display='flex'
+                                                            alignItems='center'
+                                                            justifyContent='center'
+                                                            sx={{
+                                                                cursor: 'pointer',
+                                                                color: 'red',
+                                                                borderRadius: '50%',
+                                                                width: '42px',
+                                                                height: '42px',
+                                                                '&:hover': {
+                                                                    backgroundColor: 'var(--hover-color)'
+                                                                }
+                                                            }}
+                                                            onClick={() => handleDeleteClick(row.Id)}
+                                                        >
+                                                            <Trash2 />
+                                                        </Box>
+                                                    </Tooltip>
+                                                )}
                                             </Box>
                                         </TableCell>
                                     </TableRow>

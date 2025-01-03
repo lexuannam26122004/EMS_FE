@@ -22,18 +22,18 @@ const colors = ['#00a76f', '#00b8d9', '#ff5630', '#f83696', '#ffab00', '#b863f0'
 
 function Page() {
     const { t } = useTranslation('common')
-    const onTime = 120
+    const onTime = 73
     const early = 15
     const late = 5
-    const timeOff = 3
+    const timeOff = 10
     const absent = 2
     const invalid = 1
     const onTimePercent = 10
     const earlyPercent = 5
-    const latePercent = -2
-    const timeOffPercent = -1
-    const absentPercent = 1
-    const invalidPercent = -1
+    const latePercent = -20
+    const timeOffPercent = -25
+    const absentPercent = 100
+    const invalidPercent = -50
     const { theme } = useTheme()
 
     const getOption = (data: number[], color: string) => {

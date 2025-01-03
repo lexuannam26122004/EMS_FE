@@ -10,6 +10,7 @@ import FormControl from '@mui/material/FormControl'
 import LanguageMenu from '@/components/LanguageMenu'
 import ColorModeIconDropdown from '@/components/ColorModeIconDropdown'
 import { ChevronLeft } from 'lucide-react'
+import { useEffect } from 'react'
 
 const LoginForm: React.FC = () => {
     const [email, setEmail] = useState('')
@@ -21,6 +22,23 @@ const LoginForm: React.FC = () => {
     const handleClick = () => {
         router.push('/')
     }
+    const [countdown, setCountdown] = useState(0)
+
+    useEffect(() => {
+        let timer
+        if (countdown > 0) {
+            timer = setInterval(() => {
+                setCountdown(prev => {
+                    if (prev <= 1) {
+                        clearInterval(timer)
+                        return 0
+                    }
+                    return prev - 1
+                })
+            }, 1000)
+        }
+        return () => clearInterval(timer) // Cleanup interval on unmount
+    }, [countdown])
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -28,31 +46,39 @@ const LoginForm: React.FC = () => {
         if (email === '') {
             return
         }
+
+        if (countdown > 0) {
+            toast(t('COMMON.REQUEST_PASSWORD.WAIT_BEFORE_RETRY', { countdown }), 'warning')
+            return
+        }
+
         setIsLoading(true)
 
-        const loginData = {
-            Email: email,
-            Password: 123
+        const request = {
+            Email: email
         }
 
         try {
-            const response = await fetch('https://localhost:44381/api/Auth/Login', {
+            const response = await fetch('https://localhost:44381/api/Auth/RequestPasswordReset', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json-patch+json'
                 },
-                body: JSON.stringify(loginData)
+                body: JSON.stringify(request)
             })
 
-            const data = await response.json()
+            if (response.status === 400) {
+                const data = await response?.json()
+                if (data.detail === 'AspNetUser not found!') {
+                    toast(t('COMMON.REQUEST_PASSWORD.NOT_FOUND'), 'warning')
+                    return
+                }
+            }
 
-            if (response.ok) {
-                const token = data.Data.auth_token
-                sessionStorage.setItem('auth_token', token)
-                router.push('/admin')
-                toast('Đăng nhập thành công!', 'success')
-            } else {
-                toast(data?.message || 'Đăng nhập thất bại!', 'error')
+            if (response.status === 204) {
+                toast(t('COMMON.REQUEST_PASSWORD.SEND_SUCCESS'), 'success')
+                setCountdown(60)
+                return
             }
         } catch {
             toast('Đã xảy ra lỗi. Vui lòng thử lại sau!', 'error')
@@ -280,6 +306,11 @@ const LoginForm: React.FC = () => {
                                 </InputLabel>
                                 <OutlinedInput
                                     notched
+                                    onKeyDown={e => {
+                                        if (e.key === 'Enter') {
+                                            handleSubmit(e)
+                                        }
+                                    }}
                                     id='outlined-adornment-email'
                                     {...(isSubmit && email === '' && { error: true })}
                                     autoComplete='off' // Ngăn tự động điền

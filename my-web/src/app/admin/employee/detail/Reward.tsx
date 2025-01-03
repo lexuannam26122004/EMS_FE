@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import {
     Box,
@@ -20,8 +20,6 @@ import {
     InputAdornment,
     TableSortLabel
 } from '@mui/material'
-import { IAspNetUserGetAll } from '@/models/AspNetUser'
-import { useGetAllUsersQuery } from '@/services/AspNetUserService'
 
 import SearchIcon from '@mui/icons-material/Search'
 import { useTranslation } from 'react-i18next'
@@ -30,53 +28,30 @@ interface EmployeeProps {
     aspnetUserId: string
 }
 
+interface User {
+    Id: string
+    Reason: string
+    Money: number
+    Note: string
+}
+
 const Reward: React.FC<EmployeeProps> = ({ aspnetUserId }) => {
     const [searchTerm, setSearchTerm] = useState<string>('')
     const [rowsPerPage, setRowsPerPage] = useState('10')
     const [currentPage, setCurrentPage] = useState<number>(1)
-    const [sortConfig, setSortConfig] = useState<{
-        key: keyof IAspNetUserGetAll | 'EmployeeId'
-        direction: 'asc' | 'desc'
-    }>({ key: 'EmployeeId', direction: 'asc' })
     const { t } = useTranslation('common')
 
-    
-    const { data: userResponse, isLoading: isUsersLoading } = useGetAllUsersQuery()
-    const employee = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
-    const users  = employee.filter(u => u.Id === aspnetUserId);
+    const users: User[] = [
+        { Id: '1', Reason: 'Hiệu suất làm việc', Money: 500, Note: 'Hoàn thành xuất sắc công việc được giao' },
+        { Id: '2', Reason: 'Chuyên cần', Money: 300, Note: 'Đi làm đầy đủ và đúng giờ' },
+        { Id: '3', Reason: 'Hợp tác nhóm', Money: 400, Note: 'Hỗ trợ đồng nghiệp rất tốt' },
+        { Id: '4', Reason: 'Sáng tạo', Money: 700, Note: 'Đề xuất giải pháp mới hiệu quả' },
+        { Id: '5', Reason: 'Cống hiến', Money: 600, Note: 'Làm thêm giờ để hoàn thành công việc' }
+    ]
 
-    if (isUsersLoading) return <div>Loading...</div>
+    useEffect(() => {}, [aspnetUserId])
 
-    const filteredUsers = users.filter(
-        user =>
-            user.EmployeeId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.FullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.Email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.PhoneNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.DepartmentName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.UserName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.Roles?.some(role => role.toLowerCase().includes(searchTerm.toLowerCase())) ||
-            (user.Birthday &&
-                new Date(user.Birthday).toLocaleDateString().toLowerCase().includes(searchTerm.toLowerCase())) ||
-            user.Gender?.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.Address?.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-
-    const sortedUsers = filteredUsers.sort((a, b) => {
-        const aValue = a[sortConfig.key]?.toString().toLowerCase() || ''
-        const bValue = b[sortConfig.key]?.toString().toLowerCase() || ''
-        return sortConfig.direction === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue)
-    })
-
-    const totalRecords = sortedUsers.length
-    const paginatedUsers = sortedUsers.slice((currentPage - 1) * Number(rowsPerPage), currentPage * Number(rowsPerPage))
-
-    const handleSort = (key: keyof IAspNetUserGetAll | 'EmployeeId') => {
-        setSortConfig(prev => ({
-            key,
-            direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc'
-        }))
-    }
+    const totalRecords = users.length
 
     const handleChangePage = (_event: React.ChangeEvent<unknown>, page: number) => setCurrentPage(page)
 
@@ -199,12 +174,12 @@ const Reward: React.FC<EmployeeProps> = ({ aspnetUserId }) => {
                                     }
                                 }}
                             >
-                                {['Email'].map((column, index) => (
+                                {['Id', 'Lý do', 'Tiền thưởng', 'Ghi chú'].map((column, index) => (
                                     <TableCell key={index} sx={{ borderColor: 'var(--border-color)' }}>
                                         <TableSortLabel
-                                            active={sortConfig.key === column}
-                                            direction={sortConfig.key === column ? sortConfig.direction : 'asc'}
-                                            onClick={() => handleSort(column as keyof IAspNetUserGetAll)}
+                                            //active={sortConfig.key === column}
+                                            //direction={sortConfig.key === column ? sortConfig.direction : 'asc'}
+                                            //onClick={() => handleSort(column as keyof IAspNetUserGetAll)}
                                             sx={{
                                                 '& .MuiTableSortLabel-icon': {
                                                     color: 'var(--text-color) !important'
@@ -222,15 +197,16 @@ const Reward: React.FC<EmployeeProps> = ({ aspnetUserId }) => {
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                {t(`COMMON.EMPLOYEE.${column.toUpperCase()}`)}
+                                                {column}
                                             </Typography>
                                         </TableSortLabel>
                                     </TableCell>
                                 ))}
                             </TableRow>
                         </TableHead>
+
                         <TableBody>
-                            {paginatedUsers.map(user => (
+                            {users.map(user => (
                                 <TableRow
                                     key={user.Id}
                                     sx={{
@@ -253,7 +229,50 @@ const Reward: React.FC<EmployeeProps> = ({ aspnetUserId }) => {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {user.Email || 'N/A'}
+                                            {user.Id || 'N/A'}
+                                        </Typography>
+                                    </TableCell>
+
+                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                        <Typography
+                                            sx={{
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                maxWidth: '260px',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            {user.Reason || 'N/A'}
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                        <Typography
+                                            sx={{
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                maxWidth: '260px',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            {user.Money || 'N/A'}
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                        <Typography
+                                            sx={{
+                                                color: 'var(--text-color)',
+                                                fontSize: '16px',
+                                                maxWidth: '260px',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            {user.Note || 'N/A'}
                                         </Typography>
                                     </TableCell>
                                 </TableRow>

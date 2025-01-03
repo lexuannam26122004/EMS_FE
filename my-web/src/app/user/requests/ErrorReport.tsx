@@ -11,8 +11,10 @@ import {
     InputLabel,
     FormControl,
     TextField,
-    InputAdornment
+    InputAdornment,
+    Button
 } from '@mui/material'
+import { CirclePlus } from 'lucide-react'
 import { useEffect, useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import SearchIcon from '@mui/icons-material/Search'
@@ -345,34 +347,41 @@ function ContractExpPage() {
     return (
         <Box
             sx={{
-                padding: '20px',
-                backgroundColor: 'var(--hover-color)',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                borderRadius: '12px',
+                padding: '35px',
+                boxShadow: 'var(--box-shadow-paper)',
+                borderRadius: '30px',
+                backgroundColor: 'var(--attendance-bg1)',
                 overflow: 'hidden',
                 height: '100%',
-                border: '1px solid #e0e0e0',
+                // border: '1px solid #e0e0e0',
                 width: '100%'
             }}
         >
             <Box
                 sx={{
-                    position: 'sticky',
-                    top: 0,
-                    backgroundColor: 'var(--background-color)',
-                    padding: '15px 20px',
-                    fontSize: '24px',
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                    color: 'var(--text-color)',
-                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                    border: '1px solid #e0e0e0',
-                    zIndex: 2,
-                    marginBottom: '10px',
-                    borderRadius: '12px'
+                    display: 'flex',
+                    alignItems: 'center',
+                    mb: '35px'
                 }}
             >
-                {t('COMMON.ERROR_REPORT.TITLE')}
+                <Box
+                    sx={{
+                        width: '5px',
+                        height: '42px',
+                        backgroundColor: '#4effca',
+                        borderRadius: '4px',
+                        mr: '14px'
+                    }}
+                />
+                <Typography
+                    sx={{
+                        color: 'var(--text-color)',
+                        fontSize: '21px',
+                        fontWeight: 'bold'
+                    }}
+                >
+                    {t('COMMON.ERROR_REPORT.TITLE')}
+                </Typography>
             </Box>
 
             <Paper
@@ -738,6 +747,36 @@ function ContractExpPage() {
                                 <MenuItem value={'Timekeeping'}>{t('COMMON.NOTIFICATION_TYPE.TIMEKEEPING')}</MenuItem>
                             </Select>
                         </FormControl>
+                    </Box>
+
+                    <Box
+                        display='flex'
+                        alignItems='center'
+                        justifyContent='flex-end' // Căn phải
+                        gap='20px'
+                        width='100%'
+                        borderRadius='10px' // Đảm bảo Box chiếm toàn bộ chiều rộng
+                    >
+                        <Button
+                            variant='contained'
+                            startIcon={<CirclePlus />}
+                            sx={{
+                                height: '53px',
+                                backgroundColor: 'var(--button-color)',
+                                width: 'auto',
+                                padding: '0px 30px',
+                                '&:hover': {
+                                    backgroundColor: 'var(--hover-button-color)'
+                                },
+                                fontSize: '16px',
+                                fontWeight: 'bold',
+                                whiteSpace: 'nowrap',
+                                textTransform: 'none',
+                                borderRadius: '10px'
+                            }}
+                        >
+                            {t('COMMON.BUTTON.CREATE')}
+                        </Button>
                     </Box>
                 </Box>
 

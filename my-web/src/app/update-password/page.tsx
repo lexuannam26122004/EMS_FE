@@ -19,6 +19,7 @@ const LoginForm: React.FC = () => {
     const [newPassword, setNewPassword] = useState('')
     const [password, setPassword] = useState('')
     const [isSubmit, setIsSubmit] = useState(false)
+    const [email, setEmail] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const toast = useToast()
     const router = useRouter()
@@ -42,37 +43,43 @@ const LoginForm: React.FC = () => {
         router.push('/')
     }
 
+    const token = new URLSearchParams(window.location.search).get('token')
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setIsSubmit(true)
-        if (newPassword === '' || password === '') {
+        if (newPassword === '' || password === '' || email === '') {
             return
         }
+
+        if (newPassword !== password) {
+            return
+        }
+
         setIsLoading(true)
 
-        const loginData = {
+        const updatePassword = {
+            Email: email,
+            Token: token,
             NewPassword: newPassword,
             Password: password
         }
 
         try {
-            const response = await fetch('https://localhost:44381/api/Auth/Login', {
+            const response = await fetch('https://localhost:44381/api/Auth/ResetPassword', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json-patch+json'
                 },
-                body: JSON.stringify(loginData)
+                body: JSON.stringify(updatePassword)
             })
 
-            const data = await response.json()
-
-            if (response.ok) {
-                const token = data.Data.auth_token
-                sessionStorage.setItem('auth_token', token)
-                router.push('/admin')
-                toast('Đăng nhập thành công!', 'success')
+            if (response.status === 204) {
+                toast(t('COMMON.UPDATE_PASSWORD.UPDATE_SUCCESS'), 'success')
+                router.push('/login')
+                return
             } else {
-                toast(data?.message || 'Đăng nhập thất bại!', 'error')
+                toast('Đã xảy ra lỗi. Vui lòng thử lại sau!', 'error')
             }
         } catch {
             toast('Đã xảy ra lỗi. Vui lòng thử lại sau!', 'error')
@@ -281,6 +288,89 @@ const LoginForm: React.FC = () => {
                                 alignItems: 'left'
                             }}
                         >
+                            <form autoComplete='off'>
+                                <FormControl sx={{ width: '100%' }} variant='outlined'>
+                                    <InputLabel
+                                        htmlFor='outlined-adornment-email'
+                                        {...(isSubmit && email === '' && { error: true })}
+                                        sx={{
+                                            color: 'var(--text-label-color)',
+                                            '&.Mui-focused': {
+                                                color: 'var(--selected-field-color)'
+                                            },
+                                            '&.Mui-error': {
+                                                color: 'var(--error-color) !important' // Màu khi có lỗi
+                                            }
+                                        }}
+                                        shrink
+                                    >
+                                        {t('COMMON.REQUEST_PASSWORD.EMAIL_ADDRESS')}
+                                    </InputLabel>
+                                    <OutlinedInput
+                                        notched
+                                        onKeyDown={e => {
+                                            if (e.key === 'Enter') {
+                                                handleSubmit(e)
+                                            }
+                                        }}
+                                        id='outlined-adornment-email'
+                                        {...(isSubmit && email === '' && { error: true })}
+                                        autoComplete='off' // Ngăn tự động điền
+                                        placeholder={t('COMMON.REQUEST_PASSWORD.EMAIL_EXAMPLE')} // Thêm placeholder
+                                        sx={{
+                                            '& .MuiInputBase-input': {
+                                                padding: '17px 0 17px 14px',
+                                                color: 'var(--text-color)',
+                                                borderRadius: '8px',
+                                                overflow: 'hidden'
+                                            },
+                                            '& fieldset': {
+                                                borderColor: 'var(--border-color)',
+                                                borderWidth: '1px',
+                                                borderRadius: '8px',
+                                                overflow: 'hidden'
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: 'var(--hover-field-color) !important' // Đảm bảo không bị ghi đè
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: 'var(--selected-field-color) !important',
+                                                borderWidth: '2px' // Độ dày viền
+                                            },
+                                            '&.Mui-error:hover fieldset': {
+                                                borderColor: 'var(--error-color) !important'
+                                            },
+                                            '&.Mui-error fieldset': {
+                                                borderColor: 'var(--error-color) !important'
+                                            }
+                                        }}
+                                        label={t('COMMON.REQUEST_PASSWORD.EMAIL_ADDRESS')}
+                                        onChange={e => setEmail(e.target.value)}
+                                    />
+                                </FormControl>
+                            </form>
+                            <Typography
+                                sx={{
+                                    color: 'var(--error-color)',
+                                    margin: '3px auto 0 12px',
+                                    width: 'auto',
+                                    fontSize: '12px',
+                                    visibility: isSubmit && email === '' ? 'visible' : 'hidden'
+                                }}
+                            >
+                                {t('COMMON.TEXTFIELD.REQUIRED')}
+                            </Typography>
+                        </Box>
+
+                        <Box
+                            sx={{
+                                width: '100%',
+                                mt: '15px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'left'
+                            }}
+                        >
                             <FormControl sx={{ width: '100%' }} variant='outlined'>
                                 <InputLabel
                                     {...(isSubmit && password === '' && { error: true })}
@@ -296,16 +386,21 @@ const LoginForm: React.FC = () => {
                                     }}
                                     shrink
                                 >
-                                    {t('COMMON.LOGIN.PASSWORD')}
+                                    {t('COMMON.UPDATE_PASSWORD.PASSWORD')}
                                 </InputLabel>
                                 <OutlinedInput
+                                    onKeyDown={e => {
+                                        if (e.key === 'Enter') {
+                                            handleSubmit(e)
+                                        }
+                                    }}
                                     placeholder={t('COMMON.LOGIN.8_CHARACTERS')}
                                     notched
                                     id='outlined-adornment-password'
                                     {...(isSubmit && password === '' && { error: true })}
                                     autoComplete='off' // Ngăn tự động điền
                                     type={showPassword ? 'text' : 'password'}
-                                    onChange={e => setNewPassword(e.target.value)}
+                                    onChange={e => setPassword(e.target.value)}
                                     sx={{
                                         '& .MuiInputBase-input': {
                                             padding: '15.5px 0 15.5px 14px',
@@ -349,7 +444,7 @@ const LoginForm: React.FC = () => {
                                             </IconButton>
                                         </InputAdornment>
                                     }
-                                    label={t('COMMON.LOGIN.PASSWORD')}
+                                    label={t('COMMON.UPDATE_PASSWORD.PASSWORD')}
                                 />
                             </FormControl>
                             <Typography
@@ -376,7 +471,8 @@ const LoginForm: React.FC = () => {
                         >
                             <FormControl sx={{ width: '100%' }} variant='outlined'>
                                 <InputLabel
-                                    {...(isSubmit && newPassword === '' && { error: true })}
+                                    {...(isSubmit &&
+                                        (newPassword === '' || password !== newPassword) && { error: true })}
                                     htmlFor='outlined-adornment-newPassword'
                                     sx={{
                                         color: 'var(--text-label-color)',
@@ -393,11 +489,17 @@ const LoginForm: React.FC = () => {
                                 </InputLabel>
                                 <OutlinedInput
                                     notched
+                                    onKeyDown={e => {
+                                        if (e.key === 'Enter') {
+                                            handleSubmit(e)
+                                        }
+                                    }}
                                     id='outlined-adornment-newPassword'
-                                    {...(isSubmit && newPassword === '' && { error: true })}
+                                    {...(isSubmit &&
+                                        (newPassword === '' || password !== newPassword) && { error: true })}
                                     autoComplete='off' // Ngăn tự động điền
-                                    type={showPassword ? 'text' : 'password'}
-                                    onChange={e => setPassword(e.target.value)}
+                                    type={showNewPassword ? 'text' : 'password'}
+                                    onChange={e => setNewPassword(e.target.value)}
                                     sx={{
                                         '& .MuiInputBase-input': {
                                             padding: '15.5px 0 15.5px 14px',
@@ -452,10 +554,15 @@ const LoginForm: React.FC = () => {
                                     margin: '3px auto 0 12px',
                                     width: 'auto',
                                     fontSize: '12px',
-                                    visibility: isSubmit && password === '' ? 'visible' : 'hidden'
+                                    visibility:
+                                        isSubmit && (newPassword === '' || password !== newPassword)
+                                            ? 'visible'
+                                            : 'hidden'
                                 }}
                             >
-                                {t('COMMON.TEXTFIELD.REQUIRED')}
+                                {password !== newPassword
+                                    ? t('COMMON.UPDATE_PASSWORD.EQUAL')
+                                    : t('COMMON.TEXTFIELD.REQUIRED')}
                             </Typography>
                         </Box>
 

@@ -3,10 +3,8 @@ import React from 'react'
 import ReactECharts from 'echarts-for-react'
 import { Box, Paper, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { useTheme } from 'next-themes'
 const Chart: React.FC = () => {
     const { t } = useTranslation('common')
-    const { theme } = useTheme()
 
     const option = {
         tooltip: {

@@ -24,7 +24,7 @@ function DisplayInfo() {
 
     const data = response?.Data as IEmployeeStats
 
-    const totalEmployee = 109
+    const totalEmployee = 105
     const employeePercent = 5.2
     const timeOff = 56
     const timeOffPercent = 10
@@ -135,7 +135,7 @@ function DisplayInfo() {
                                 fontSize: '16px'
                             }}
                         >
-                            {t('COMMON.DASHBOARD.UP_FROM_LAST_MONTH')}
+                            {t('COMMON.DASHBOARD.FROM_LAST_QUARTER')}
                         </Typography>
                     </Box>
                 </Paper>

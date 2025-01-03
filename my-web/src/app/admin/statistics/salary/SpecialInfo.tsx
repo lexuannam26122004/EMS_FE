@@ -1,10 +1,81 @@
 'use client'
-import { Box, Paper, Tooltip, Typography } from '@mui/material'
-import { BadgeDollarSign, BadgeHelp } from 'lucide-react'
+import { Box, CircularProgress, Paper, Typography } from '@mui/material'
+import { BadgeDollarSign } from 'lucide-react'
 import React from 'react'
 import TotalBySex from './TotalBySex'
 import TotalByLevel from './TotalByLevel'
+import { useGetTotalMaxMinQuery } from '@/services/SalaryService'
+import { useTranslation } from 'react-i18next'
+
+interface TotalMaxMin {
+    maxUser: string
+    max: number
+    minUser: string
+    min: number
+}
+
 export default function SpecialInfo() {
+    const { t } = useTranslation()
+    const { data, isLoading, isError } = useGetTotalMaxMinQuery()
+
+    const totalData = data?.Data as TotalMaxMin
+
+    let unit = ''
+
+    const formatValue = value => {
+        if (value >= 1e9) {
+            unit = t('COMMON.SALARY.BILLION')
+            return (value / 1e9).toFixed(2)
+        } else if (value >= 1e6) {
+            unit = t('COMMON.SALARY.MILLION')
+            return (value / 1e6).toFixed(2)
+        } else if (value >= 1e3) {
+            unit = t('COMMON.SALARY.THOUSAND')
+            return (value / 1e3).toFixed(2)
+        } else {
+            unit = t('COMMON.SALARY.VND')
+            return value
+        }
+    }
+
+    if (isLoading) {
+        return (
+            <Paper
+                elevation={0}
+                sx={{
+                    width: '100%',
+                    padding: '24px',
+                    backgroundColor: 'var(--background-item)',
+                    borderRadius: '15px',
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+            >
+                <CircularProgress /> {/* Hiển thị spinner khi đang tải */}
+            </Paper>
+        )
+    }
+    if (isError) {
+        return (
+            <Paper
+                elevation={0}
+                sx={{
+                    width: '100%',
+                    padding: '24px',
+                    backgroundColor: 'var(--background-item)',
+                    borderRadius: '15px',
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+            >
+                <Typography color='red'>Có lỗi xảy ra khi tải dữ liệu.</Typography> {/* Thông báo lỗi */}
+            </Paper>
+        )
+    }
     return (
         <Box sx={{ justifyContent: 'center', alignItems: 'center', gap: '24px', display: 'flex' }}>
             <Box sx={{ width: 'calc(100% / 3)' }}>
@@ -30,7 +101,7 @@ export default function SpecialInfo() {
                                 color: '#637381'
                             }}
                         >
-                            Nhân viên có lương cao nhất
+                            {t('COMMON.SALARY.HIGHEST')}
                         </Typography>
                         <Box
                             sx={{
@@ -47,20 +118,8 @@ export default function SpecialInfo() {
                                     fontWeight: 'bold'
                                 }}
                             >
-                                Nguyễn Văn A
+                                {totalData?.maxUser}
                             </Typography>
-                            <Box
-                                sx={{
-                                    position: 'absolute',
-                                    right: '30px',
-                                    display: 'flex',
-                                    alignItems: 'center'
-                                }}
-                            >
-                                <Tooltip title={'tăng 3 triệu so với tháng trước'}>
-                                    <BadgeHelp color='#33FF33' style={{ marginLeft: '10px' }}></BadgeHelp>
-                                </Tooltip>
-                            </Box>
                         </Box>
 
                         <Box
@@ -81,7 +140,7 @@ export default function SpecialInfo() {
                                     fontSize: '16px'
                                 }}
                             >
-                                30
+                                {formatValue(totalData?.max)}
                             </Typography>
                             <Typography
                                 sx={{
@@ -90,7 +149,7 @@ export default function SpecialInfo() {
                                     fontSize: '16px'
                                 }}
                             >
-                                Triệu đồng
+                                {unit}
                             </Typography>
                         </Box>
                     </Box>
@@ -120,7 +179,7 @@ export default function SpecialInfo() {
                                 color: 'var(--reward-title-color)'
                             }}
                         >
-                            Nhân viên có lương thấp nhất
+                            {t('COMMON.SALARY.LOWEST')}
                         </Typography>
                         <Box
                             sx={{
@@ -137,20 +196,8 @@ export default function SpecialInfo() {
                                     fontWeight: 'bold'
                                 }}
                             >
-                                Nguyễn Văn A
+                                {totalData?.minUser}
                             </Typography>
-                            <Box
-                                sx={{
-                                    position: 'absolute',
-                                    right: '30px',
-                                    display: 'flex',
-                                    alignItems: 'center'
-                                }}
-                            >
-                                <Tooltip title={'tăng 3 triệu so với tháng trước'}>
-                                    <BadgeHelp color='#33FF33' style={{ marginLeft: '10px' }}></BadgeHelp>
-                                </Tooltip>
-                            </Box>
                         </Box>
 
                         <Box
@@ -171,7 +218,7 @@ export default function SpecialInfo() {
                                     fontSize: '16px'
                                 }}
                             >
-                                10
+                                {formatValue(totalData?.min)}
                             </Typography>
                             <Typography
                                 sx={{
@@ -180,7 +227,7 @@ export default function SpecialInfo() {
                                     fontSize: '16px'
                                 }}
                             >
-                                Triệu đồng
+                                {unit}
                             </Typography>
                         </Box>
                     </Box>

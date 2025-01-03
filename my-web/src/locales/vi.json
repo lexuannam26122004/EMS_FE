@@ -174,6 +174,7 @@
             "PROFILE": "Thông tin cá nhân",
             "SETTINGS": "Cài đặt",
             "LOGOUT": "Đăng xuất",
+            "PERSONAL": "Trang cá nhân",
             "TIMEKEEPING": "Chấm công",
             "CALENDAR": "Lịch",
             "LOGIN_HISTORY": "Lịch sử đăng nhập",
@@ -288,7 +289,13 @@
             "SALARY_LEVEL": "Mức lương (Triệu VND)",
             "NUMBER_OF_EMPLOYEES": "Số lượng nhân viên",
             "UNPAID": "Danh sách lương chưa trả",
-            "BIRTHDAY": "Sinh nhật"
+            "BIRTHDAY": "Sinh nhật",
+            "HIGHEST": "Nhân viên có lương cao nhất",
+            "LOWEST": "Nhân viên có lương thấp nhất",
+            "BILLION": "tỷ VND",
+            "MILLION": "triệu VND",
+            "THOUSAND": "trăm nghìn VND",
+            "VND": "VND"
         },
         "CREATE_NOTIFICATION": {
             "TITLE_PAGE": "Tạo thông báo mới",
@@ -511,6 +518,8 @@
         "REWARD_DISCIPLINE": {
             "LAST_MONTH": "tháng trước",
             "LAST_QUARTER": "quý trước",
+            "RECEIVED": "Đã nhận",
+            "UNRECEIVED": "Chưa nhận",
             "LIST_REWARD": "Danh sách Khen thưởng",
             "LIST_DISCIPLINE": "Danh sách Kỷ luật",
             "SUMMARY_REWARD": "Tổng số lần Khen thưởng",
@@ -526,6 +535,7 @@
             "STATUS": "Trạng thái",
             "MONEY_REWARD": "Số tiền thưởng",
             "MONEY_DISCIPLINE": "Số tiền phạt",
+            "NOTE": "Ghi chú",
             "PUNISHMENT": "Hình thức kỷ luật",
             "DATE": "Ngày",
             "VIEW_DETAIL": "Xem chi tiết",
@@ -544,6 +554,7 @@
             "READ_NOTIFY_RATE": "Tỉ lệ đọc Thông báo",
             "INCREASED": "tăng",
             "DECREASED": "giảm",
+            "LIST_EVENTS": "Danh sách Sự kiện",
             "DELETE": "Xóa",
             "VIEW": "Xem chi tiết",
             "UPDATE": "Chỉnh sửa",
@@ -569,6 +580,7 @@
             "STATUS_LATE": "Đi trễ",
             "STATUS_EARLY": "Về sớm",
             "ALL": "Tất cả",
+            "BY_DEPARTMENT": "Thống kê Chấm công theo Phòng ban",
             "STATUS_INVALID": "Không hợp lệ",
             "CHECK_IN_&_OUT": "Giờ vào & ra",
             "OVERTIME": "Làm thêm giờ",
@@ -576,12 +588,14 @@
             "NOTE": "Ghi chú",
             "CHECK_IN": "Giờ vào",
             "CHECK_OUT": "Giờ ra",
+            "SEARCH": "Tìm kiếm theo Tên",
             "JOIN": "Tham gia",
             "STATUS_ABSENT": "Vắng mặt",
             "MEMBER_ATTENDANCE": "Chấm công nhân viên",
             "ATTENDANCE_PERCENT": "Tỉ lệ chấm công {{status}} {{x}}% so với hôm qua",
             "DETAIL_EMPLOYEE": "Thông tin chi tiết nhân viên",
-            "DOWNLOAD_INFO": "Tải thông tin"
+            "DOWNLOAD_INFO": "Tải thông tin",
+            "LIST_ATTENDANCE": "Danh sách chấm công"
         },
         "INSURANCE_BENEFIT": {
             "LAST_MONTH": "tháng trước",
@@ -639,7 +653,11 @@
             "DESC": "Nhập địa chỉ email của bạn và chúng tôi sẽ gửi cho bạn một liên kết để đặt lại mật khẩu của bạn.",
             "EMAIL_ADDRESS": "Địa chỉ Email",
             "SEND_REQUEST": "Gửi yêu cầu",
-            "RETURN_LOGIN": "Quay lại đăng nhập"
+            "RETURN_LOGIN": "Quay lại đăng nhập",
+            "NOT_FOUND": "Không tìm thấy email",
+            "SEND_SUCCESS": "Gửi yêu cầu thành công",
+
+            "WAIT_BEFORE_RETRY": "Vui lòng chờ {{countdown}} giây trước khi thử lại!"
         },
         "VERIFY": {
             "TITLE": "Vui lòng kiểm tra email!",
@@ -651,9 +669,11 @@
         "UPDATE_PASSWORD": {
             "TITLE": "Yêu cầu đã được gửi thành công!",
             "DESC": "Cập nhật mật khẩu của bạn để đảm bảo tài khoản của bạn được an toàn.",
-            "PASSWORD": "Mật khẩu",
+            "PASSWORD": "Mật khẩu mới",
             "CONFIRM": "Xác nhận mật khẩu mới",
-            "UPDATE_PASSWORD": "Cập nhật mật khẩu"
+            "UPDATE_PASSWORD": "Cập nhật mật khẩu",
+            "EQUAL": "Mật khẩu và xác nhận mật khẩu phải trùng khớp",
+            "UPDATE_SUCCESS": "Cập nhật mật khẩu thành công!"
         },
         "USER_SCHEDULAR": {
             "TITLE": "Danh sách sự kiện",

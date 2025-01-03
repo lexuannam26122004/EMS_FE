@@ -82,6 +82,32 @@ export const salaryApi = createApi({
         getGrossTotal: builder.query<SalaryResponse, void>({
             query: () => 'GetGrossTotal',
             providesTags: ['Salary']
+        }),
+        getTotalMaxMin: builder.query<SalaryResponse, void>({
+            query: () => 'GetTotalMaxMin',
+            providesTags: ['Salary']
+        }),
+        getDisplayInfo: builder.query<SalaryResponse, void>({
+            query: () => 'GetDisplayInfo',
+            providesTags: ['Salary']
+        }),
+        getGrossTotalByDepartments: builder.query<SalaryResponse, void>({
+            query: () => 'GetGrossTotalByDepartments',
+            providesTags: ['Salary']
+        }),
+        getPayrollOfDepartmentOvertime: builder.query<SalaryResponse, { year: string }>({
+            query: ({ year }) => ({
+                url: `GetPayrollOfDepartmentOvertime?year=${year}`,
+                method: 'GET'
+            }),
+            providesTags: ['Salary']
+        }),
+        getPayrollReport: builder.query<SalaryResponse, { year: string }>({
+            query: ({ year }) => ({
+                url: `GetPayrollReport?year=${year}`,
+                method: 'GET'
+            }),
+            providesTags: ['Salary']
         })
     })
 })
@@ -97,5 +123,10 @@ export const {
     useGetIncomeStructureQuery,
     useGetPeriodQuery,
     useGetTotalBySexQuery,
-    useGetGrossTotalQuery
+    useGetGrossTotalQuery,
+    useGetTotalMaxMinQuery,
+    useGetDisplayInfoQuery,
+    useGetGrossTotalByDepartmentsQuery,
+    useGetPayrollOfDepartmentOvertimeQuery,
+    useGetPayrollReportQuery
 } = salaryApi

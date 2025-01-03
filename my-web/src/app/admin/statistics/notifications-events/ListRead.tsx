@@ -14,42 +14,70 @@ const users = [
         avatarPath: 'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-1.webp',
         fullname: 'Lê Xuân Nam',
         count: 30,
-        employeeID: 'EMP001',
+        employeeID: 'CC-001',
         roles: ['Leader']
     },
     {
         avatarPath: 'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-2.webp',
         fullname: 'Lê Xuân Thanh',
         count: 24,
-        employeeID: 'EMP002',
+        employeeID: 'CC-025',
         roles: ['Leader']
     },
     {
         avatarPath: 'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-3.webp',
         fullname: 'Lê Thị Tuyết Phương',
         count: 20,
-        employeeID: 'EMP003',
+        employeeID: 'CC-039',
         roles: ['Manager']
     },
     {
         avatarPath: 'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-4.webp',
         fullname: 'Hùng Bùi Vỹ',
         count: 19,
-        employeeID: 'EMP004',
+        employeeID: 'CC-054',
         roles: ['Employee']
     },
     {
         avatarPath: 'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-5.webp',
         fullname: 'Lê Tuấn Khang',
         count: 15,
-        employeeID: 'EMP005',
+        employeeID: 'CC-095',
         roles: ['Employee']
     },
     {
         avatarPath: 'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-6.webp',
         fullname: 'Bùi Thị Thanh Hằng',
+        count: 14,
+        employeeID: 'CC-031',
+        roles: ['Employee']
+    },
+    {
+        avatarPath: 'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-7.webp',
+        fullname: 'Tuấn Hùng',
+        count: 12,
+        employeeID: 'CC-029',
+        roles: ['Employee']
+    },
+    {
+        avatarPath: 'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-8.webp',
+        fullname: 'Lê Tuấn Phương',
+        count: 10,
+        employeeID: 'CC-055',
+        roles: ['Employee']
+    },
+    {
+        avatarPath: 'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-9.webp',
+        fullname: 'Bùi Thị Thanh Mai',
         count: 9,
-        employeeID: 'EMP006',
+        employeeID: 'CC-091',
+        roles: ['Employee']
+    },
+    {
+        avatarPath: 'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-9.webp',
+        fullname: 'Vũ Thị Yến Nhi',
+        count: 7,
+        employeeID: 'CC-105',
         roles: ['Employee']
     }
 ]

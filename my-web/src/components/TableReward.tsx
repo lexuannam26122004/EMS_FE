@@ -35,6 +35,28 @@ function getStatusTextColor(status: boolean): string {
     }
 }
 
+const avatars = [
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-1.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-2.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-3.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-4.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-5.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-6.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-7.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-8.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-9.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-10.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-11.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-12.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-13.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-14.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-15.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-16.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-17.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-18.webp',
+    'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-19.webp'
+]
+
 // function getStatusBgColor1(status: boolean): string {
 //     if (status === false) {
 //         return 'var(--bg-warning-color1)'
@@ -334,7 +356,7 @@ function TableErrorReport({ rewardsData, totalRecords, type }: IProps) {
                                                 mt: '-2px'
                                             }}
                                             src={
-                                                row.AvatarPath ||
+                                                avatars[row.Id] ||
                                                 'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'
                                             }
                                         />
@@ -474,8 +496,8 @@ function TableErrorReport({ rewardsData, totalRecords, type }: IProps) {
                                             }}
                                         >
                                             {row.IsReceived
-                                                ? t('COMMON.REWARD_DISCIPLINE.PROCESSED')
-                                                : t('COMMON.REWARD_DISCIPLINE.UNPROCESSED')}
+                                                ? t('COMMON.REWARD_DISCIPLINE.RECEIVED')
+                                                : t('COMMON.REWARD_DISCIPLINE.UNRECEIVED')}
                                         </Typography>
                                     </Box>
                                 </TableCell>

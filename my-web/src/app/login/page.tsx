@@ -234,13 +234,20 @@ const LoginForm: React.FC = () => {
                         sx={{
                             width: '450px',
                             display: 'flex',
+                            mt: '-40px',
                             flexDirection: 'column',
                             justifyContent: 'center'
                         }}
                     >
+                        <img
+                            src='/images/login-img.png'
+                            style={{
+                                width: '220px',
+                                margin: '0 auto'
+                            }}
+                        />
                         <Typography
                             sx={{
-                                mt: '15px',
                                 mr: 'auto',
                                 fontSize: '22px',
                                 fontWeight: 'bold',
@@ -259,60 +266,68 @@ const LoginForm: React.FC = () => {
                                 alignItems: 'left'
                             }}
                         >
-                            <FormControl sx={{ width: '100%' }} variant='outlined'>
-                                <InputLabel
-                                    htmlFor='outlined-adornment-username'
-                                    {...(isSubmit && email === '' && { error: true })}
-                                    sx={{
-                                        color: 'var(--text-label-color)',
-                                        '&.Mui-focused': {
-                                            color: 'var(--selected-field-color)'
-                                        },
-                                        '&.Mui-error': {
-                                            color: 'var(--error-color) !important' // Màu khi có lỗi
-                                        }
-                                    }}
-                                    shrink
-                                >
-                                    {t('COMMON.LOGIN.USERNAME')}
-                                </InputLabel>
-                                <OutlinedInput
-                                    notched
-                                    placeholder={t('COMMON.LOGIN.USERNAME_PLACEHOLDER')}
-                                    id='outlined-adornment-username'
-                                    {...(isSubmit && email === '' && { error: true })}
-                                    autoComplete='off' // Ngăn tự động điền
-                                    sx={{
-                                        '& .MuiInputBase-input': {
-                                            padding: '15.5px 0 15.5px 14px',
-                                            color: 'var(--text-color)',
-                                            borderRadius: '8px',
-                                            overflow: 'hidden'
-                                        },
-                                        '& fieldset': {
-                                            borderColor: 'var(--border-color)',
-                                            borderWidth: '1px',
-                                            borderRadius: '8px',
-                                            overflow: 'hidden'
-                                        },
-                                        '&:hover fieldset': {
-                                            borderColor: 'var(--hover-field-color) !important' // Đảm bảo không bị ghi đè
-                                        },
-                                        '&.Mui-focused fieldset': {
-                                            borderColor: 'var(--selected-field-color) !important',
-                                            borderWidth: '2px' // Độ dày viền
-                                        },
-                                        '&.Mui-error:hover fieldset': {
-                                            borderColor: 'var(--error-color) !important'
-                                        },
-                                        '&.Mui-error fieldset': {
-                                            borderColor: 'var(--error-color) !important'
-                                        }
-                                    }}
-                                    label={t('COMMON.LOGIN.USERNAME')}
-                                    onChange={e => setEmail(e.target.value)}
-                                />
-                            </FormControl>
+                            <form autoComplete='off'>
+                                <FormControl sx={{ width: '100%' }} variant='outlined'>
+                                    <InputLabel
+                                        htmlFor='outlined-adornment-username'
+                                        {...(isSubmit && email === '' && { error: true })}
+                                        sx={{
+                                            color: 'var(--text-label-color)',
+                                            '&.Mui-focused': {
+                                                color: 'var(--selected-field-color)'
+                                            },
+                                            '&.Mui-error': {
+                                                color: 'var(--error-color) !important' // Màu khi có lỗi
+                                            }
+                                        }}
+                                        shrink
+                                    >
+                                        {t('COMMON.LOGIN.USERNAME')}
+                                    </InputLabel>
+                                    <OutlinedInput
+                                        notched
+                                        onKeyDown={e => {
+                                            if (e.key === 'Enter') {
+                                                handleSubmit(e) // Gọi hàm submit khi nhấn Enter
+                                            }
+                                        }}
+                                        tabIndex={0} // Thêm thuộc tính tabIndex
+                                        placeholder={t('COMMON.LOGIN.USERNAME_PLACEHOLDER')}
+                                        id='outlined-adornment-username'
+                                        {...(isSubmit && email === '' && { error: true })}
+                                        autoComplete='off' // Ngăn tự động điền
+                                        sx={{
+                                            '& .MuiInputBase-input': {
+                                                padding: '15.5px 0 15.5px 14px',
+                                                color: 'var(--text-color)',
+                                                borderRadius: '8px',
+                                                overflow: 'hidden'
+                                            },
+                                            '& fieldset': {
+                                                borderColor: 'var(--border-color)',
+                                                borderWidth: '1px',
+                                                borderRadius: '8px',
+                                                overflow: 'hidden'
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: 'var(--hover-field-color) !important' // Đảm bảo không bị ghi đè
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: 'var(--selected-field-color) !important',
+                                                borderWidth: '2px' // Độ dày viền
+                                            },
+                                            '&.Mui-error:hover fieldset': {
+                                                borderColor: 'var(--error-color) !important'
+                                            },
+                                            '&.Mui-error fieldset': {
+                                                borderColor: 'var(--error-color) !important'
+                                            }
+                                        }}
+                                        label={t('COMMON.LOGIN.USERNAME')}
+                                        onChange={e => setEmail(e.target.value)}
+                                    />
+                                </FormControl>
+                            </form>
                             <Typography
                                 sx={{
                                     color: 'var(--error-color)',
@@ -339,6 +354,7 @@ const LoginForm: React.FC = () => {
                                     textDecoration: 'underline' // Xóa gạch chân
                                 }
                             }}
+                            tabIndex={4} // Thêm thuộc tính tabIndex
                         >
                             {t('COMMON.LOGIN.FORGOT_PASSWORD')}
                         </Link>
@@ -372,10 +388,16 @@ const LoginForm: React.FC = () => {
                                 <OutlinedInput
                                     placeholder={t('COMMON.LOGIN.8_CHARACTERS')}
                                     notched
+                                    onKeyDown={e => {
+                                        if (e.key === 'Enter') {
+                                            handleSubmit(e) // Gọi hàm submit khi nhấn Enter
+                                        }
+                                    }}
                                     id='outlined-adornment-password'
                                     {...(isSubmit && password === '' && { error: true })}
                                     autoComplete='off' // Ngăn tự động điền
                                     type={showPassword ? 'text' : 'password'}
+                                    tabIndex={1}
                                     onChange={e => setPassword(e.target.value)}
                                     sx={{
                                         '& .MuiInputBase-input': {
@@ -439,6 +461,7 @@ const LoginForm: React.FC = () => {
                         <Button
                             variant='contained'
                             color='primary'
+                            tabIndex={2}
                             sx={{
                                 mt: '30px',
                                 height: '100%',
@@ -456,70 +479,17 @@ const LoginForm: React.FC = () => {
                                 opacity: isLoading ? 0.7 : 1 // Làm mờ nhẹ khi đang loading
                             }}
                             onClick={handleSubmit}
+                            onKeyDown={e => {
+                                if (e.key === 'Enter') {
+                                    handleSubmit(e)
+                                }
+                            }}
                         >
                             {t('COMMON.LOGIN.SIGN_IN')}
                         </Button>
                     </Box>
                 </Box>
             </Box>
-            {/* <form
-                onSubmit={handleSubmit}
-                style={{
-                    backgroundColor: 'white',
-                    padding: '40px',
-                    borderRadius: '12px',
-                    boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.2)',
-                    maxWidth: '400px',
-                    textAlign: 'center'
-                }}
-            >
-                <TextField
-                    label='Tên đăng nhập'
-                    variant='outlined'
-                    fullWidth
-                    margin='normal'
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    required
-                />
-                <TextField
-                    label='Mật khẩu'
-                    type='password'
-                    variant='outlined'
-                    fullWidth
-                    margin='normal'
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                    required
-                />
-                <Button
-                    type='submit'
-                    variant='contained'
-                    fullWidth
-                    sx={{
-                        padding: '15px',
-                        backgroundColor: loading ? '#bbb' : '#00b049',
-                        color: 'white',
-                        borderRadius: '8px',
-                        fontSize: '18px'
-                    }}
-                    disabled={loading}
-                >
-                    {loading ? 'Đang xử lý...' : 'Đăng nhập'}
-                </Button>
-                <a
-                    href='#'
-                    style={{
-                        textDecoration: 'none',
-                        color: '#00b049',
-                        marginTop: '10px',
-                        display: 'block',
-                        fontSize: '16px'
-                    }}
-                >
-                    Quên mật khẩu?
-                </a>
-            </form> */}
         </Box>
     )
 }
