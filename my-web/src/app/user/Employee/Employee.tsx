@@ -1,11 +1,11 @@
 import { Avatar, Box, Button, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { useGetAuthMeQuery } from '@/services/AuthService'
-
+import ErrorPage from '@/app/user/requests/ErrorPage'
 import { formatDate } from '@/utils/formatDate'
 import Loading from '@/components/Loading'
-import { Download } from 'lucide-react'
+import { Download, AlertCircle } from 'lucide-react'
 
 interface EmployeeProps {
     aspnetUserId: string
@@ -13,7 +13,7 @@ interface EmployeeProps {
 
 const Employee: React.FC<EmployeeProps> = ({ aspnetUserId }) => {
     const { t } = useTranslation('common')
-
+    const [openErrorReport, setopenErrorReport] = useState(false)
     const prevOpen = useRef(open)
     useEffect(() => {
         prevOpen.current = open
@@ -129,6 +129,27 @@ const Employee: React.FC<EmployeeProps> = ({ aspnetUserId }) => {
                     >
                         <Download size={20} />
                         {t('COMMON.ATTENDANCE.DOWNLOAD_INFO')}
+                    </Button>
+
+                    <Button
+                        sx={{
+                            padding: '8px 12px',
+                            borderRadius: '8px',
+                            height: '41.5px',
+                            mb: 'auto',
+                            fontWeight: 'bold',
+                            display: 'flex',
+                            gap: '10px',
+                            color: '#040506',
+                            backgroundColor: '#ff4e4e',
+                            textTransform: 'none',
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}
+                        onClick={() => setopenErrorReport(true)}
+                    >
+                        <AlertCircle size={20} />
+                        {t('Báo lỗi')}
                     </Button>
                 </Box>
             </Box>
@@ -284,6 +305,14 @@ const Employee: React.FC<EmployeeProps> = ({ aspnetUserId }) => {
                     </Box>
                 </Box>
             </Box>
+
+            <ErrorPage
+                handleToggle={() => setopenErrorReport(false)}
+                open={openErrorReport}
+                reportedBy={infoMe.Id}
+                type={'COMMON.SIDEBAR.EMPLOYEE'}
+                typeId={infoMe.EmployeeId}
+            />
         </Box>
     )
 }

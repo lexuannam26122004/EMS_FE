@@ -26,6 +26,7 @@ import { AuthApi } from '@/services/AuthService'
 import { authSlice } from './slices/authSlice'
 import { disciplineApi } from '@/services/DisciplineService'
 import { messageApi } from '@/services/MessageService'
+import { ErrorReportApi } from '@/services/ErrorReportService'
 
 export const store = configureStore({
     reducer: {
@@ -55,6 +56,7 @@ export const store = configureStore({
         [rewardApi.reducerPath]: rewardApi.reducer,
         [AuthApi.reducerPath]: AuthApi.reducer,
         [authSlice.name]: authSlice.reducer,
+        [ErrorReportApi.reducerPath]: ErrorReportApi.reducer,
         [disciplineApi.reducerPath]: disciplineApi.reducer
     },
     middleware: getDefaultMiddleware =>
@@ -76,7 +78,7 @@ export const store = configureStore({
             rewardApi.middleware,
             disciplineApi.middleware,
             AuthApi.middleware,
-
+            ErrorReportApi.middleware,
             AuthApi.middleware,
             messageApi.middleware
         )

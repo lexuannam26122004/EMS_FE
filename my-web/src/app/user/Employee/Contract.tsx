@@ -1,8 +1,8 @@
 import { Avatar, Box, Button, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { useRef, useEffect } from 'react'
-
-import { Download } from 'lucide-react'
+import { useRef, useEffect, useState } from 'react'
+import ErrorPage from '@/app/user/requests/ErrorPage'
+import { Download, AlertCircle } from 'lucide-react'
 
 interface ContractProps {
     aspnetUserId: string
@@ -10,7 +10,7 @@ interface ContractProps {
 
 const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
     const { t } = useTranslation('common')
-
+    const [openErrorReport, setopenErrorReport] = useState(false)
     const prevOpen = useRef(open)
     useEffect(() => {
         prevOpen.current = open
@@ -84,6 +84,27 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                     >
                         <Download size={20} />
                         {t('COMMON.ATTENDANCE.DOWNLOAD_INFO')}
+                    </Button>
+
+                    <Button
+                        sx={{
+                            padding: '8px 12px',
+                            borderRadius: '8px',
+                            height: '41.5px',
+                            mb: 'auto',
+                            fontWeight: 'bold',
+                            display: 'flex',
+                            gap: '10px',
+                            color: '#040506',
+                            backgroundColor: '#ff4e4e',
+                            textTransform: 'none',
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}
+                        onClick={() => setopenErrorReport(true)}
+                    >
+                        <AlertCircle size={20} />
+                        {t('Báo lỗi')}
                     </Button>
                 </Box>
             </Box>
@@ -258,6 +279,14 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                     </Box>
                 </Box>
             </Box>
+
+            <ErrorPage
+                handleToggle={() => setopenErrorReport(false)}
+                open={openErrorReport}
+                reportedBy={aspnetUserId}
+                type={'COMMON.SIDEBAR.CONTRACT'}
+                typeId={''}
+            />
         </Box>
     )
 }

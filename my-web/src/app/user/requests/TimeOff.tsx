@@ -18,9 +18,11 @@ import { useTranslation } from 'react-i18next'
 import SearchIcon from '@mui/icons-material/Search'
 import { useRouter } from 'next/navigation'
 import TableTimeOff from './TableTimeOff'
-
+import ErrorPage from '@/app/user/requests/ErrorPage'
+import { useGetAuthMeQuery } from '@/services/AuthService'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
+import Loading from '@/components/Loading'
 
 function a11yProps(index: number) {
     return {
@@ -133,15 +135,10 @@ function ContractExpPage() {
     const [selectedRow, setSelectedRow] = useState<number | null>(null)
     const [order, setOrder] = useState<'asc' | 'desc'>('asc')
     const [orderBy, setOrderBy] = useState<string>('')
-    // const [selectedConfig, setSelectedConfig] = useState<IGetAllSysConfiguration | null>(null)
-    const [openModal, setOpenModal] = useState(false)
+    const [openErrorReport, setopenErrorReport] = useState(false)
 
-    // const { data: responseD, isFetching, refetch } = useGetContractsExpiringSoonQuery(filter)
-
-    // const handleClickDetail = (config: IGetAllSysConfiguration) => {
-    //     setSelectedConfig(config)
-    //     setOpenModal(true)
-    // }
+    const { data: responseDataGetMe, isFetching: isFetchingGetMe } = useGetAuthMeQuery()
+    const user = responseDataGetMe?.Data || null
 
     useEffect(() => {}, [
         router,
@@ -155,15 +152,14 @@ function ContractExpPage() {
         selectedRow,
         order,
         orderBy,
-        openModal,
+        openErrorReport,
         setSelected,
         setSelectedRow,
         setOpenDialog,
         setFrom,
         setTo,
         setOrder,
-        setOrderBy,
-        setOpenModal
+        setOrderBy
     ])
 
     const errorsData = responseData?.Data.Records as IGetAllTimeOff[]
@@ -269,6 +265,10 @@ function ContractExpPage() {
         justifyContent: 'center'
     }
 
+    if (isFetchingGetMe) {
+        return <Loading />
+    }
+
     return (
         <Box
             sx={{
@@ -305,7 +305,7 @@ function ContractExpPage() {
                         fontWeight: 'bold'
                     }}
                 >
-                    {t('COMMON.ERROR_REPORT.TITLE')}
+                    {t('Danh sách xin nghỉ phép')}
                 </Typography>
             </Box>
 
@@ -510,6 +510,7 @@ function ContractExpPage() {
                                 textTransform: 'none',
                                 borderRadius: '10px'
                             }}
+                            onClick={() => setopenErrorReport(true)}
                         >
                             {t('COMMON.BUTTON.CREATE')}
                         </Button>
@@ -627,6 +628,14 @@ function ContractExpPage() {
                     />
                 </Box>
             </Paper>
+
+            <ErrorPage
+                handleToggle={() => setopenErrorReport(false)}
+                open={openErrorReport}
+                reportedBy={user.Id}
+                type={''}
+                typeId={''}
+            />
         </Box>
     )
 }
