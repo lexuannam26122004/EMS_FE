@@ -137,6 +137,8 @@ function Page({ notifications }: Props) {
                 <Box
                     key={chunkIndex}
                     sx={{
+                        width: '100%',
+                        height: '100%',
                         display: 'flex',
                         mt: chunkIndex === 0 ? '0' : '24px',
                         alignItems: 'center',
@@ -146,10 +148,11 @@ function Page({ notifications }: Props) {
                     <Paper
                         sx={{
                             display: 'flex',
-                            alignItems: 'center',
+                            height: '100%',
                             borderRadius: '15px',
+                            overflow: 'hidden',
                             boxShadow: 'var(--box-shadow-paper)',
-                            flex: 1,
+                            width: 'calc(100% / 2 - 12px)',
                             backgroundColor: 'var(--background-item)',
                             justifyContent: 'space-between'
                         }}
@@ -157,8 +160,9 @@ function Page({ notifications }: Props) {
                         <Box
                             sx={{
                                 display: 'flex',
-                                flex: 1,
+                                width: 'calc(100% - 185px)',
                                 flexDirection: 'column',
+                                height: '214px',
                                 padding: '24px 24px 16px'
                             }}
                         >
@@ -199,12 +203,12 @@ function Page({ notifications }: Props) {
                                     sx={{
                                         color: 'var(--text-color)',
                                         fontSize: '16px',
-                                        display: '-webkit-box',
                                         overflow: 'hidden',
-                                        WebkitBoxOrient: 'vertical',
-                                        WebkitLineClamp: 2,
                                         textOverflow: 'ellipsis',
-                                        fontWeight: 'bold'
+                                        fontWeight: 'bold',
+                                        width: '100%',
+                                        cursor: 'pointer',
+                                        whiteSpace: 'nowrap'
                                     }}
                                 >
                                     {chunk[0].Title}
@@ -228,9 +232,9 @@ function Page({ notifications }: Props) {
 
                             <Box
                                 sx={{
+                                    marginTop: 'auto',
                                     display: 'flex',
                                     alignItems: 'center',
-                                    mt: '16px',
                                     justifyContent: 'space-between'
                                 }}
                             >
@@ -428,10 +432,10 @@ function Page({ notifications }: Props) {
                         <Paper
                             sx={{
                                 display: 'flex',
-                                alignItems: 'center',
                                 boxShadow: 'var(--box-shadow-paper)',
                                 borderRadius: '15px',
-                                flex: 1,
+                                overflow: 'hidden',
+                                width: 'calc(100% / 2 - 12px)',
                                 backgroundColor: 'var(--background-item)',
                                 justifyContent: 'space-between'
                             }}
@@ -439,7 +443,8 @@ function Page({ notifications }: Props) {
                             <Box
                                 sx={{
                                     display: 'flex',
-                                    flex: 1,
+                                    width: 'calc(100% - 185px)',
+                                    height: '214px',
                                     flexDirection: 'column',
                                     padding: '24px 24px 16px'
                                 }}
@@ -448,6 +453,7 @@ function Page({ notifications }: Props) {
                                     sx={{
                                         display: 'flex',
                                         alignItems: 'center',
+                                        width: '100%',
                                         mb: '20px',
                                         justifyContent: 'space-between'
                                     }}
@@ -475,18 +481,18 @@ function Page({ notifications }: Props) {
                                     </Typography>
                                 </Box>
 
-                                <Box>
+                                <Box sx={{ width: '100%' }}>
                                     <Typography
                                         variant='h5'
                                         sx={{
                                             color: 'var(--text-color)',
                                             fontSize: '16px',
-                                            display: '-webkit-box',
                                             overflow: 'hidden',
-                                            WebkitBoxOrient: 'vertical',
-                                            WebkitLineClamp: 2,
                                             textOverflow: 'ellipsis',
-                                            fontWeight: 'bold'
+                                            fontWeight: 'bold',
+                                            width: '100%',
+                                            cursor: 'pointer',
+                                            whiteSpace: 'nowrap'
                                         }}
                                     >
                                         {chunk[1].Title}
@@ -512,7 +518,7 @@ function Page({ notifications }: Props) {
                                     sx={{
                                         display: 'flex',
                                         alignItems: 'center',
-                                        mt: '16px',
+                                        mt: 'auto',
                                         justifyContent: 'space-between'
                                     }}
                                 >

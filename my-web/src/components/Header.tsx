@@ -57,7 +57,7 @@ export default function Header() {
                 ) : (
                     <Box> </Box>
                 )}
-                <Box className='flex items-center gap-4'>
+                <Box className='flex items-center gap-3'>
                     <Search />
                     <Divider
                         orientation='vertical'

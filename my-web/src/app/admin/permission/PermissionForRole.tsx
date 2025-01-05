@@ -24,6 +24,7 @@ import sortTable, { getComparator } from '@/common/sortTable'
 import { useTranslation } from 'react-i18next'
 import PermissionForRoleModal from './PermissionForRoleModal'
 import { SearchIcon } from 'lucide-react'
+import { debounce } from 'lodash'
 import { IFilterRole } from '@/models/TablePermissionModel'
 
 export default function PermissionForRole() {
@@ -43,7 +44,7 @@ export default function PermissionForRole() {
 
     useEffect(() => {}, [filter])
 
-    const { data: roleResponse, isLoading, isFetching } = useGetAllRolesQuery()
+    const { data: roleResponse, isLoading, isFetching, refetch } = useGetAllRolesQuery(filter)
 
     const roleData = (roleResponse?.Data?.Records as IAspNetRoleGetAll[]) || []
     const totalRecords = roleResponse?.Data?.TotalRecords || 0
@@ -88,16 +89,26 @@ export default function PermissionForRole() {
         })
     }
 
-    const handleSearchKeyword = () => {
-        setPage(1)
-        setFilter(prev => {
-            return {
+    const debouncedSetFilter = useCallback(
+        debounce(value => {
+            setFilter(prev => ({
                 ...prev,
-                keyword: keyword,
+                keyword: value,
                 pageNumber: 1
-            }
-        })
+            }))
+        }, 100),
+        []
+    )
+
+    const handleSearchKeyword = value => {
+        setPage(1)
+        setKeyword(value)
+        debouncedSetFilter(value)
     }
+
+    useEffect(() => {
+        refetch()
+    }, [filter])
 
     const handleOpenModal = useCallback(
         (data: IAspNetRoleGetAll | null) => {
@@ -142,7 +153,7 @@ export default function PermissionForRole() {
                     variant='outlined'
                     required
                     value={keyword}
-                    onChange={e => setKeyword(e.target.value)}
+                    onChange={e => handleSearchKeyword(e.target.value)}
                     sx={{
                         color: 'var(--text-color)',
                         padding: '0px',
@@ -167,9 +178,6 @@ export default function PermissionForRole() {
                         '& .MuiOutlinedInput-root.Mui-focused fieldset': {
                             borderColor: 'var(--selected-field-color)'
                         }
-                    }}
-                    onKeyDown={() => {
-                        handleSearchKeyword()
                     }}
                     slotProps={{
                         input: {

@@ -180,7 +180,8 @@
             "CALENDAR": "Calendar",
             "LOGIN_HISTORY": "Login history",
             "HELP": "Help",
-            "CREATE_NOTIFICATION": "Create notification"
+            "CREATE_NOTIFICATION": "Create notification",
+            "CHANGE_PASSWORD": "Change password"
         },
         "TIME_DIFFERENCE": {
             "SECONDS_AGO": "{{seconds}} seconds ago",
@@ -624,6 +625,7 @@
             "READ_NOTIFY_RATE": "Read Notification Rate",
             "TOTAL_EVENTS": "Total Events",
             "INCREASED": "increased",
+            "SEARCH": "Search by Title of Notification",
             "DECREASED": "decreased",
             "LIST_EVENTS": "List of Events",
             "UPDATE": "Update",
@@ -741,6 +743,13 @@
                 "HOLIDAY": "Holiday",
                 "NON_HOLIDAY": "Other"
             }
+        },
+        "CHANGE_PASSWORD": {
+            "TITLE": "Change your password!",
+            "DESC": "Create a strong password to better protect your account.",
+            "CHANGE_PASSWORD": "Change password",
+            "CURRENT_PASSWORD": "Current Password",
+            "LEAST_8_CHARACTERS": "At least 8 characters"
         }
     }
 }

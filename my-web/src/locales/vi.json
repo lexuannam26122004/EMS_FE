@@ -179,7 +179,8 @@
             "CALENDAR": "Lịch",
             "LOGIN_HISTORY": "Lịch sử đăng nhập",
             "HELP": "Trợ giúp",
-            "CREATE_NOTIFICATION": "Tạo thông báo"
+            "CREATE_NOTIFICATION": "Tạo thông báo",
+            "CHANGE_PASSWORD": "Đổi mật khẩu"
         },
         "TIME_DIFFERENCE": {
             "SECONDS_AGO": "{{seconds}} giây trước",
@@ -581,6 +582,7 @@
             "DELETE": "Xóa",
             "VIEW": "Xem chi tiết",
             "UPDATE": "Chỉnh sửa",
+            "SEARCH": "Tìm kiếm theo Tiêu đề thông báo",
             "READ_NOTIFY_PER_EMPLOYEE": "Số thông báo đã đọc mỗi nhân viên",
             "BY": "Theo",
             "MONTH": "Tháng",
@@ -708,6 +710,13 @@
                 "HOLIDAY": "Ngày lễ",
                 "NON_HOLIDAY": "Khác"
             }
+        },
+        "CHANGE_PASSWORD": {
+            "TITLE": "Thay đổi mật khẩu của bạn!",
+            "DESC": "Hãy tạo một mật khẩu mạnh để bảo vệ tài khoản của bạn tốt hơn.",
+            "CHANGE_PASSWORD": "Đổi mật khẩu",
+            "CURRENT_PASSWORD": "Mật khẩu hiện tại",
+            "LEAST_8_CHARACTERS": "Ít nhất 8 ký tự"
         }
     }
 }

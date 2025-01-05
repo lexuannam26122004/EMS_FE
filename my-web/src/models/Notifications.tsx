@@ -35,6 +35,15 @@ export interface IFilterNotificationsForUserVModel {
     sentDate?: Date
 }
 
+export interface IFilterNotificationsVModel {
+    title?: string
+    type?: string
+    pageSize?: number
+    pageNumber?: number
+    isActive?: boolean
+    sentDate?: Date
+}
+
 export interface IFilterReadNotificationsForUserVModel {
     userId?: string
     type?: string

@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import {
     IFilterNotificationsForUserVModel,
     INotificationCreateVModel,
+    IFilterNotificationsVModel,
     INotificationUpdateVModel
 } from '@/models/Notifications'
 import axios from './axios'
@@ -44,6 +45,21 @@ export const notificationsApi = createApi({
                 }
 
                 return `SearchForUser?${params.toString()}`
+            }
+        }),
+        searchNotifications: builder.query<NotificationsResponse, IFilterNotificationsVModel>({
+            query: filter => {
+                const params = new URLSearchParams()
+
+                if (filter) {
+                    if (filter.title) params.append('Title', filter.title)
+                    if (filter.pageSize) params.append('PageSize', filter.pageSize.toString())
+                    if (filter.pageNumber) params.append('PageNumber', filter.pageNumber.toString())
+                    if (filter.isActive !== undefined) params.append('IsActive', filter.isActive.toString())
+                    if (filter.sentDate) params.append('SentDate', filter.sentDate.toISOString())
+                }
+
+                return `Search?${params.toString()}`
             }
         }),
         getNotificationById: builder.query<NotificationsResponse, number>({
@@ -98,6 +114,7 @@ export const {
     useChangeAllReadMutation,
     useChangeNotificationReadMutation,
     useDeleteNotificationMutation,
+    useSearchNotificationsQuery,
     useGetNotificationByIdQuery,
     useGetCountIsNewQuery,
     useUpdateIsNewMutation,

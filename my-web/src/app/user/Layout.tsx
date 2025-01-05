@@ -52,12 +52,12 @@ function Layout({ children }: { children: React.ReactNode }) {
                         sx={{
                             borderRadius: '30px',
                             padding: '5px',
-                            backgroundColor: '#dc2e85'
+                            backgroundColor: '#3ecdaa'
                         }}
                     >
-                        <LanguageMenu />
-                        <ColorModeIconDropdown />
-                        <NotificationMenu />
+                        <LanguageMenu isUser={true} />
+                        <ColorModeIconDropdown isUser={true} />
+                        <NotificationMenu isUser={true} />
                     </Box>
                     <AvatarMenu />
                 </Box>

@@ -370,7 +370,7 @@ const LoginForm: React.FC = () => {
                         >
                             <FormControl sx={{ width: '100%' }} variant='outlined'>
                                 <InputLabel
-                                    {...(isSubmit && password === '' && { error: true })}
+                                    {...(isSubmit && (password === '' || password.length < 8) && { error: true })}
                                     htmlFor='outlined-adornment-password'
                                     sx={{
                                         color: 'var(--text-label-color)',
@@ -394,7 +394,7 @@ const LoginForm: React.FC = () => {
                                         }
                                     }}
                                     id='outlined-adornment-password'
-                                    {...(isSubmit && password === '' && { error: true })}
+                                    {...(isSubmit && (password === '' || password.length < 8) && { error: true })}
                                     autoComplete='off' // Ngăn tự động điền
                                     type={showPassword ? 'text' : 'password'}
                                     tabIndex={1}
@@ -451,10 +451,13 @@ const LoginForm: React.FC = () => {
                                     margin: '3px auto 0 12px',
                                     width: 'auto',
                                     fontSize: '12px',
-                                    visibility: isSubmit && password === '' ? 'visible' : 'hidden'
+                                    visibility:
+                                        isSubmit && (password === '' || password.length < 8) ? 'visible' : 'hidden'
                                 }}
                             >
-                                {t('COMMON.TEXTFIELD.REQUIRED')}
+                                {password === ''
+                                    ? t('COMMON.TEXTFIELD.REQUIRED')
+                                    : t('COMMON.CHANGE_PASSWORD.LEAST_8_CHARACTERS')}
                             </Typography>
                         </Box>
 

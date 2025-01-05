@@ -15,7 +15,8 @@ import { useTranslation } from 'react-i18next'
 // import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined'
 import { ChevronDown, CalendarClock, ChevronUp, User } from 'lucide-react'
 // import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
-import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
+// import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
+import VpnKeyOutlinedIcon from '@mui/icons-material/VpnKeyOutlined'
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined'
 import { PencilLine } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
@@ -90,6 +91,11 @@ const AvatarMenu = () => {
     const handlePersonal = () => {
         setOpen(false)
         router.push('/user')
+    }
+
+    const handleChangePassword = () => {
+        setOpen(false)
+        router.push('/change-password')
     }
 
     const handleSchedular = () => {
@@ -240,8 +246,8 @@ const AvatarMenu = () => {
                                     id='avatar-menu'
                                     onKeyDown={handleListKeyDown}
                                     sx={{
-                                        borderRadius: '6px',
-                                        minWidth: '208px'
+                                        borderRadius: '8px',
+                                        minWidth: '200px'
                                     }}
                                 >
                                     {/* <MenuItem sx={{ padding: '8px', cursor: 'default' }}>
@@ -275,7 +281,8 @@ const AvatarMenu = () => {
                                             onClick={handlePersonal}
                                             sx={{
                                                 color: 'var(--text-color)',
-                                                borderRadius: '6px',
+                                                borderRadius: '8px',
+                                                padding: '10px92px',
                                                 '&:hover': {
                                                     backgroundColor: 'var(--hover-color)'
                                                 }
@@ -290,7 +297,8 @@ const AvatarMenu = () => {
                                         onClick={handleCreateNotification}
                                         sx={{
                                             color: 'var(--text-color)',
-                                            borderRadius: '6px',
+                                            padding: '9px 12px',
+                                            borderRadius: '8px',
                                             '&:hover': {
                                                 backgroundColor: 'var(--hover-color)'
                                             }
@@ -303,7 +311,8 @@ const AvatarMenu = () => {
                                         onClick={handleSchedular}
                                         sx={{
                                             color: 'var(--text-color)',
-                                            borderRadius: '6px',
+                                            padding: '9px 12px',
+                                            borderRadius: '8px',
                                             '&:hover': {
                                                 backgroundColor: 'var(--hover-color)'
                                             }
@@ -317,7 +326,7 @@ const AvatarMenu = () => {
                                         onClick={handleCreateTasks}
                                         sx={{
                                             color: 'var(--text-color)',
-                                            borderRadius: '6px',
+                                            borderRadius: '8px',
                                             '&:hover': {
                                                 backgroundColor: 'var(--hover-color)'
                                             }
@@ -330,7 +339,7 @@ const AvatarMenu = () => {
                                         onClick={handleClose}
                                         sx={{
                                             color: 'var(--text-color)',
-                                            borderRadius: '6px',
+                                            borderRadius: '8px',
                                             '&:hover': {
                                                 backgroundColor: 'var(--hover-color)'
                                             }
@@ -340,24 +349,25 @@ const AvatarMenu = () => {
                                         {t('COMMON.AVATAR_MENU.LOGIN_HISTORY')}
                                     </MenuItem> */}
                                     <MenuItem
-                                        onClick={handleClose}
+                                        onClick={handleChangePassword}
                                         sx={{
                                             color: 'var(--text-color)',
-                                            borderRadius: '6px',
+                                            padding: '9px 12px',
+                                            borderRadius: '8px',
                                             '&:hover': {
                                                 backgroundColor: 'var(--hover-color)'
                                             }
                                         }}
                                     >
-                                        <SettingsOutlinedIcon sx={{ mr: 2 }} />
-                                        {t('COMMON.AVATAR_MENU.SETTINGS')}
+                                        <VpnKeyOutlinedIcon sx={{ mr: 2 }} />
+                                        {t('COMMON.AVATAR_MENU.CHANGE_PASSWORD')}
                                     </MenuItem>
                                     {/* 
                                     <MenuItem
                                         onClick={handleClose}
                                         sx={{
                                             color: 'var(--text-color)',
-                                            borderRadius: '6px',
+                                            borderRadius: '8px',
                                             '&:hover': {
                                                 backgroundColor: 'var(--hover-color)'
                                             }
@@ -371,7 +381,8 @@ const AvatarMenu = () => {
                                         onClick={handleLogout}
                                         sx={{
                                             color: 'var(--text-color)',
-                                            borderRadius: '6px',
+                                            padding: '9px 12px',
+                                            borderRadius: '8px',
                                             '&:hover': {
                                                 backgroundColor: 'var(--hover-color)'
                                             }

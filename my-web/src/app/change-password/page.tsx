@@ -19,13 +19,16 @@ const LoginForm: React.FC = () => {
     const [newPassword, setNewPassword] = useState('')
     const [password, setPassword] = useState('')
     const [isSubmit, setIsSubmit] = useState(false)
-    const [email, setEmail] = useState('')
+    const [currentPassword, setCurrentPassword] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const toast = useToast()
     const router = useRouter()
     const { t } = useTranslation('common')
     const [showPassword, setShowPassword] = React.useState(false)
     const [showNewPassword, setShowNewPassword] = React.useState(false)
+    const [showCurrentPassword, setShowCurrentPassword] = React.useState(false)
+
+    const handleClickShowCurrentPassword = () => setShowCurrentPassword(show => !show)
 
     const handleClickShowPassword = () => setShowPassword(show => !show)
 
@@ -43,28 +46,39 @@ const LoginForm: React.FC = () => {
         router.push('/')
     }
 
-    const token = new URLSearchParams(window.location.search).get('token')
-
     const handleSubmit = async (e: React.FormEvent) => {
+        const token = sessionStorage.getItem('auth_token')
+
+        if (!token) {
+            router.push('/login')
+            return
+        }
+
         e.preventDefault()
         setIsSubmit(true)
-        if (newPassword === '' || password === '' || email === '' || password.length < 8 || password !== newPassword) {
+        if (
+            newPassword === '' ||
+            password === '' ||
+            currentPassword === '' ||
+            currentPassword.length < 8 ||
+            password.length < 8 ||
+            password !== newPassword
+        ) {
             return
         }
 
         setIsLoading(true)
 
         const updatePassword = {
-            Email: email,
-            Token: token,
-            NewPassword: newPassword,
-            Password: password
+            OldPassword: currentPassword,
+            NewPassword: newPassword
         }
 
         try {
-            const response = await fetch('https://localhost:44381/api/Auth/ResetPassword', {
-                method: 'POST',
+            const response = await fetch('https://localhost:44381/api/admin/AspNetUser/ChangePassword', {
+                method: 'PUT',
                 headers: {
+                    Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json-patch+json'
                 },
                 body: JSON.stringify(updatePassword)
@@ -246,7 +260,7 @@ const LoginForm: React.FC = () => {
                         }}
                     >
                         <img
-                            src='/images/request-sent.svg'
+                            src='/images/padlock.png'
                             style={{
                                 width: '96px',
                                 height: '96px',
@@ -262,7 +276,7 @@ const LoginForm: React.FC = () => {
                                 color: 'var(--text-color)'
                             }}
                         >
-                            {t('COMMON.UPDATE_PASSWORD.TITLE')}
+                            {t('COMMON.CHANGE_PASSWORD.TITLE')}
                         </Typography>
 
                         <Typography
@@ -272,7 +286,7 @@ const LoginForm: React.FC = () => {
                                 color: 'var(--sub-title-color)'
                             }}
                         >
-                            {t('COMMON.UPDATE_PASSWORD.DESC')}
+                            {t('COMMON.CHANGE_PASSWORD.DESC')}
                         </Typography>
 
                         <Box
@@ -287,8 +301,9 @@ const LoginForm: React.FC = () => {
                             <form autoComplete='off'>
                                 <FormControl sx={{ width: '100%' }} variant='outlined'>
                                     <InputLabel
-                                        htmlFor='outlined-adornment-email'
-                                        {...(isSubmit && email === '' && { error: true })}
+                                        {...(isSubmit &&
+                                            (currentPassword === '' || currentPassword.length < 8) && { error: true })}
+                                        htmlFor='outlined-adornment-passwordCurrent'
                                         sx={{
                                             color: 'var(--text-label-color)',
                                             '&.Mui-focused': {
@@ -300,22 +315,25 @@ const LoginForm: React.FC = () => {
                                         }}
                                         shrink
                                     >
-                                        {t('COMMON.REQUEST_PASSWORD.EMAIL_ADDRESS')}
+                                        {t('COMMON.CHANGE_PASSWORD.CURRENT_PASSWORD')}
                                     </InputLabel>
                                     <OutlinedInput
-                                        notched
                                         onKeyDown={e => {
                                             if (e.key === 'Enter') {
                                                 handleSubmit(e)
                                             }
                                         }}
-                                        id='outlined-adornment-email'
-                                        {...(isSubmit && email === '' && { error: true })}
+                                        placeholder={t('COMMON.LOGIN.8_CHARACTERS')}
+                                        notched
+                                        id='outlined-adornment-passwordCurrent'
+                                        {...(isSubmit &&
+                                            (currentPassword === '' || currentPassword.length < 8) && { error: true })}
                                         autoComplete='off' // Ngăn tự động điền
-                                        placeholder={t('COMMON.REQUEST_PASSWORD.EMAIL_EXAMPLE')} // Thêm placeholder
+                                        type={showCurrentPassword ? 'text' : 'password'}
+                                        onChange={e => setCurrentPassword(e.target.value)}
                                         sx={{
                                             '& .MuiInputBase-input': {
-                                                padding: '17px 0 17px 14px',
+                                                padding: '15.5px 0 15.5px 14px',
                                                 color: 'var(--text-color)',
                                                 borderRadius: '8px',
                                                 overflow: 'hidden'
@@ -340,8 +358,27 @@ const LoginForm: React.FC = () => {
                                                 borderColor: 'var(--error-color) !important'
                                             }
                                         }}
-                                        label={t('COMMON.REQUEST_PASSWORD.EMAIL_ADDRESS')}
-                                        onChange={e => setEmail(e.target.value)}
+                                        endAdornment={
+                                            <InputAdornment position='end'>
+                                                <IconButton
+                                                    aria-label={
+                                                        showCurrentPassword
+                                                            ? 'hide the password current'
+                                                            : 'display the password current'
+                                                    }
+                                                    onClick={handleClickShowCurrentPassword}
+                                                    onMouseDown={handleMouseDownPassword}
+                                                    onMouseUp={handleMouseUpPassword}
+                                                    edge='end'
+                                                    sx={{
+                                                        color: 'var(--text-label-color)'
+                                                    }}
+                                                >
+                                                    {showCurrentPassword ? <VisibilityOff /> : <Visibility />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        }
+                                        label={t('COMMON.CHANGE_PASSWORD.CURRENT_PASSWORD')}
                                     />
                                 </FormControl>
                             </form>
@@ -351,10 +388,15 @@ const LoginForm: React.FC = () => {
                                     margin: '3px auto 0 12px',
                                     width: 'auto',
                                     fontSize: '12px',
-                                    visibility: isSubmit && email === '' ? 'visible' : 'hidden'
+                                    visibility:
+                                        isSubmit && (currentPassword === '' || currentPassword.length < 8)
+                                            ? 'visible'
+                                            : 'hidden'
                                 }}
                             >
-                                {t('COMMON.TEXTFIELD.REQUIRED')}
+                                {currentPassword === ''
+                                    ? t('COMMON.TEXTFIELD.REQUIRED')
+                                    : t('COMMON.CHANGE_PASSWORD.LEAST_8_CHARACTERS')}
                             </Typography>
                         </Box>
 
