@@ -80,8 +80,8 @@ const CreateEmploymentContract = () => {
             startDate === '' ||
             endDate === '' ||
             basicSalary === '' ||
-            probationPeriod === '' ||
             workingHours === '' ||
+            probationPeriod === '' ||
             typeContract === '' ||
             managerId === ''
         ) {
@@ -133,10 +133,8 @@ const CreateEmploymentContract = () => {
             startDate === '' ||
             endDate === '' ||
             basicSalary === '' ||
-            clause === '' ||
-            probationPeriod === '' ||
             workingHours === '' ||
-            terminationClause === '' ||
+            probationPeriod === '' ||
             typeContract === '' ||
             managerId === ''
         ) {

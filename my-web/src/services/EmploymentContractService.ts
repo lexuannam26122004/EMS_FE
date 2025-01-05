@@ -45,6 +45,10 @@ export const EmploymentContractApi = createApi({
             query: params => `GetEmployeeStatsByMonthAndYear/monthly-stats?year=${params.Year}&month=${params.Month}`
         }),
 
+        getEmployeesStatsByYears: builder.query<EmploymentContractResponse, number>({
+            query: params => `GetEmployeesStatsByYears?year=${params}`
+        }),
+
         getByIdEmploymentContracts: builder.query<EmploymentContractResponse, string>({
             query: id => `GetById/${id}`
         }),
@@ -86,5 +90,6 @@ export const {
     useUpdateEmploymentContractsMutation,
     useChangeStatusEmploymentContractsMutation,
     useGetEmployeeStatsByMonthAndYearQuery,
+    useGetEmployeesStatsByYearsQuery,
     useGetContractsExpiringSoonQuery
 } = EmploymentContractApi

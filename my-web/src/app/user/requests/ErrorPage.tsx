@@ -155,7 +155,6 @@ function DetailModal({ open, handleToggle, reportedBy, type, typeId }: Props) {
                     sx={{
                         width: '100%',
                         height: '90%',
-                        borderRadius: '15px',
                         backgroundColor: 'var(--background-item)',
                         padding: '24px',
                         boxShadow: 'var(--box-shadow-paper)'
