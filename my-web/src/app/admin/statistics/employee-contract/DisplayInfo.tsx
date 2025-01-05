@@ -79,7 +79,7 @@ function Page() {
                             color: 'var(--reward-title-color)'
                         }}
                     >
-                        {t('Tổng số nhân viên mới')}
+                        {t('COMMON.EMPLOYEE-CONTRACT.TOTAL_NEW_EMPLOYEE')}
                     </Typography>
                     <Typography
                         sx={{
@@ -170,7 +170,7 @@ function Page() {
                             color: 'var(--reward-title-color)'
                         }}
                     >
-                        {t('Tổng số nhân viên nghỉ việc')}
+                        {t('COMMON.EMPLOYEE-CONTRACT.TOTAL_OLD_EMPLOYEE')}
                     </Typography>
                     <Typography
                         sx={{
@@ -271,7 +271,7 @@ function Page() {
                             color: 'var(--reward-title-color)'
                         }}
                     >
-                        {t('Tổng số nhân viên trong công ty')}
+                        {t('COMMON.EMPLOYEE-CONTRACT.TOTAL_EMPLOYEE')}
                     </Typography>
                     <Typography
                         sx={{
@@ -364,7 +364,7 @@ function Page() {
                             color: 'var(--reward-title-color)'
                         }}
                     >
-                        {t('Tổng số hợp đồng mới')}
+                        {t('COMMON.EMPLOYEE-CONTRACT.TOTAL_CONTRACT')}
                     </Typography>
                     <Typography
                         sx={{

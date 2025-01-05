@@ -718,6 +718,20 @@
             "CHANGE_PASSWORD": "Đổi mật khẩu",
             "CURRENT_PASSWORD": "Mật khẩu hiện tại",
             "LEAST_8_CHARACTERS": "Ít nhất 8 ký tự"
+        },
+        "EMPLOYEE-CONTRACT": {
+            "TOTAL_NEW_EMPLOYEE": "Tổng số nhân viên mới ",
+            "TOTAL_OLD_EMPLOYEE": "Tổng số nhân viên nghỉ việc",
+            "TOTAL_EMPLOYEE": "Tổng số nhân viên trong công ty",
+            "TOTAL_CONTRACT": "Tổng số hợp đồng mới",
+            "NEW_EMPLOYEE": "Nhân viên mới ",
+            "OLD_EMPLOYEE": "Nhân viên nghỉ việc",
+            "EMPLOYEE": "Nhân viên trong công ty",
+            "STAFF_STATISTICS": "Biểu đồ thống kê nhân viên",
+            "GENDER_STATISTICS": "Giới tính của nhân viên",
+            "GENDER_STATISTICS_MALE": "Nam",
+            "GENDER_STATISTICS_FEMALE": "Nữ",
+            "GENDER_STATISTICS_OTHER": "Khác"
         }
     }
 }

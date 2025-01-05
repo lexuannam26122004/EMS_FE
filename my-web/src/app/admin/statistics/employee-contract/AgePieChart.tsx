@@ -45,11 +45,11 @@ const AgePieChart: React.FC = () => {
                     show: false
                 },
                 data: [
-                    { value: 10, name: '0-18 years' },
-                    { value: 10, name: '19-35 years' },
-                    { value: 10, name: '36-50 years' },
-                    { value: 10, name: '51-65 years' },
-                    { value: 10, name: '66+ years' }
+                    { value: 10, name: '0-18' },
+                    { value: 10, name: '19-35' },
+                    { value: 10, name: '36-50' },
+                    { value: 10, name: '51-65' },
+                    { value: 10, name: '66+' }
                 ]
             }
         ]

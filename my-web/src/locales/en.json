@@ -751,6 +751,20 @@
             "CHANGE_PASSWORD": "Change password",
             "CURRENT_PASSWORD": "Current Password",
             "LEAST_8_CHARACTERS": "At least 8 characters"
+        },
+        "EMPLOYEE-CONTRACT": {
+            "TOTAL_NEW_EMPLOYEE": "Total number of new employees",
+            "TOTAL_OLD_EMPLOYEE": "Total number of employees who left",
+            "TOTAL_EMPLOYEE": "Total number of employees in the company",
+            "TOTAL_CONTRACT": "Total number of new contracts",
+            "NEW_EMPLOYEE": "New employees",
+            "OLD_EMPLOYEE": "Employees who left",
+            "EMPLOYEE": "Employees in the company",
+            "STAFF_STATISTICS": "Staff statistics chart",
+            "GENDER_STATISTICS": "Gender of employees",
+            "GENDER_STATISTICS_MALE": "Male",
+            "GENDER_STATISTICS_FEMALE": "Female",
+            "GENDER_STATISTICS_OTHER": "Other"
         }
     }
 }

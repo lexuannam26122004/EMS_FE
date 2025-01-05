@@ -15,18 +15,17 @@ const GenderPieChart: React.FC = () => {
         },
         tooltip: {
             trigger: 'item',
-            formatter: '{a} <br/>{b}: {c} ({d}%)'
+            formatter: '{b}: {c} ({d}%)'
         },
         legend: {
             top: 'bottom',
             textStyle: {
                 color: theme === 'light' ? '#000000' : '#ffffff',
                 fontFamily: 'Arial, sans-serif'
-            },
+            }
         },
         series: [
             {
-                name: 'Gender Distribution',
                 type: 'pie',
                 radius: ['40%', '70%'],
                 avoidLabelOverlap: false,
@@ -49,9 +48,9 @@ const GenderPieChart: React.FC = () => {
                     show: false
                 },
                 data: [
-                    { value: 1048, name: 'Male' },
-                    { value: 735, name: 'Female' },
-                    { value: 580, name: 'Other' }
+                    { value: 1048, name: t('COMMON.EMPLOYEE-CONTRACT.GENDER_STATISTICS_MALE') },
+                    { value: 735, name: t('COMMON.EMPLOYEE-CONTRACT.GENDER_STATISTICS_FEMALE') },
+                    { value: 580, name: t('COMMON.EMPLOYEE-CONTRACT.GENDER_STATISTICS_OTHER') }
                 ]
             }
         ]
@@ -61,7 +60,8 @@ const GenderPieChart: React.FC = () => {
             elevation={0}
             sx={{
                 width: '100%',
-                padding: '24px',boxShadow: 'var(--box-shadow-paper)',
+                padding: '24px',
+                boxShadow: 'var(--box-shadow-paper)',
                 backgroundColor: 'var(--background-item)',
                 borderRadius: '15px',
                 height: '100%'
@@ -75,7 +75,7 @@ const GenderPieChart: React.FC = () => {
                         color: 'var(--text-color)'
                     }}
                 >
-                    {t('Giới tính của Nhân viên')}
+                    {t('COMMON.EMPLOYEE-CONTRACT.GENDER_STATISTICS')}
                 </Typography>
             </Box>
             <ReactECharts option={option} style={{ height: '450px', width: '100%', marginTop: '-50px' }} />
