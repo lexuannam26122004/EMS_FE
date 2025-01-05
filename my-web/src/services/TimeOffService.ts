@@ -4,7 +4,10 @@ interface TimeOffResponse {
     Success: boolean
     Data: any
 }
-
+interface IMonthAndYear {
+    Month: number
+    Year: number
+}
 const apiPath = 'https://localhost:44381/api/admin/TimeOff'
 
 export const TimeOffApi = createApi({
@@ -30,6 +33,10 @@ export const TimeOffApi = createApi({
             })
         }),
 
+        getTimeOffStatisticsByMonthAndYear: builder.query<TimeOffResponse, IMonthAndYear>({
+            query: params => `GetTimeOffStatistics/time-off-statistics?year=${params.Year}&month=${params.Month}`
+        }),
+
         getByIdTimeOffs: builder.query<TimeOffResponse, number>({
             query: id => `GetById/${id}`
         }),
@@ -48,5 +55,6 @@ export const {
     useCreateTimeOffsMutation,
     useUpdateTimeOffsMutation,
     useGetByIdTimeOffsQuery,
+    useGetTimeOffStatisticsByMonthAndYearQuery,
     useChangeStatusTimeOffsMutation
 } = TimeOffApi
