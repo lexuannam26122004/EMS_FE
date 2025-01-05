@@ -6,6 +6,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction' // Dùng plugin này để hỗ trợ kéo và thả
 import { EventDropArg } from '@fullcalendar/core'
 import dayjs from 'dayjs'
+import { DatePicker } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
@@ -14,6 +15,7 @@ import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers'
 import { styled } from '@mui/material/styles'
 import { SwitchProps } from '@mui/material/Switch'
 import equal from 'fast-deep-equal'
+import { subDays } from 'date-fns'
 import {
     Paper,
     Dialog,
@@ -110,8 +112,11 @@ const IOSSwitch = styled((props: SwitchProps) => (
 }))
 
 import { toZonedTime, format } from 'date-fns-tz'
+import Loading from '@/components/Loading'
 
 const convertToVietnamTime = (date: Date) => {
+    console.log(date)
+
     // Đảm bảo date là hợp lệ
     if (isNaN(date.getTime())) {
         throw new Error('Invalid Date')
@@ -153,7 +158,7 @@ const MyCalendar = () => {
     const [createEvent, { isLoading: isLoadingCreate }] = useCreateEventMutation()
     const [deleteEvent, { isLoading: isLoadingDelete }] = useDeleteEventMutation()
     const [updateEvent, { isLoading: isLoadingUpdate }] = useUpdateEventMutation()
-    const { data: responseData, refetch } = useSearchEventQuery(filter)
+    const { data: responseData, isLoading, refetch } = useSearchEventQuery(filter)
 
     const eventData = responseData?.Data.Records as IEventGetAll[]
 
@@ -218,7 +223,7 @@ const MyCalendar = () => {
     const [isNewEvent, setIsNewEvent] = useState(false)
 
     const handleSelect = (info: { start: Date; end: Date }) => {
-        const newEventId = 'new_' + Date.now() // Tạo ID mới cho sự kiện mới
+        const newEventId = 'new_' + Date.now()
 
         setNewEvent({
             id: newEventId,
@@ -226,7 +231,7 @@ const MyCalendar = () => {
             description: '',
             start: info.start,
             isHoliday: false,
-            end: info.end,
+            end: new Date(info.end.getTime() - 1),
             allDay: false,
             color: '#00a76f'
         })
@@ -248,7 +253,17 @@ const MyCalendar = () => {
         }
 
         const startTime = convertToVietnamTime(newEvent.start)
-        const endTime = convertToVietnamTime(newEvent.end)
+        let endTime = convertToVietnamTime(newEvent.end)
+
+        // const formattedStartDate = format(startTime, 'yyyy-MM-dd')
+        // const formattedEndDate = format(endTime, 'yyyy-MM-dd')
+
+        if (newEvent.allDay) {
+            let endDate = new Date(endTime)
+            endDate.setDate(endDate.getDate() + 1) // Thêm 1 ngày
+            endDate.setHours(0, 0, 0, 0) // Đặt giờ là 00:00:00
+            endTime = convertToVietnamTime(endDate)
+        }
 
         if (isNewEvent) {
             setEvents([...events, newEvent])
@@ -283,7 +298,12 @@ const MyCalendar = () => {
 
         setIsNewEvent(false)
 
-        console.log(event.start, event.end)
+        let endTime = event.end
+
+        if (convertToVietnamTime(endTime).endsWith('T00:00:00')) {
+            endTime = subDays(endTime, 1)
+            endTime.setHours(23, 59, 0, 0)
+        }
 
         setNewEvent({
             id: event.id,
@@ -291,7 +311,7 @@ const MyCalendar = () => {
             description: event.extendedProps.description || '',
             start: event.start,
             isHoliday: event.extendedProps.isHoliday || false,
-            end: event.end,
+            end: endTime,
             allDay: event.allDay || false,
             color: event.backgroundColor || '#00a76f'
         })
@@ -301,10 +321,19 @@ const MyCalendar = () => {
     }
 
     const handleAllDayChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setNewEvent(prevEvent => ({
-            ...prevEvent,
-            allDay: event.target.checked
-        }))
+        const isAllDay = event.target.checked
+
+        setNewEvent(prevEvent => {
+            const endOfDay = isAllDay
+                ? new Date(prevEvent.end?.setHours(23, 59, 0, 0) ?? prevEvent.start.setHours(23, 59, 0, 0))
+                : prevEvent.end
+
+            return {
+                ...prevEvent,
+                allDay: isAllDay,
+                end: endOfDay
+            }
+        })
     }
 
     const handleEventDrop = async (info: EventDropArg) => {
@@ -316,7 +345,16 @@ const MyCalendar = () => {
         )
 
         const startTime = convertToVietnamTime(newStart)
-        const endTime = convertToVietnamTime(newEnd)
+        let endTime = convertToVietnamTime(newEnd)
+
+        // const formattedStartDate = format(startTime, 'yyyy-MM-dd')
+        // const formattedEndDate = format(endTime, 'yyyy-MM-dd')
+
+        if (info.event.allDay) {
+            let endDate = new Date(endTime)
+            endDate.setHours(0, 0, 0, 0)
+            endTime = convertToVietnamTime(endDate)
+        }
 
         const eventUpdate = {
             Title: info.event.title,
@@ -366,6 +404,10 @@ const MyCalendar = () => {
             const calendarApi = calendarRef.current.getApi()
             calendarApi.today() // Di chuyển lịch đến ngày hiện tại
         }
+    }
+
+    if (isLoading) {
+        return <Loading />
     }
 
     return (
@@ -639,7 +681,7 @@ const MyCalendar = () => {
                         margin: 0,
                         borderRadius: '16px',
                         maxWidth: 'none',
-                        height: '90vh'
+                        maxHeight: '90vh'
                     }
                 }}
                 onClose={() => setModalOpen(false)}
@@ -815,93 +857,183 @@ const MyCalendar = () => {
                         label={t('COMMON.CALENDAR.ALL_DAY')}
                     />
 
-                    <Box>
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DateTimePicker
-                                label='Ngày bắt đầu'
-                                value={dayjs(newEvent.start)}
-                                onChange={value => setNewEvent({ ...newEvent, start: value?.toDate() || new Date() })}
-                                viewRenderers={{
-                                    hours: renderTimeViewClock,
-                                    minutes: renderTimeViewClock,
-                                    seconds: renderTimeViewClock
-                                }}
-                                sx={{
-                                    width: '100%',
-                                    '& .MuiInputBase-root': {
-                                        color: 'var(--text-color)'
-                                    },
-                                    '& .MuiInputLabel-root': {
-                                        color: 'var(--text-label-color)'
-                                    },
-                                    '& .MuiOutlinedInput-notchedOutline': {
-                                        borderRadius: '8px',
-                                        borderColor: 'var(--border-dialog)'
-                                    },
-                                    '& .MuiSvgIcon-root': {
-                                        color: 'var(--text-label-color)' // Màu của icon (lịch)
-                                    },
-                                    '& .MuiOutlinedInput-root': {
-                                        '&:hover .MuiOutlinedInput-notchedOutline': {
-                                            borderColor: 'var(--hover-field-color)' // Màu viền khi hover
-                                        },
-                                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                            borderColor: 'var(--selected-field-color) !important' // Màu viền khi focus, thêm !important để ghi đè
-                                        }
-                                    },
-                                    '& .MuiInputLabel-root.Mui-focused': {
-                                        color: 'var(--selected-field-color)'
+                    {newEvent.allDay === true && (
+                        <Box>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker
+                                    label={t('COMMON.USER.START_DATE')}
+                                    value={dayjs(newEvent.start)}
+                                    onChange={value =>
+                                        setNewEvent({ ...newEvent, start: value?.toDate() || new Date() })
                                     }
-                                }}
-                            />
-                        </LocalizationProvider>
-                    </Box>
+                                    sx={{
+                                        width: '100%',
+                                        '& .MuiInputBase-root': {
+                                            color: 'var(--text-color)'
+                                        },
+                                        '& .MuiInputLabel-root': {
+                                            color: 'var(--text-label-color)'
+                                        },
+                                        '& .MuiOutlinedInput-notchedOutline': {
+                                            borderRadius: '8px',
+                                            borderColor: 'var(--border-dialog)'
+                                        },
+                                        '& .MuiSvgIcon-root': {
+                                            color: 'var(--text-label-color)' // Màu của icon (lịch)
+                                        },
+                                        '& .MuiOutlinedInput-root': {
+                                            '&:hover .MuiOutlinedInput-notchedOutline': {
+                                                borderColor: 'var(--hover-field-color)' // Màu viền khi hover
+                                            },
+                                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                borderColor: 'var(--selected-field-color) !important' // Màu viền khi focus, thêm !important để ghi đè
+                                            }
+                                        },
+                                        '& .MuiInputLabel-root.Mui-focused': {
+                                            color: 'var(--selected-field-color)'
+                                        }
+                                    }}
+                                />
+                            </LocalizationProvider>
+                        </Box>
+                    )}
 
-                    <Box
-                        sx={{
-                            mt: '26px'
-                        }}
-                    >
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DateTimePicker
-                                label='Ngày kết thúc'
-                                value={dayjs(newEvent.end)}
-                                onChange={value => setNewEvent({ ...newEvent, end: value?.toDate() || new Date() })}
-                                viewRenderers={{
-                                    hours: renderTimeViewClock,
-                                    minutes: renderTimeViewClock,
-                                    seconds: renderTimeViewClock
-                                }}
-                                sx={{
-                                    width: '100%',
-                                    '& .MuiInputBase-root': {
-                                        color: 'var(--text-color)'
-                                    },
-                                    '& .MuiInputLabel-root': {
-                                        color: 'var(--text-label-color)'
-                                    },
-                                    '& .MuiOutlinedInput-notchedOutline': {
-                                        borderRadius: '8px',
-                                        borderColor: 'var(--border-dialog)'
-                                    },
-                                    '& .MuiSvgIcon-root': {
-                                        color: 'var(--text-label-color)' // Màu của icon (lịch)
-                                    },
-                                    '& .MuiOutlinedInput-root': {
-                                        '&:hover .MuiOutlinedInput-notchedOutline': {
-                                            borderColor: 'var(--hover-field-color)' // Màu viền khi hover
-                                        },
-                                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                            borderColor: 'var(--selected-field-color) !important' // Màu viền khi focus, thêm !important để ghi đè
-                                        }
-                                    },
-                                    '& .MuiInputLabel-root.Mui-focused': {
-                                        color: 'var(--selected-field-color)'
+                    {newEvent.allDay === false && (
+                        <Box>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DateTimePicker
+                                    label={t('COMMON.USER.START_DATE')}
+                                    value={dayjs(newEvent.start)}
+                                    onChange={value =>
+                                        setNewEvent({ ...newEvent, start: value?.toDate() || new Date() })
                                     }
-                                }}
-                            />
-                        </LocalizationProvider>
-                    </Box>
+                                    viewRenderers={{
+                                        hours: renderTimeViewClock,
+                                        minutes: renderTimeViewClock,
+                                        seconds: renderTimeViewClock
+                                    }}
+                                    sx={{
+                                        width: '100%',
+                                        '& .MuiInputBase-root': {
+                                            color: 'var(--text-color)'
+                                        },
+                                        '& .MuiInputLabel-root': {
+                                            color: 'var(--text-label-color)'
+                                        },
+                                        '& .MuiOutlinedInput-notchedOutline': {
+                                            borderRadius: '8px',
+                                            borderColor: 'var(--border-dialog)'
+                                        },
+                                        '& .MuiSvgIcon-root': {
+                                            color: 'var(--text-label-color)' // Màu của icon (lịch)
+                                        },
+                                        '& .MuiOutlinedInput-root': {
+                                            '&:hover .MuiOutlinedInput-notchedOutline': {
+                                                borderColor: 'var(--hover-field-color)' // Màu viền khi hover
+                                            },
+                                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                borderColor: 'var(--selected-field-color) !important' // Màu viền khi focus, thêm !important để ghi đè
+                                            }
+                                        },
+                                        '& .MuiInputLabel-root.Mui-focused': {
+                                            color: 'var(--selected-field-color)'
+                                        }
+                                    }}
+                                />
+                            </LocalizationProvider>
+                        </Box>
+                    )}
+
+                    {newEvent.allDay === false && (
+                        <Box
+                            sx={{
+                                mt: '26px'
+                            }}
+                        >
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DateTimePicker
+                                    label={t('COMMON.USER.END_DATE')}
+                                    value={dayjs(newEvent.end)}
+                                    onChange={value => setNewEvent({ ...newEvent, end: value?.toDate() || new Date() })}
+                                    viewRenderers={{
+                                        hours: renderTimeViewClock,
+                                        minutes: renderTimeViewClock,
+                                        seconds: renderTimeViewClock
+                                    }}
+                                    sx={{
+                                        width: '100%',
+                                        '& .MuiInputBase-root': {
+                                            color: 'var(--text-color)'
+                                        },
+                                        '& .MuiInputLabel-root': {
+                                            color: 'var(--text-label-color)'
+                                        },
+                                        '& .MuiOutlinedInput-notchedOutline': {
+                                            borderRadius: '8px',
+                                            borderColor: 'var(--border-dialog)'
+                                        },
+                                        '& .MuiSvgIcon-root': {
+                                            color: 'var(--text-label-color)' // Màu của icon (lịch)
+                                        },
+                                        '& .MuiOutlinedInput-root': {
+                                            '&:hover .MuiOutlinedInput-notchedOutline': {
+                                                borderColor: 'var(--hover-field-color)' // Màu viền khi hover
+                                            },
+                                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                borderColor: 'var(--selected-field-color) !important' // Màu viền khi focus, thêm !important để ghi đè
+                                            }
+                                        },
+                                        '& .MuiInputLabel-root.Mui-focused': {
+                                            color: 'var(--selected-field-color)'
+                                        }
+                                    }}
+                                />
+                            </LocalizationProvider>
+                        </Box>
+                    )}
+
+                    {newEvent.allDay === true && (
+                        <Box
+                            sx={{
+                                mt: '26px'
+                            }}
+                        >
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker
+                                    label={t('COMMON.USER.END_DATE')}
+                                    value={dayjs(newEvent.end)}
+                                    onChange={value => setNewEvent({ ...newEvent, end: value?.toDate() || new Date() })}
+                                    sx={{
+                                        width: '100%',
+                                        '& .MuiInputBase-root': {
+                                            color: 'var(--text-color)'
+                                        },
+                                        '& .MuiInputLabel-root': {
+                                            color: 'var(--text-label-color)'
+                                        },
+                                        '& .MuiOutlinedInput-notchedOutline': {
+                                            borderRadius: '8px',
+                                            borderColor: 'var(--border-dialog)'
+                                        },
+                                        '& .MuiSvgIcon-root': {
+                                            color: 'var(--text-label-color)' // Màu của icon (lịch)
+                                        },
+                                        '& .MuiOutlinedInput-root': {
+                                            '&:hover .MuiOutlinedInput-notchedOutline': {
+                                                borderColor: 'var(--hover-field-color)' // Màu viền khi hover
+                                            },
+                                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                borderColor: 'var(--selected-field-color) !important' // Màu viền khi focus, thêm !important để ghi đè
+                                            }
+                                        },
+                                        '& .MuiInputLabel-root.Mui-focused': {
+                                            color: 'var(--selected-field-color)'
+                                        }
+                                    }}
+                                />
+                            </LocalizationProvider>
+                        </Box>
+                    )}
 
                     {newEvent.isHoliday === false && (
                         <Box sx={{ marginTop: '25px', ml: '1px', display: 'flex', gap: '16px' }}>
@@ -953,8 +1085,9 @@ const MyCalendar = () => {
                         <Tooltip title={t('COMMON.CALENDAR.DELETE_EVENT')} placement='top'>
                             <IconButton
                                 sx={{
-                                    padding: '10px',
                                     borderRadius: '50%',
+                                    width: '37px',
+                                    height: '37px',
                                     '&:hover': {
                                         backgroundColor: 'var(--hover-color)'
                                     }
@@ -964,7 +1097,13 @@ const MyCalendar = () => {
                                     setModalOpen(false)
                                 }}
                             >
-                                <Trash2 width='21px' height='21px' color='var(--placeholder-color)' />
+                                <img
+                                    src='/images/trash.svg'
+                                    style={{
+                                        width: '20px',
+                                        height: '20px'
+                                    }}
+                                />
                             </IconButton>
                         </Tooltip>
                     )}

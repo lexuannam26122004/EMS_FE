@@ -9,3 +9,11 @@ export interface IAspNetRoleGetAll {
     UpdatedDate?: Date | null
     UpdatedBy: string
 }
+
+export interface IFilterRole {
+    pageSize?: number
+    pageNumber?: number
+    sortBy?: string
+    isDescending?: boolean
+    keyword?: string
+}

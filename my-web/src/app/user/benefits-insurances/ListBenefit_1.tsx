@@ -18,8 +18,9 @@ import {
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
-import { AlignJustify, ChevronDown, ChevronUp, Smile } from 'lucide-react'
+import { AlignJustify, ChevronDown, ChevronUp, Smile, CalendarDays } from 'lucide-react'
 //import { SizeIcon } from '@radix-ui/react-icons'
+import { BsCoin } from 'react-icons/bs'
 interface IBenefitType {
     Name: string
     Description: string
@@ -210,18 +211,85 @@ function Page() {
                                             sx={{
                                                 padding: '10px',
                                                 border: '1px solid gray',
-                                                marginBottom: '8px'
+                                                marginBottom: '15px'
                                             }}
                                         >
-                                            <Typography>
-                                                <strong>Money:</strong> {benefit.Money.toLocaleString()} VND
-                                            </Typography>
-                                            <Typography>
-                                                <strong>Create Date:</strong> {benefit.CreateDate}
-                                            </Typography>
-                                            <Typography>
-                                                <strong>Status:</strong> {benefit.IsActive ? 'Active' : 'Inactive'}
-                                            </Typography>
+                                            <Box
+                                                sx={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    gap: '10px'
+                                                }}
+                                            >
+                                                <Box
+                                                    sx={{
+                                                        display: 'flex',
+                                                        flexDirection: 'row',
+                                                        justifyContent: 'space-between',
+                                                        alignItems: 'center',
+                                                        width: '100%',
+                                                        gap: '10px'
+                                                    }}
+                                                >
+                                                    <Box
+                                                        sx={{
+                                                            width: 'calc(100%)',
+                                                            backgroundColor: 'yellow',
+                                                            display: 'flex',
+                                                            justifyContent: 'center',
+                                                            alignItems: 'center',
+                                                            borderRadius: '10px',
+                                                            padding: '5px 0px 5px 0px',
+                                                            border: '2px solid black',
+                                                            gap: '10px'
+                                                        }}
+                                                    >
+                                                        <BsCoin size={20} />
+                                                        <Typography sx={{ fontWeight: 'bold' }}>
+                                                            {benefit.Money} VNĐ
+                                                        </Typography>
+                                                    </Box>
+                                                    <Box
+                                                        sx={{
+                                                            width: 'calc(100%)',
+                                                            backgroundColor: 'yellow',
+                                                            display: 'flex',
+                                                            justifyContent: 'center',
+                                                            alignItems: 'center',
+                                                            gap: '10px',
+                                                            borderRadius: '10px',
+                                                            padding: '5px 0px 5px 0px',
+                                                            border: '2px solid black'
+                                                        }}
+                                                    >
+                                                        <CalendarDays />
+                                                        <Typography>{benefit.CreateDate}</Typography>
+                                                    </Box>
+                                                </Box>
+                                                <Box
+                                                    sx={{
+                                                        width: 'calc(100% / 2)',
+                                                        backgroundColor:
+                                                            benefit.IsActive === true
+                                                                ? 'rgb(122, 233, 112)'
+                                                                : 'rgb(242, 95, 95)',
+                                                        display: 'flex',
+                                                        justifyContent: 'center',
+                                                        alignItems: 'center',
+                                                        borderRadius: '10px',
+                                                        padding: '5px 0px 5px 0px',
+                                                        border: '2px solid black'
+                                                    }}
+                                                >
+                                                    <Typography sx={{ fontWeight: 'bold' }}>
+                                                        {benefit.IsActive === true
+                                                            ? t('Đã nhận tiền')
+                                                            : t('Chưa nhận tiền')}
+                                                    </Typography>
+                                                </Box>
+                                            </Box>
                                         </Box>
                                     ))}
                                 </Box>

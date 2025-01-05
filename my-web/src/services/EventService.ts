@@ -17,11 +17,12 @@ export const eventApi = createApi({
                 const params = new URLSearchParams()
 
                 if (filter) {
-                    if (filter.pageSize) params.append('PageSize', filter.pageSize.toString())
-                    if (filter.pageNumber) params.append('PageNumber', filter.pageNumber.toString())
-                    if (filter.keyword) params.append('Keyword', filter.keyword)
-                    if (filter.isDescending !== undefined) params.append('IsDescending', filter.isDescending.toString())
-                    if (filter.sortBy) params.append('SortBy', filter.sortBy)
+                    if (filter.pageSize != null) params.append('PageSize', filter.pageSize.toString())
+                    if (filter.pageNumber != null) params.append('PageNumber', filter.pageNumber.toString())
+                    if (filter.keyword != null) params.append('Keyword', filter.keyword)
+                    if (filter.startDate != null) params.append('StartDate', filter.startDate)
+                    if (filter.endDate != null) params.append('EndDate', filter.endDate)
+                    if (filter.isHoliday != null) params.append('IsHoliday', filter.isHoliday.toString())
                 }
 
                 return `GetAll?${params.toString()}`
