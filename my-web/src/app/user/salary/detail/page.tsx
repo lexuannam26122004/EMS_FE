@@ -5,17 +5,14 @@ import {
     Card,
     CardContent,
     Typography,
-    Grid,
-    Divider,
     Avatar,
-    Button,
-    TableCell,
-    TableRow,
-    TableBody,
+    TableContainer,
     Table,
-    TableContainer
+    TableBody,
+    TableRow,
+    TableCell
 } from '@mui/material'
-import { styled } from '@mui/system'
+import { styled } from '@mui/material/styles'
 
 interface EmployeeSalaryProps {
     avatarUrl: string
@@ -25,9 +22,19 @@ interface EmployeeSalaryProps {
     bonus: number
     totalSalary: number
     department: string
+    employeeId: string
+    workDays: number
+    lateDays: number
+    paidLeaveDays: number
+    unpaidLeaveDays: number
+    salaryCoefficient: number
+    overtimeSalary: number
+    allowance: number
+    insurance: number
+    tax: number
 }
 
-const StyledCard = styled(Card)(({ theme }) => ({}))
+const StyledCard = styled(Card)(() => ({}))
 
 const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({
     avatarUrl,
@@ -36,7 +43,17 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({
     baseSalary,
     bonus,
     totalSalary,
-    department
+    department,
+    employeeId,
+    workDays,
+    lateDays,
+    paidLeaveDays,
+    unpaidLeaveDays,
+    salaryCoefficient,
+    overtimeSalary,
+    allowance,
+    insurance,
+    tax
 }) => {
     return (
         <Box sx={{ maxWidth: 1000, mx: 'auto', mt: 4, p: 2 }}>
@@ -104,7 +121,7 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                ...............................................
+                                                {employeeName}
                                             </Typography>
                                         </TableCell>
                                         <TableCell sx={{ borderColor: 'var(--border-color)' }}>
@@ -132,7 +149,7 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                ...............................................
+                                                {employeeId}
                                             </Typography>
                                         </TableCell>
                                     </TableRow>
@@ -162,7 +179,7 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                ...............................................
+                                                {department}
                                             </Typography>
                                         </TableCell>
                                         <TableCell sx={{ borderColor: 'var(--border-color)' }}>
@@ -190,7 +207,7 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                ...............................................
+                                                {workDays}
                                             </Typography>
                                         </TableCell>
                                     </TableRow>
@@ -220,7 +237,7 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                ...............................................
+                                                {lateDays}
                                             </Typography>
                                         </TableCell>
                                         <TableCell sx={{ borderColor: 'var(--border-color)' }}>
@@ -248,7 +265,7 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                ...............................................
+                                                {paidLeaveDays}
                                             </Typography>
                                         </TableCell>
                                     </TableRow>
@@ -278,7 +295,7 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                ...............................................
+                                                {unpaidLeaveDays}
                                             </Typography>
                                         </TableCell>
                                     </TableRow>
@@ -328,7 +345,10 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                ...............................................
+                                                {baseSalary.toLocaleString('vi-VN', {
+                                                    style: 'currency',
+                                                    currency: 'VND'
+                                                })}
                                             </Typography>
                                         </TableCell>
                                         <TableCell sx={{ borderColor: 'var(--border-color)' }}>
@@ -356,7 +376,7 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                ...............................................
+                                                {salaryCoefficient}
                                             </Typography>
                                         </TableCell>
                                     </TableRow>
@@ -386,7 +406,10 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                ...............................................
+                                                {overtimeSalary.toLocaleString('vi-VN', {
+                                                    style: 'currency',
+                                                    currency: 'VND'
+                                                })}
                                             </Typography>
                                         </TableCell>
                                         <TableCell sx={{ borderColor: 'var(--border-color)' }}>
@@ -414,7 +437,10 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                ...............................................
+                                                {allowance.toLocaleString('vi-VN', {
+                                                    style: 'currency',
+                                                    currency: 'VND'
+                                                })}
                                             </Typography>
                                         </TableCell>
                                     </TableRow>
@@ -444,7 +470,7 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                ...............................................
+                                                {bonus.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                                             </Typography>
                                         </TableCell>
                                         <TableCell sx={{ borderColor: 'var(--border-color)' }} colSpan={2}></TableCell>
@@ -495,7 +521,10 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                ...............................................
+                                                {insurance.toLocaleString('vi-VN', {
+                                                    style: 'currency',
+                                                    currency: 'VND'
+                                                })}
                                             </Typography>
                                         </TableCell>
                                         <TableCell sx={{ borderColor: 'var(--border-color)' }}>
@@ -523,7 +552,7 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                ...............................................
+                                                {tax.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                                             </Typography>
                                         </TableCell>
                                     </TableRow>
@@ -559,7 +588,10 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                ...............................................
+                                                {totalSalary.toLocaleString('vi-VN', {
+                                                    style: 'currency',
+                                                    currency: 'VND'
+                                                })}
                                             </Typography>
                                         </TableCell>
                                     </TableRow>
@@ -573,7 +605,10 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({
                                 Tổng số tiền thực nhận:
                             </Typography>
                             <Typography color='var(--text-color)'>
-                                ...............................................
+                                {(totalSalary - insurance - tax).toLocaleString('vi-VN', {
+                                    style: 'currency',
+                                    currency: 'VND'
+                                })}
                             </Typography>
                         </Box>
                     </Box>
@@ -586,13 +621,23 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({
 // Demo dữ liệu
 const EmployeeSalaryPage: React.FC = () => {
     const sampleData = {
-        avatarUrl: 'https://i.pravatar.cc/150?img=3', // Thay bằng đường dẫn avatar thật
-        employeeName: 'Nguyễn Văn A',
-        position: 'Kỹ sư phần mềm',
+        avatarUrl: 'https://i.pravatar.cc/150?img=3',
+        employeeName: 'Lê Xuân Nam',
+        position: 'Administrator',
         baseSalary: 20000000,
         bonus: 5000000,
         totalSalary: 25000000,
-        department: 'Phát triển phần mềm'
+        department: 'Human Resources',
+        employeeId: 'NV001',
+        workDays: 26,
+        lateDays: 2,
+        paidLeaveDays: 1,
+        unpaidLeaveDays: 0,
+        salaryCoefficient: 1.5,
+        overtimeSalary: 3000000,
+        allowance: 1000000,
+        insurance: 1500000,
+        tax: 1000000
     }
 
     return <EmployeeSalary {...sampleData} />
