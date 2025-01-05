@@ -13,6 +13,7 @@ import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import LanguageMenu from '@/components/LanguageMenu'
 import ColorModeIconDropdown from '@/components/ColorModeIconDropdown'
+import { useGetAuthMeQuery } from '@/services/AuthService'
 
 const LoginForm: React.FC = () => {
     const [email, setEmail] = useState('')
@@ -24,6 +25,7 @@ const LoginForm: React.FC = () => {
     const { t } = useTranslation('common')
     const [showPassword, setShowPassword] = React.useState(false)
 
+     const { refetch } = useGetAuthMeQuery()
     const handleClickShowPassword = () => setShowPassword(show => !show)
 
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -65,6 +67,7 @@ const LoginForm: React.FC = () => {
             if (response.ok) {
                 const token = data.Data.auth_token
                 sessionStorage.setItem('auth_token', token)
+                refetch()
                 router.push('/admin')
                 toast('Đăng nhập thành công!', 'success')
             } else {

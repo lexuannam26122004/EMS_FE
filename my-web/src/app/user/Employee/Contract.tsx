@@ -2,7 +2,14 @@ import { Avatar, Box, Button, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useRef, useEffect, useState } from 'react'
 import ErrorPage from '@/app/user/requests/ErrorPage'
-import { Download, AlertCircle } from 'lucide-react'
+import { Download, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react'
+import { IEmploymentContractSearch } from '@/models/EmploymentContract'
+import { useSearchEmploymentContractsQuery } from '@/services/EmploymentContractService'
+import { IAspNetUserGetAll } from '@/models/AspNetUser'
+import { useGetAllUsersQuery } from '@/services/AspNetUserService'
+import { formatDate } from '@/utils/formatDate'
+
+import Loading from '@/components/Loading'
 
 interface ContractProps {
     aspnetUserId: string
@@ -11,10 +18,32 @@ interface ContractProps {
 const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
     const { t } = useTranslation('common')
     const [openErrorReport, setopenErrorReport] = useState(false)
+
+    const { data: userResponse, isLoading: isUsersLoading } = useGetAllUsersQuery()
+    const employee = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
+
+    const { data: contractResponse, isLoading: isContractsLoading } = useSearchEmploymentContractsQuery()
+
+    const contract = ((contractResponse?.Data?.Records as IEmploymentContractSearch[]) || []).find(
+        ct => ct.UserId === aspnetUserId
+    )
+
+    const manager = employee.find(ep => ep.Id === contract.ManagerId)
+
+    const [openDetail, setOpenDetail] = useState(false)
+
+    const handleIconClick = () => {
+        setOpenDetail(!openDetail)
+    }
+
     const prevOpen = useRef(open)
     useEffect(() => {
         prevOpen.current = open
-    }, [open, aspnetUserId])
+    }, [open])
+
+    if (isContractsLoading || isUsersLoading) {
+        return <Loading />
+    }
 
     return (
         <Box
@@ -104,7 +133,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                         onClick={() => setopenErrorReport(true)}
                     >
                         <AlertCircle size={20} />
-                        {t('Báo lỗi')}
+                        {t('COMMON.ATTENDANCE.ERROR_REPORT')}
                     </Button>
                 </Box>
             </Box>
@@ -117,30 +146,56 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                 }}
             >
                 <Avatar
-                    src='https://assets.minimals.cc/public/assets/images/mock/avatar/avatar-25.webp'
+                    src={
+                        manager.AvatarPath ||
+                        'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'
+                    }
                     sx={{
                         width: '120px',
                         height: '120px'
                     }}
                 />
 
-                <Box>
-                    <Typography
-                        sx={{
-                            fontSize: '20px',
-                            fontWeight: 'bold',
-                            color: 'var(--text-color)'
-                        }}
-                    >
-                        {'Phụ trách : Lê Ngọc Ngà'}
-                    </Typography>
+                <Box sx={{ width: '100%' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                        <Typography
+                            sx={{
+                                fontSize: '20px',
+                                fontWeight: 'bold',
+                                color: 'var(--text-color)',
+                                flexGrow: 1
+                            }}
+                        >
+                            {'Người phụ trách : ' + `${manager?.EmployeeId} ${manager?.FullName}`}
+                        </Typography>
+                        <Box
+                            sx={{
+                                width: '40px',
+                                height: '40px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                border: '1px solid var(--border-color)',
+                                borderRadius: '50%',
+                                padding: '5px'
+                            }}
+                            onClick={handleIconClick}
+                        >
+                            {openDetail ? (
+                                <ChevronUp style={{ fontSize: '24px' }} />
+                            ) : (
+                                <ChevronDown style={{ fontSize: '24px' }} />
+                            )}
+                        </Box>
+                    </Box>
 
                     <Box
                         sx={{
                             mt: '20px',
                             display: 'flex',
                             gap: '45px',
-                            alignItems: 'center'
+                            alignItems: 'center',
+                            width: '100%'
                         }}
                     >
                         <Box>
@@ -150,7 +205,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                                     fontSize: '15px'
                                 }}
                             >
-                                {t('Tên hợp đồng')}
+                                {t(`COMMON.CONTRACT.CONTRACTNAME`)}
                             </Typography>
                             <Typography
                                 sx={{
@@ -159,7 +214,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                                     fontSize: '17px'
                                 }}
                             >
-                                {'Sales Manager Contract'}
+                                {contract.ContractName}
                             </Typography>
                         </Box>
                         <Box>
@@ -169,7 +224,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                                     fontSize: '15px'
                                 }}
                             >
-                                {t('Ngày bắt đầu')}
+                                {t(`COMMON.CONTRACT.STARTDATE`)}
                             </Typography>
                             <Typography
                                 sx={{
@@ -178,7 +233,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                                     fontSize: '17px'
                                 }}
                             >
-                                {'12/18/2024'}
+                                {formatDate(contract.StartDate.toString())}
                             </Typography>
                         </Box>
                         <Box>
@@ -188,7 +243,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                                     fontSize: '15px'
                                 }}
                             >
-                                {t('Ngày kết thúc')}
+                                {t(`COMMON.CONTRACT.ENDDATE`)}
                             </Typography>
                             <Typography
                                 sx={{
@@ -197,7 +252,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                                     fontSize: '17px'
                                 }}
                             >
-                                {'3/18/2025'}
+                                {formatDate(contract.EndDate.toString())}
                             </Typography>
                         </Box>
                         <Box>
@@ -207,7 +262,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                                     fontSize: '15px'
                                 }}
                             >
-                                {t('Lương cơ bản')}
+                                {t(`COMMON.CONTRACT.BASICSALARY`)}
                             </Typography>
                             <Typography
                                 sx={{
@@ -216,7 +271,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                                     fontSize: '17px'
                                 }}
                             >
-                                {'8000000'}
+                                {contract.BasicSalary}
                             </Typography>
                         </Box>
                         <Box>
@@ -226,7 +281,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                                     fontSize: '15px'
                                 }}
                             >
-                                {t('Số ngày làm việc')}
+                                {t(`COMMON.CONTRACT.WORKINGHOURS`)}
                             </Typography>
                             <Typography
                                 sx={{
@@ -235,7 +290,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                                     fontSize: '17px'
                                 }}
                             >
-                                {'8'}
+                                {contract.WorkingHours}
                             </Typography>
                         </Box>
                         <Box>
@@ -245,7 +300,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                                     fontSize: '15px'
                                 }}
                             >
-                                {t('Số ngày thử việc')}
+                                {t(`COMMON.CONTRACT.PROBATIONPERIOD`)}
                             </Typography>
                             <Typography
                                 sx={{
@@ -254,7 +309,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                                     fontSize: '17px'
                                 }}
                             >
-                                {'7'}
+                                {contract.ProbationPeriod}
                             </Typography>
                         </Box>
                         <Box>
@@ -264,7 +319,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                                     fontSize: '15px'
                                 }}
                             >
-                                {t('Chế độ làm việc')}
+                                {t(`COMMON.CONTRACT.TYPECONTRACT`)}
                             </Typography>
                             <Typography
                                 sx={{
@@ -273,7 +328,97 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                                     fontSize: '17px'
                                 }}
                             >
-                                {'Full-time'}
+                                {contract.TypeContract}
+                            </Typography>
+                        </Box>
+                    </Box>
+
+                    <Box
+                        sx={{
+                            mt: '20px',
+                            gap: '45px',
+                            alignItems: 'center',
+                            display: openDetail ? 'grid' : 'none',
+                            width: '100%'
+                        }}
+                    >
+                        <Box>
+                            <Typography
+                                sx={{
+                                    color: 'var(--sub-title-color)',
+                                    fontSize: '15px'
+                                }}
+                            >
+                                {t(`COMMON.CONTRACT.CLAUSE`)}
+                            </Typography>
+                            <Typography
+                                sx={{
+                                    mt: '4px',
+                                    color: 'var(--text-color)',
+                                    fontSize: '17px'
+                                }}
+                            >
+                                {contract.Clause || 'N/A'}
+                            </Typography>
+                        </Box>
+                    </Box>
+
+                    <Box
+                        sx={{
+                            mt: '20px',
+                            gap: '45px',
+                            alignItems: 'center',
+                            display: openDetail ? 'grid' : 'none',
+                            width: '100%'
+                        }}
+                    >
+                        <Box>
+                            <Typography
+                                sx={{
+                                    color: 'var(--sub-title-color)',
+                                    fontSize: '15px'
+                                }}
+                            >
+                                {t(`COMMON.CONTRACT.TERMINATIONCLAUSE`)}
+                            </Typography>
+                            <Typography
+                                sx={{
+                                    mt: '4px',
+                                    color: 'var(--text-color)',
+                                    fontSize: '17px'
+                                }}
+                            >
+                                {contract.TerminationClause || 'N/A'}
+                            </Typography>
+                        </Box>
+                    </Box>
+
+                    <Box
+                        sx={{
+                            mt: '20px',
+                            gap: '45px',
+                            alignItems: 'center',
+                            display: openDetail ? 'grid' : 'none',
+                            width: '100%'
+                        }}
+                    >
+                        <Box>
+                            <Typography
+                                sx={{
+                                    color: 'var(--sub-title-color)',
+                                    fontSize: '15px'
+                                }}
+                            >
+                                {t(`COMMON.CONTRACT.APPENDIX`)}
+                            </Typography>
+                            <Typography
+                                sx={{
+                                    mt: '4px',
+                                    color: 'var(--text-color)',
+                                    fontSize: '17px'
+                                }}
+                            >
+                                {contract.Appendix || 'N/A'}
                             </Typography>
                         </Box>
                     </Box>

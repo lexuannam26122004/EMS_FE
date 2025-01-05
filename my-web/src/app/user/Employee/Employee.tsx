@@ -5,7 +5,7 @@ import { useGetAuthMeQuery } from '@/services/AuthService'
 import ErrorPage from '@/app/user/requests/ErrorPage'
 import { formatDate } from '@/utils/formatDate'
 import Loading from '@/components/Loading'
-import { Download, AlertCircle } from 'lucide-react'
+import { Download, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react'
 
 interface EmployeeProps {
     aspnetUserId: string
@@ -22,43 +22,14 @@ const Employee: React.FC<EmployeeProps> = ({ aspnetUserId }) => {
     const { data: responseGetMeData, isFetching: isFetchingGetMe } = useGetAuthMeQuery()
     const infoMe = responseGetMeData?.Data
 
-    if (isFetchingGetMe || !infoMe) {
-        return <Loading />
+    const [openDetail, setOpenDetail] = useState(false)
+
+    const handleIconClick = () => {
+        setOpenDetail(!openDetail)
     }
 
-    {
-        /*const [fullName, setFullName] = useState('')
-    const [userName, setUserName] = useState('')
-    const [email, setEmail] = useState('')
-    const [phoneNumber, setPhoneNumber] = useState('')
-    const [startDateWork, setStartDateWork] = useState('')
-    const [gender, setGender] = useState(null)
-    const [address, setAddress] = useState('')
-    const [note, setNote] = useState('')
-    const [birthday, setBirthday] = useState('')
-    const [departmentName, setDepartmentName] = useState(0)
-    const [employeeId, setEmployeeId] = useState('')
-    const [roles, setRoles] = useState<string[]>([])
-
-    const { data: responseData, isFetching: isFetchingGetById } = useGetByIdUsersQuery(aspnetUserId)
-
-    const data = responseData?.Data
-    useEffect(() => {
-        if (!isFetchingGetById && data) {
-            setEmployeeId(data.EmployeeId)
-            setFullName(data.FullName)
-            setUserName(data.UserName)
-            setEmail(data.Email)
-            setPhoneNumber(data.PhoneNumber)
-            setStartDateWork(data.StartDateWork)
-            setGender(data.Gender)
-            setAddress(data.Address)
-            setNote(data.Note)
-            setBirthday(data.Birthday)
-            setDepartmentName(data.departmentName)
-            setRoles(data.Roles)
-        }
-    }, [data, isFetchingGetById])*/
+    if (isFetchingGetMe || !infoMe) {
+        return <Loading />
     }
 
     return (
@@ -149,7 +120,7 @@ const Employee: React.FC<EmployeeProps> = ({ aspnetUserId }) => {
                         onClick={() => setopenErrorReport(true)}
                     >
                         <AlertCircle size={20} />
-                        {t('Báo lỗi')}
+                        {t('COMMON.ATTENDANCE.ERROR_REPORT')}
                     </Button>
                 </Box>
             </Box>
@@ -162,30 +133,56 @@ const Employee: React.FC<EmployeeProps> = ({ aspnetUserId }) => {
                 }}
             >
                 <Avatar
-                    src='https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-3.webp'
+                    src={
+                        'https://localhost:44381/' + infoMe.AvatarPath ||
+                        'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'
+                    }
                     sx={{
                         width: '120px',
                         height: '120px'
                     }}
                 />
 
-                <Box>
-                    <Typography
-                        sx={{
-                            fontSize: '20px',
-                            fontWeight: 'bold',
-                            color: 'var(--text-color)'
-                        }}
-                    >
-                        {infoMe.FullName}
-                    </Typography>
-
+                <Box sx={{ width: '100%' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                        <Typography
+                            sx={{
+                                fontSize: '20px',
+                                fontWeight: 'bold',
+                                color: 'var(--text-color)',
+                                flexGrow: 1
+                            }}
+                        >
+                            {`${infoMe.EmployeeId} ${infoMe.FullName}`}
+                        </Typography>
+                        <Box
+                            sx={{
+                                width: '40px',
+                                height: '40px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                border: '1px solid var(--border-color)',
+                                borderRadius: '50%',
+                                padding: '5px'
+                            }}
+                            onClick={handleIconClick}
+                        >
+                            {openDetail ? (
+                                <ChevronUp style={{ fontSize: '24px' }} />
+                            ) : (
+                                <ChevronDown style={{ fontSize: '24px' }} />
+                            )}
+                        </Box>
+                    </Box>
                     <Box
                         sx={{
                             mt: '20px',
-                            display: 'flex',
-                            gap: '45px',
-                            alignItems: 'center'
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(5, 1fr)',
+                            gap: '20px',
+                            alignItems: 'start',
+                            width: '100%'
                         }}
                     >
                         <Box>
@@ -226,25 +223,7 @@ const Employee: React.FC<EmployeeProps> = ({ aspnetUserId }) => {
                                 {infoMe.PhoneNumber}
                             </Typography>
                         </Box>
-                        <Box>
-                            <Typography
-                                sx={{
-                                    color: 'var(--sub-title-color)',
-                                    fontSize: '15px'
-                                }}
-                            >
-                                {t('COMMON.EMPLOYEE.EMAIL')}
-                            </Typography>
-                            <Typography
-                                sx={{
-                                    mt: '4px',
-                                    color: 'var(--text-color)',
-                                    fontSize: '17px'
-                                }}
-                            >
-                                {infoMe.Email}
-                            </Typography>
-                        </Box>
+
                         <Box>
                             <Typography
                                 sx={{
@@ -283,6 +262,78 @@ const Employee: React.FC<EmployeeProps> = ({ aspnetUserId }) => {
                                 {infoMe.DepartmentName || 'Department'}
                             </Typography>
                         </Box>
+
+                        <Box>
+                            <Typography
+                                sx={{
+                                    color: 'var(--sub-title-color)',
+                                    fontSize: '15px'
+                                }}
+                            >
+                                {t('COMMON.EMPLOYEE.ADDRESS')}
+                            </Typography>
+                            <Typography
+                                sx={{
+                                    mt: '4px',
+                                    color: 'var(--text-color)',
+                                    fontSize: '17px'
+                                }}
+                            >
+                                {infoMe.Address}
+                            </Typography>
+                        </Box>
+                    </Box>
+
+                    <Box
+                        sx={{
+                            mt: '20px',
+                            gridTemplateColumns: 'repeat(5, 1fr)',
+                            gap: '20px',
+                            alignItems: 'start',
+                            display: openDetail ? 'grid' : 'none',
+                            width: '100%'
+                        }}
+                    >
+                        <Box>
+                            <Typography
+                                sx={{
+                                    color: 'var(--sub-title-color)',
+                                    fontSize: '15px'
+                                }}
+                            >
+                                {t('COMMON.EMPLOYEE.USERNAME')}
+                            </Typography>
+                            <Typography
+                                sx={{
+                                    mt: '4px',
+                                    color: 'var(--text-color)',
+                                    fontSize: '17px'
+                                }}
+                            >
+                                {infoMe.UserName}
+                            </Typography>
+                        </Box>
+
+                        <Box>
+                            <Typography
+                                sx={{
+                                    color: 'var(--sub-title-color)',
+                                    fontSize: '15px'
+                                }}
+                            >
+                                {t('COMMON.EMPLOYEE.GENDER')}
+                            </Typography>
+                            <Typography
+                                sx={{
+                                    mt: '4px',
+                                    color: 'var(--text-color)',
+                                    fontSize: '17px'
+                                }}
+                            >
+                                {infoMe.Gender === true ? 'Nam' : infoMe.Gender === false ? 'Nữ' : 'Khác'}
+                            </Typography>
+                        </Box>
+
                         <Box>
                             <Typography
                                 sx={{
@@ -300,6 +351,56 @@ const Employee: React.FC<EmployeeProps> = ({ aspnetUserId }) => {
                                 }}
                             >
                                 {formatDate(infoMe.StartDateWork)}
+                            </Typography>
+                        </Box>
+
+                        <Box>
+                            <Typography
+                                sx={{
+                                    color: 'var(--sub-title-color)',
+                                    fontSize: '15px'
+                                }}
+                            >
+                                {t('COMMON.EMPLOYEE.EMAIL')}
+                            </Typography>
+                            <Typography
+                                sx={{
+                                    mt: '4px',
+                                    color: 'var(--text-color)',
+                                    fontSize: '17px'
+                                }}
+                            >
+                                {infoMe.Email}
+                            </Typography>
+                        </Box>
+                    </Box>
+
+                    <Box
+                        sx={{
+                            mt: '20px',
+                            gap: '45px',
+                            alignItems: 'center',
+                            display: openDetail ? 'grid' : 'none',
+                            width: '100%'
+                        }}
+                    >
+                        <Box>
+                            <Typography
+                                sx={{
+                                    color: 'var(--sub-title-color)',
+                                    fontSize: '15px'
+                                }}
+                            >
+                                {t('COMMON.EMPLOYEE.NOTE')}
+                            </Typography>
+                            <Typography
+                                sx={{
+                                    mt: '4px',
+                                    color: 'var(--text-color)',
+                                    fontSize: '17px'
+                                }}
+                            >
+                                {infoMe.Note || 'N/A'}
                             </Typography>
                         </Box>
                     </Box>

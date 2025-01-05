@@ -618,7 +618,8 @@
             "ATTENDANCE_PERCENT": "Tỉ lệ chấm công {{status}} {{x}}% so với hôm qua",
             "DETAIL_EMPLOYEE": "Thông tin chi tiết nhân viên",
             "DOWNLOAD_INFO": "Tải thông tin",
-            "LIST_ATTENDANCE": "Danh sách chấm công"
+            "LIST_ATTENDANCE": "Danh sách chấm công",
+            "ERROR_REPORT":"Báo lỗi"
         },
         "INSURANCE_BENEFIT": {
             "LAST_MONTH": "tháng trước",

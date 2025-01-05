@@ -7,8 +7,8 @@ export interface IEmploymentContractSearch {
     UpdatedDate?: Date
     UserId: string
     ContractName: string
-    StartDate: Date
-    EndDate: Date
+    StartDate: Date | null
+    EndDate: Date | null
     BasicSalary: number
     Clause?: string
     Appendix?: string

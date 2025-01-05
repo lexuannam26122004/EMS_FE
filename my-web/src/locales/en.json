@@ -666,7 +666,8 @@
             "ATTENDANCE_PERCENT": "{{status}} {{x}}% attendance from yesterday",
             "DETAIL_EMPLOYEE": "Detail Employee",
             "DOWNLOAD_INFO": "Download Info",
-            "LIST_ATTENDANCE": "List of Attendance"
+            "LIST_ATTENDANCE": "List of Attendance",
+            "ERROR_REPORT": "Error Report"
         },
         "LOGIN": {
             "HI": "Hi, Welcome back!",
