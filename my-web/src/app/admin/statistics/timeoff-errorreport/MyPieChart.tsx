@@ -33,7 +33,7 @@ const Chart: React.FC = () => {
             source: [['score', 'amount', 'type'], ...reportData.map(item => [item.score, item.amount, item.type])]
         },
         grid: { containLabel: true, top: '10%', left: '2%', right: '10%', bottom: '3%' },
-        xAxis: { name: 'Số lượng' },
+        xAxis: {},
         yAxis: { type: 'category' },
         visualMap: {
             orient: 'horizontal',
@@ -41,7 +41,10 @@ const Chart: React.FC = () => {
             top: '0%',
             min: 0,
             max: maxScore,
-            text: ['Cao', 'Thấp'],
+            text: [
+                t('COMMON.TIMEOFF_ERROR.ERROR_STATISTICS_CHART_HIGH'),
+                t('COMMON.TIMEOFF_ERROR.ERROR_STATISTICS_CHART_SHORT')
+            ],
             textStyle: {
                 color: theme === 'light' ? '#000000' : '#ffffff',
                 fontFamily: 'Arial, sans-serif'
@@ -55,7 +58,7 @@ const Chart: React.FC = () => {
         tooltip: {
             trigger: 'item', // Trigger when hovering over an item
             formatter: function (params) {
-                return `Loại: ${params.value[2]}<br/>Số lượng: ${params.value[1]}`
+                return `${params.value[2]}<br/>${params.value[1]}`
             },
             textStyle: {
                 fontFamily: 'Arial, sans-serif'
@@ -103,7 +106,8 @@ const Chart: React.FC = () => {
         <Paper
             elevation={0}
             sx={{
-                width: '100%',boxShadow: 'var(--box-shadow-paper)',
+                width: '100%',
+                boxShadow: 'var(--box-shadow-paper)',
                 mt: '24px',
                 padding: '24px 24px 15px',
                 overflow: 'hidden',
@@ -126,7 +130,7 @@ const Chart: React.FC = () => {
                             color: 'var(--text-color)'
                         }}
                     >
-                        {t('Biểu đồ thống kê báo cáo lỗi')}
+                        {t('COMMON.TIMEOFF_ERROR.ERROR_STATISTICS_CHART')}
                     </Typography>
                 </Box>
                 <FormControl sx={{ width: '100px' }}>

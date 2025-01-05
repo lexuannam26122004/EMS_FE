@@ -77,7 +77,7 @@ function Page() {
                             color: 'var(--reward-title-color)'
                         }}
                     >
-                        {t('Tổng số đơn nghỉ phép')}
+                        {t('COMMON.TIMEOFF_ERROR.TOTAL_TIMEOOF')}
                     </Typography>
                     <Typography
                         sx={{
@@ -176,7 +176,7 @@ function Page() {
                             color: 'var(--reward-title-color)'
                         }}
                     >
-                        {t('Tổng số đơn báo cáo lỗi')}
+                        {t('COMMON.TIMEOFF_ERROR.TOTAL_ERROR')}
                     </Typography>
                     <Typography
                         sx={{
@@ -280,7 +280,7 @@ function Page() {
                             color: 'var(--reward-title-color)'
                         }}
                     >
-                        {t('Tổng số yêu cầu')}
+                        {t('COMMON.TIMEOFF_ERROR.TOTAL_REQUEST')}
                     </Typography>
                     <Typography
                         sx={{
