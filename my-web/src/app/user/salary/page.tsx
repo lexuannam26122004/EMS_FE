@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next'
 
 export default function EmployeeSalary() {
     const { t } = useTranslation()
+
     return (
         <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: '30px' }}>
             <Paper

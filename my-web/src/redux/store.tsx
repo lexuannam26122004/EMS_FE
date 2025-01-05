@@ -24,6 +24,7 @@ import { eventApi } from '@/services/EventService'
 import { rewardApi } from '@/services/RewardService'
 import { AuthApi } from '@/services/AuthService'
 import { authSlice } from './slices/authSlice'
+import { disciplineApi } from '@/services/DisciplineService'
 import { messageApi } from '@/services/MessageService'
 
 export const store = configureStore({
@@ -53,7 +54,8 @@ export const store = configureStore({
         [eventApi.reducerPath]: eventApi.reducer,
         [rewardApi.reducerPath]: rewardApi.reducer,
         [AuthApi.reducerPath]: AuthApi.reducer,
-        [authSlice.name]: authSlice.reducer
+        [authSlice.name]: authSlice.reducer,
+        [disciplineApi.reducerPath]: disciplineApi.reducer
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware().concat(
@@ -72,6 +74,9 @@ export const store = configureStore({
             benefitApi.middleware,
             eventApi.middleware,
             rewardApi.middleware,
+            disciplineApi.middleware,
+            AuthApi.middleware,
+
             AuthApi.middleware,
             messageApi.middleware
         )

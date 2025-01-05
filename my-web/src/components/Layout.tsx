@@ -7,7 +7,6 @@ import { Building2, Wallet } from 'lucide-react'
 import {
     ShieldCheck,
     Calendar,
-    CalendarDays,
     Home,
     ScrollText,
     Landmark,
@@ -63,6 +62,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                                 icon={<ChartNoAxesCombined />}
                                 text={t('COMMON.SIDEBAR.ATTENDANCE')}
                                 route='/admin/statistics/attendance'
+                                active={pathname === '/admin/statistics/attendance'}
                             />
                         )}
                         {menuLeft['/admin/statistics/benefits'].IsAllowView && (
@@ -70,6 +70,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                                 icon={<ChartNoAxesCombined />}
                                 text={t('COMMON.SIDEBAR.BENEFITS')}
                                 route='/admin/statistics/benefits'
+                                active={pathname === '/admin/statistics/benefits'}
                             />
                         )}
                         {menuLeft['/admin/statistics/salary'].IsAllowView && (
@@ -77,6 +78,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                                 icon={<ChartNoAxesCombined />}
                                 text={t('COMMON.SIDEBAR.SALARY')}
                                 route='/admin/statistics/salary'
+                                active={pathname === '/admin/statistics/salary'}
                             />
                         )}
                         {menuLeft['/admin/statistics/employee-contract'].IsAllowView && (
@@ -84,6 +86,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                                 icon={<ChartNoAxesCombined />}
                                 text={t('COMMON.SIDEBAR.EMPLOYEE-CONTRACT')}
                                 route='/admin/statistics/employee-contract'
+                                active={pathname === '/admin/statistics/employee-contract'}
                             />
                         )}
                         {menuLeft['/admin/statistics/timeoff-errorreport'].IsAllowView && (
@@ -91,6 +94,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                                 icon={<ChartNoAxesCombined />}
                                 text={t('COMMON.SIDEBAR.TIMEOFF-ERRORREPORT')}
                                 route='/admin/statistics/timeoff-errorreport'
+                                active={pathname === '/admin/statistics/timeoff-errorreport'}
                             />
                         )}
                         {menuLeft['/admin/statistics/rewards-disciplines'].IsAllowView && (
@@ -98,6 +102,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                                 icon={<ChartNoAxesCombined />}
                                 text={t('COMMON.SIDEBAR.REWARDS_DISCIPLINE')}
                                 route='/admin/statistics/rewards-disciplines'
+                                active={pathname === '/admin/statistics/rewards-disciplines'}
                             />
                         )}
                         {menuLeft['/admin/statistics/notifications-events'].IsAllowView && (
@@ -105,6 +110,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                                 icon={<ChartNoAxesCombined />}
                                 text={t('COMMON.SIDEBAR.NOTIFICATIONS_EVENTS')}
                                 route='/admin/statistics/notifications-events'
+                                active={pathname === '/admin/statistics/notifications-events'}
                             />
                         )}
                     </SidebarItem>
@@ -153,7 +159,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                         active={pathname === '/admin/schedular'}
                     />
                 )}
-                {menuLeft['/admin/attendance'].IsAllowView && (
+                {/* {menuLeft['/admin/attendance'].IsAllowView && (
                     <SidebarItem
                         icon={<CalendarDays />}
                         text={t('COMMON.SIDEBAR.TIMEKEEPING')}
@@ -161,7 +167,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                         alert={true}
                         active={pathname === '/admin/attendance'}
                     />
-                )}
+                )} */}
                 {menuLeft['Time off'].IsAllowView && (
                     <SidebarItem
                         icon={<CalendarX />}
@@ -259,24 +265,24 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 {menuLeft['Benefit'].IsAllowView && (
                     <SidebarItem
                         icon={<Gift />}
-                        text={t('COMMON.SIDEBAR.BENEFIT')}
-                        //route='/admin/benefit'
-                        //active={pathname === '/admin/benefit'}
+                        text={t('Phúc lợi')}
+                        route='/admin/benefit'
+                        active={pathname === '/admin/benefit'}
                     >
-                        {menuLeft['/admin/benefit'].IsAllowView && (
+                        {/* {menuLeft['/admin/benefit'].IsAllowView && (
                             <SidebarItem
                                 icon={<ChartNoAxesCombined />}
-                                text={t('COMMON.SIDEBAR.ATTENDANCE')}
+                                text={t('Danh sách phúc lợi')}
                                 route='/admin/benefit'
                             />
-                        )}
-                        {menuLeft['/admin/benefit/add-employee-benefits'].IsAllowView && (
+                        )} */}
+                        {/* {menuLeft['/admin/benefit/add-employee-benefits'].IsAllowView && (
                             <SidebarItem
                                 icon={<ChartNoAxesCombined />}
-                                text={t('COMMON.SIDEBAR.BENEFITS')}
+                                text={t('Phúc lợi nhân viên')}
                                 route='/admin/benefit/add-employee-benefits'
                             />
-                        )}
+                        )} */}
                     </SidebarItem>
                 )}
                 {menuLeft['Discipline'].IsAllowView && (

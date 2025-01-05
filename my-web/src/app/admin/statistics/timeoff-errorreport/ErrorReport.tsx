@@ -348,7 +348,7 @@ function ContractExpPage() {
             sx={{
                 width: '100%',
                 overflow: 'hidden',
-                height: '605px',
+                height: '605px',boxShadow: 'var(--box-shadow-paper)',
                 backgroundColor: 'var(--background-item)'
             }}
         >

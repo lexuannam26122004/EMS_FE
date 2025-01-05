@@ -1,9 +1,8 @@
-import { TableContainer, Table, TableRow, TableBody, TableCell, Box, CircularProgress } from '@mui/material'
+import { Avatar, Box, Button, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { useSearchEmploymentContractsQuery } from '@/services/EmploymentContractService'
-import { IEmploymentContractSearch } from '@/models/EmploymentContract'
-import { IAspNetUserGetAll } from '@/models/AspNetUser'
-import { useGetAllUsersQuery } from '@/services/AspNetUserService'
+import { useRef, useEffect } from 'react'
+
+import { Download } from 'lucide-react'
 
 interface ContractProps {
     aspnetUserId: string
@@ -12,186 +11,252 @@ interface ContractProps {
 const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
     const { t } = useTranslation('common')
 
-    const { data: contractResponse, isLoading: isContractsLoading } = useSearchEmploymentContractsQuery()
-    const { data: userResponse, isLoading: isuserscontractLoading } = useGetAllUsersQuery()
-
-    const contract = (contractResponse?.Data?.Records as IEmploymentContractSearch[]) || []
-    const employee = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
-
-    const userscontract = contract.find(ct => ct.UserId === aspnetUserId)
-    const matchedEmployee = employee.find(emp => emp.Id === userscontract?.UserId)
-    const matchedManager = employee.find(emp => emp.Id === userscontract?.ManagerId)
-
-    if (isContractsLoading || isuserscontractLoading) {
-        return (
-            <Box
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: '400px',
-                    backgroundColor: '#f5f5f5'
-                }}
-            >
-                <CircularProgress />
-            </Box>
-        )
-    }
+    const prevOpen = useRef(open)
+    useEffect(() => {
+        prevOpen.current = open
+    }, [open, aspnetUserId])
 
     return (
         <Box
             sx={{
-                padding: '20px',
-                backgroundColor: 'var(--hover-color)',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                borderRadius: '12px',
-                overflow: 'hidden',
-                height: '600px',
-                border: '1px solid #e0e0e0',
-                width: '100%'
+                width: '100%',
+                boxShadow: 'var(--box-shadow-paper)',
+                borderRadius: '30px',
+                padding: '35px',
+                backgroundColor: 'var(--attendance-bg1)'
             }}
         >
             <Box
                 sx={{
-                    position: 'sticky',
-                    top: 0,
-                    backgroundColor: 'var(--background-color)',
-                    padding: '15px 20px',
-                    fontSize: '24px',
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                    color: 'var(--text-color)',
-                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                    border: '1px solid #e0e0e0',
-                    zIndex: 2,
-                    marginBottom: '10px',
-                    borderRadius: '12px'
+                    display: 'flex',
+                    justifyContent: 'space-between'
                 }}
             >
-                Thông tin hợp đồng
+                <Box
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        mb: '35px'
+                    }}
+                >
+                    <Box
+                        sx={{
+                            width: '5px',
+                            height: '42px',
+                            backgroundColor: '#4effca',
+                            borderRadius: '4px',
+                            mr: '14px'
+                        }}
+                    />
+                    <Typography
+                        sx={{
+                            color: 'var(--text-color)',
+                            fontSize: '21px',
+                            fontWeight: 'bold'
+                        }}
+                    >
+                        {t('Thông tin chi tiết hợp đồng')}
+                    </Typography>
+                </Box>
+
+                <Box
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '18px'
+                    }}
+                >
+                    <Button
+                        sx={{
+                            padding: '8px 12px',
+                            borderRadius: '8px',
+                            height: '41.5px',
+                            mb: 'auto',
+                            fontWeight: 'bold',
+                            display: 'flex',
+                            gap: '10px',
+                            color: '#040506',
+                            backgroundColor: '#4effca',
+                            textTransform: 'none',
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}
+                    >
+                        <Download size={20} />
+                        {t('COMMON.ATTENDANCE.DOWNLOAD_INFO')}
+                    </Button>
+                </Box>
             </Box>
 
             <Box
                 sx={{
-                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                    borderRadius: '12px',
-                    overflow: 'auto',
-                    height: '480px',
-                    width: '100%',
-                    '&::-webkit-scrollbar': {
-                        width: '10px' // Độ cao thanh cuộn
-                    },
-                    '&::-webkit-scrollbar-thumb': {
-                        background: '#555', // Màu thanh cuộn
-                        borderRadius: '4px'
-                    },
-                    '&::-webkit-scrollbar-thumb:hover': {
-                        background: '#333'
-                    }
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '40px'
                 }}
             >
-                <TableContainer
+                <Avatar
+                    src='https://assets.minimals.cc/public/assets/images/mock/avatar/avatar-25.webp'
                     sx={{
-                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                        overflow: 'auto',
-                        height: '480px',
-                        width: '100%',
-                        color: 'var(--text-color)'
+                        width: '120px',
+                        height: '120px'
                     }}
-                >
-                    <Table
+                />
+
+                <Box>
+                    <Typography
                         sx={{
-                            overflow: 'hidden',
-                            backgroundColor: 'var(--background-color)'
+                            fontSize: '20px',
+                            fontWeight: 'bold',
+                            color: 'var(--text-color)'
                         }}
                     >
-                        <TableBody>
-                            {[
-                                { label: t('ID'), value: userscontract?.Id },
-                                {
-                                    label: t('COMMON.CONTRACT.INFORMATION'),
-                                    value: `${matchedEmployee?.EmployeeId || 'N/A'} ${matchedEmployee?.FullName || 'N/A'}`
-                                },
+                        {'Phụ trách : Lê Ngọc Ngà'}
+                    </Typography>
 
-                                {
-                                    label: t('COMMON.CONTRACT.INFORMATIONMANAGER'),
-                                    value: `${matchedManager?.EmployeeId || 'N/A'} ${matchedManager?.FullName || 'N/A'}`
-                                },
-
-                                {
-                                    label: t('COMMON.CONTRACT.CONTRACTNAME'),
-                                    value: userscontract?.ContractName || 'N/A'
-                                },
-                                {
-                                    label: t('COMMON.CONTRACT.STARTDATE'),
-                                    value:
-                                        userscontract?.StartDate && !isNaN(new Date(userscontract?.StartDate).getTime())
-                                            ? new Date(userscontract?.StartDate).toLocaleDateString()
-                                            : 'N/A'
-                                },
-                                {
-                                    label: t('COMMON.CONTRACT.ENDDATE'),
-                                    value:
-                                        userscontract?.EndDate && !isNaN(new Date(userscontract?.EndDate).getTime())
-                                            ? new Date(userscontract?.EndDate).toLocaleDateString()
-                                            : 'N/A'
-                                },
-                                { label: t('COMMON.CONTRACT.CLAUSE'), value: userscontract?.Clause || 'N/A' },
-                                { label: t('COMMON.CONTRACT.BASICSALARY'), value: userscontract?.BasicSalary || 'N/A' },
-                                {
-                                    label: t('COMMON.CONTRACT.PROBATIONPERIOD'),
-                                    value: userscontract?.ProbationPeriod || 'N/A'
-                                },
-                                {
-                                    label: t('COMMON.CONTRACT.WORKINGHOURS'),
-                                    value: userscontract?.WorkingHours || 'N/A'
-                                },
-                                {
-                                    label: t('COMMON.CONTRACT.TYPECONTRACT'),
-                                    value: userscontract?.TypeContract || 'N/A'
-                                },
-                                {
-                                    label: t('COMMON.CONTRACT.TERMINATIONCLAUSE'),
-                                    value: userscontract?.TerminationClause || 'N/A'
-                                },
-                                { label: t('COMMON.CONTRACT.APPENDIX'), value: userscontract?.Appendix || 'N/A' }
-                            ].map((item, index) => (
-                                <TableRow
-                                    key={index}
-                                    sx={{
-                                        color: 'var(--text-color)',
-                                        backgroundColor:
-                                            index % 2 === 0 ? 'var(--hover-color)' : 'var(--background-color)',
-                                        transition: 'background-color 0.3s ease'
-                                    }}
-                                >
-                                    <TableCell
-                                        sx={{
-                                            fontSize: '18px',
-                                            fontWeight: '600',
-                                            paddingLeft: '30px',
-                                            paddingRight: '20px',
-                                            width: '40%',
-                                            color: 'var(--text-color)'
-                                        }}
-                                    >
-                                        {item.label}:
-                                    </TableCell>
-                                    <TableCell
-                                        sx={{
-                                            fontSize: '16px',
-                                            paddingLeft: '20px',
-                                            paddingRight: '30px',
-                                            color: 'var(--text-color)'
-                                        }}
-                                    >
-                                        {item.value}
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                    <Box
+                        sx={{
+                            mt: '20px',
+                            display: 'flex',
+                            gap: '45px',
+                            alignItems: 'center'
+                        }}
+                    >
+                        <Box>
+                            <Typography
+                                sx={{
+                                    color: 'var(--sub-title-color)',
+                                    fontSize: '15px'
+                                }}
+                            >
+                                {t('Tên hợp đồng')}
+                            </Typography>
+                            <Typography
+                                sx={{
+                                    mt: '4px',
+                                    color: 'var(--text-color)',
+                                    fontSize: '17px'
+                                }}
+                            >
+                                {'Sales Manager Contract'}
+                            </Typography>
+                        </Box>
+                        <Box>
+                            <Typography
+                                sx={{
+                                    color: 'var(--sub-title-color)',
+                                    fontSize: '15px'
+                                }}
+                            >
+                                {t('Ngày bắt đầu')}
+                            </Typography>
+                            <Typography
+                                sx={{
+                                    mt: '4px',
+                                    color: 'var(--text-color)',
+                                    fontSize: '17px'
+                                }}
+                            >
+                                {'12/18/2024'}
+                            </Typography>
+                        </Box>
+                        <Box>
+                            <Typography
+                                sx={{
+                                    color: 'var(--sub-title-color)',
+                                    fontSize: '15px'
+                                }}
+                            >
+                                {t('Ngày kết thúc')}
+                            </Typography>
+                            <Typography
+                                sx={{
+                                    mt: '4px',
+                                    color: 'var(--text-color)',
+                                    fontSize: '17px'
+                                }}
+                            >
+                                {'3/18/2025'}
+                            </Typography>
+                        </Box>
+                        <Box>
+                            <Typography
+                                sx={{
+                                    color: 'var(--sub-title-color)',
+                                    fontSize: '15px'
+                                }}
+                            >
+                                {t('Lương cơ bản')}
+                            </Typography>
+                            <Typography
+                                sx={{
+                                    mt: '4px',
+                                    color: 'var(--text-color)',
+                                    fontSize: '17px'
+                                }}
+                            >
+                                {'8000000'}
+                            </Typography>
+                        </Box>
+                        <Box>
+                            <Typography
+                                sx={{
+                                    color: 'var(--sub-title-color)',
+                                    fontSize: '15px'
+                                }}
+                            >
+                                {t('Số ngày làm việc')}
+                            </Typography>
+                            <Typography
+                                sx={{
+                                    mt: '4px',
+                                    color: 'var(--text-color)',
+                                    fontSize: '17px'
+                                }}
+                            >
+                                {'8'}
+                            </Typography>
+                        </Box>
+                        <Box>
+                            <Typography
+                                sx={{
+                                    color: 'var(--sub-title-color)',
+                                    fontSize: '15px'
+                                }}
+                            >
+                                {t('Số ngày thử việc')}
+                            </Typography>
+                            <Typography
+                                sx={{
+                                    mt: '4px',
+                                    color: 'var(--text-color)',
+                                    fontSize: '17px'
+                                }}
+                            >
+                                {'7'}
+                            </Typography>
+                        </Box>
+                        <Box>
+                            <Typography
+                                sx={{
+                                    color: 'var(--sub-title-color)',
+                                    fontSize: '15px'
+                                }}
+                            >
+                                {t('Chế độ làm việc')}
+                            </Typography>
+                            <Typography
+                                sx={{
+                                    mt: '4px',
+                                    color: 'var(--text-color)',
+                                    fontSize: '17px'
+                                }}
+                            >
+                                {'Full-time'}
+                            </Typography>
+                        </Box>
+                    </Box>
+                </Box>
             </Box>
         </Box>
     )

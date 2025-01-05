@@ -22,7 +22,8 @@ import {
     TableHead,
     TableSortLabel,
     TableBody,
-    Tooltip
+    Tooltip,
+    Button
 } from '@mui/material'
 import { useEffect, useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -36,7 +37,7 @@ import Tab from '@mui/material/Tab'
 import { useGetAllRewardsQuery } from '@/services/RewardService'
 import { IRewardGetAll } from '@/models/Reward'
 import { formatNumberToMoney } from '@/utils/formatNumberWithUnit'
-import { ClipboardCheck } from 'lucide-react'
+import { CirclePlus, ClipboardCheck } from 'lucide-react'
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
 
 function a11yProps(index: number) {
@@ -67,9 +68,9 @@ function Page() {
     //const router = useRouter()
     //const [selected, setSelected] = useState<number[]>([])
     const [page, setPage] = useState(1)
-    const [rowsPerPage, setRowsPerPage] = useState('5')
+    const [rowsPerPage, setRowsPerPage] = useState('10')
     const [from, setFrom] = useState(1)
-    const [to, setTo] = useState(5)
+    const [to, setTo] = useState(10)
     const [filter, setFilter] = useState<IFilterSysConfiguration>({
         pageSize: 10,
         pageNumber: 1
@@ -218,19 +219,44 @@ function Page() {
                     backgroundColor: 'var(--background-item)'
                 }}
             >
-                <Typography
-                    sx={{
-                        userSelect: 'none',
-                        color: 'var(--text-color)',
-                        fontWeight: 'bold',
-                        fontSize: '18px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        padding: '24px 24px 15px'
-                    }}
-                >
-                    {t('COMMON.REWARD_DISCIPLINE.LIST_REWARD')}
-                </Typography>
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Typography
+                        sx={{
+                            userSelect: 'none',
+                            color: 'var(--text-color)',
+                            fontWeight: 'bold',
+                            fontSize: '18px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            padding: '24px 24px 15px'
+                        }}
+                    >
+                        {t('COMMON.REWARD_DISCIPLINE.LIST_REWARD')}
+                    </Typography>
+                    <Button
+                        variant='contained'
+                        startIcon={<CirclePlus />}
+                        sx={{
+                            mt: '24px',
+                            mr: '24px',
+                            height: '44px',
+                            backgroundColor: 'var(--button-color)',
+                            width: 'auto',
+                            padding: '0px 24px',
+                            '&:hover': {
+                                backgroundColor: 'var(--hover-button-color)'
+                            },
+                            fontSize: '16px',
+                            fontWeight: 'bold',
+                            whiteSpace: 'nowrap',
+                            textTransform: 'none'
+                        }}
+                        //onClick={() => router.push('/admin/benefit/create-benefit')}
+                        //onClick={() => handleOpenCreateDialog()}
+                    >
+                        {t('COMMON.BUTTON.CREATE')}
+                    </Button>
+                </Box>
 
                 <Box>
                     <Tabs
@@ -519,14 +545,13 @@ function Page() {
                                     }
                                 }}
                             >
-                                <MenuItem value={'Public'}>{t('COMMON.NOTIFICATION_TYPE.PUBLIC')}</MenuItem>
-                                <MenuItem value={'Benefit'}>{t('COMMON.NOTIFICATION_TYPE.BENEFIT')}</MenuItem>
-                                <MenuItem value={'Salary'}>{t('COMMON.NOTIFICATION_TYPE.SALARY')}</MenuItem>
-                                <MenuItem value={'Reward'}>{t('COMMON.NOTIFICATION_TYPE.REWARD')}</MenuItem>
-                                <MenuItem value={'Insurance'}>{t('COMMON.NOTIFICATION_TYPE.INSURANCE')}</MenuItem>
-                                <MenuItem value={'Holiday'}>{t('COMMON.NOTIFICATION_TYPE.HOLIDAY')}</MenuItem>
-                                <MenuItem value={'Discipline'}>{t('COMMON.NOTIFICATION_TYPE.DISCIPLINE')}</MenuItem>
-                                <MenuItem value={'Timekeeping'}>{t('COMMON.NOTIFICATION_TYPE.TIMEKEEPING')}</MenuItem>
+                                <MenuItem value={'Public'}>{t('Human Resources')}</MenuItem>
+                                <MenuItem value={'Benefit'}>{t('Finance')}</MenuItem>
+                                <MenuItem value={'Salary'}>{t('IT Services')}</MenuItem>
+                                <MenuItem value={'Reward'}>{t('Marketing')}</MenuItem>
+                                <MenuItem value={'Insurance'}>{t('Sales')}</MenuItem>
+                                <MenuItem value={'Holiday'}>{t('Operations')}</MenuItem>
+                                <MenuItem value={'Discipline'}>{t('Customer Support')}</MenuItem>
                             </Select>
                         </FormControl>
                     </Box>
@@ -603,7 +628,7 @@ function Page() {
                                                 textAlign: 'center',
                                                 maxWidth: '280px',
                                                 overflow: 'hidden',
-                                                ml: '8px',
+                                                ml: '-20px',
                                                 textOverflow: 'ellipsis',
                                                 whiteSpace: 'nowrap'
                                             }}

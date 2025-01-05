@@ -85,7 +85,7 @@ const EmployeeCountChart = () => {
             {
                 name: t('COMMON.DASHBOARD.YEAR') + ' ' + (selectedYear - 1).toString(),
                 type: 'bar',
-                data: [40, 45, 40, 50, 50, 60, 70, 90, 150, 40, 50, 50],
+                data: [40, 45, 40, 50, 50, 60, 70, 90, 100, 40, 50, 50],
                 barWidth: '27%', // Điều chỉnh độ rộng của cột
                 itemStyle: {
                     color: '#d24c2f',
@@ -95,7 +95,7 @@ const EmployeeCountChart = () => {
             {
                 name: t('COMMON.DASHBOARD.YEAR') + ' ' + selectedYear.toString(),
                 type: 'bar',
-                data: [10, 30, 15, 50, 80, 90, 100, 70, 40, 15, 80, 80],
+                data: [50, 80, 75, 85, 80, 90, 100, 70, 80, 95, 100, 105],
                 barWidth: '27%', // Điều chỉnh độ rộng của cột
                 itemStyle: {
                     color: '#00a76f',

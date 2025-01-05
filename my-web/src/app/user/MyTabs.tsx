@@ -115,7 +115,7 @@ function MyTabs() {
                     Yêu cầu
                 </Tab>
                 <Tab
-                    value='/user/work-rules'
+                    value='/user/working-rules'
                     sx={{
                         whiteSpace: 'nowrap'
                     }}

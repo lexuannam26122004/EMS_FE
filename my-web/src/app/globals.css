@@ -94,6 +94,25 @@ body {
     --bg-success-color1: rgba(2, 177, 90, 0.2);
     --text-danger-color1: #ff7650;
     --text-success-color1: #00ff77;
+
+    --bg-insurance-color1: rgba(48, 255, 189, 0.277);
+    --bg-holiday-color1: rgba(247, 63, 170, 0.219);
+    --bg-attendance-color1: rgba(8, 182, 72, 0.295);
+    --bg-discipline-color1: rgba(197, 99, 34, 0.236);
+    --text-insurance-color1: #10d4ad;
+    --text-holiday-color1: #d41d88;
+    --text-attendance-color1: #10b56e;
+    --text-discipline-color1: #e06924;
+
+    --bg-insurance-color: #04c59f;
+    --bg-holiday-color: #d41d88;
+    --bg-attendance-color: #10b56e;
+    --bg-discipline-color: #e06924;
+    --text-insurance-color: #fff;
+    --text-holiday-color: #fff;
+    --text-attendance-color: #fff;
+    --text-discipline-color: #fff;
+
     --text-all-color1: #1c252e;
     --bg-all-color1: #ffffff;
     --text-rejected-color1: #919eab;
@@ -114,6 +133,7 @@ body {
     --attendance-bg3: #3f5060;
     --loader0: #132025;
     --loader1: #0f3132;
+    --roles: rgb(255, 255, 255);
 }
 
 .light {
@@ -159,6 +179,26 @@ body {
     --text-danger-color1: #d41610;
     --text-warning-color1: #d68b01;
     --text-success-color1: #118d57;
+
+    --bg-insurance-color1: rgba(48, 255, 189, 0.277);
+    --bg-holiday-color1: rgba(247, 63, 170, 0.219);
+    --bg-attendance-color1: rgba(8, 182, 72, 0.295);
+    --bg-discipline-color1: rgba(197, 99, 34, 0.236);
+    --text-insurance-color1: #10d4ad;
+    --text-holiday-color1: #d6017d;
+    --text-attendance-color1: #10b56e;
+    --text-discipline-color1: #8d3f11;
+
+    --bg-insurance-color: #19ddb6;
+    --bg-holiday-color: #f2219b;
+    --bg-attendance-color: #22d889;
+    --bg-discipline-color: #f8782e;
+    --text-insurance-color: #fff;
+    --text-holiday-color: #fff;
+    --text-attendance-color: #fff;
+    --text-discipline-color: #fff;
+
+    --placeholder-color: #a5bed4;
     --placeholder-color: #a5bed4;
     --hover-field-color: #1c252e;
     --selected-field-color: #1c252e;
@@ -204,6 +244,7 @@ body {
     --attendance-bg3: #a0ffde;
     --loader0: #cdf0ed;
     --loader1: #9aebdf;
+    --roles: rgb(134, 90, 200);
 }
 
 body {

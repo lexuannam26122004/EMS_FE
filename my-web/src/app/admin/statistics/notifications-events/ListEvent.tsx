@@ -213,7 +213,7 @@ function Page() {
                     color: 'var(--text-color)'
                 }}
             >
-                {t('COMMON.STAT_NOTIFY.READ_NOTIFY_PER_EMPLOYEE')}
+                {t('COMMON.STAT_NOTIFY.LIST_EVENTS')}
             </Typography>
 
             <Box
@@ -241,7 +241,9 @@ function Page() {
                             '& .MuiInputBase-root': {
                                 color: 'var(--text-color)'
                             },
-                            '& .MuiInputBase-input': {},
+                            '& .MuiInputBase-input': {
+                                padding: '10px 14px'
+                            },
                             '& .MuiInputLabel-root': {
                                 color: 'var(--text-label-color)'
                             },
@@ -284,7 +286,9 @@ function Page() {
                             '& .MuiInputBase-root': {
                                 color: 'var(--text-color)'
                             },
-                            '& .MuiInputBase-input': {},
+                            '& .MuiInputBase-input': {
+                                padding: '10px 14px'
+                            },
                             '& .MuiInputLabel-root': {
                                 color: 'var(--text-label-color)'
                             },
@@ -320,7 +324,7 @@ function Page() {
                 <TextField
                     id='location-search'
                     type='search'
-                    placeholder={t('COMMON.ERROR_REPORT.SEARCH')}
+                    placeholder={t('COMMON.USER_SCHEDULAR.SEARCH_PLACEHOLDER')}
                     variant='outlined'
                     required
                     value={keyword}
@@ -379,7 +383,7 @@ function Page() {
                 />
                 <FormControl
                     sx={{
-                        width: '90px',
+                        width: '110px',
                         '& fieldset': {
                             borderRadius: '8px',
                             borderColor: 'var(--border-color)' // Viền mặc định
@@ -410,11 +414,9 @@ function Page() {
                         }
                     }}
                 >
-                    <InputLabel id='select-label'>
-                        {type === 0 ? t('COMMON.STAT_NOTIFY.MONTH') : t('COMMON.STAT_NOTIFY.YEAR')}
-                    </InputLabel>
+                    <InputLabel id='select-label'>{t('COMMON.USER_SCHEDULAR.FILTER_LABEL')}</InputLabel>
                     <Select
-                        label={type === 0 ? t('COMMON.STAT_NOTIFY.MONTH') : t('COMMON.STAT_NOTIFY.YEAR')}
+                        label={t('COMMON.USER_SCHEDULAR.FILTER_LABEL')}
                         defaultValue={type === 0 ? currentMonth : currentYear}
                         onChange={handleValueChange}
                         sx={{
@@ -440,7 +442,7 @@ function Page() {
                             PaperProps: {
                                 elevation: 0,
                                 sx: {
-                                    width: '90px',
+                                    width: '110px',
                                     mt: '2px',
                                     borderRadius: '8px',
                                     padding: '0 8px',
@@ -472,38 +474,37 @@ function Page() {
                             }
                         }}
                     >
-                        {type === 0
-                            ? [...Array(12).keys()].map(item => (
-                                  <MenuItem
-                                      value={item}
-                                      key={item}
-                                      sx={{
-                                          borderRadius: '6px',
-                                          '&:last-child': {
-                                              mt: '3px'
-                                          }
-                                      }}
-                                  >
-                                      {item + 1}
-                                  </MenuItem>
-                              ))
-                            : Array.from({ length: currentYear - 2022 }, (_, index) => {
-                                  const year = currentYear - index
-                                  return (
-                                      <MenuItem
-                                          key={year}
-                                          value={year}
-                                          sx={{
-                                              borderRadius: '6px',
-                                              '&:last-child': {
-                                                  mt: '3px'
-                                              }
-                                          }}
-                                      >
-                                          {year}
-                                      </MenuItem>
-                                  )
-                              })}
+                        <MenuItem
+                            sx={{
+                                padding: '8px',
+                                borderRadius: '6px'
+                            }}
+                            value={0}
+                        >
+                            {t('COMMON.USER_SCHEDULAR.FILTER_OPTIONS.ALL')}
+                        </MenuItem>
+
+                        <MenuItem
+                            sx={{
+                                padding: '8px',
+                                borderRadius: '6px',
+                                mt: '3px'
+                            }}
+                            value={1}
+                        >
+                            {t('COMMON.USER_SCHEDULAR.FILTER_OPTIONS.HOLIDAY')}
+                        </MenuItem>
+
+                        <MenuItem
+                            sx={{
+                                padding: '8px',
+                                borderRadius: '6px',
+                                mt: '3px'
+                            }}
+                            value={2}
+                        >
+                            {t('COMMON.USER_SCHEDULAR.FILTER_OPTIONS.NON_HOLIDAY')}
+                        </MenuItem>
                     </Select>
                 </FormControl>
             </Box>

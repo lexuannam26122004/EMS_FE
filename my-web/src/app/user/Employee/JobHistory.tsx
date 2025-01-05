@@ -187,11 +187,15 @@ const Timeline: React.FC = () => {
                     <Typography sx={{ color: 'var(--text-color)', fontSize: '0.9em', marginBottom: '5px' }}>
                         {event.startDate} - {event.endDate} | {event.location}
                     </Typography>
-                    <Typography sx={{ color: 'var(--text-color)', fontSize: '1.1em' }}>{event.content.jobDescription}</Typography>
+                    <Typography sx={{ color: 'var(--text-color)', fontSize: '1.1em' }}>
+                        {event.content.jobDescription}
+                    </Typography>
                     <Typography sx={{ color: 'var(--text-color)', fontSize: '1.1em' }}>
                         Allowance: {event.content.allowance}
                     </Typography>
-                    <Typography sx={{ color: 'var(--text-color)', fontSize: '1.1em' }}>Note: {event.content.note}</Typography>
+                    <Typography sx={{ color: 'var(--text-color)', fontSize: '1.1em' }}>
+                        Note: {event.content.note}
+                    </Typography>
                 </Box>
             ))}
         </Box>
@@ -203,45 +207,53 @@ const App: React.FC = () => {
     return (
         <Box
             sx={{
-                padding: '20px',
-                backgroundColor: 'var(--hover-color)',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                borderRadius: '12px',
+                padding: '35px',
+                backgroundColor: 'var(--attendance-bg1)',
+                boxShadow: 'var(--box-shadow-paper)',
+                borderRadius: '30px',
                 overflow: 'hidden',
                 height: '100%',
-                border: '1px solid #e0e0e0',
+                //border: '1px solid #e0e0e0',
                 width: '100%'
             }}
         >
             <Box
                 sx={{
-                    position: 'sticky',
-                    top: 0,
-                    backgroundColor: 'var(--background-color)',
-                    padding: '15px 20px',
-                    fontSize: '24px',
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                    color: 'var(--text-color)',
-                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                    border: '1px solid #e0e0e0',
-                    zIndex: 2,
-                    borderRadius: '12px'
+                    display: 'flex',
+                    alignItems: 'center',
+                    mb: '35px'
                 }}
             >
-                {t('COMMON.SIDEBAR.WORKHISTORY')}
+                <Box
+                    sx={{
+                        width: '5px',
+                        height: '42px',
+                        backgroundColor: '#4effca',
+                        borderRadius: '4px',
+                        mr: '14px'
+                    }}
+                />
+                <Typography
+                    sx={{
+                        color: 'var(--text-color)',
+                        fontSize: '21px',
+                        fontWeight: 'bold'
+                    }}
+                >
+                    {t('COMMON.SIDEBAR.WORKHISTORY')}
+                </Typography>
             </Box>
 
             <Box
                 sx={{
-                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                    borderRadius: '12px',
+                    //boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                    borderRadius: '30px',
                     overflow: 'auto',
                     height: '600px',
                     width: '100%',
                     marginTop: '20px',
                     position: 'relative',
-                    backgroundColor: 'var(--hover-color)',
+                    backgroundColor: 'var(--attendance-bg1)',
                     '&::-webkit-scrollbar': {
                         width: '10px' // Độ cao thanh cuộn
                     },

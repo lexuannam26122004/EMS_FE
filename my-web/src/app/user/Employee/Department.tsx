@@ -66,102 +66,51 @@ const Timeline: React.FC = () => {
 
     const events = [
         {
-            startDate: '24 Dec 2024 - 9:47 PM',
-            endDate: '24 Dec 2024 - 10:47 PM',
-            location: 'New York',
-            content: {
-                jobDescription: 'Software Developer',
-                allowance: '$2000',
-                note: 'Completed annual review'
-            },
+            TransferDate: '24 Dec 2024 - 9:47 PM',
+            Reason: 'Department restructuring',
+            ToDepartment: 'Marketing',
             color: getRandomColor()
         },
         {
-            startDate: '23 Dec 2024 - 8:47 PM',
-            endDate: '23 Dec 2024 - 9:47 PM',
-            location: 'San Francisco',
-            content: {
-                jobDescription: 'Senior Developer',
-                allowance: '$3000',
-                note: 'Promoted to Senior Developer'
-            },
+            TransferDate: '23 Dec 2024 - 8:47 PM',
+            Reason: 'Promotion to team leader',
+            ToDepartment: 'Development',
             color: getRandomColor()
         },
         {
-            startDate: '22 Dec 2024 - 7:47 PM',
-            endDate: '22 Dec 2024 - 8:47 PM',
-            location: 'Los Angeles',
-            content: {
-                jobDescription: 'Project Manager',
-                allowance: '$2500',
-                note: 'Project completed on time'
-            },
+            TransferDate: '22 Dec 2024 - 7:47 PM',
+            Reason: 'Project reassignment',
+            ToDepartment: 'Research',
             color: getRandomColor()
         },
         {
-            startDate: '24 Dec 2024 - 9:47 PM',
-            endDate: '24 Dec 2024 - 10:47 PM',
-            location: 'New York',
-            content: {
-                jobDescription: 'Software Developer',
-                allowance: '$2000',
-                note: 'Completed annual review'
-            },
+            TransferDate: '21 Dec 2024 - 6:47 PM',
+            Reason: 'Performance improvement plan',
+            ToDepartment: 'Quality Assurance',
             color: getRandomColor()
         },
         {
-            startDate: '23 Dec 2024 - 8:47 PM',
-            endDate: '23 Dec 2024 - 9:47 PM',
-            location: 'San Francisco',
-            content: {
-                jobDescription: 'Senior Developer',
-                allowance: '$3000',
-                note: 'Promoted to Senior Developer'
-            },
+            TransferDate: '20 Dec 2024 - 5:47 PM',
+            Reason: 'Cross-functional training',
+            ToDepartment: 'Customer Support',
             color: getRandomColor()
         },
         {
-            startDate: '22 Dec 2024 - 7:47 PM',
-            endDate: '22 Dec 2024 - 8:47 PM',
-            location: 'Los Angeles',
-            content: {
-                jobDescription: 'Project Manager',
-                allowance: '$2500',
-                note: 'Project completed on time'
-            },
+            TransferDate: '19 Dec 2024 - 4:47 PM',
+            Reason: 'Temporary assignment',
+            ToDepartment: 'Sales',
             color: getRandomColor()
         },
         {
-            startDate: '24 Dec 2024 - 9:47 PM',
-            endDate: '24 Dec 2024 - 10:47 PM',
-            location: 'New York',
-            content: {
-                jobDescription: 'Software Developer',
-                allowance: '$2000',
-                note: 'Completed annual review'
-            },
+            TransferDate: '18 Dec 2024 - 3:47 PM',
+            Reason: 'Relocation request',
+            ToDepartment: 'Human Resources',
             color: getRandomColor()
         },
         {
-            startDate: '23 Dec 2024 - 8:47 PM',
-            endDate: '23 Dec 2024 - 9:47 PM',
-            location: 'San Francisco',
-            content: {
-                jobDescription: 'Senior Developer',
-                allowance: '$3000',
-                note: 'Promoted to Senior Developer'
-            },
-            color: getRandomColor()
-        },
-        {
-            startDate: '22 Dec 2024 - 7:47 PM',
-            endDate: '22 Dec 2024 - 8:47 PM',
-            location: 'Los Angeles',
-            content: {
-                jobDescription: 'Project Manager',
-                allowance: '$2500',
-                note: 'Project completed on time'
-            },
+            TransferDate: '17 Dec 2024 - 2:47 PM',
+            Reason: 'Department realignment',
+            ToDepartment: 'Finance',
             color: getRandomColor()
         }
     ]
@@ -169,40 +118,48 @@ const Timeline: React.FC = () => {
     return (
         <Box
             sx={{
-                padding: '20px',
-                backgroundColor: 'var(--hover-color)',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                borderRadius: '12px',
+                //padding: '20px',
+                backgroundColor: 'var(--attendance-bg1)',
+                boxShadow: 'var(--box-shadow-paper)',
+                borderRadius: '30px',
                 overflow: 'hidden',
                 height: '100%',
-                border: '1px solid #e0e0e0',
+                padding: '35px',
+                //border: '1px solid #e0e0e0',
                 width: '100%'
             }}
         >
             <Box
                 sx={{
-                    position: 'sticky',
-                    top: 0,
-                    backgroundColor: 'var(--background-color)',
-                    padding: '15px 20px',
-                    fontSize: '24px',
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                    color: 'var(--text-color)',
-                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                    border: '1px solid #e0e0e0',
-                    zIndex: 2,
-                    borderRadius: '12px'
+                    display: 'flex',
+                    alignItems: 'center'
                 }}
             >
-                {'Lịch sử chuyển phòng ban'}
+                <Box
+                    sx={{
+                        width: '5px',
+                        height: '42px',
+                        backgroundColor: '#4effca',
+                        borderRadius: '4px',
+                        mr: '14px'
+                    }}
+                />
+                <Typography
+                    sx={{
+                        color: 'var(--text-color)',
+                        fontSize: '21px',
+                        fontWeight: 'bold'
+                    }}
+                >
+                    {'Lịch sử chuyển phòng ban'}
+                </Typography>
             </Box>
             <Box
                 sx={{
                     position: 'sticky',
                     left: 0,
                     right: 0,
-                    top: 112,
+                    top: 87,
                     height: '4px',
                     backgroundColor: 'var(--text-color)',
                     zIndex: 1,
@@ -225,7 +182,7 @@ const Timeline: React.FC = () => {
                 sx={{
                     borderRadius: '12px',
                     marginTop: '24px',
-                    //backgroundColor: 'var(--hover-color)',
+                    backgroundColor: 'var(--attendance-bg1)',
                     position: 'relative',
                     width: '100%',
                     display: 'flex',
@@ -257,7 +214,7 @@ const Timeline: React.FC = () => {
                         justifyContent: 'space-between',
                         marginTop: '-12px',
                         width: '100%',
-                        gap: '80px' 
+                        gap: '80px'
                     }}
                 >
                     {events.map((event, index) => (
@@ -296,16 +253,13 @@ const Timeline: React.FC = () => {
                                 }}
                             >
                                 <Typography sx={{ fontSize: '0.9em', marginBottom: '5px', color: 'var(--text-color)' }}>
-                                    {event.startDate}
+                                    {event.TransferDate}
                                 </Typography>
                                 <Typography sx={{ fontSize: '1.1em', fontWeight: 'bold', color: 'var(--text-color)' }}>
-                                    {event.content.jobDescription}
+                                    {event.ToDepartment}
                                 </Typography>
                                 <Typography sx={{ fontSize: '1em', color: 'var(--text-color)' }}>
-                                    Allowance: {event.content.allowance}
-                                </Typography>
-                                <Typography sx={{ fontSize: '1em', color: 'var(--text-color)' }}>
-                                    Note: {event.content.note}
+                                    Reason: {event.Reason}
                                 </Typography>
                             </Box>
                         </Box>

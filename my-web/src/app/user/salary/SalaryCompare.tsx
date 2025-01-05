@@ -3,6 +3,7 @@ import { MenuItem, FormControl, Select, Box, Paper, Typography, SelectChangeEven
 import ReactECharts from 'echarts-for-react'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
+
 import { useTranslation } from 'react-i18next'
 
 export default function SalaryCompare() {
@@ -11,6 +12,7 @@ export default function SalaryCompare() {
     const currentYear = new Date().getFullYear()
     const [selectedYear, setSelectedYear] = useState(currentYear)
 
+    useEffect(() => {}, [selectedYear])
     const handleYearChange = (event: SelectChangeEvent<number>) => {
         setSelectedYear(event.target.value as number)
     }
