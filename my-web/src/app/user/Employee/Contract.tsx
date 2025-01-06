@@ -144,7 +144,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
             >
                 <Avatar
                     src={
-                        manager.AvatarPath ||
+                        manager?.AvatarPath ||
                         'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'
                     }
                     sx={{
