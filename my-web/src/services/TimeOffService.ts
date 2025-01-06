@@ -80,6 +80,7 @@ export const TimeOffApi = createApi({
 
         getTimeOffStatistics: builder.query<TimeOffResponse, ITotalEventsByMonth>({
             query: params => `GetTimeOffStatistics/time-off-statistics?month=${params.Month}&year=${params.Year}`
+        }),
 
         getTimeOffStatisticsByMonthAndYear: builder.query<TimeOffResponse, IMonthAndYear>({
             query: params => `GetTimeOffStatistics/time-off-statistics?year=${params.Year}&month=${params.Month}`
