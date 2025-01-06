@@ -37,6 +37,10 @@ export const TimeOffApi = createApi({
             query: params => `GetTimeOffStatistics/time-off-statistics?year=${params.Year}&month=${params.Month}`
         }),
 
+        getPendingFutureTimeOffs: builder.query<TimeOffResponse, void>({
+            query: () => `GetPendingFutureTimeOffs/pending-future-timeoffs`
+        }),
+
         getByIdTimeOffs: builder.query<TimeOffResponse, number>({
             query: id => `GetById/${id}`
         }),
@@ -56,5 +60,6 @@ export const {
     useUpdateTimeOffsMutation,
     useGetByIdTimeOffsQuery,
     useGetTimeOffStatisticsByMonthAndYearQuery,
+    useGetPendingFutureTimeOffsQuery,
     useChangeStatusTimeOffsMutation
 } = TimeOffApi

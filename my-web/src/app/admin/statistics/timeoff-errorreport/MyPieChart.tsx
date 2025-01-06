@@ -19,7 +19,7 @@ const Chart: React.FC = () => {
     const { theme } = useTheme()
 
     const { data: response, isLoading } = useGetCountErrorReportsByTypeAndYearQuery(selectedYear)
-    const data = response?.Data as ICountErrorReportsByType[]
+    const data: ICountErrorReportsByType[] = Array.isArray(response?.Data) ? response.Data : []
 
     const handleYearChange = (event: SelectChangeEvent<number>) => {
         setSelectedYear(Number(event.target.value))
@@ -35,7 +35,7 @@ const Chart: React.FC = () => {
         type: t(item.Type)
     }))
 
-    const maxScore = Math.max(...reportData.map(item => item.score))
+    const maxScore = reportData.length > 0 ? Math.max(...reportData.map(item => item.score)) : 0
 
     const option = {
         textStyle: {

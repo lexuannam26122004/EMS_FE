@@ -5,51 +5,45 @@ import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import { Building, ChevronLeft, ChevronRight, IdCard, UserRoundCog } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { useGetPendingFutureTimeOffsQuery } from '@/services/TimeOffService'
+import Loading from '@/components/Loading'
 
-const leaveRequests = [
-    {
-        FullName: 'Nguyen Van A',
-        Roles: 'Software Engineer',
-        CreatedDate: '15 Dec 2024 4:55pm',
-        Department: 'IT Department',
-        EmployeeId: 'EMP001',
-        Reason: 'Personal Reasons',
-        Content:
-            'Undergoing a minor surgery and need recovery time. Undergoing a minor surgery and need recovery time. Need to take a short break to handle some personal. Need to take a short break to handle some personal. Need to take a short break to handle some personal. Need to take a short break to handle some personal',
-        StartDate: '20 Dec 2024',
-        EndDate: '22 Dec 2024',
-        AvatarPath: '/AvatarPath1.jpg'
-    },
-    {
-        FullName: 'Tran Thi B',
-        Roles: 'Project Manager',
-        CreatedDate: '15 Dec 2024 4:55pm',
-        Reason: 'Medical leave',
-        Department: 'HR Department',
-        EmployeeId: 'EMP002',
-        Content: 'Undergoing a minor surgery and need recovery time.',
-        StartDate: '18 Dec 2024',
-        EndDate: '25 Dec 2024',
-        AvatarPath: '/AvatarPath2.jpg'
-    },
-    {
-        FullName: 'Le Van C',
-        Roles: 'UI/UX Designer',
-        CreatedDate: '15 Dec 2024 4:55pm',
-        Reason: 'Vacation',
-        Department: 'Design Department',
-        EmployeeId: 'EMP003',
-        Content: 'Taking a vacation trip with family.',
-        StartDate: '24 Dec 2024',
-        EndDate: '31 Dec 2024',
-        AvatarPath: '/Avatar3.jpg'
-    }
-]
+interface ITimeOffS {
+    Id: number
+    StartDate: string
+    EndDate: string
+    IsAccepted: boolean
+    Reason: string
+    Content: string
+    CreatedDate: string
+    FullName: string
+    Roles: string[]
+    EmployeeId: string
+    AvatarPath: string
+    Department: string
+}
 
 export default function LeaveRequestCarousel() {
     const sliderRef = useRef<Slider | null>(null)
     const [currentSlide, setCurrentSlide] = useState(0)
     const { t } = useTranslation('common')
+
+    const { data: response, isLoading } = useGetPendingFutureTimeOffsQuery()
+
+    const dataTimeOff = (response?.Data as ITimeOffS[]) || []
+
+    const leaveRequests = dataTimeOff.map(item => ({
+        FullName: item.FullName || 'N/A',
+        Roles: item.Roles,
+        CreatedDate: item.CreatedDate || 'N/A',
+        Department: item.Department || 'N/A',
+        EmployeeId: item.EmployeeId || 'N/A',
+        Reason: item.Reason || 'N/A',
+        Content: item.Content || 'N/A',
+        StartDate: item.StartDate || 'N/A',
+        EndDate: item.EndDate || 'N/A',
+        AvatarPath: item.AvatarPath || 'N/A'
+    }))
 
     const settings = {
         dots: false,
@@ -81,6 +75,10 @@ export default function LeaveRequestCarousel() {
         sliderRef.current?.slickGoTo(prevSlide)
     }
 
+    if (isLoading) {
+        return <Loading />
+    }
+
     return (
         <Paper
             elevation={0}
@@ -89,7 +87,8 @@ export default function LeaveRequestCarousel() {
                 padding: '24px 0',
                 backgroundColor: 'var(--background-item)',
                 borderRadius: '15px',
-                height: '605px',boxShadow: 'var(--box-shadow-paper)',
+                height: '605px',
+                boxShadow: 'var(--box-shadow-paper)',
                 display: 'flex',
                 flexDirection: 'column'
             }}
@@ -269,7 +268,7 @@ export default function LeaveRequestCarousel() {
                                             variant='body2'
                                             sx={{ fontSize: '14px', color: 'var(--text-color)', fontWeight: 'bold' }}
                                         >
-                                            {request.Roles}
+                                            {request.Roles?.join(', ') || 'N/A'}
                                         </Typography>
                                     </Box>
                                     <Box
