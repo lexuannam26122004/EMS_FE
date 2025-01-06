@@ -8,4 +8,11 @@ const axios = Axios.create({
     }
 })
 
+export const axiosUser = Axios.create({
+    baseURL: 'https://localhost:44381/api/user',
+    headers: {
+        'Content-Type': 'application/json'
+    }
+})
+
 export default axios

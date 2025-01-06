@@ -25,11 +25,22 @@ export interface INotificationUpdateVModel extends INotificationCreateVModel {
     Id: number
 }
 
+export interface ICountNotifyReadByUser {
+    pageNumber: number
+    fullName?: string
+    startDate?: string
+    endDate?: string
+}
+
+export interface ICountNotifyReadByUserResponse {
+    UserId: string
+    UserFullName: string
+    EmployeeId?: string
+    AvatarPath?: string
+    ReadCount: number
+}
+
 export interface IFilterNotificationsForUserVModel {
-    userId: string
-    type?: string
-    pageSize?: number
-    pageNumber?: number
     isActive?: boolean
     isRead?: boolean
     sentDate?: Date
@@ -59,6 +70,8 @@ export interface INotificationGetById {
     Type: string
     UserId: string
     FullName: string
+    ReceivedCount?: number
+    ReadCount?: number
     AvatarPath?: string
     Role: string
     ListFile?: string[]

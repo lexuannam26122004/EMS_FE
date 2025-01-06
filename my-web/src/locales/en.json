@@ -83,11 +83,15 @@
             "INSURANCE": "Insurance",
             "DISCIPLINE": "Discipline",
             "BENEFIT": "Benefit",
-            "HOLIDAY": "Holiday",
-            "TIMEKEEPING": "Timekeeping"
+            "Event": "Event",
+            "ATTENDANCE": "Attendance"
         },
         "NOTIFICATION": {
             "TITLE": "Notification",
+            "HIGH_SCORE": "High score",
+            "NOTE_NOT_READ": "Those who haven't read yet will not appear",
+            "LOW_SCORE": "Low score",
+            "AMOUNT": "Amount",
             "BUTTON": {
                 "ALL": "All",
                 "UNREAD": "Unread",
@@ -418,6 +422,7 @@
             "CONTRACT_END": "End date",
             "CONTRACT_STATUS": "Status",
             "MONTHS": "months",
+            "STAT_EVENT_BY_YEAR": "Event statistics by year",
             "MEMBER_COUNT_OF_DEPT": "Member count of Department",
             "EMPLOYEE_SALARY_BY_MONTH": "Employee Salary Summary by Month",
             "SUM_EMPLOYEE_BY_MONTH": "Number of employees by month",

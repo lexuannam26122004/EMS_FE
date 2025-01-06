@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { ITimeOffCreate, ITimeOffUpdate } from '@/models/TimeOff'
+import { ITotalEventsByMonth } from '@/models/Event'
+
 interface TimeOffResponse {
     Success: boolean
     Data: any
@@ -30,6 +32,10 @@ export const TimeOffApi = createApi({
             })
         }),
 
+        getTimeOffStatistics: builder.query<TimeOffResponse, ITotalEventsByMonth>({
+            query: params => `GetTimeOffStatistics/time-off-statistics?month=${params.Month}&year=${params.Year}`
+        }),
+
         getByIdTimeOffs: builder.query<TimeOffResponse, number>({
             query: id => `GetById/${id}`
         }),
@@ -48,5 +54,6 @@ export const {
     useCreateTimeOffsMutation,
     useUpdateTimeOffsMutation,
     useGetByIdTimeOffsQuery,
+    useGetTimeOffStatisticsQuery,
     useChangeStatusTimeOffsMutation
 } = TimeOffApi

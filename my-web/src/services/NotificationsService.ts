@@ -3,9 +3,11 @@ import {
     IFilterNotificationsForUserVModel,
     INotificationCreateVModel,
     IFilterNotificationsVModel,
+    ICountNotifyReadByUser,
     INotificationUpdateVModel
 } from '@/models/Notifications'
 import axios from './axios'
+import { ITotalEventsByMonth } from '@/models/Event'
 
 interface NotificationsResponse {
     Success: boolean
@@ -35,10 +37,6 @@ export const notificationsApi = createApi({
                 const params = new URLSearchParams()
 
                 if (filter) {
-                    if (filter.userId) params.append('UserId', filter.userId)
-                    if (filter.type) params.append('Type', filter.type)
-                    if (filter.pageSize) params.append('PageSize', filter.pageSize.toString())
-                    if (filter.pageNumber) params.append('PageNumber', filter.pageNumber.toString())
                     if (filter.isActive !== undefined) params.append('IsActive', filter.isActive.toString())
                     if (filter.isRead !== undefined) params.append('IsRead', filter.isRead.toString())
                     if (filter.sentDate) params.append('SentDate', filter.sentDate.toISOString())
@@ -85,6 +83,31 @@ export const notificationsApi = createApi({
                 body: body
             })
         }),
+
+        statNotificationByMonth: builder.query<NotificationsResponse, ITotalEventsByMonth>({
+            query: params => `StatNotificationByMonth?month=${params.Month}&year=${params.Year}`
+        }),
+
+        statNotificationByType: builder.query<NotificationsResponse, number>({
+            query: year => `StatNotificationByType?year=${year}`
+        }),
+
+        countNotifyReadByUser: builder.query<NotificationsResponse, ICountNotifyReadByUser>({
+            query: filter => {
+                const params = new URLSearchParams()
+
+                if (filter) {
+                    if (filter.fullName !== '' && filter.fullName !== undefined && filter.fullName !== null)
+                        params.append('FullName', filter.fullName)
+                    if (filter.pageNumber) params.append('PageNumber', filter.pageNumber.toString())
+                    if (filter.startDate !== null) params.append('StartDate', filter.startDate)
+                    if (filter.endDate !== null) params.append('EndDate', filter.endDate)
+                }
+
+                return `CountNotifyReadByUser?${params.toString()}`
+            }
+        }),
+
         updateNotification: builder.mutation<void, INotificationUpdateVModel>({
             query: body => ({
                 url: 'Update',
@@ -119,5 +142,8 @@ export const {
     useGetCountIsNewQuery,
     useUpdateIsNewMutation,
     useCreateNotificationMutation,
+    useStatNotificationByMonthQuery,
+    useStatNotificationByTypeQuery,
+    useCountNotifyReadByUserQuery,
     useUpdateNotificationMutation
 } = notificationsApi

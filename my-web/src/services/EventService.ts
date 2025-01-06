@@ -1,4 +1,4 @@
-import { IEventCreate, IFilterEvent, IEventUpdate } from '@/models/Event'
+import { IEventCreate, IFilterEvent, IEventUpdate, ITotalEventsByMonth } from '@/models/Event'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 interface IEventResponse {
@@ -29,12 +29,20 @@ export const eventApi = createApi({
             }
         }),
 
+        totalEventsByMonth: builder.query<IEventResponse, ITotalEventsByMonth>({
+            query: params => `TotalEventsByMonth?month=${params.Month}&year=${params.Year}`
+        }),
+
         createEvent: builder.mutation<void, IEventCreate>({
             query: body => ({
                 url: `Create`,
                 method: 'POST',
                 body: body
             })
+        }),
+
+        statEventByYear: builder.query<IEventResponse, number>({
+            query: year => `StatEventByYear?year=${year}`
         }),
 
         updateEvent: builder.mutation<void, IEventUpdate>({
@@ -63,5 +71,7 @@ export const {
     useGetByIdEventQuery,
     useSearchEventQuery,
     useUpdateEventMutation,
-    useDeleteEventMutation
+    useDeleteEventMutation,
+    useStatEventByYearQuery,
+    useTotalEventsByMonthQuery
 } = eventApi
