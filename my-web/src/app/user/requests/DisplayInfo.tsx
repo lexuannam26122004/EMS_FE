@@ -20,9 +20,9 @@ function Page() {
         <Box
             sx={{
                 padding: '20px',
-                boxShadow: 'var(--box-shadow-paper)',
+                //boxShadow: 'var(--box-shadow-paper)',
                 borderRadius: '30px',
-                backgroundColor: 'var(--attendance-bg1)',
+                //backgroundColor: 'var(--attendance-bg1)',
                 //borderRadius: '12px',
                 overflow: 'hidden',
                 height: '100%',

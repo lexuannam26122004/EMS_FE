@@ -1,5 +1,6 @@
 export interface ITimeOffSearch {
     Id: number
+    FullName: string
     IsActive: boolean
     CreatedBy?: string
     CreatedDate?: Date
@@ -11,6 +12,8 @@ export interface ITimeOffSearch {
     EndDate: Date
     Content: string
     IsAccepted: boolean
+    EmployeeId?: string
+    AvatarPath: string | null
 }
 
 export interface ITimeOffCreate {

@@ -191,9 +191,9 @@ function ContractExpPage() {
     const counts = useMemo(
         () => ({
             0: errorsData?.length ?? 0,
-            1: errorsData?.filter(item => item.IsAccepted === false).length ?? 0,
+            1: errorsData?.filter(item => item.IsAccepted === null).length ?? 0,
             2: errorsData?.filter(item => item.IsAccepted === true).length ?? 0,
-            3: errorsData?.filter(item => item.IsAccepted === null).length ?? 0
+            3: errorsData?.filter(item => item.IsAccepted === false).length ?? 0
         }),
         [errorsData]
     )
@@ -217,7 +217,9 @@ function ContractExpPage() {
     return (
         <Box
             sx={{
-                padding: '35px',
+                paddingTop: '35px',
+                paddingLeft: '35px',
+                paddingRight: '35px',
                 boxShadow: 'var(--box-shadow-paper)',
                 borderRadius: '30px',
                 backgroundColor: 'var(--attendance-bg1)',
@@ -605,7 +607,14 @@ function ContractExpPage() {
                 </Box>
             </Paper>
 
-            <TimeOffPage handleToggle={() => setopenErrorReport(false)} open={openErrorReport} reportedBy={user.Id} />
+            <TimeOffPage
+                handleToggle={() => {
+                    setopenErrorReport(false)
+                    refetch()
+                }}
+                open={openErrorReport}
+                reportedBy={user.Id}
+            />
         </Box>
     )
 }
