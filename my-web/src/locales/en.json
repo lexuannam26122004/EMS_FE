@@ -530,6 +530,9 @@
             "ISACCEPTED": "Status",
             "STARTDATE": "Start Date of Leave",
             "ENDDATE": "End Date of Leave",
+            "PENDING": "Pending",
+            "AGREE": "Agree",
+            "REFUSE": "Refuse",
             "CREATE": {
                 "CREATE_TIMEOFF": "Add New Leave Information",
                 "SUCCESS": {
