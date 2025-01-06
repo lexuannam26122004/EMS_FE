@@ -25,7 +25,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
     const contract = ((contractResponse?.Data?.Records as IEmploymentContractSearch[]) || []).find(
         ct => ct.UserId === aspnetUserId
     )
-    const manager = employee.find(ep => ep.Id === contract?.ManagerId)
+    const manager = employee?.find(ep => ep.Id === contract?.ManagerId)
 
     const [openDetail, setOpenDetail] = useState(false)
 
@@ -211,7 +211,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                                     fontSize: '17px'
                                 }}
                             >
-                                {contract.ContractName}
+                                {contract?.ContractName}
                             </Typography>
                         </Box>
                         <Box>
@@ -230,7 +230,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                                     fontSize: '17px'
                                 }}
                             >
-                                {formatDate(contract.StartDate.toString())}
+                                {formatDate(contract?.StartDate.toString())}
                             </Typography>
                         </Box>
                         <Box>
@@ -249,7 +249,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                                     fontSize: '17px'
                                 }}
                             >
-                                {formatDate(contract.EndDate.toString())}
+                                {formatDate(contract?.EndDate.toString())}
                             </Typography>
                         </Box>
                         <Box>
@@ -268,7 +268,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                                     fontSize: '17px'
                                 }}
                             >
-                                {contract.BasicSalary}
+                                {contract?.BasicSalary}
                             </Typography>
                         </Box>
                         <Box>
@@ -287,7 +287,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                                     fontSize: '17px'
                                 }}
                             >
-                                {contract.WorkingHours}
+                                {contract?.WorkingHours}
                             </Typography>
                         </Box>
                         <Box>
@@ -306,7 +306,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                                     fontSize: '17px'
                                 }}
                             >
-                                {contract.ProbationPeriod}
+                                {contract?.ProbationPeriod}
                             </Typography>
                         </Box>
                         <Box>
@@ -325,7 +325,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                                     fontSize: '17px'
                                 }}
                             >
-                                {contract.TypeContract}
+                                {contract?.TypeContract}
                             </Typography>
                         </Box>
                     </Box>
@@ -355,7 +355,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                                     fontSize: '17px'
                                 }}
                             >
-                                {contract.Clause || 'N/A'}
+                                {contract?.Clause || 'N/A'}
                             </Typography>
                         </Box>
                     </Box>
@@ -385,7 +385,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                                     fontSize: '17px'
                                 }}
                             >
-                                {contract.TerminationClause || 'N/A'}
+                                {contract?.TerminationClause || 'N/A'}
                             </Typography>
                         </Box>
                     </Box>
@@ -415,7 +415,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                                     fontSize: '17px'
                                 }}
                             >
-                                {contract.Appendix || 'N/A'}
+                                {contract?.Appendix || 'N/A'}
                             </Typography>
                         </Box>
                     </Box>
