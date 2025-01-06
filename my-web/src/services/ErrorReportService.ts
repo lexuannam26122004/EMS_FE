@@ -95,6 +95,7 @@ export const ErrorReportApi = createApi({
 
 export const {
     useSearchErrorReportQuery,
+    useSearchByUserIdQuery,
     useCreateErrorReportsMutation,
     useUpdateErrorReportsMutation,
     useGetByIdErrorReportsQuery,

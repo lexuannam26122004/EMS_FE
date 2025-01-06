@@ -85,12 +85,11 @@ interface IGetAllErrorReport {
     ResolvedAvatarPath: string | null
 }
 
-
 interface IProps {
     errorsData: IGetAllErrorReport[]
     totalRecords: number
     type: number
-    
+
     onSort: (property: string) => void
 }
 
@@ -129,7 +128,7 @@ function TableErrorReport({ errorsData, totalRecords, type, onSort }: IProps) {
     ])
 
     const handleSort = (property: string) => {
-        onSort(property) 
+        onSort(property)
         if (orderBy === property) {
             setOrder(order === 'asc' ? 'desc' : 'asc')
         } else {
@@ -410,7 +409,7 @@ function TableErrorReport({ errorsData, totalRecords, type, onSort }: IProps) {
                                 <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                     <Box
                                         sx={{
-                                            //color: '#6bd6eb',
+                                            color: getStatusBgColor(row?.Status),
                                             fontSize: '15px',
                                             overflow: 'hidden',
                                             borderRadius: '8px',

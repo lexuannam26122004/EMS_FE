@@ -68,15 +68,15 @@ function ContractExpPage() {
     const [orderBy, setOrderBy] = useState<string>('')
     const [openErrorReport, setopenErrorReport] = useState(false)
 
-    const { data: responseDataGetMe, isFetching: isFetchingGetMe } = useGetAuthMeQuery()
-    const user = responseDataGetMe?.Data || null
+    const { data: responseGetMeData, isFetching: isFetchingGetMe } = useGetAuthMeQuery()
+    const infoMe = responseGetMeData?.Data
 
     const {
         data: timeoffResponse,
         isLoading: istimeoffsLoading,
         refetch
     } = useSearchByUserIdQuery({
-        userId: user?.Id ?? '',
+        userId: infoMe?.Id,
         filter: filter
     })
 
@@ -210,7 +210,7 @@ function ContractExpPage() {
         justifyContent: 'center'
     }
 
-    if (isFetchingGetMe || istimeoffsLoading) {
+    if (isFetchingGetMe || istimeoffsLoading || !infoMe) {
         return <Loading />
     }
 
@@ -613,7 +613,7 @@ function ContractExpPage() {
                     refetch()
                 }}
                 open={openErrorReport}
-                reportedBy={user.Id}
+                reportedBy={infoMe.Id}
             />
         </Box>
     )

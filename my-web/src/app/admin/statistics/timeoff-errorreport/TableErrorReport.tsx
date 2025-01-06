@@ -410,7 +410,7 @@ function TableErrorReport({ errorsData, totalRecords, type, onSort }: IProps) {
                                 <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                     <Box
                                         sx={{
-                                            //color: '#6bd6eb',
+                                            color: getStatusBgColor(row?.Status),
                                             fontSize: '15px',
                                             overflow: 'hidden',
                                             borderRadius: '8px',

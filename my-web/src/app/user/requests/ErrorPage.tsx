@@ -39,7 +39,7 @@ function DetailModal({ open, handleToggle, reportedBy, type, typeId }: Props) {
 
 
     const [createErrorReport, { isSuccess, isError, reset }] = useCreateErrorReportsMutation()
-    const { refetch } = useSearchErrorReportQuery()
+    const { refetch } = useSearchErrorReportQuery(null)
 
     useEffect(() => {
         if (isSuccess === true) {
@@ -218,7 +218,7 @@ function DetailModal({ open, handleToggle, reportedBy, type, typeId }: Props) {
                                         color: 'var(--error-color)'
                                     }
                                 }}
-                                value={`${user.EmployeeId} ${user.FullName}`}
+                                value={`${user?.EmployeeId} ${user?.FullName}`}
                                 InputProps={{
                                     readOnly: true
                                 }}
