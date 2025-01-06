@@ -553,7 +553,8 @@ const EmployeeTable: React.FC = () => {
                                         }
                                         onChange={handleSelectAllClick}
                                         sx={{
-                                            color: 'var(--text-color)'
+                                            color: 'var(--text-color)',
+                                            width: '48px'
                                         }}
                                     />
                                 </TableCell>
@@ -685,14 +686,16 @@ const EmployeeTable: React.FC = () => {
                                     <TableCell
                                         padding='checkbox'
                                         sx={{
-                                            borderColor: 'var(--border-color)'
+                                            borderColor: 'var(--border-color)',
+                                            paddingLeft: '12px'
                                         }}
                                     >
                                         <Checkbox
                                             checked={isSelected(user.Id)}
                                             onChange={() => handleCheckboxClick(user.Id)}
                                             sx={{
-                                                color: 'var(--text-color)'
+                                                color: 'var(--text-color)',
+                                                width: '48px'
                                             }}
                                         />
                                     </TableCell>

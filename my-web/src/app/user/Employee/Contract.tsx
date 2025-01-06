@@ -20,15 +20,12 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
     const [openErrorReport, setopenErrorReport] = useState(false)
 
     const { data: userResponse, isLoading: isUsersLoading } = useGetAllUsersQuery()
-    const employee = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
-
     const { data: contractResponse, isLoading: isContractsLoading } = useSearchEmploymentContractsQuery()
-
+    const employee = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
     const contract = ((contractResponse?.Data?.Records as IEmploymentContractSearch[]) || []).find(
         ct => ct.UserId === aspnetUserId
     )
-
-    const manager = employee.find(ep => ep.Id === contract.ManagerId)
+    const manager = employee.find(ep => ep.Id === contract?.ManagerId)
 
     const [openDetail, setOpenDetail] = useState(false)
 
