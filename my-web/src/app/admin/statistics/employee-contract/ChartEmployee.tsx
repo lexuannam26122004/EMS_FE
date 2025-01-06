@@ -3,6 +3,19 @@ import ReactECharts from 'echarts-for-react'
 import { useTheme } from 'next-themes'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import Loading from '@/components/Loading'
+import { useGetEmployeesStatsByYearsQuery } from '@/services/EmploymentContractService'
+
+interface IMonthlyStat {
+    Month: number
+    StartCount: number
+    EndCount: number
+    ContractsInMonth: number
+}
+
+interface IEmployeesStatsByYearsQuery {
+    MonthlyStats: IMonthlyStat[]
+}
 
 export default function Chart() {
     const { t } = useTranslation('common')
@@ -10,8 +23,15 @@ export default function Chart() {
     const currentYear = new Date().getFullYear()
     const [selectedYear, setSelectedYear] = useState(currentYear)
 
+    const { data: response, isLoading } = useGetEmployeesStatsByYearsQuery(selectedYear)
+    const data = response?.Data as IEmployeesStatsByYearsQuery
+
     const handleYearChange = (event: SelectChangeEvent<number>) => {
         setSelectedYear(event.target.value as number)
+    }
+
+    if (isLoading) {
+        return <Loading />
     }
 
     const option = {
@@ -30,7 +50,11 @@ export default function Chart() {
             }
         },
         legend: {
-            data: [t('Nhân viên mới'), t('Nhân viên nghỉ việc'), t('Nhân viên trong công ty')],
+            data: [
+                t('COMMON.EMPLOYEE-CONTRACT.NEW_EMPLOYEE'),
+                t('COMMON.EMPLOYEE-CONTRACT.OLD_EMPLOYEE'),
+                t('COMMON.EMPLOYEE-CONTRACT.EMPLOYEE')
+            ],
             textStyle: {
                 color: theme === 'light' ? '#000000' : '#ffffff',
                 fontFamily: 'Arial, sans-serif'
@@ -88,9 +112,9 @@ export default function Chart() {
         ],
         series: [
             {
-                name: t('Nhân viên mới'),
+                name: t('COMMON.EMPLOYEE-CONTRACT.NEW_EMPLOYEE'),
                 type: 'bar',
-                data: [selectedYear * 0 + 76, 75, 19, 48, 78, 31, 51, 78, 20, 6, 30, 70],
+                data: Array.from({ length: 12 }, (_, i) => data?.MonthlyStats[i]?.StartCount || 0),
                 markPoint: {
                     data: [
                         { type: 'max', name: 'Max' },
@@ -112,9 +136,9 @@ export default function Chart() {
                 }
             },
             {
-                name: t('Nhân viên nghỉ việc'),
+                name: t('COMMON.EMPLOYEE-CONTRACT.OLD_EMPLOYEE'),
                 type: 'bar',
-                data: [49, 31, 53, 88, 16, 74, 85, 73, 68, 93, 62, 89],
+                data: Array.from({ length: 12 }, (_, i) => data?.MonthlyStats[i]?.EndCount || 0),
                 barWidth: '22%', // Điều chỉnh độ rộng của cột
                 itemStyle: {
                     color: '#FF6F91',
@@ -137,9 +161,9 @@ export default function Chart() {
             },
 
             {
-                name: t('Nhân viên trong công ty'),
+                name: t('COMMON.EMPLOYEE-CONTRACT.EMPLOYEE'),
                 type: 'bar',
-                data: [50, 80, 60, 100, 70, 110, 90, 130, 110, 140, 120, 160],
+                data: Array.from({ length: 12 }, (_, i) => data?.MonthlyStats[i]?.ContractsInMonth || 0),
                 markPoint: {
                     data: [
                         { type: 'max', name: 'Max' },
@@ -171,7 +195,8 @@ export default function Chart() {
                 mt: '24px',
                 padding: '24px 24px 15px',
                 overflow: 'hidden',
-                borderRadius: '20px',boxShadow: 'var(--box-shadow-paper)',
+                borderRadius: '20px',
+                boxShadow: 'var(--box-shadow-paper)',
                 backgroundColor: 'var(--background-item)'
             }}
         >
@@ -190,7 +215,7 @@ export default function Chart() {
                             color: 'var(--text-color)'
                         }}
                     >
-                        {t('Biểu đồ thống kê nhân viên')}
+                        {t('COMMON.EMPLOYEE-CONTRACT.STAFF_STATISTICS')}
                     </Typography>
                 </Box>
                 <FormControl sx={{ width: '90px' }}>

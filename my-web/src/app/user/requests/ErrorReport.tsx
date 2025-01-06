@@ -11,10 +11,9 @@ import {
     InputLabel,
     FormControl,
     TextField,
-    InputAdornment,
-    Button
+    InputAdornment
 } from '@mui/material'
-import { CirclePlus } from 'lucide-react'
+
 import { useEffect, useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import SearchIcon from '@mui/icons-material/Search'
@@ -747,36 +746,6 @@ function ContractExpPage() {
                                 <MenuItem value={'Timekeeping'}>{t('COMMON.NOTIFICATION_TYPE.TIMEKEEPING')}</MenuItem>
                             </Select>
                         </FormControl>
-                    </Box>
-
-                    <Box
-                        display='flex'
-                        alignItems='center'
-                        justifyContent='flex-end' // Căn phải
-                        gap='20px'
-                        width='100%'
-                        borderRadius='10px' // Đảm bảo Box chiếm toàn bộ chiều rộng
-                    >
-                        <Button
-                            variant='contained'
-                            startIcon={<CirclePlus />}
-                            sx={{
-                                height: '53px',
-                                backgroundColor: 'var(--button-color)',
-                                width: 'auto',
-                                padding: '0px 30px',
-                                '&:hover': {
-                                    backgroundColor: 'var(--hover-button-color)'
-                                },
-                                fontSize: '16px',
-                                fontWeight: 'bold',
-                                whiteSpace: 'nowrap',
-                                textTransform: 'none',
-                                borderRadius: '10px'
-                            }}
-                        >
-                            {t('COMMON.BUTTON.CREATE')}
-                        </Button>
                     </Box>
                 </Box>
 

@@ -3,18 +3,47 @@
 import { Box, Paper, Typography } from '@mui/material'
 import { TrendingDown, TrendingUp } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
+import { useGetTimeOffStatisticsByMonthAndYearQuery } from '@/services/TimeOffService'
+import { useGetCountErrorReportsInMonthQuery } from '@/services/ErrorReportService'
+import Loading from '@/components/Loading'
+
+interface ITimeOffStats {
+    CurrentMonthCount: number
+    PreviousMonthCount: number
+    PercentageIncrease: number
+}
 
 function Page() {
     const { t } = useTranslation('common')
 
-    const newEmployeesCount = 5
-    const newEmployeesPercent = -7.5
+    const date = new Date()
+    const month = date.getMonth() + 1
+    const year = date.getFullYear()
+    const { data: responseTimeOff, isLoading: isLoadingTimeOff } = useGetTimeOffStatisticsByMonthAndYearQuery({
+        Month: month,
+        Year: year
+    })
+    const { data: responseErrorReport, isLoading: isLoadingErrorReport } = useGetCountErrorReportsInMonthQuery({
+        Month: month,
+        Year: year
+    })
 
-    const currentEmployeesCount = 50
-    const currentEmployeesPercent = 72.0
+    const dataTimeOff = responseTimeOff?.Data as ITimeOffStats
+    const dataErrorReport = responseErrorReport?.Data as ITimeOffStats
 
-    const resignedEmployeesCount = 3
-    const resignedEmployeesPercent = -5.0
+    const newEmployeesCount = dataTimeOff?.CurrentMonthCount
+    const newEmployeesPercent = dataTimeOff?.PercentageIncrease
+
+    const currentEmployeesCount = dataErrorReport?.CurrentMonthCount
+    const currentEmployeesPercent = dataErrorReport?.PercentageIncrease
+
+    const Count = dataTimeOff?.PreviousMonthCount + dataErrorReport?.PreviousMonthCount
+    const resignedEmployeesCount = dataTimeOff?.CurrentMonthCount + dataErrorReport?.CurrentMonthCount
+    const resignedEmployeesPercent = Count === 0 ? null : ((resignedEmployeesCount - Count) / Count) * 100
+
+    if (isLoadingTimeOff || isLoadingErrorReport) {
+        return <Loading />
+    }
 
     return (
         <Box>
@@ -77,7 +106,7 @@ function Page() {
                             color: 'var(--reward-title-color)'
                         }}
                     >
-                        {t('Tổng số đơn nghỉ phép')}
+                        {t('COMMON.TIMEOFF_ERROR.TOTAL_TIMEOOF')}
                     </Typography>
                     <Typography
                         sx={{
@@ -176,7 +205,7 @@ function Page() {
                             color: 'var(--reward-title-color)'
                         }}
                     >
-                        {t('Tổng số đơn báo cáo lỗi')}
+                        {t('COMMON.TIMEOFF_ERROR.TOTAL_ERROR')}
                     </Typography>
                     <Typography
                         sx={{
@@ -280,7 +309,7 @@ function Page() {
                             color: 'var(--reward-title-color)'
                         }}
                     >
-                        {t('Tổng số yêu cầu')}
+                        {t('COMMON.TIMEOFF_ERROR.TOTAL_REQUEST')}
                     </Typography>
                     <Typography
                         sx={{

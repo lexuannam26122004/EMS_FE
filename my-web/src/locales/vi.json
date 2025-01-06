@@ -441,8 +441,11 @@
             "REASON": "Lý do nghỉ phép",
             "CONTENT": "Nội dung nghỉ phép",
             "ISACCEPTED": "Trạng thái",
-            "STARTDATE": "Ngày bắt đầu nghỉ phép",
-            "ENDDATE": "Ngày kết thúc nghỉ phép",
+            "STARTDATE": "Ngày bắt đầu",
+            "ENDDATE": "Ngày kết thúc",
+            "PENDING": "Chưa giải quyết",
+            "AGREE": "Đồng ý",
+            "REFUSE": "Từ chối",
             "CREATE": {
                 "CREATE_TIMEOFF": "Thêm mới thông tin nghỉ phép",
                 "SUCCESS": {
@@ -625,7 +628,8 @@
             "ATTENDANCE_PERCENT": "Tỉ lệ chấm công {{status}} {{x}}% so với hôm qua",
             "DETAIL_EMPLOYEE": "Thông tin chi tiết nhân viên",
             "DOWNLOAD_INFO": "Tải thông tin",
-            "LIST_ATTENDANCE": "Danh sách chấm công"
+            "LIST_ATTENDANCE": "Danh sách chấm công",
+            "ERROR_REPORT": "Báo lỗi"
         },
         "INSURANCE_BENEFIT": {
             "LAST_MONTH": "tháng trước",
@@ -722,6 +726,33 @@
             "CHANGE_PASSWORD": "Đổi mật khẩu",
             "CURRENT_PASSWORD": "Mật khẩu hiện tại",
             "LEAST_8_CHARACTERS": "Ít nhất 8 ký tự"
+        },
+        "EMPLOYEE-CONTRACT": {
+            "TOTAL_NEW_EMPLOYEE": "Tổng số nhân viên mới ",
+            "TOTAL_OLD_EMPLOYEE": "Tổng số nhân viên nghỉ việc",
+            "TOTAL_EMPLOYEE": "Tổng số nhân viên trong công ty",
+            "TOTAL_CONTRACT": "Tổng số hợp đồng mới",
+            "NEW_EMPLOYEE": "Nhân viên mới ",
+            "OLD_EMPLOYEE": "Nhân viên nghỉ việc",
+            "EMPLOYEE": "Nhân viên trong công ty",
+            "STAFF_STATISTICS": "Biểu đồ thống kê nhân viên",
+            "GENDER_STATISTICS": "Giới tính của nhân viên",
+            "GENDER_STATISTICS_MALE": "Nam",
+            "GENDER_STATISTICS_FEMALE": "Nữ",
+            "GENDER_STATISTICS_OTHER": "Khác"
+        },
+        "TIMEOFF_ERROR": {
+            "TOTAL_TIMEOOF": "Tổng số đơn nghỉ phép",
+            "TOTAL_ERROR": "Tổng số đơn báo lỗi",
+            "TOTAL_REQUEST": "Tổng số yêu cầu",
+            "TOTAL_TIMEOOF_APPROVED": "Tổng số đơn nghỉ phép đã duyệt",
+            "TOTAL_TIMEOOF_NOT_APPROVED": "Tổng số đơn nghỉ phép chưa duyệt",
+            "TOTAL_ERROR_APPROVED": "Tổng số đơn báo lỗi đã duyệt",
+            "TOTAL_ERROR_NOT_APPROVED": "Tổng số đơn báo lỗi chưa duyệt",
+            "REQUEST_STATISTICS_CHART": "Biểu đồ thống kê yêu cầu",
+            "ERROR_STATISTICS_CHART_HIGH": "Cao",
+            "ERROR_STATISTICS_CHART_SHORT": "Thấp",
+            "ERROR_STATISTICS_CHART": "Biểu đồ thống kê báo lỗi"
         }
     }
 }

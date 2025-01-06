@@ -74,7 +74,7 @@ const CreateTimeOff = () => {
             Reason: reason,
             StartDate: new Date(startDate),
             EndDate: new Date(endDate),
-            IsAccepted: isAccepted === 'da' ? true : false,
+            IsAccepted: isAccepted === 'da' ? true : isAccepted === 'chua' ? false : null,
             Content: content,
             IsActive: true
         }
@@ -110,7 +110,7 @@ const CreateTimeOff = () => {
             Reason: reason,
             StartDate: new Date(startDate),
             EndDate: new Date(endDate),
-            IsAccepted: isAccepted === 'da' ? true : false,
+            IsAccepted: isAccepted === 'da' ? true : isAccepted === 'chua' ? false : null,
             Content: content,
             IsActive: true
         }
@@ -355,8 +355,9 @@ const CreateTimeOff = () => {
                                     }
                                 }}
                             >
-                                <MenuItem value='da'>Đã duyệt</MenuItem>
-                                <MenuItem value='chua'>Chưa duyệt</MenuItem>
+                                <MenuItem value='da'>{t('COMMON.TIMEOFF.AGREE')} </MenuItem>
+                                <MenuItem value='chua'>{t('COMMON.TIMEOFF.REFUSE')}</MenuItem>
+                                <MenuItem value='dang'>{t('COMMON.TIMEOFF.PENDING')}</MenuItem>
                             </Select>
                         </FormControl>
                         <Typography

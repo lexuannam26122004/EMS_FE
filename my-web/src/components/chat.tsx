@@ -1,10 +1,11 @@
 import { MessageCircleMore } from 'lucide-react'
 import { Box, Tooltip, TextField, IconButton } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Close as CloseIcon, Send as SendIcon } from '@mui/icons-material'
 import { useCreateMessageMutation, useGetAllMessageQuery } from '@/services/MessageService'
 import { IMessageGetAll } from '@/models/Message'
 import { GoogleGenerativeAI } from '@google/generative-ai'
+import { useGetAuthMeQuery } from '@/services/AuthService'
 
 // Access your API key as an environment variable (see "Set up your API key" above)
 const genAI = new GoogleGenerativeAI('AIzaSyAGW_ofMFvk9YoadeM9eq9j931Bb_58l5s')
@@ -33,10 +34,19 @@ export default function ChatButton() {
     const { data: responseData } = useGetAllMessageQuery()
     const messageData = (responseData?.Data as IMessageGetAll[]) || []
 
+    const { data: meData } = useGetAuthMeQuery()
+    const user = meData?.Data || null
+
     const handleToggleChat = () => {
         setIsOpen(true)
         setIsAppear(false)
     }
+
+    useEffect(() => {
+        if (!isAppear && boxRef.current) {
+            boxRef.current.scrollTop = boxRef.current.scrollHeight
+        }
+    }, [isAppear, messageData])
 
     const handleCloseChat = () => {
         setIsOpen(false)
@@ -51,7 +61,7 @@ export default function ChatButton() {
 
             try {
                 // Gọi API createMessage
-                await createMessage({ Content: newMessage, Type: type })
+                await createMessage({ Content: newMessage, Type: type, UserId: user?.Id })
                     .unwrap()
                     .then(response => {
                         console.log('Message sent successfully:', response)
@@ -62,7 +72,7 @@ export default function ChatButton() {
                 const modelResponse = await runPrompt(newMessage) // Gửi tin nhắn người dùng và nhận phản hồi từ API
 
                 // Lưu phản hồi của chatbot vào cơ sở dữ liệu
-                await createMessage({ Content: modelResponse, Type: false }).unwrap()
+                await createMessage({ Content: modelResponse, Type: false, UserId: user?.Id }).unwrap()
 
                 // Cập nhật lại danh sách tin nhắn để hiển thị phản hồi
                 setMessages([...messages, { text: modelResponse, sender: 'bot' }])
@@ -111,6 +121,23 @@ export default function ChatButton() {
         } catch (err) {
             console.error('Lỗi khi nhận phản hồi từ mô hình:', err)
         }
+    }
+
+    const boxRef = useRef(null) // Tạo tham chiếu đến Box
+
+    useEffect(() => {
+        // Cuộn xuống cuối khi mở Box hoặc khi messageData thay đổi
+        if (boxRef.current) {
+            boxRef.current.scrollTop = boxRef.current.scrollHeight // Cuộn xuống cuối
+        }
+    }, [messageData])
+
+    const [clickedMessage, setClickedMessage] = useState(null)
+    const handleClickMessage = id => {
+        setClickedMessage(id)
+        setTimeout(() => {
+            setClickedMessage(null) // Ẩn sau 5 giây
+        }, 5000)
     }
 
     // Hàm phân tích cảm xúc
@@ -231,6 +258,7 @@ export default function ChatButton() {
 
                     {/* Chat content */}
                     <Box
+                        ref={boxRef} // Gắn ref vào Box chứa tin nhắn
                         sx={{
                             flex: 1,
                             padding: 2,
@@ -241,10 +269,19 @@ export default function ChatButton() {
                         }}
                     >
                         {messageData.map((message, index) => (
-                            <Tooltip title={formatDate(message.CreatedAt)} key={index}>
+                            <Box
+                                key={index}
+                                sx={{
+                                    position: 'relative', // Để định vị thời gian
+                                    display: 'flex',
+                                    flexDirection: 'column', // Bố cục theo cột
+                                    alignItems: message.Type === true ? 'flex-end' : 'flex-start' // Canh theo loại tin nhắn
+                                }}
+                                onClick={() => handleClickMessage(index)} // Xử lý click
+                            >
+                                {/* Tin nhắn */}
                                 <Box
                                     sx={{
-                                        alignSelf: message.Type === true ? 'flex-end' : 'flex-start',
                                         backgroundColor: message.Type === true ? 'var(--button-color)' : '#f1f1f1',
                                         color: message.Type === true ? 'white' : 'black',
                                         borderRadius: '12px',
@@ -256,7 +293,30 @@ export default function ChatButton() {
                                 >
                                     {message.Content}
                                 </Box>
-                            </Tooltip>
+
+                                {/* Thời gian (hiển thị nếu được click) */}
+                                {clickedMessage === index && (
+                                    <Box
+                                        sx={{
+                                            position: 'absolute',
+                                            top: '100%', // Hiển thị ngay bên dưới tin nhắn
+                                            left: message.Type === true ? 'auto' : '0', // Canh trái/phải theo loại tin nhắn
+                                            right: message.Type === true ? '0' : 'auto', // Canh phải/trái theo loại tin nhắn
+                                            marginTop: '3px', // Cách box tin nhắn 3px
+                                            backgroundColor: '#f9f9f9',
+                                            color: '#333',
+                                            borderRadius: '4px',
+                                            fontSize: '12px',
+                                            padding: '2px 8px',
+                                            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                                            whiteSpace: 'nowrap',
+                                            zIndex: 10 // Đảm bảo hiển thị phía trên các phần tử khác
+                                        }}
+                                    >
+                                        {formatDate(message.CreatedAt)}
+                                    </Box>
+                                )}
+                            </Box>
                         ))}
                     </Box>
 

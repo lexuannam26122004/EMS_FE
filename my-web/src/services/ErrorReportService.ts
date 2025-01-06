@@ -4,6 +4,10 @@ interface ErrorReportResponse {
     Success: boolean
     Data: any
 }
+interface IMonthAndYear {
+    Month: number
+    Year: number
+}
 
 const apiPath = 'https://localhost:44381/api/admin/ErrorReport'
 
@@ -13,6 +17,14 @@ export const ErrorReportApi = createApi({
     endpoints: builder => ({
         searchErrorReport: builder.query<ErrorReportResponse, void>({
             query: () => 'Search/search'
+        }),
+
+        getCountErrorReportsInMonth: builder.query<ErrorReportResponse, IMonthAndYear>({
+            query: params => `CountErrorReportsInMonth?year=${params.Year}&month=${params.Month}`
+        }),
+
+        getCountErrorReportsByTypeAndYear: builder.query<ErrorReportResponse, number>({
+            query: params => `CountErrorReportsByTypeAndYear?year=${params}`
         }),
 
         createErrorReports: builder.mutation<void, IErrorReportCreate>({
@@ -48,5 +60,7 @@ export const {
     useCreateErrorReportsMutation,
     useUpdateErrorReportsMutation,
     useGetByIdErrorReportsQuery,
+    useGetCountErrorReportsInMonthQuery,
+    useGetCountErrorReportsByTypeAndYearQuery,
     useChangeStatusErrorReportsMutation
 } = ErrorReportApi

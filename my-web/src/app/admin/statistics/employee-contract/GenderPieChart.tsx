@@ -5,9 +5,26 @@ import ReactECharts from 'echarts-for-react'
 import { Box, Paper, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'next-themes'
+import Loading from '@/components/Loading'
+import { useGetEmployeeCountByGenderQuery } from '@/services/AspNetUserService'
+
+export interface IUserByGenderGetAllDashboard {
+    Male: number
+    Female: number
+    Other: number
+}
+
 const GenderPieChart: React.FC = () => {
     const { t } = useTranslation('common')
     const { theme } = useTheme()
+
+    const { data, isFetching } = useGetEmployeeCountByGenderQuery()
+    const gender = data?.Data as IUserByGenderGetAllDashboard
+
+    if (isFetching) {
+        return <Loading />
+    }
+
     const option = {
         textStyle: {
             color: theme === 'light' ? '#000000' : '#ffffff',
@@ -15,18 +32,17 @@ const GenderPieChart: React.FC = () => {
         },
         tooltip: {
             trigger: 'item',
-            formatter: '{a} <br/>{b}: {c} ({d}%)'
+            formatter: '{b}: {c} ({d}%)'
         },
         legend: {
             top: 'bottom',
             textStyle: {
                 color: theme === 'light' ? '#000000' : '#ffffff',
                 fontFamily: 'Arial, sans-serif'
-            },
+            }
         },
         series: [
             {
-                name: 'Gender Distribution',
                 type: 'pie',
                 radius: ['40%', '70%'],
                 avoidLabelOverlap: false,
@@ -49,9 +65,9 @@ const GenderPieChart: React.FC = () => {
                     show: false
                 },
                 data: [
-                    { value: 1048, name: 'Male' },
-                    { value: 735, name: 'Female' },
-                    { value: 580, name: 'Other' }
+                    { value: gender?.Male, name: t('COMMON.EMPLOYEE-CONTRACT.GENDER_STATISTICS_MALE') },
+                    { value: gender?.Female, name: t('COMMON.EMPLOYEE-CONTRACT.GENDER_STATISTICS_FEMALE') },
+                    { value: gender?.Other, name: t('COMMON.EMPLOYEE-CONTRACT.GENDER_STATISTICS_OTHER') }
                 ]
             }
         ]
@@ -61,7 +77,8 @@ const GenderPieChart: React.FC = () => {
             elevation={0}
             sx={{
                 width: '100%',
-                padding: '24px',boxShadow: 'var(--box-shadow-paper)',
+                padding: '24px',
+                boxShadow: 'var(--box-shadow-paper)',
                 backgroundColor: 'var(--background-item)',
                 borderRadius: '15px',
                 height: '100%'
@@ -75,7 +92,7 @@ const GenderPieChart: React.FC = () => {
                         color: 'var(--text-color)'
                     }}
                 >
-                    {t('Giới tính của Nhân viên')}
+                    {t('COMMON.EMPLOYEE-CONTRACT.GENDER_STATISTICS')}
                 </Typography>
             </Box>
             <ReactECharts option={option} style={{ height: '450px', width: '100%', marginTop: '-50px' }} />

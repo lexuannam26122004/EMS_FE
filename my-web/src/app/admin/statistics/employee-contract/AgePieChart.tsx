@@ -4,10 +4,21 @@ import ReactECharts from 'echarts-for-react'
 import { Box, Paper, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'next-themes'
+import { useGetEmployeeCountByAgeQuery } from '@/services/AspNetUserService'
+import { IUserByAgeGetAllDashboard } from '@/models/AspNetUser'
+import Loading from '@/components/Loading'
+
 const AgePieChart: React.FC = () => {
     const { t } = useTranslation('common')
     const { theme } = useTheme()
-    
+
+    const { data, isLoading } = useGetEmployeeCountByAgeQuery()
+    const ages = data?.Data as IUserByAgeGetAllDashboard
+
+    if (isLoading) {
+        return <Loading />
+    }
+
     const option = {
         textStyle: {
             color: theme === 'light' ? '#000000' : '#ffffff',
@@ -18,7 +29,7 @@ const AgePieChart: React.FC = () => {
             textStyle: {
                 color: theme === 'light' ? '#000000' : '#ffffff',
                 fontFamily: 'Arial, sans-serif'
-            },
+            }
         },
         tooltip: {
             trigger: 'item',
@@ -45,11 +56,11 @@ const AgePieChart: React.FC = () => {
                     show: false
                 },
                 data: [
-                    { value: 10, name: '0-18 years' },
-                    { value: 10, name: '19-35 years' },
-                    { value: 10, name: '36-50 years' },
-                    { value: 10, name: '51-65 years' },
-                    { value: 10, name: '66+ years' }
+                    { value: ages?.Between0And18, name: '0-18' },
+                    { value: ages?.Between19And35, name: '19-35' },
+                    { value: ages?.Between36And50, name: '36-50' },
+                    { value: ages?.Between51And65, name: '51-65' },
+                    { value: ages?.GreaterThan65, name: '66+' }
                 ]
             }
         ]
@@ -59,7 +70,8 @@ const AgePieChart: React.FC = () => {
             elevation={0}
             sx={{
                 width: '100%',
-                padding: '24px',boxShadow: 'var(--box-shadow-paper)',
+                padding: '24px',
+                boxShadow: 'var(--box-shadow-paper)',
                 backgroundColor: 'var(--background-item)',
                 borderRadius: '15px',
                 height: '100%'

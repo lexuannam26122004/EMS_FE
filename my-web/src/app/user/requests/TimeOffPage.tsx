@@ -6,77 +6,76 @@ import { useTranslation } from 'react-i18next'
 import { SaveIcon } from 'lucide-react'
 import React from 'react'
 import LoadingButton from '@mui/lab/LoadingButton'
-import { useCreateErrorReportsMutation, useSearchErrorReportQuery } from '@/services/ErrorReportService'
+
 import { useToast } from '@/hooks/useToast'
 import { useEffect, useState } from 'react'
-import { IAspNetUserGetAll } from '@/models/AspNetUser'
-import { useGetAllUsersQuery } from '@/services/AspNetUserService'
-import Loading from '@/components/Loading'
+import { useCreateTimeOffsMutation } from '@/services/TimeOffService'
 
 interface Props {
     open: boolean
     handleToggle: () => void
     reportedBy: string
-    type?: string
-    typeId?: string
 }
 
-function DetailModal({ open, handleToggle, reportedBy, type, typeId }: Props) {
+const getCurrentDateTime = () => {
+    const now = new Date()
+    const year = now.getFullYear()
+    const month = String(now.getMonth() + 1).padStart(2, '0')
+    const day = String(now.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+}
+
+function DetailModal({ open, handleToggle, reportedBy }: Props) {
     const { t } = useTranslation('common')
     const toast = useToast()
     const [isSaveLoading, setIsSaveLoading] = useState(false)
     const [isSubmit, setIsSubmit] = useState(false)
 
-    const [Type, setType] = useState(type)
-    const reportedDate = new Date()
-    const [TypeId, setTypeId] = useState(typeId)
-    const [description, setDescription] = useState('')
+    const [reason, setReason] = useState('')
+    const [startDate, setStartDate] = useState('')
+    const [endDate, setEndDate] = useState('')
+    const [content, setContent] = useState('')
 
-    const { data: userResponse, isLoading: isUsersLoading } = useGetAllUsersQuery()
-    const employee = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
-
-    const user = employee.find(em => em.Id === reportedBy);
-
-
-    const [createErrorReport, { isSuccess, isError, reset }] = useCreateErrorReportsMutation()
-    const { refetch } = useSearchErrorReportQuery()
+    const [createTimeOff, { isSuccess, isError, reset }] = useCreateTimeOffsMutation()
 
     useEffect(() => {
         if (isSuccess === true) {
-            toast(t('Tạo báo lỗi thành công'), 'success')
-            refetch()
+            toast(t('COMMON.TIMEOFF.CREATE.SUCCESS.CREATE_TIMEOFF'), 'success')
             reset()
         }
         if (isError === true) {
-            toast(t('Tạo báo lỗi thất bại'), 'error')
+            toast(t('COMMON.TIMEOFF.CREATE.ERROR.CREATE_TIMEOFF'), 'error')
             reset()
         }
-    }, [isSuccess, isError, toast, t, reset, refetch])
+    }, [isSuccess, isError, toast, t, reset])
+
+    useEffect(() => {
+        setStartDate(getCurrentDateTime())
+        setEndDate(getCurrentDateTime())
+    }, [])
 
     const handleSave = async () => {
         setIsSaveLoading(true)
         setIsSubmit(true)
-        if (reportedBy === '' || Type === '' || TypeId === '') {
+        if (reason === '' || startDate === '' || endDate === '') {
             setIsSaveLoading(false)
             return
         }
         const data = {
-            ReportedBy: reportedBy,
-            Type: Type,
-            TypeId: TypeId,
-            ReportedDate: reportedDate,
-            Description: description
+            UserId: reportedBy,
+            Reason: reason,
+            StartDate: new Date(startDate),
+            EndDate: new Date(endDate),
+            IsAccepted: null,
+            Content: content,
+            IsActive: true
         }
         try {
-            await createErrorReport(data).unwrap()
+            await createTimeOff(data).unwrap()
         } finally {
             setIsSaveLoading(false)
         }
         setIsSubmit(false)
-    }
-
-    if (isUsersLoading) {
-        return <Loading />
     }
 
     return (
@@ -127,7 +126,7 @@ function DetailModal({ open, handleToggle, reportedBy, type, typeId }: Props) {
                             color: 'var(--text-color)'
                         }}
                     >
-                        {t('Điền thông tin báo cáo lỗi')}
+                        {t('COMMON.TIMEOFF.CREATE.CREATE_TIMEOFF')}
                     </Typography>
 
                     <Box
@@ -151,10 +150,12 @@ function DetailModal({ open, handleToggle, reportedBy, type, typeId }: Props) {
                     </Box>
                 </Box>
 
-                <Box
+                <Paper
+                    elevation={0}
                     sx={{
                         width: '100%',
                         height: '90%',
+                        overflow: 'hidden',
                         backgroundColor: 'var(--background-item)',
                         padding: '24px',
                         boxShadow: 'var(--box-shadow-paper)'
@@ -175,9 +176,10 @@ function DetailModal({ open, handleToggle, reportedBy, type, typeId }: Props) {
                         >
                             <TextField
                                 variant='outlined'
-                                label={t('Thông tin nhân viên') + '*'}
-                                type='text'
+                                label={t('COMMON.TIMEOFF.STARTDATE') + '*'}
+                                type='date'
                                 fullWidth
+                                {...(isSubmit && startDate === '' && { error: true })}
                                 sx={{
                                     '& fieldset': {
                                         borderRadius: '8px',
@@ -218,17 +220,15 @@ function DetailModal({ open, handleToggle, reportedBy, type, typeId }: Props) {
                                         color: 'var(--error-color)'
                                     }
                                 }}
-                                value={`${user.EmployeeId} ${user.FullName}`}
-                                InputProps={{
-                                    readOnly: true
-                                }}
+                                value={startDate}
+                                onChange={e => setStartDate(e.target.value)}
                             />
                             <Typography
                                 sx={{
                                     color: 'red',
                                     margin: '1px 0 0 10px',
                                     fontSize: '12px',
-                                    visibility: 'hidden'
+                                    visibility: isSubmit && startDate === '' ? 'visible' : 'hidden'
                                 }}
                             >
                                 {t('COMMON.TEXTFIELD.REQUIRED')}
@@ -242,9 +242,10 @@ function DetailModal({ open, handleToggle, reportedBy, type, typeId }: Props) {
                         >
                             <TextField
                                 variant='outlined'
-                                label={t('Ngày tạo báo cáo') + '*'}
+                                label={t('COMMON.TIMEOFF.ENDDATE') + '*'}
                                 type='date'
                                 fullWidth
+                                {...(isSubmit && endDate === '' && { error: true })}
                                 sx={{
                                     '& fieldset': {
                                         borderRadius: '8px',
@@ -285,17 +286,15 @@ function DetailModal({ open, handleToggle, reportedBy, type, typeId }: Props) {
                                         color: 'var(--error-color)'
                                     }
                                 }}
-                                value={reportedDate.toISOString().split('T')[0]}
-                                InputProps={{
-                                    readOnly: true
-                                }}
+                                value={endDate}
+                                onChange={e => setEndDate(e.target.value)}
                             />
                             <Typography
                                 sx={{
                                     color: 'red',
                                     margin: '1px 0 0 10px',
                                     fontSize: '12px',
-                                    visibility: 'hidden'
+                                    visibility: isSubmit && endDate === '' ? 'visible' : 'hidden'
                                 }}
                             >
                                 {t('COMMON.TEXTFIELD.REQUIRED')}
@@ -308,19 +307,23 @@ function DetailModal({ open, handleToggle, reportedBy, type, typeId }: Props) {
                             display: 'flex',
                             justifyContent: 'center',
                             gap: '20px',
-                            mt: '20px'
+                            mt: '15px'
                         }}
                     >
                         <Box
                             sx={{
-                                width: 'calc(50% - 10px)'
+                                width: '100%'
                             }}
                         >
                             <TextField
                                 variant='outlined'
-                                label={t('Loại')}
+                                label={t('COMMON.TIMEOFF.REASON') + '*'}
+                                id='fullWidth'
                                 fullWidth
-                                {...(isSubmit && Type === '' && { error: true })}
+                                multiline
+                                {...(isSubmit && reason === '' && { error: true })}
+                                minRows={1}
+                                maxRows={12}
                                 sx={{
                                     '& fieldset': {
                                         borderRadius: '8px',
@@ -361,86 +364,15 @@ function DetailModal({ open, handleToggle, reportedBy, type, typeId }: Props) {
                                         color: 'var(--error-color)'
                                     }
                                 }}
-                                value={t(Type)}
-                                onChange={e => setType(e.target.value)}
-                                InputProps={{
-                                    readOnly: Type !== ''
-                                }}
+                                value={reason}
+                                onChange={e => setReason(e.target.value)}
                             />
                             <Typography
                                 sx={{
-                                    color: 'var(--error-color)',
+                                    color: 'red',
                                     margin: '1px 0 0 10px',
                                     fontSize: '12px',
-                                    visibility: isSubmit && Type === '' ? 'visible' : 'hidden'
-                                }}
-                            >
-                                {t('COMMON.TEXTFIELD.REQUIRED')}
-                            </Typography>
-                        </Box>
-
-                        <Box
-                            sx={{
-                                width: 'calc(50% - 10px)'
-                            }}
-                        >
-                            <TextField
-                                variant='outlined'
-                                label={t('Mã loại')}
-                                fullWidth
-                                {...(isSubmit && TypeId === '' && { error: true })}
-                                sx={{
-                                    '& fieldset': {
-                                        borderRadius: '8px',
-                                        color: 'var(--text-color)',
-                                        borderColor: 'var(--border-color)'
-                                    },
-                                    '& .MuiInputBase-root': {
-                                        paddingRight: '0px'
-                                    },
-                                    '& .MuiInputBase-input': {
-                                        paddingRight: '12px',
-                                        color: 'var(--text-color)',
-                                        fontSize: '16px',
-                                        '&::placeholder': {
-                                            color: 'var(--placeholder-color)',
-                                            opacity: 1
-                                        }
-                                    },
-                                    '& .MuiOutlinedInput-root:hover fieldset': {
-                                        borderColor: 'var(--hover-field-color)'
-                                    },
-                                    '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
-                                        borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
-                                    },
-                                    '& .MuiOutlinedInput-root.Mui-error fieldset': {
-                                        borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
-                                    },
-                                    '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                        borderColor: 'var(--selected-field-color)'
-                                    },
-                                    '& .MuiInputLabel-root': {
-                                        color: 'var(--text-label-color)'
-                                    },
-                                    '& .MuiInputLabel-root.Mui-focused': {
-                                        color: 'var(--selected-field-color)'
-                                    },
-                                    '& .MuiInputLabel-root.Mui-error': {
-                                        color: 'var(--error-color)'
-                                    }
-                                }}
-                                value={TypeId}
-                                onChange={e => setTypeId(e.target.value)}
-                                InputProps={{
-                                    readOnly: TypeId !== ''
-                                }}
-                            />
-                            <Typography
-                                sx={{
-                                    color: 'var(--error-color)',
-                                    margin: '1px 0 0 10px',
-                                    fontSize: '12px',
-                                    visibility: isSubmit && TypeId === '' ? 'visible' : 'hidden'
+                                    visibility: isSubmit && reason === '' ? 'visible' : 'hidden'
                                 }}
                             >
                                 {t('COMMON.TEXTFIELD.REQUIRED')}
@@ -450,14 +382,14 @@ function DetailModal({ open, handleToggle, reportedBy, type, typeId }: Props) {
 
                     <TextField
                         variant='outlined'
-                        label={t('Nội dung')}
+                        label={t('COMMON.TIMEOFF.CONTENT')}
                         id='fullWidth'
                         fullWidth
                         multiline
                         minRows={4}
-                        maxRows={4}
+                        maxRows={12}
                         sx={{
-                            mt: '20px',
+                            mt: '15px',
                             '& fieldset': {
                                 borderRadius: '8px',
                                 color: 'var(--text-color)',
@@ -497,8 +429,8 @@ function DetailModal({ open, handleToggle, reportedBy, type, typeId }: Props) {
                                 color: 'var(--error-color)'
                             }
                         }}
-                        value={description}
-                        onChange={e => setDescription(e.target.value)}
+                        value={content}
+                        onChange={e => setContent(e.target.value)}
                     />
 
                     <Box
@@ -533,7 +465,7 @@ function DetailModal({ open, handleToggle, reportedBy, type, typeId }: Props) {
                             {t('COMMON.BUTTON.SAVE')}
                         </LoadingButton>
                     </Box>
-                </Box>
+                </Paper>
             </Paper>
         </Modal>
     )

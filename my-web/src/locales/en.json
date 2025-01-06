@@ -533,8 +533,11 @@
             "REASON": "Reason for Leave",
             "CONTENT": "Leave Details",
             "ISACCEPTED": "Status",
-            "STARTDATE": "Start Date of Leave",
-            "ENDDATE": "End Date of Leave",
+            "STARTDATE": "Start Date",
+            "ENDDATE": "End Date",
+            "PENDING": "Pending",
+            "AGREE": "Agree",
+            "REFUSE": "Refuse",
             "CREATE": {
                 "CREATE_TIMEOFF": "Add New Leave Information",
                 "SUCCESS": {
@@ -673,7 +676,8 @@
             "ATTENDANCE_PERCENT": "{{status}} {{x}}% attendance from yesterday",
             "DETAIL_EMPLOYEE": "Detail Employee",
             "DOWNLOAD_INFO": "Download Info",
-            "LIST_ATTENDANCE": "List of Attendance"
+            "LIST_ATTENDANCE": "List of Attendance",
+            "ERROR_REPORT": "Error Report"
         },
         "LOGIN": {
             "HI": "Hi, Welcome back!",
@@ -755,6 +759,33 @@
             "CHANGE_PASSWORD": "Change password",
             "CURRENT_PASSWORD": "Current Password",
             "LEAST_8_CHARACTERS": "At least 8 characters"
+        },
+        "EMPLOYEE-CONTRACT": {
+            "TOTAL_NEW_EMPLOYEE": "Total number of new employees",
+            "TOTAL_OLD_EMPLOYEE": "Total number of employees who left",
+            "TOTAL_EMPLOYEE": "Total number of employees in the company",
+            "TOTAL_CONTRACT": "Total number of new contracts",
+            "NEW_EMPLOYEE": "New employees",
+            "OLD_EMPLOYEE": "Employees who left",
+            "EMPLOYEE": "Employees in the company",
+            "STAFF_STATISTICS": "Staff statistics chart",
+            "GENDER_STATISTICS": "Gender of employees",
+            "GENDER_STATISTICS_MALE": "Male",
+            "GENDER_STATISTICS_FEMALE": "Female",
+            "GENDER_STATISTICS_OTHER": "Other"
+        },
+        "TIMEOFF_ERROR": {
+            "TOTAL_TIMEOOF": "Total number of time off requests",
+            "TOTAL_ERROR": "Total number of error reports",
+            "TOTAL_REQUEST": "Total number of requests",
+            "TOTAL_TIMEOOF_APPROVED": "Total number of approved time off requests",
+            "TOTAL_TIMEOOF_NOT_APPROVED": "Total number of unapproved time off requests",
+            "TOTAL_ERROR_APPROVED": "Total number of approved error reports",
+            "TOTAL_ERROR_NOT_APPROVED": "Total number of unapproved error reports",
+            "REQUEST_STATISTICS_CHART": "Request statistics chart",
+            "ERROR_STATISTICS_CHART_HIGH": "High",
+            "ERROR_STATISTICS_CHART_SHORT": "Low",
+            "ERROR_STATISTICS_CHART": "Error report statistics chart"
         }
     }
 }

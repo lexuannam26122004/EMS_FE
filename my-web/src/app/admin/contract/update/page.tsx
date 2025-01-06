@@ -117,8 +117,8 @@ const UpdateEmploymentContract = () => {
             startDate === '' ||
             endDate === '' ||
             basicSalary === '' ||
-            probationPeriod === '' ||
             workingHours === '' ||
+            probationPeriod === '' ||
             typeContract === '' ||
             managerId === ''
         ) {
@@ -173,10 +173,8 @@ const UpdateEmploymentContract = () => {
             startDate === '' ||
             endDate === '' ||
             basicSalary === '' ||
-            clause === '' ||
             probationPeriod === '' ||
             workingHours === '' ||
-            terminationClause === '' ||
             typeContract === '' ||
             managerId === ''
         ) {

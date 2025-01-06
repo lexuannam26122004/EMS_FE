@@ -1,8 +1,10 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import {
+    Tab,
+    Tabs,
     Box,
     Select,
     Pagination,
@@ -25,8 +27,6 @@ import {
     Avatar
 } from '@mui/material'
 
-import { IAspNetUserGetAll } from '@/models/AspNetUser'
-import { useGetAllUsersQuery } from '@/services/AspNetUserService'
 import { ITimeOffSearch } from '@/models/TimeOff'
 import { useSearchTimeOffQuery, useChangeStatusTimeOffsMutation } from '@/services/TimeOffService'
 
@@ -35,55 +35,125 @@ import SearchIcon from '@mui/icons-material/Search'
 import { useTranslation } from 'react-i18next'
 import AlertDialog from '@/components/AlertDialog'
 
+function a11yProps(index: number) {
+    return {
+        id: `simple-tab-${index}`,
+        'aria-controls': `simple-tabpanel-${index}`
+    }
+}
+
+function getStatusBgColor(status: boolean): string {
+    if (status === false) {
+        return 'var(--bg-danger-color)'
+    } else if (status === true) {
+        return 'var(--bg-success-color)'
+    } else {
+        return 'var(--bg-closed-color)'
+    }
+}
+
+function getStatusTextColor(status: boolean): string {
+    if (status === false) {
+        return 'var(--text-danger-color)'
+    } else if (status === true) {
+        return 'var(--text-success-color)'
+    } else {
+        return 'var(--text-closed-color)'
+    }
+}
+
+interface IFilter {
+    isActive?: boolean
+    createdDate?: Date
+    pageSize?: number
+    pageNumber?: number
+    sortBy?: string
+    isDescending?: boolean
+    keyword?: string
+}
+
 const EmployeeTable: React.FC = () => {
     const router = useRouter()
     const [selectedRow, setSelectedRow] = useState<number | null>(null)
+    const [currentTab, setCurrentTab] = useState(0)
+    const [page, setPage] = useState(1)
+    const [keyword, setKeyword] = useState('')
+    const [from, setFrom] = useState(1)
+    const [to, setTo] = useState(10)
+    const [order, setOrder] = useState<'asc' | 'desc'>('asc')
+    const [orderBy, setOrderBy] = useState<string>('')
 
     const [openDialog, setOpenDialog] = useState(false)
     const [isChangeMany, setIsChangeMany] = useState(false)
     const [selected, setSelected] = useState<number[]>([])
-    const [searchTerm, setSearchTerm] = useState<string>('')
     const [rowsPerPage, setRowsPerPage] = useState('10')
-    const [currentPage, setCurrentPage] = useState<number>(1)
-    const [sortConfig, setSortConfig] = useState<{
-        key: keyof ITimeOffSearch | 'Id'
-        direction: 'asc' | 'desc'
-    }>({ key: 'Id', direction: 'asc' })
     const { t } = useTranslation('common')
+
+    const [filter, setFilter] = useState<IFilter>({
+        pageSize: 10,
+        pageNumber: 1
+    })
+
+    const handleSort = (property: string) => {
+        setFilter(prev => ({
+            ...prev,
+            sortBy: property,
+            isDescending: orderBy === property && order === 'asc' ? true : false
+        }))
+        if (orderBy === property) {
+            setOrder(order === 'asc' ? 'desc' : 'asc')
+        } else {
+            setOrder('asc')
+        }
+        setOrderBy(property)
+    }
 
     const [changeTimeOff] = useChangeStatusTimeOffsMutation()
 
-    const { data: timeoffResponse, isLoading: istimeoffsLoading, refetch } = useSearchTimeOffQuery()
-    const { data: userResponse, isLoading: isUsersLoading } = useGetAllUsersQuery()
+    const { data: timeoffResponse, isLoading: istimeoffsLoading, isFetching, refetch } = useSearchTimeOffQuery(filter)
 
-    const timeoff = (timeoffResponse?.Data?.Records as ITimeOffSearch[]) || []
-    const employee = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
+    const timeoff = timeoffResponse?.Data?.Records as ITimeOffSearch[]
 
-    const users = timeoff.map(timeoff => {
-        const matchedEmployee = employee.find(emp => emp.Id === timeoff.UserId)
-        return {
-            ...timeoff,
-            FullName: matchedEmployee?.FullName || 'N/A',
-            AvatarPath:
-                matchedEmployee?.AvatarPath ||
-                'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif',
-            EmployeeId: matchedEmployee?.EmployeeId || 'N/A'
+    useEffect(() => {
+        if (!isFetching && timeoffResponse?.Data) {
+            const from = (page - 1) * Number(rowsPerPage) + Math.min(1, timeoff.length)
+            setFrom(from)
+
+            const to = Math.min(timeoff.length + (page - 1) * Number(rowsPerPage), totalRecords)
+            setTo(to)
         }
-    })
+    }, [isFetching, timeoffResponse, page, rowsPerPage])
 
-    if (istimeoffsLoading || isUsersLoading) return <div>Loading...</div>
+    useEffect(() => {
+        refetch()
+    }, [])
 
-    const filteredUsers = users.filter(
-        user =>
-            user.Id?.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.FullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.EmployeeId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.Reason?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            (user.StartDate &&
-                new Date(user.StartDate).toLocaleDateString().toLowerCase().includes(searchTerm.toLowerCase())) ||
-            (user.EndDate &&
-                new Date(user.EndDate).toLocaleDateString().toLowerCase().includes(searchTerm.toLowerCase()))
+    const filteredData = useMemo(() => {
+        switch (currentTab) {
+            case 0: // All
+                return timeoff
+            case 1: // In Progress
+                return timeoff.filter(item => item.IsAccepted === null)
+            case 2: // Resolved
+                return timeoff.filter(item => item.IsAccepted === true)
+            case 3: // Resolved
+                return timeoff.filter(item => item.IsAccepted === false)
+            default:
+                return timeoff
+        }
+    }, [timeoff, currentTab])
+
+    const counts = useMemo(
+        () => ({
+            0: timeoff?.length ?? 0,
+            1: timeoff?.filter(item => item.IsAccepted === null).length ?? 0,
+            2: timeoff?.filter(item => item.IsAccepted === true).length ?? 0,
+            3: timeoff?.filter(item => item.IsAccepted === false).length ?? 0
+        }),
+        [timeoff]
     )
+
+    if (istimeoffsLoading) return <div>Loading...</div>
 
     const isSelected = (id: number) => selected.includes(id)
 
@@ -91,35 +161,40 @@ const EmployeeTable: React.FC = () => {
         setSelected(prev => (prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]))
     }
 
-    const sortedUsers = filteredUsers.sort((a, b) => {
-        const aValue = a[sortConfig.key]
-        const bValue = b[sortConfig.key]
-
-        if (typeof aValue === 'number' && typeof bValue === 'number') {
-            return sortConfig.direction === 'asc' ? aValue - bValue : bValue - aValue
-        } else {
-            const aString = aValue?.toString().toLowerCase() || ''
-            const bString = bValue?.toString().toLowerCase() || ''
-            return sortConfig.direction === 'asc' ? aString.localeCompare(bString) : bString.localeCompare(aString)
-        }
-    })
-
-    const totalRecords = sortedUsers.length
-    const paginatedUsers = sortedUsers.slice((currentPage - 1) * Number(rowsPerPage), currentPage * Number(rowsPerPage))
-
-    const handleSort = (key: keyof ITimeOffSearch | 'Id') => {
-        setSortConfig(prev => ({
-            key,
-            direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc'
-        }))
+    const handleChangePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
+        setPage(newPage)
+        setFilter(prev => {
+            return {
+                ...prev,
+                pageNumber: newPage
+            }
+        })
     }
 
-    const handleChangePage = (_event: React.ChangeEvent<unknown>, page: number) => setCurrentPage(page)
-
-    const handleChangeRowsPerPage = (event: SelectChangeEvent<string>) => {
-        setRowsPerPage(event.target.value)
-        setCurrentPage(1)
+    const handleChangeRowsPerPage = (event: SelectChangeEvent) => {
+        setPage(1)
+        setRowsPerPage(event.target.value as string)
+        setFilter(prev => {
+            return {
+                ...prev,
+                pageSize: Number(event.target.value),
+                pageNumber: 1
+            }
+        })
     }
+
+    const handleSearchKeyword = () => {
+        setPage(1)
+        setFilter(prev => {
+            return {
+                ...prev,
+                keyword: keyword,
+                pageNumber: 1
+            }
+        })
+    }
+
+    const totalRecords = (timeoffResponse?.Data.TotalRecords as number) || 0
 
     const handleDeleteManyClick = async () => {
         setIsChangeMany(true)
@@ -128,14 +203,11 @@ const EmployeeTable: React.FC = () => {
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
-            setSelected(users.map(row => row.Id))
+            setSelected(timeoff.map(row => row.Id))
         } else {
             setSelected([])
         }
     }
-
-    const from = (currentPage - 1) * Number(rowsPerPage) + 1
-    const to = Math.min(currentPage * Number(rowsPerPage), totalRecords)
 
     const countRows = selected.length
 
@@ -168,6 +240,18 @@ const EmployeeTable: React.FC = () => {
         }
     }
 
+    const badgeStyle: React.CSSProperties = {
+        fontSize: '12px',
+        height: '24px',
+        minWidth: '24px',
+        borderRadius: '6px',
+        padding: '0px 7px',
+        fontWeight: 'bold',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+    }
+
     return (
         <Box>
             <Paper
@@ -178,13 +262,156 @@ const EmployeeTable: React.FC = () => {
                     backgroundColor: 'var(--background-item)'
                 }}
             >
+                <Box>
+                    <Tabs
+                        value={currentTab}
+                        onChange={(event, newValue) => setCurrentTab(newValue)}
+                        aria-label='basic tabs example'
+                        TabIndicatorProps={{
+                            sx: {
+                                background: 'linear-gradient(to right,rgb(103, 255, 164),rgb(255, 182, 127))', // Màu của thanh indicator
+                                height: '2px',
+                                borderRadius: '1px'
+                            }
+                        }}
+                    >
+                        <Tab
+                            sx={{
+                                textTransform: 'none',
+                                color: 'var(--text-rejected-color1)',
+                                fontWeight: '600',
+                                paddingLeft: '25px',
+                                paddingRight: '25px',
+                                '&.Mui-selected': {
+                                    color: 'var(--text-color)',
+                                    fontWeight: '600'
+                                }
+                            }}
+                            label={
+                                <Box style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    {t('COMMON.ERROR_REPORT.ALL')}
+                                    <Box
+                                        style={{
+                                            ...badgeStyle,
+                                            backgroundColor:
+                                                currentTab === 0 ? 'var(--bg-all-color1)' : 'var(--bg-rejected-color1)',
+                                            color:
+                                                currentTab === 0
+                                                    ? 'var(--text-all-color1)'
+                                                    : 'var(--text-rejected-color1)'
+                                        }}
+                                    >
+                                        {counts[0]}
+                                    </Box>
+                                </Box>
+                            }
+                            {...a11yProps(0)}
+                        />
+                        <Tab
+                            sx={{
+                                textTransform: 'none',
+                                color: 'var(--text-rejected-color1)',
+                                fontWeight: '600',
+                                '&.Mui-selected': {
+                                    color: 'var(--text-color)',
+                                    fontWeight: '600'
+                                }
+                            }}
+                            label={
+                                <Box style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    {t('COMMON.TIMEOFF.PENDING')}
+                                    <Box
+                                        style={{
+                                            ...badgeStyle,
+                                            backgroundColor:
+                                                currentTab === 1 ? 'var(--bg-closed-color)' : 'var(--bg-closed-color1)',
+                                            color:
+                                                currentTab === 1
+                                                    ? 'var(--text-closed-color)'
+                                                    : 'var(--text-closed-color1)'
+                                        }}
+                                    >
+                                        {counts[1]}
+                                    </Box>
+                                </Box>
+                            }
+                            {...a11yProps(1)}
+                        />
+                        <Tab
+                            sx={{
+                                textTransform: 'none',
+                                color: 'var(--text-rejected-color1)',
+                                fontWeight: '600',
+                                '&.Mui-selected': {
+                                    color: 'var(--text-color)',
+                                    fontWeight: '600'
+                                }
+                            }}
+                            label={
+                                <Box style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    {t('COMMON.TIMEOFF.AGREE')}
+                                    <Box
+                                        style={{
+                                            ...badgeStyle,
+                                            backgroundColor:
+                                                currentTab === 2
+                                                    ? 'var(--bg-success-color)'
+                                                    : 'var(--bg-success-color1)',
+                                            color:
+                                                currentTab === 2
+                                                    ? 'var(--text-success-color)'
+                                                    : 'var(--text-success-color1)'
+                                        }}
+                                    >
+                                        {counts[2]}
+                                    </Box>
+                                </Box>
+                            }
+                            {...a11yProps(2)}
+                        />
+
+                        <Tab
+                            sx={{
+                                textTransform: 'none',
+                                color: 'var(--text-rejected-color1)',
+                                fontWeight: '600',
+                                '&.Mui-selected': {
+                                    color: 'var(--text-color)',
+                                    fontWeight: '600'
+                                }
+                            }}
+                            label={
+                                <Box style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    {t('COMMON.TIMEOFF.REFUSE')}
+                                    <Box
+                                        style={{
+                                            ...badgeStyle,
+                                            backgroundColor:
+                                                currentTab === 3 ? 'var(--bg-danger-color)' : 'var(--bg-danger-color1)',
+                                            color:
+                                                currentTab === 3
+                                                    ? 'var(--text-danger-color)'
+                                                    : 'var(--text-danger-color1)'
+                                        }}
+                                    >
+                                        {counts[3]}
+                                    </Box>
+                                </Box>
+                            }
+                            {...a11yProps(3)}
+                        />
+                    </Tabs>
+                </Box>
+
                 <Box display='flex' alignItems='center' justifyContent='space-between' margin='24px'>
                     <Box sx={{ position: 'relative', width: '100%', height: '55px' }}>
                         <TextField
                             fullWidth
                             variant='outlined'
                             placeholder={t('COMMON.SYS_CONFIGURATION.PLACEHOLDER_SEARCH')}
-                            value={searchTerm}
+                            required
+                            value={keyword}
+                            onChange={e => setKeyword(e.target.value)}
                             sx={{
                                 color: 'var(--text-color)',
                                 padding: '0px',
@@ -210,7 +437,9 @@ const EmployeeTable: React.FC = () => {
                                     borderColor: 'var(--selected-field-color)'
                                 }
                             }}
-                            onChange={e => setSearchTerm(e.target.value)}
+                            onKeyDown={() => {
+                                handleSearchKeyword()
+                            }}
                             slotProps={{
                                 input: {
                                     startAdornment: (
@@ -224,8 +453,7 @@ const EmployeeTable: React.FC = () => {
                                                 sx={{
                                                     height: '100%',
                                                     color: '#a5bed4',
-                                                    padding: '10.5px',
-                                                    zIndex: 100
+                                                    padding: '10.5px'
                                                 }}
                                             >
                                                 <SearchIcon />
@@ -315,16 +543,13 @@ const EmployeeTable: React.FC = () => {
                                     sx={{
                                         borderColor: 'var(--border-color)',
                                         paddingLeft: '12px',
-                                        backgroundColor: 'var(--header-color-table)',
-                                        position: 'sticky',
-                                        left: 0,
-                                        zIndex: 2
+                                        backgroundColor: 'var(--header-color-table)'
                                     }}
                                 >
                                     <Checkbox
-                                        indeterminate={selected.length > 0 && selected.length < users.length}
+                                        indeterminate={selected.length > 0 && selected.length < timeoff.length}
                                         checked={
-                                            users && selected.length > 0 ? selected.length === users.length : false
+                                            timeoff && selected.length > 0 ? selected.length === timeoff.length : false
                                         }
                                         onChange={handleSelectAllClick}
                                         sx={{
@@ -335,15 +560,12 @@ const EmployeeTable: React.FC = () => {
                                 <TableCell
                                     sx={{
                                         borderColor: 'var(--border-color)',
-                                        backgroundColor: 'var(--header-color-table)',
-                                        position: 'sticky',
-                                        left: 54,
-                                        zIndex: 1
+                                        backgroundColor: 'var(--header-color-table)'
                                     }}
                                 >
                                     <TableSortLabel
-                                        active={sortConfig.key === 'Id'}
-                                        direction={sortConfig.key === 'Id' ? sortConfig.direction : 'asc'}
+                                        active={'Id' === orderBy}
+                                        direction={orderBy === 'Id' ? order : 'asc'}
                                         onClick={() => handleSort('Id')}
                                         sx={{
                                             '& .MuiTableSortLabel-icon': {
@@ -372,16 +594,13 @@ const EmployeeTable: React.FC = () => {
                                         key={index}
                                         sx={{
                                             borderColor: 'var(--border-color)',
-                                            backgroundColor: 'var(--header-color-table)',
-                                            position: 'sticky',
-                                            left: 127,
-                                            zIndex: 1
+                                            backgroundColor: 'var(--header-color-table)'
                                         }}
                                     >
                                         <TableSortLabel
-                                            active={sortConfig.key === column}
-                                            direction={sortConfig.key === column ? sortConfig.direction : 'asc'}
-                                            onClick={() => handleSort(column as keyof ITimeOffSearch)}
+                                            active={column === orderBy}
+                                            direction={orderBy === column ? order : 'asc'}
+                                            onClick={() => handleSort(column)}
                                             sx={{
                                                 '& .MuiTableSortLabel-icon': {
                                                     color: 'var(--text-color) !important'
@@ -409,9 +628,9 @@ const EmployeeTable: React.FC = () => {
                                     (column, index) => (
                                         <TableCell key={index} sx={{ borderColor: 'var(--border-color)' }}>
                                             <TableSortLabel
-                                                active={sortConfig.key === column}
-                                                direction={sortConfig.key === column ? sortConfig.direction : 'asc'}
-                                                onClick={() => handleSort(column as keyof ITimeOffSearch)}
+                                                active={column === orderBy}
+                                                direction={orderBy === column ? order : 'asc'}
+                                                onClick={() => handleSort(column)}
                                                 sx={{
                                                     '& .MuiTableSortLabel-icon': {
                                                         color: 'var(--text-color) !important'
@@ -440,10 +659,7 @@ const EmployeeTable: React.FC = () => {
                                     sx={{
                                         borderColor: 'var(--border-color)',
                                         padding: '0px 9.5px 0px 0px',
-                                        width: '146px',
-                                        position: 'sticky',
-                                        right: -0.38,
-                                        zIndex: 1,
+
                                         backgroundColor: 'var(--header-color-table)'
                                     }}
                                 >
@@ -464,27 +680,12 @@ const EmployeeTable: React.FC = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {paginatedUsers.map(user => (
-                                <TableRow
-                                    key={user.Id}
-                                    selected={isSelected(user.Id)}
-                                    sx={{
-                                        backgroundColor: user.IsAccepted
-                                            ? 'var(--bg-success-color1)'
-                                            : 'var(--bg-danger-color1)'
-                                    }}
-                                >
+                            {filteredData.map(user => (
+                                <TableRow key={user.Id} selected={isSelected(user.Id)}>
                                     <TableCell
                                         padding='checkbox'
                                         sx={{
-                                            borderColor: 'var(--border-color)',
-                                            paddingLeft: '12px',
-                                            position: 'sticky',
-                                            left: 0,
-                                            zIndex: 1,
-                                            clipPath: 'inset(0px 0px 1px 0px)',
-                                            backdropFilter: 'blur(250px)',
-                                            WebkitBackdropFilter: 'blur(250px)'
+                                            borderColor: 'var(--border-color)'
                                         }}
                                     >
                                         <Checkbox
@@ -498,13 +699,7 @@ const EmployeeTable: React.FC = () => {
 
                                     <TableCell
                                         sx={{
-                                            borderColor: 'var(--border-color)',
-                                            position: 'sticky',
-                                            left: 54,
-                                            zIndex: 1,
-                                            clipPath: 'inset(0px 0px 1px 0px)',
-                                            backdropFilter: 'blur(3000px)',
-                                            WebkitBackdropFilter: 'blur(3000px)'
+                                            borderColor: 'var(--border-color)'
                                         }}
                                     >
                                         <Typography
@@ -523,13 +718,7 @@ const EmployeeTable: React.FC = () => {
 
                                     <TableCell
                                         sx={{
-                                            borderColor: 'var(--border-color)',
-                                            position: 'sticky',
-                                            left: 127,
-                                            zIndex: 1,
-                                            clipPath: 'inset(0px 0px 1px 0px)',
-                                            backdropFilter: 'blur(3000px)',
-                                            WebkitBackdropFilter: 'blur(3000px)'
+                                            borderColor: 'var(--border-color)'
                                         }}
                                     >
                                         <Typography
@@ -572,19 +761,36 @@ const EmployeeTable: React.FC = () => {
                                         </Typography>
                                     </TableCell>
 
-                                    <TableCell sx={{ borderColor: 'var(--border-color)' }}>
-                                        <Typography
+                                    <TableCell sx={{ borderColor: 'var(--border-color)', padding: '11px' }}>
+                                        <Box
                                             sx={{
-                                                color: 'var(--text-color)',
-                                                fontSize: '16px',
-                                                maxWidth: '260px',
-                                                overflow: 'hidden',
-                                                textOverflow: 'ellipsis',
-                                                whiteSpace: 'nowrap'
+                                                borderRadius: '8px',
+                                                padding: '5px',
+                                                display: 'flex',
+                                                minWidth: '100px',
+                                                justifyContent: 'center',
+                                                backgroundColor: getStatusBgColor(user.IsAccepted)
                                             }}
                                         >
-                                            {user.IsAccepted ? 'Đã duyệt' : 'Chưa duyệt'}
-                                        </Typography>
+                                            <Typography
+                                                sx={{
+                                                    fontSize: '15px',
+                                                    overflow: 'hidden',
+                                                    color: getStatusTextColor(user.IsAccepted),
+                                                    width: 'auto',
+                                                    fontWeight: 'bold',
+                                                    display: 'inline-block',
+                                                    textOverflow: 'ellipsis',
+                                                    whiteSpace: 'nowrap'
+                                                }}
+                                            >
+                                                {user.IsAccepted === null
+                                                    ? t('COMMON.TIMEOFF.PENDING')
+                                                    : user.IsAccepted
+                                                      ? t('COMMON.TIMEOFF.AGREE')
+                                                      : t('COMMON.TIMEOFF.REFUSE')}
+                                            </Typography>
+                                        </Box>
                                     </TableCell>
 
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
@@ -653,14 +859,7 @@ const EmployeeTable: React.FC = () => {
                                     <TableCell
                                         sx={{
                                             padding: '0px 9.5px 0px 0px',
-                                            borderColor: 'var(--border-color)',
-                                            width: '146px',
-                                            position: 'sticky',
-                                            right: -0.38,
-                                            zIndex: 1,
-                                            clipPath: 'inset(0px 0px 1px 0px)',
-                                            backdropFilter: 'blur(3000px)',
-                                            WebkitBackdropFilter: 'blur(3000px)'
+                                            borderColor: 'var(--border-color)'
                                         }}
                                     >
                                         <Box
@@ -703,9 +902,7 @@ const EmployeeTable: React.FC = () => {
                                                             backgroundColor: 'var(--hover-color)'
                                                         }
                                                     }}
-                                                    onClick={() =>
-                                                        router.push(`/admin/time-off/update?id=${user.Id}`)
-                                                    }
+                                                    onClick={() => router.push(`/admin/time-off/update?id=${user.Id}`)}
                                                 >
                                                     <Pencil />
                                                 </Box>
@@ -812,7 +1009,7 @@ const EmployeeTable: React.FC = () => {
                     </Box>
                     <Pagination
                         count={Math.ceil(totalRecords / Number(rowsPerPage))}
-                        page={currentPage}
+                        page={page}
                         onChange={handleChangePage}
                         boundaryCount={1}
                         siblingCount={2}

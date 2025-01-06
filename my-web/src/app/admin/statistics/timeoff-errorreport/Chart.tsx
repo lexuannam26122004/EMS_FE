@@ -45,12 +45,17 @@ const Chart: React.FC = () => {
             fontFamily: 'Arial, sans-serif'
         },
         legend: {
-            data: ['Nghỉ phép đã duyệt', 'Nghỉ phép chưa duyệt', 'Báo cáo lỗi đã duyệt', 'Báo cáo lỗi chưa duyệt'],
-            width: '50%',
+            data: [
+                t('COMMON.TIMEOFF_ERROR.TOTAL_TIMEOOF_APPROVED'),
+                t('COMMON.TIMEOFF_ERROR.TOTAL_ERROR_APPROVED'),
+                t('COMMON.TIMEOFF_ERROR.TOTAL_TIMEOOF_NOT_APPROVED'),
+                t('COMMON.TIMEOFF_ERROR.TOTAL_ERROR_NOT_APPROVED')
+            ],
+            width: '80%',
             textStyle: {
                 color: theme === 'light' ? '#000000' : '#ffffff',
                 fontFamily: 'Arial, sans-serif'
-            },
+            }
         },
 
         toolbox: {
@@ -62,10 +67,10 @@ const Chart: React.FC = () => {
                         let tableContent = '<table style="width: 100%; text-align: left; border-collapse: collapse;">'
                         tableContent += '<tr>'
                         tableContent += `<th style="border: 1px solid #ccc; padding: 5px;"></th>`
-                        tableContent += `<th style="border: 1px solid #ccc; padding: 5px;">Nghỉ phép đã duyệt</th>`
-                        tableContent += `<th style="border: 1px solid #ccc; padding: 5px;">Nghỉ phép chưa duyệt</th>`
-                        tableContent += `<th style="border: 1px solid #ccc; padding: 5px;">Báo cáo lỗi đã duyệt</th>`
-                        tableContent += `<th style="border: 1px solid #ccc; padding: 5px;">Báo cáo lỗi chưa duyệt</th>`
+                        tableContent += `<th style="border: 1px solid #ccc; padding: 5px;"> ${t('COMMON.TIMEOFF_ERROR.TOTAL_TIMEOOF_APPROVED')}</th>`
+                        tableContent += `<th style="border: 1px solid #ccc; padding: 5px;"> ${t('COMMON.TIMEOFF_ERROR.TOTAL_TIMEOOF_NOT_APPROVED')}</th>`
+                        tableContent += `<th style="border: 1px solid #ccc; padding: 5px;"> ${t('COMMON.TIMEOFF_ERROR.TOTAL_ERROR_APPROVED')}</th>`
+                        tableContent += `<th style="border: 1px solid #ccc; padding: 5px;"> ${t('COMMON.TIMEOFF_ERROR.TOTAL_ERROR_NOT_APPROVED')}</th>`
                         tableContent += '</tr>'
 
                         for (let i = 0; i < 12; i++) {
@@ -79,7 +84,7 @@ const Chart: React.FC = () => {
                         }
 
                         tableContent += `<tr>`
-                        tableContent += `<td style="border: 1px solid #ccc; padding: 5px; font-weight: bold;">Tổng</td>`
+                        tableContent += `<td style="border: 1px solid #ccc; padding: 5px; font-weight: bold;"></td>`
                         tableContent += `<td style="border: 1px solid #ccc; padding: 5px;">${totalLeaveApproved}</td>`
                         tableContent += `<td style="border: 1px solid #ccc; padding: 5px;">${totalLeavePending}</td>`
                         tableContent += `<td style="border: 1px solid #ccc; padding: 5px;">${totalReportApproved}</td>`
@@ -104,9 +109,15 @@ const Chart: React.FC = () => {
                 let totalErrorReport = 0
 
                 params.forEach((param: any) => {
-                    if (param.seriesName.includes('Nghỉ phép')) {
+                    if (
+                        param.seriesName.includes(t('COMMON.TIMEOFF_ERROR.TOTAL_TIMEOOF_APPROVED')) ||
+                        param.seriesName.includes(t('COMMON.TIMEOFF_ERROR.TOTAL_TIMEOOF_NOT_APPROVED'))
+                    ) {
                         totalLeave += param.value
-                    } else if (param.seriesName.includes('Báo cáo lỗi')) {
+                    } else if (
+                        param.seriesName.includes(t('COMMON.TIMEOFF_ERROR.TOTAL_ERROR_APPROVED')) ||
+                        param.seriesName.includes(t('COMMON.TIMEOFF_ERROR.TOTAL_ERROR_NOT_APPROVED'))
+                    ) {
                         totalErrorReport += param.value
                     }
                 })
@@ -117,8 +128,8 @@ const Chart: React.FC = () => {
                     tooltipContent += `${param.seriesName}: ${param.value}<br/>`
                 })
 
-                tooltipContent += `<br/><strong>Tổng Nghỉ Phép:</strong> ${totalLeave.toFixed(2)}<br/>`
-                tooltipContent += `<strong>Tổng Báo Cáo Lỗi:</strong> ${totalErrorReport.toFixed(2)}<br/>`
+                tooltipContent += `<br/><strong>${t('COMMON.TIMEOFF_ERROR.TOTAL_TIMEOOF')}</strong> ${totalLeave.toFixed(2)}<br/>`
+                tooltipContent += `<strong>${t('COMMON.TIMEOFF_ERROR.TOTAL_ERROR')}</strong> ${totalErrorReport.toFixed(2)}<br/>`
 
                 return tooltipContent
             }
@@ -135,7 +146,7 @@ const Chart: React.FC = () => {
         },
         series: [
             {
-                name: 'Nghỉ phép đã duyệt',
+                name: t('COMMON.TIMEOFF_ERROR.TOTAL_TIMEOOF_APPROVED'),
                 type: 'bar',
                 stack: 'stack1',
                 emphasis: emphasisStyle,
@@ -145,7 +156,7 @@ const Chart: React.FC = () => {
                 }
             },
             {
-                name: 'Nghỉ phép chưa duyệt',
+                name: t('COMMON.TIMEOFF_ERROR.TOTAL_TIMEOOF_NOT_APPROVED'),
                 type: 'bar',
                 stack: 'stack1',
                 emphasis: emphasisStyle,
@@ -155,7 +166,7 @@ const Chart: React.FC = () => {
                 }
             },
             {
-                name: 'Báo cáo lỗi đã duyệt',
+                name: t('COMMON.TIMEOFF_ERROR.TOTAL_ERROR_APPROVED'),
                 type: 'bar',
                 stack: 'stack2',
                 emphasis: emphasisStyle,
@@ -165,7 +176,7 @@ const Chart: React.FC = () => {
                 }
             },
             {
-                name: 'Báo cáo lỗi chưa duyệt',
+                name: t('COMMON.TIMEOFF_ERROR.TOTAL_ERROR_NOT_APPROVED'),
                 type: 'bar',
                 stack: 'stack2',
                 emphasis: emphasisStyle,
@@ -185,7 +196,8 @@ const Chart: React.FC = () => {
                 mt: '24px',
                 padding: '24px 24px 15px',
                 overflow: 'hidden',
-                borderRadius: '20px',boxShadow: 'var(--box-shadow-paper)',
+                borderRadius: '20px',
+                boxShadow: 'var(--box-shadow-paper)',
                 backgroundColor: 'var(--background-item)'
             }}
         >
@@ -204,7 +216,7 @@ const Chart: React.FC = () => {
                             color: 'var(--text-color)'
                         }}
                     >
-                        {t('Biểu đồ thống kê yêu cầu')}
+                        {t('COMMON.TIMEOFF_ERROR.REQUEST_STATISTICS_CHART')}
                     </Typography>
                 </Box>
                 <FormControl sx={{ width: '100px' }}>

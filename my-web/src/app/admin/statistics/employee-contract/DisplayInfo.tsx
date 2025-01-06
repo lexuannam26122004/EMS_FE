@@ -3,21 +3,45 @@
 import { Box, Paper, Typography } from '@mui/material'
 import { TrendingDown, TrendingUp } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
+import { useGetEmployeeStatsByMonthAndYearQuery } from '@/services/EmploymentContractService'
+import Loading from '@/components/Loading'
+
+interface IEmployeeStats {
+    CreatedContractsCount: number
+    CreatedContractsPercentChange: number
+    StartCount: number
+    StartPercentChange: number
+    EndCount: number
+    EndPercentChange: number
+    ContractsInMonth: number
+    ContractsInMonthPercentChange: number
+}
 
 function Page() {
     const { t } = useTranslation('common')
 
-    const contractsCount = 10
-    const contractsPercent = 15.5
+    const date = new Date()
+    const month = date.getMonth() + 1
+    const year = date.getFullYear()
+    const { data: response, isFetching } = useGetEmployeeStatsByMonthAndYearQuery({ Month: month, Year: year })
 
-    const newEmployeesCount = 5
-    const newEmployeesPercent = -7.5
+    const data = response?.Data as IEmployeeStats
 
-    const resignedEmployeesCount = 3
-    const resignedEmployeesPercent = -5.0
+    const contractsCount = data?.CreatedContractsCount
+    const contractsPercent = data?.CreatedContractsPercentChange
 
-    const currentEmployeesCount = 50
-    const currentEmployeesPercent = 72.0
+    const newEmployeesCount = data?.StartCount
+    const newEmployeesPercent = data?.StartPercentChange
+
+    const resignedEmployeesCount = data?.EndCount
+    const resignedEmployeesPercent = data?.EndPercentChange
+
+    const currentEmployeesCount = data?.ContractsInMonth
+    const currentEmployeesPercent = data?.ContractsInMonthPercentChange
+
+    if (isFetching) {
+        return <Loading />
+    }
 
     return (
         <Box>
@@ -79,7 +103,7 @@ function Page() {
                             color: 'var(--reward-title-color)'
                         }}
                     >
-                        {t('Tổng số nhân viên mới')}
+                        {t('COMMON.EMPLOYEE-CONTRACT.TOTAL_NEW_EMPLOYEE')}
                     </Typography>
                     <Typography
                         sx={{
@@ -170,7 +194,7 @@ function Page() {
                             color: 'var(--reward-title-color)'
                         }}
                     >
-                        {t('Tổng số nhân viên nghỉ việc')}
+                        {t('COMMON.EMPLOYEE-CONTRACT.TOTAL_OLD_EMPLOYEE')}
                     </Typography>
                     <Typography
                         sx={{
@@ -271,7 +295,7 @@ function Page() {
                             color: 'var(--reward-title-color)'
                         }}
                     >
-                        {t('Tổng số nhân viên trong công ty')}
+                        {t('COMMON.EMPLOYEE-CONTRACT.TOTAL_EMPLOYEE')}
                     </Typography>
                     <Typography
                         sx={{
@@ -364,7 +388,7 @@ function Page() {
                             color: 'var(--reward-title-color)'
                         }}
                     >
-                        {t('Tổng số hợp đồng mới')}
+                        {t('COMMON.EMPLOYEE-CONTRACT.TOTAL_CONTRACT')}
                     </Typography>
                     <Typography
                         sx={{

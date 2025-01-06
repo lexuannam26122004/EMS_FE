@@ -213,8 +213,7 @@ function EmployeeTable() {
                                                 sx={{
                                                     height: '100%',
                                                     color: '#a5bed4',
-                                                    padding: '10.5px',
-                                                    zIndex: 100
+                                                    padding: '10.5px'
                                                 }}
                                             >
                                                 <SearchIcon />
@@ -304,10 +303,7 @@ function EmployeeTable() {
                                     sx={{
                                         borderColor: 'var(--border-color)',
                                         paddingLeft: '12px',
-                                        backgroundColor: 'var(--header-color-table)',
-                                        position: 'sticky',
-                                        left: 0,
-                                        zIndex: 2
+                                        backgroundColor: 'var(--header-color-table)'
                                     }}
                                 >
                                     <Checkbox
@@ -326,10 +322,7 @@ function EmployeeTable() {
                                 <TableCell
                                     sx={{
                                         borderColor: 'var(--border-color)',
-                                        backgroundColor: 'var(--header-color-table)',
-                                        position: 'sticky',
-                                        left: 60,
-                                        zIndex: 1
+                                        backgroundColor: 'var(--header-color-table)'
                                     }}
                                 >
                                     <TableSortLabel
@@ -362,10 +355,7 @@ function EmployeeTable() {
                                 <TableCell
                                     sx={{
                                         borderColor: 'var(--border-color)',
-                                        backgroundColor: 'var(--header-color-table)',
-                                        position: 'sticky',
-                                        left: 145,
-                                        zIndex: 1
+                                        backgroundColor: 'var(--header-color-table)'
                                     }}
                                 >
                                     <TableSortLabel
@@ -438,9 +428,6 @@ function EmployeeTable() {
                                         borderColor: 'var(--border-color)',
                                         padding: '0px 9.5px 0px 0px',
                                         width: '146px',
-                                        position: 'sticky',
-                                        right: -0.45,
-                                        zIndex: 1,
                                         backgroundColor: 'var(--header-color-table)'
                                     }}
                                 >
@@ -467,13 +454,7 @@ function EmployeeTable() {
                                         padding='checkbox'
                                         sx={{
                                             borderColor: 'var(--border-color)',
-                                            paddingLeft: '12px',
-                                            position: 'sticky',
-                                            left: 0,
-                                            zIndex: 1,
-                                            clipPath: 'inset(0px 0px 1px 0px)',
-                                            backdropFilter: 'blur(250px)',
-                                            WebkitBackdropFilter: 'blur(250px)'
+                                            paddingLeft: '12px'
                                         }}
                                     >
                                         <Checkbox
@@ -488,13 +469,7 @@ function EmployeeTable() {
 
                                     <TableCell
                                         sx={{
-                                            borderColor: 'var(--border-color)',
-                                            position: 'sticky',
-                                            left: 60,
-                                            zIndex: 1,
-                                            clipPath: 'inset(0px 0px 1px 0px)',
-                                            backdropFilter: 'blur(3000px)',
-                                            WebkitBackdropFilter: 'blur(3000px)'
+                                            borderColor: 'var(--border-color)'
                                         }}
                                     >
                                         <Typography
@@ -513,13 +488,7 @@ function EmployeeTable() {
 
                                     <TableCell
                                         sx={{
-                                            borderColor: 'var(--border-color)',
-                                            position: 'sticky',
-                                            left: 145,
-                                            zIndex: 1,
-                                            clipPath: 'inset(0px 0px 1px 0px)',
-                                            backdropFilter: 'blur(3000px)',
-                                            WebkitBackdropFilter: 'blur(3000px)'
+                                            borderColor: 'var(--border-color)'
                                         }}
                                     >
                                         <Typography
@@ -684,13 +653,7 @@ function EmployeeTable() {
                                         sx={{
                                             padding: '0px 9.5px 0px 0px',
                                             borderColor: 'var(--border-color)',
-                                            width: '146px',
-                                            position: 'sticky',
-                                            right: -0.45,
-                                            zIndex: 1,
-                                            clipPath: 'inset(0px 0px 1px 0px)',
-                                            backdropFilter: 'blur(3000px)',
-                                            WebkitBackdropFilter: 'blur(3000px)'
+                                            width: '146px'
                                         }}
                                     >
                                         <Box

@@ -23,6 +23,17 @@ export interface IUserByAgeGetAllDashboard {
     LessThan32Percentage: number
     Between32And45Percentage: number
     GreaterThan45Percentage: number
+
+    Between0And18: number
+    Between19And35: number
+    Between36And50: number
+    Between51And65: number
+    GreaterThan65: number
+    Between0And18Percentage: number
+    Between19And35Percentage: number
+    Between36And50Percentage: number
+    Between51And65Percentage: number
+    GreaterThan65Percentage: number
 }
 
 export interface IAspNetUserCreate {
