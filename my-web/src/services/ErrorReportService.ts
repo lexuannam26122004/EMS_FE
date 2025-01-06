@@ -9,14 +9,52 @@ interface IMonthAndYear {
     Year: number
 }
 
+interface IFilter {
+    pageSize?: number
+    pageNumber?: number
+    sortBy?: string
+    isDescending?: boolean
+    keyword?: string
+    isType?: string
+}
+
 const apiPath = 'https://localhost:44381/api/admin/ErrorReport'
 
 export const ErrorReportApi = createApi({
     reducerPath: 'ErrorReportApi',
     baseQuery: fetchBaseQuery({ baseUrl: apiPath }),
     endpoints: builder => ({
-        searchErrorReport: builder.query<ErrorReportResponse, void>({
-            query: () => 'Search/search'
+        searchErrorReport: builder.query<ErrorReportResponse, IFilter>({
+            query: filter => {
+                const params = new URLSearchParams()
+
+                if (filter) {
+                    if (filter.pageSize) params.append('PageSize', filter.pageSize.toString())
+                    if (filter.pageNumber) params.append('PageNumber', filter.pageNumber.toString())
+                    if (filter.keyword) params.append('Keyword', filter.keyword)
+                    if (filter.isDescending !== undefined) params.append('IsDescending', filter.isDescending.toString())
+                    if (filter.sortBy) params.append('SortBy', filter.sortBy)
+                    if (filter.isType) params.append('Keyword', filter.isType)
+                }
+
+                return `Search/search?${params.toString()}`
+            }
+        }),
+
+        searchByUserId: builder.query<ErrorReportResponse, { userId: string; filter: IFilter }>({
+            query: ({ userId, filter }) => {
+                const params = new URLSearchParams()
+
+                if (filter) {
+                    if (filter.pageSize) params.append('PageSize', filter.pageSize.toString())
+                    if (filter.pageNumber) params.append('PageNumber', filter.pageNumber.toString())
+                    if (filter.keyword) params.append('Keyword', filter.keyword)
+                    if (filter.isDescending !== undefined) params.append('IsDescending', filter.isDescending.toString())
+                    if (filter.sortBy) params.append('SortBy', filter.sortBy)
+                }
+
+                return `SearchByUserId?${params.toString()}&UserId=${userId}`
+            }
         }),
 
         getCountErrorReportsInMonth: builder.query<ErrorReportResponse, IMonthAndYear>({

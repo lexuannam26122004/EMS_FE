@@ -143,7 +143,7 @@ function TableErrorReport({ errorsData, totalRecords, type, onSort }: IProps) {
             sx={{
                 scrollbarGutter: 'stable',
                 paddingLeft: '7px',
-                height: '303px',
+                height: '100%',
                 '&::-webkit-scrollbar': {
                     width: '7px',
                     height: '7px'
