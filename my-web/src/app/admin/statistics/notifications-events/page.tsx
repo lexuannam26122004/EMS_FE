@@ -492,7 +492,7 @@ function ContractExpPage() {
                             }}
                             label={
                                 <Box style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    {t('COMMON.NOTIFICATION_TYPE.HOLIDAY')}
+                                    {t('COMMON.NOTIFICATION_TYPE.EVENT')}
                                     <Box
                                         style={{
                                             ...badgeStyle,
@@ -556,7 +556,7 @@ function ContractExpPage() {
                             }}
                             label={
                                 <Box style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    {t('COMMON.NOTIFICATION_TYPE.TIMEKEEPING')}
+                                    {t('COMMON.NOTIFICATION_TYPE.ATTENDANCE')}
                                     <Box
                                         style={{
                                             ...badgeStyle,

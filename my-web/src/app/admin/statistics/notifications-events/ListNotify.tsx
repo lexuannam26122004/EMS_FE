@@ -293,7 +293,7 @@ function Page({ notifications }: Props) {
                                                 fontSize: '14px'
                                             }}
                                         >
-                                            100
+                                            {chunk[0].ReceivedCount}
                                         </Typography>
                                     </Box>
                                     <Box
@@ -319,7 +319,7 @@ function Page({ notifications }: Props) {
                                                 fontSize: '14px'
                                             }}
                                         >
-                                            100
+                                            {chunk[0].ReadCount}
                                         </Typography>
                                     </Box>
                                 </Box>
@@ -577,7 +577,7 @@ function Page({ notifications }: Props) {
                                                     fontSize: '14px'
                                                 }}
                                             >
-                                                100
+                                                {chunk[1].ReceivedCount}
                                             </Typography>
                                         </Box>
                                         <Box
@@ -603,7 +603,7 @@ function Page({ notifications }: Props) {
                                                     fontSize: '14px'
                                                 }}
                                             >
-                                                100
+                                                {chunk[1].ReadCount}
                                             </Typography>
                                         </Box>
                                     </Box>

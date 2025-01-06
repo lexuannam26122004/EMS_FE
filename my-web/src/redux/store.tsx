@@ -27,6 +27,7 @@ import { authSlice } from './slices/authSlice'
 import { disciplineApi } from '@/services/DisciplineService'
 import { messageApi } from '@/services/MessageService'
 import { ErrorReportApi } from '@/services/ErrorReportService'
+import { userNotificationsApi } from '@/services/UserNotificationsService'
 
 export const store = configureStore({
     reducer: {
@@ -57,7 +58,8 @@ export const store = configureStore({
         [AuthApi.reducerPath]: AuthApi.reducer,
         [authSlice.name]: authSlice.reducer,
         [ErrorReportApi.reducerPath]: ErrorReportApi.reducer,
-        [disciplineApi.reducerPath]: disciplineApi.reducer
+        [disciplineApi.reducerPath]: disciplineApi.reducer,
+        [userNotificationsApi.reducerPath]: userNotificationsApi.reducer
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware().concat(
@@ -80,7 +82,8 @@ export const store = configureStore({
             AuthApi.middleware,
             ErrorReportApi.middleware,
             AuthApi.middleware,
-            messageApi.middleware
+            messageApi.middleware,
+            userNotificationsApi.middleware
         )
 })
 

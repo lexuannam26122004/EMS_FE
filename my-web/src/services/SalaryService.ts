@@ -1,6 +1,7 @@
 import { ISalaryGetAll } from '@/models/salary'
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { ITotalEventsByMonth } from '@/models/Event'
 
 interface SalaryResponse {
     Success: boolean
@@ -43,6 +44,12 @@ export const salaryApi = createApi({
                 body: salary
             }),
             invalidatesTags: ['Salary']
+        }),
+        getIncomeInMonth: builder.query<SalaryResponse, ITotalEventsByMonth>({
+            query: params => `GetIncomeInMonth?month=${params.Month}&year=${params.Year}`
+        }),
+        getYearIncome: builder.query<SalaryResponse, number>({
+            query: value => `GetYearIncome?year=${value}`
         }),
         getInfoForDepartmentChart: builder.query<SalaryResponse, void>({
             query: () => 'GetInfoForDepartmentChart',
@@ -128,5 +135,7 @@ export const {
     useGetDisplayInfoQuery,
     useGetGrossTotalByDepartmentsQuery,
     useGetPayrollOfDepartmentOvertimeQuery,
-    useGetPayrollReportQuery
+    useGetPayrollReportQuery,
+    useGetIncomeInMonthQuery,
+    useGetYearIncomeQuery
 } = salaryApi

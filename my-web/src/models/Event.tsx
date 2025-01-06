@@ -8,6 +8,11 @@ export interface IEventCreate {
     AllDay: boolean
 }
 
+export interface ITotalEventsByMonth {
+    Year: number
+    Month: number
+}
+
 export interface IEventGetAll extends IEventCreate {
     Id: number
 }

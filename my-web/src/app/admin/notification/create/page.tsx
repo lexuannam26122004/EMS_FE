@@ -342,6 +342,7 @@ function CreateNotification() {
                                             backgroundSize: '50%, 50%',
                                             backgroundRepeat: 'no-repeat',
                                             padding: '0 8px',
+                                            mt: 'px',
                                             backdropFilter: 'blur(20px)',
                                             borderRadius: '8px',
                                             backgroundColor: 'var(--background-item)',
@@ -353,7 +354,7 @@ function CreateNotification() {
                                                     backgroundColor: 'var(--hover-color)'
                                                 },
                                                 '&.Mui-selected': {
-                                                    backgroundColor: 'var(--selected-color)',
+                                                    backgroundColor: 'var(--background-selected-item)',
                                                     '&:hover': {
                                                         backgroundColor: 'var(--hover-color)'
                                                     }
@@ -369,9 +370,9 @@ function CreateNotification() {
                                 <MenuItem value={'Salary'}>{t('COMMON.NOTIFICATION_TYPE.SALARY')}</MenuItem>
                                 <MenuItem value={'Reward'}>{t('COMMON.NOTIFICATION_TYPE.REWARD')}</MenuItem>
                                 <MenuItem value={'Insurance'}>{t('COMMON.NOTIFICATION_TYPE.INSURANCE')}</MenuItem>
-                                <MenuItem value={'Holiday'}>{t('COMMON.NOTIFICATION_TYPE.HOLIDAY')}</MenuItem>
+                                <MenuItem value={'Holiday'}>{t('COMMON.NOTIFICATION_TYPE.EVENT')}</MenuItem>
                                 <MenuItem value={'Discipline'}>{t('COMMON.NOTIFICATION_TYPE.DISCIPLINE')}</MenuItem>
-                                <MenuItem value={'Timekeeping'}>{t('COMMON.NOTIFICATION_TYPE.TIMEKEEPING')}</MenuItem>
+                                <MenuItem value={'Timekeeping'}>{t('COMMON.NOTIFICATION_TYPE.ATTENDANCE')}</MenuItem>
                             </Select>
                         </FormControl>
                         <Typography
