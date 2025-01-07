@@ -554,6 +554,7 @@
         },
 
         "TIMEOFF": {
+            "TIMEOFF": "Time Off List",
             "INFORMATION": "Employee Information",
             "FULLNAME": "Full Name",
             "EMPLOYEEID": "Employee ID",

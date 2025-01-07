@@ -78,8 +78,8 @@ export default function LeaveRequestCarousel() {
         sliderRef.current?.slickGoTo(prevSlide)
     }
 
-    const handleButtonClick = isAccepted => {
-        updateIsAccepted({ id: dataTimeOff[currentSlide]?.Id, isAccepted })
+    const handleButtonClick = async isAccepted => {
+        await updateIsAccepted({ id: dataTimeOff[currentSlide]?.Id, isAccepted })
         refetch()
     }
 

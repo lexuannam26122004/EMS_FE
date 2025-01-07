@@ -237,27 +237,44 @@ function ContractExpPage() {
         <Paper
             elevation={0}
             sx={{
-                width: '100%',
-                overflow: 'hidden',
-                height: '605px',
-                backgroundColor: 'var(--background-item)',
+                paddingTop: '35px',
+                paddingLeft: '35px',
+                paddingRight: '35px',
                 boxShadow: 'var(--box-shadow-paper)',
-                borderRadius: '30px'
+                borderRadius: '30px',
+                backgroundColor: 'var(--attendance-bg1)',
+                overflow: 'hidden',
+                height: '100%',
+                //border: '1px solid #e0e0e0',
+                width: '100%'
             }}
         >
-            <Typography
+            <Box
                 sx={{
-                    userSelect: 'none',
-                    color: 'var(--text-color)',
-                    fontWeight: 'bold',
-                    fontSize: '18px',
                     display: 'flex',
                     alignItems: 'center',
-                    padding: '24px 24px 15px'
+                    mb: '35px'
                 }}
             >
-                {t('COMMON.ERROR_REPORT.TITLE')}
-            </Typography>
+                <Box
+                    sx={{
+                        width: '5px',
+                        height: '42px',
+                        backgroundColor: '#4effca',
+                        borderRadius: '4px',
+                        mr: '14px'
+                    }}
+                />
+                <Typography
+                    sx={{
+                        color: 'var(--text-color)',
+                        fontSize: '21px',
+                        fontWeight: 'bold'
+                    }}
+                >
+                    {t('COMMON.ERROR_REPORT.TITLE')}
+                </Typography>
+            </Box>
 
             <Box>
                 <Tabs

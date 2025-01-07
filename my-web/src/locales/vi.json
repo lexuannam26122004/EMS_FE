@@ -462,6 +462,7 @@
         },
 
         "TIMEOFF": {
+            "TIMEOFF":"Danh sách nghỉ phép",
             "INFORMATION": "Thông tin nhân viên",
             "FULLNAME": "Họ và tên",
             "EMPLOYEEID": "Mã nhân viên",

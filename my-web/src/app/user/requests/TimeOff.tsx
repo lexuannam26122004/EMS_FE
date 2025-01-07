@@ -227,7 +227,7 @@ function ContractExpPage() {
                         fontWeight: 'bold'
                     }}
                 >
-                    {t('Danh sách xin nghỉ phép')}
+                     {t('COMMON.TIMEOFF.TIMEOFF')}
                 </Typography>
             </Box>
 

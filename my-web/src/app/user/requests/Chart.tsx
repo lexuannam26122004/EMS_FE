@@ -121,7 +121,7 @@ const Chart = () => {
                     height: '87%'
                 }}
             >
-                <ReactECharts option={option} style={{ height: '87%', width: '100%' }} />
+                <ReactECharts option={option} style={{ height: '100%', width: '100%' }} />
             </Box>
         </Box>
     )
