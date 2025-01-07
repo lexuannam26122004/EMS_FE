@@ -12,6 +12,13 @@ export interface ITimekeeping {
     WorkingHours: string
 }
 
+export interface IFilterTimekeepingForUser {
+    Id: number
+    StartDate: Date
+    EndDate: Date
+    IsValid: boolean
+}
+
 export interface ITimekeepingCreate {
     UserId: string
     Date: Date
