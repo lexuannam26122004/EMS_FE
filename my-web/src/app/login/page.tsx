@@ -14,6 +14,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import LanguageMenu from '@/components/LanguageMenu'
 import ColorModeIconDropdown from '@/components/ColorModeIconDropdown'
 import { useGetAuthMeQuery } from '@/services/AuthService'
+import { useCreateAttendanceUserMutation } from '@/services/UserAttendanceService'
 
 const LoginForm: React.FC = () => {
     const [email, setEmail] = useState('')
@@ -24,8 +25,9 @@ const LoginForm: React.FC = () => {
     const router = useRouter()
     const { t } = useTranslation('common')
     const [showPassword, setShowPassword] = React.useState(false)
+    const [createAttendanceUser, { isLoading: isLoadingAttendance }] = useCreateAttendanceUserMutation()
 
-     const { refetch } = useGetAuthMeQuery()
+    const { refetch } = useGetAuthMeQuery()
     const handleClickShowPassword = () => setShowPassword(show => !show)
 
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -54,6 +56,9 @@ const LoginForm: React.FC = () => {
         }
 
         try {
+            const responseIP = await fetch('https://api.ipify.org?format=json')
+            const IPdata = await responseIP.json()
+
             const response = await fetch('https://localhost:44381/api/Auth/Login', {
                 method: 'POST',
                 headers: {
@@ -67,9 +72,17 @@ const LoginForm: React.FC = () => {
             if (response.ok) {
                 const token = data.Data.auth_token
                 sessionStorage.setItem('auth_token', token)
-                refetch()
-                router.push('/admin')
-                toast('Đăng nhập thành công!', 'success')
+                try {
+                    var responseAttendance = await createAttendanceUser(IPdata.ip).unwrap()
+                    console.log(responseAttendance)
+                    refetch()
+                    router.push('/admin')
+                    sessionStorage.setItem('AttendanceId', responseAttendance.Data.Id)
+                    toast('Đăng nhập thành công!', 'success')
+                } catch (error) {
+                    sessionStorage.removeItem('auth_token')
+                    toast('Đã xảy ra lỗi. Vui lòng thử lại sau!', 'error')
+                }
             } else {
                 toast(data?.message || 'Đăng nhập thất bại!', 'error')
             }
