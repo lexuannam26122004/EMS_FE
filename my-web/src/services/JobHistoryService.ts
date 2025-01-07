@@ -2,10 +2,10 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 import { IJobHistoryCreate } from '@/models/JobHistory'
 import { createBaseQuery } from './api'
 
-// interface ApiResponse {
-//     Success: boolean
-//     Data: any
-// }
+interface ApiResponse {
+    Success: boolean
+    Data: any
+}
 
 const apiPath = 'https://localhost:44381/api/admin/JobHistory'
 
@@ -19,19 +19,11 @@ export const JobHistoryApi = createApi({
                 method: 'POST',
                 body: body
             })
+        }),
+
+        searchByUser: builder.query<ApiResponse, string>({
+            query: id => `SearchByUser?id=${id}`
         })
-
-        // updateUsers: builder.mutation<void, IAspNetUserUpdate>({
-        //     query: body => ({
-        //         url: `Update`,
-        //         method: 'PUT',
-        //         body: body
-        //     })
-        // }),
-
-        // getByIdUsers: builder.query<ApiResponse, string>({
-        //     query: id => `GetById?id=${id}`
-        // }),
 
         // getEmployeeCountByDepartment: builder.query<ApiResponse, void>({
         //     query: () => 'GetEmployeeCountByDepartment'
@@ -55,10 +47,8 @@ export const JobHistoryApi = createApi({
 })
 
 export const {
-    //useGetAllUsersQuery,
-    useCreateUsersMutation
-    // useUpdateUsersMutation,
-    // useGetByIdUsersQuery,
+    useCreateUsersMutation,
+    useSearchByUserQuery
     // useChangeStatusUsersMutation,
     // useGetEmployeeCountByAgeQuery,
     // useGetEmployeeCountByGenderQuery,

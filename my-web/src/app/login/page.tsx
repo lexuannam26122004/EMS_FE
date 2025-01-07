@@ -73,11 +73,11 @@ const LoginForm: React.FC = () => {
                 const token = data.Data.auth_token
                 sessionStorage.setItem('auth_token', token)
                 try {
-                    var responseAttendance = await createAttendanceUser(IPdata.ip).unwrap()
-                    console.log(responseAttendance)
+                    //var responseAttendance = await createAttendanceUser(IPdata.ip).unwrap()
+                    //console.log(responseAttendance)
                     refetch()
                     router.push('/admin')
-                    sessionStorage.setItem('AttendanceId', responseAttendance.Data.Id)
+                    //sessionStorage.setItem('AttendanceId', responseAttendance.Data.Id)
                     toast('Đăng nhập thành công!', 'success')
                 } catch (error) {
                     sessionStorage.removeItem('auth_token')

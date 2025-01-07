@@ -8,6 +8,8 @@ export interface IJobHistoryByUser {
     SupervisorId: string | null // Mã người giám sát (dạng string hoặc null)
     WorkLocation: string | null // Địa điểm làm việc (dạng string hoặc null)
     Allowance: string | null // Phụ cấp (dạng string hoặc null)
+    SupervisorFullName: string | null // Địa điểm làm việc (dạng string hoặc null)
+    SupervisorEmployeeId: string | null // Phụ cấp (dạng string hoặc null)
 }
 
 export interface IJobHistoryCreate {

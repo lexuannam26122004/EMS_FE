@@ -1,8 +1,20 @@
 import React from 'react'
 import { Box, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import { useSearchByUserQuery } from '@/services/UserJobHistoryService'
+import Loading from '@/components/Loading'
+import { IJobHistoryByUser } from '@/models/JobHistory'
+import { formatDate } from '@/utils/formatDate'
 
 const Timeline: React.FC = () => {
+    const { data, isLoading } = useSearchByUserQuery()
+
+    const jobHistory = (data?.Data as IJobHistoryByUser[]) || []
+
+    if (isLoading) {
+        return <Loading />
+    }
+
     const colors = [
         'hsl(0, 100%, 50%)',
         'hsl(30, 100%, 50%)',
@@ -65,63 +77,19 @@ const Timeline: React.FC = () => {
         return `rgba(${r}, ${g}, ${b}, ${alpha})`
     }
 
-    const events = [
-        {
-            startDate: '24 Dec 2024 - 9:47 PM',
-            endDate: '24 Dec 2024 - 10:47 PM',
-            location: 'New York',
-            content: {
-                jobDescription: 'Software Developer',
-                allowance: '$2000',
-                note: 'Completed annual review'
-            },
-            color: getRandomColor()
+    const events = jobHistory.map(job => ({
+        startDate: formatDate(job?.StartDate),
+        endDate: formatDate(job?.EndDate),
+        location: job?.WorkLocation,
+        content: {
+            supervisorId: job?.SupervisorEmployeeId,
+            supervisorName: job?.SupervisorFullName,
+            jobDescription: job?.JobDescription,
+            allowance: job?.Allowance,
+            note: job?.Note
         },
-        {
-            startDate: '23 Dec 2024 - 8:47 PM',
-            endDate: '23 Dec 2024 - 9:47 PM',
-            location: 'San Francisco',
-            content: {
-                jobDescription: 'Senior Developer',
-                allowance: '$3000',
-                note: 'Promoted to Senior Developer'
-            },
-            color: getRandomColor()
-        },
-        {
-            startDate: '22 Dec 2024 - 7:47 PM',
-            endDate: '22 Dec 2024 - 8:47 PM',
-            location: 'Los Angeles',
-            content: {
-                jobDescription: 'Project Manager',
-                allowance: '$2500',
-                note: 'Project completed on time'
-            },
-            color: getRandomColor()
-        },
-        {
-            startDate: '21 Dec 2024 - 6:47 PM',
-            endDate: '21 Dec 2024 - 7:47 PM',
-            location: 'Chicago',
-            content: {
-                jobDescription: 'Data Analyst',
-                allowance: '$1800',
-                note: 'Analyzed quarterly data'
-            },
-            color: getRandomColor()
-        },
-        {
-            startDate: '20 Dec 2024 - 5:47 PM',
-            endDate: '20 Dec 2024 - 6:47 PM',
-            location: 'Boston',
-            content: {
-                jobDescription: 'System Architect',
-                allowance: '$2200',
-                note: 'Designing system architecture for new project'
-            },
-            color: getRandomColor()
-        }
-    ]
+        color: getRandomColor()
+    }))
 
     return (
         <Box
@@ -186,6 +154,9 @@ const Timeline: React.FC = () => {
                 >
                     <Typography sx={{ color: 'var(--text-color)', fontSize: '0.9em', marginBottom: '5px' }}>
                         {event.startDate} - {event.endDate} | {event.location}
+                    </Typography>
+                    <Typography sx={{ color: 'var(--text-color)', fontSize: '1.1em' }}>
+                        {`${event.content.supervisorId}  ${event.content.supervisorName}`}
                     </Typography>
                     <Typography sx={{ color: 'var(--text-color)', fontSize: '1.1em' }}>
                         {event.content.jobDescription}
