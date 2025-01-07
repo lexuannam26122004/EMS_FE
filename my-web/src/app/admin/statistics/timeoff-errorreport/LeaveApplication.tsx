@@ -79,7 +79,7 @@ export default function LeaveRequestCarousel() {
     }
 
     const handleButtonClick = isAccepted => {
-        updateIsAccepted({ id: dataTimeOff[currentSlide].Id, isAccepted })
+        updateIsAccepted({ id: dataTimeOff[currentSlide]?.Id, isAccepted })
         refetch()
     }
 

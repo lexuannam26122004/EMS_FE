@@ -71,14 +71,7 @@ function ContractExpPage() {
     const { data: responseGetMeData, isFetching: isFetchingGetMe } = useGetAuthMeQuery()
     const infoMe = responseGetMeData?.Data
 
-    const {
-        data: timeoffResponse,
-        isLoading: istimeoffsLoading,
-        refetch
-    } = useSearchByUserIdQuery({
-        userId: infoMe?.Id,
-        filter: filter
-    })
+    const { data: timeoffResponse, isLoading: istimeoffsLoading, refetch } = useSearchByUserIdQuery(filter)
 
     const errorsData = timeoffResponse?.Data.Records as IGetAllTimeOff[]
 

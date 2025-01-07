@@ -1,7 +1,7 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi } from '@reduxjs/toolkit/query/react'
 import { ITimeOffCreate, ITimeOffUpdate } from '@/models/TimeOff'
 import { ITotalEventsByMonth } from '@/models/Event'
-
+import { createBaseQuery } from './api'
 interface TimeOffResponse {
     Success: boolean
     Data: any
@@ -25,7 +25,7 @@ const apiPath = 'https://localhost:44381/api/admin/TimeOff'
 
 export const TimeOffApi = createApi({
     reducerPath: 'TimeOffApi',
-    baseQuery: fetchBaseQuery({ baseUrl: apiPath }),
+    baseQuery: createBaseQuery(apiPath),
     endpoints: builder => ({
         searchTimeOff: builder.query<TimeOffResponse, IFilter>({
             query: filter => {
@@ -45,8 +45,8 @@ export const TimeOffApi = createApi({
             }
         }),
 
-        searchByUserId: builder.query<TimeOffResponse, { userId: string; filter: IFilter }>({
-            query: ({ userId, filter }) => {
+        searchByUserId: builder.query<TimeOffResponse, IFilter>({
+            query: filter => {
                 const params = new URLSearchParams()
 
                 if (filter) {
@@ -59,7 +59,7 @@ export const TimeOffApi = createApi({
                     if (filter.sortBy) params.append('SortBy', filter.sortBy)
                 }
 
-                return `SearchByUserId?${params.toString()}&UserId=${userId}`
+                return `SearchByUserId?${params.toString()}`
             }
         }),
 

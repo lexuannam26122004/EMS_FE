@@ -1,5 +1,6 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi } from '@reduxjs/toolkit/query/react'
 import { IErrorReportCreate, IErrorReportUpdate } from '@/models/ErrorReport'
+import { createBaseQuery } from './api'
 interface ErrorReportResponse {
     Success: boolean
     Data: any
@@ -22,7 +23,7 @@ const apiPath = 'https://localhost:44381/api/admin/ErrorReport'
 
 export const ErrorReportApi = createApi({
     reducerPath: 'ErrorReportApi',
-    baseQuery: fetchBaseQuery({ baseUrl: apiPath }),
+    baseQuery: createBaseQuery(apiPath),
     endpoints: builder => ({
         searchErrorReport: builder.query<ErrorReportResponse, IFilter>({
             query: filter => {

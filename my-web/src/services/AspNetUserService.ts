@@ -1,5 +1,6 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi } from '@reduxjs/toolkit/query/react'
 import { IAspNetUserCreate, IAspNetUserUpdate } from '@/models/AspNetUser'
+import { createBaseQuery } from './api'
 interface ApiResponse {
     Success: boolean
     Data: any
@@ -9,7 +10,7 @@ const apiPath = 'https://localhost:44381/api/admin/AspNetUser'
 
 export const userApi = createApi({
     reducerPath: 'userApi',
-    baseQuery: fetchBaseQuery({ baseUrl: apiPath }),
+    baseQuery: createBaseQuery(apiPath),
     endpoints: builder => ({
         getAllUsers: builder.query<ApiResponse, void>({
             query: () => 'GetAll'
