@@ -5,8 +5,10 @@ import { Paper, Typography } from '@mui/material'
 import { useTheme } from 'next-themes'
 import Loading from '@/components/Loading'
 import { useGetGrossTotalByDepartmentsQuery } from '@/services/SalaryService'
+import { useTranslation } from 'react-i18next'
 
 export default function GrossTotalByAreas() {
+    const { t } = useTranslation()
     const { theme } = useTheme()
     const [chartData, setChartData] = useState<{ [key: string]: number }>({})
     const [loading, setLoading] = useState(true)
@@ -52,7 +54,9 @@ export default function GrossTotalByAreas() {
             textStyle: {
                 color: theme === 'light' ? 'black' : '#fff',
                 fontFamily: 'Arial, sans-serif'
-            }
+            },
+
+            itemStyle: { color: '#FF6699' }
         },
         grid: {
             right: '5%',
@@ -84,7 +88,11 @@ export default function GrossTotalByAreas() {
         yAxis: {
             type: 'category',
             data: Object.keys(chartData),
-
+            name: t('COMMON.DASHBOARD.DEPARTMENT'),
+            nameTextStyle: {
+                color: theme === 'light' ? 'black' : '#fff',
+                fontFamily: 'Arial, sans-serif'
+            },
             axisLabel: {
                 formatter: function (value: string) {
                     const maxLength = 10 // Độ dài tối đa cho nhãn
@@ -98,13 +106,11 @@ export default function GrossTotalByAreas() {
         },
         series: [
             {
+                name: `${data?.Data?.period}`,
                 data: Object.values(chartData),
                 type: 'bar',
                 itemStyle: {
-                    color: function (params: { dataIndex: number; value: number; seriesIndex: number; name: string }) {
-                        const colors = ['#ff69b4', '#ff1493', '#db7093', '#c71585', '#ffb6c1']
-                        return colors[params.dataIndex % colors.length]
-                    }
+                    color: '#FF6699'
                 }
             }
         ]
@@ -122,9 +128,9 @@ export default function GrossTotalByAreas() {
             }}
         >
             <Typography fontSize={'20px'} fontWeight={'bold'} color='var(--text-color)'>
-                Gross total by departments
+                {t('COMMON.SALARY.GROSS_TOTAL_BY_DEPARTMENTS')}
             </Typography>
-            <ReactECharts option={option} style={{ width: '100%', height: '330px', marginTop: '25px' }}></ReactECharts>
+            <ReactECharts option={option} style={{ width: '100%', height: '400px', marginTop: '25px' }}></ReactECharts>
         </Paper>
     )
 }

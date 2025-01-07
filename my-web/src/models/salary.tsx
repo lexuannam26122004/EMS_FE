@@ -12,8 +12,12 @@ export interface ISalaryGetAll {
     PITax: number
     TotalSalary: number
     IsActive: number
-    IsPaid: number
+    IsPaid: boolean
     PayrollPeriod: string
+}
+
+export interface IUnpaidSalary extends ISalaryGetAll {
+    AvatarPath: string
 }
 
 export interface ISalaryByLevel {

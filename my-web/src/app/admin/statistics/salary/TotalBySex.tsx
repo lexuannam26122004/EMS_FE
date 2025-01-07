@@ -4,12 +4,14 @@ import ReactECharts from 'echarts-for-react'
 import { CircularProgress, Paper, Typography } from '@mui/material'
 import { useTheme } from 'next-themes'
 import { useGetTotalBySexQuery } from '@/services/SalaryService'
+import { useTranslation } from 'react-i18next'
 interface TotalBySex {
     male: number
     female: number
     other: number
 }
 export default function TotalBySex() {
+    const { t } = useTranslation()
     const { theme } = useTheme()
     const { data, isLoading, isError } = useGetTotalBySexQuery()
 
@@ -70,25 +72,25 @@ export default function TotalBySex() {
             {
                 name: 'Access From',
                 type: 'pie',
-                radius: '50%',
+                radius: '60%',
                 data: [
                     {
                         value: totalData?.male,
-                        name: 'Nam',
+                        name: t('COMMON.SALARY.MALE'),
                         itemStyle: {
                             color: '#00a76f'
                         }
                     },
                     {
                         value: totalData?.female,
-                        name: 'Nữ',
+                        name: t('COMMON.SALARY.FEMALE'),
                         itemStyle: {
                             color: '#ffab00'
                         }
                     },
                     {
                         value: totalData?.other,
-                        name: 'Khác',
+                        name: t('COMMON.SALARY.OTHER'),
                         itemStyle: {
                             color: '#FF6699'
                         }
@@ -116,9 +118,9 @@ export default function TotalBySex() {
             }}
         >
             <Typography fontSize={'20px'} fontWeight={'bold'} color='var(--text-color)'>
-                Phân tích lương theo giới tính
+                {t('COMMON.SALARY.SALARY_ANALYSIS_BY_GENDER')}
             </Typography>
-            <ReactECharts option={option} style={{ width: '115%', height: '260px', marginTop: '20px' }}></ReactECharts>
+            <ReactECharts option={option} style={{ width: '100%', height: '260px', marginTop: '20px' }}></ReactECharts>
         </Paper>
     )
 }

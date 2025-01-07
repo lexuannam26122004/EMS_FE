@@ -5,7 +5,9 @@ import { Paper, Typography } from '@mui/material'
 import { useTheme } from 'next-themes'
 import { useGetGrossTotalByDepartmentsQuery } from '@/services/SalaryService'
 import Loading from '@/components/Loading'
+import { useTranslation } from 'react-i18next'
 export default function PayrollShares() {
+    const { t } = useTranslation()
     const { theme } = useTheme()
     const [chartData, setChartData] = useState<{ [key: string]: number }>({})
     const [loading, setLoading] = useState(true)
@@ -98,9 +100,9 @@ export default function PayrollShares() {
             }}
         >
             <Typography fontSize={'20px'} fontWeight={'bold'} color='var(--text-color)'>
-                Payroll shares by departments
+                {t('COMMON.SALARY.PAYROLL_SHARES_BY_DEPARTMENTS')}
             </Typography>
-            <ReactECharts option={option} style={{ width: '100%', height: '350px', marginTop: '5px' }}></ReactECharts>
+            <ReactECharts option={option} style={{ width: '100%', height: '400px', marginTop: '5px' }}></ReactECharts>
         </Paper>
     )
 }

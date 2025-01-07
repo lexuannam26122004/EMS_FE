@@ -4,6 +4,7 @@ import { CircularProgress, Paper, Typography } from '@mui/material'
 import { useTheme } from 'next-themes'
 import { useGetIncomeStructureQuery } from '@/services/SalaryService'
 import { useTranslation } from 'react-i18next'
+import Loading from '@/components/Loading'
 
 interface IncomeStructure {
     baseSalary: number
@@ -20,23 +21,7 @@ const IncomeStructureChart = () => {
     const totalData = data?.Data as IncomeStructure
 
     if (isLoading) {
-        return (
-            <Paper
-                elevation={0}
-                sx={{
-                    width: '100%',
-                    padding: '24px',
-                    backgroundColor: 'var(--background-item)',
-                    borderRadius: '15px',
-                    height: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }}
-            >
-                <CircularProgress /> {/* Hiển thị spinner khi đang tải */}
-            </Paper>
-        )
+        return <Loading />
     }
     if (isError) {
         return (
@@ -115,7 +100,7 @@ const IncomeStructureChart = () => {
             }}
         >
             <Typography fontSize={'24px'} fontWeight={'bold'} color='var(--text-color)'>
-                Cơ cấu thu nhập
+                {t('COMMON.SALARY.INCOME_STRUCTURE')}
             </Typography>
             <ReactECharts option={option} style={{ width: '100%', height: '320px', marginTop: '10px' }}></ReactECharts>
         </Paper>

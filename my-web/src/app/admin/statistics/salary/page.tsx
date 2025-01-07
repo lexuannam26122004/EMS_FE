@@ -17,10 +17,10 @@ export default function SalaryStatistic() {
             <Box width='100%'>
                 <DisplayInfo />
             </Box>
-            <Box sx={{ width: '100%', marginTop: '20px' }}>
+            <Box sx={{ width: '100%', marginTop: '24px' }}>
                 <SpecialInfo />
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', marginTop: '20px', gap: '20px' }}>
+            <Box sx={{ display: 'flex', alignItems: 'stretch', marginTop: '24px', gap: '24px' }}>
                 <Box sx={{ width: 'calc(100% / 4 * 3 - 30px)' }}>
                     <PayrollReport />
                 </Box>
@@ -28,7 +28,7 @@ export default function SalaryStatistic() {
                     <GrossTotal />
                 </Box>
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'stretch', marginTop: '20px', gap: '20px' }}>
+            <Box sx={{ display: 'flex', alignItems: 'stretch', marginTop: '24px', gap: '24px' }}>
                 <Box sx={{ width: 'calc(100% / 3)' }}>
                     <GrossTotalByAreas />
                 </Box>
@@ -39,7 +39,7 @@ export default function SalaryStatistic() {
                     <PayrollOvertime />
                 </Box>
             </Box>
-            <Box sx={{ width: '100%', marginTop: '20px' }}>
+            <Box sx={{ width: '100%', marginTop: '24px' }}>
                 <SalaryTablePage />
             </Box>
         </Box>
