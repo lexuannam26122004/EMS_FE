@@ -29,7 +29,7 @@ import {
 
 import { ITimeOffSearch } from '@/models/TimeOff'
 import { useSearchTimeOffQuery, useChangeStatusTimeOffsMutation } from '@/services/TimeOffService'
-
+import Loading from '@/components/Loading'
 import { CirclePlus, EyeIcon, Pencil, Trash2 } from 'lucide-react'
 import SearchIcon from '@mui/icons-material/Search'
 import { useTranslation } from 'react-i18next'
@@ -153,7 +153,7 @@ const EmployeeTable: React.FC = () => {
         [timeoff]
     )
 
-    if (istimeoffsLoading) return <div>Loading...</div>
+    if (istimeoffsLoading) return <Loading />
 
     const isSelected = (id: number) => selected.includes(id)
 

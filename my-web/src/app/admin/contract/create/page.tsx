@@ -13,6 +13,7 @@ import {
     Avatar
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import Loading from '@/components/Loading'
 import { SaveIcon, XIcon, RefreshCcwIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
@@ -166,7 +167,7 @@ const CreateEmploymentContract = () => {
         setIsSubmit(false)
     }
 
-    if (isUsersLoading) return <div>Loading...</div>
+    if (isUsersLoading) return <Loading />
 
     return (
         <Box sx={{ width: '720px', maxWidth: '100%', margin: '0 auto' }}>

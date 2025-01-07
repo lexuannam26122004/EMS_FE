@@ -19,7 +19,7 @@ import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import LoadingButton from '@mui/lab/LoadingButton'
 import { useToast } from '@/hooks/useToast'
-
+import Loading from '@/components/Loading'
 import { IAspNetUserGetAll } from '@/models/AspNetUser'
 import { useGetAllUsersQuery } from '@/services/AspNetUserService'
 
@@ -154,7 +154,7 @@ const UpdateTimeOff = () => {
         setIsSubmit(false)
     }
 
-    if (isUsersLoading) return <div>Loading...</div>
+    if (isUsersLoading) return <Loading />
 
     return (
         <Box sx={{ width: '720px', maxWidth: '100%', margin: '0 auto' }}>
