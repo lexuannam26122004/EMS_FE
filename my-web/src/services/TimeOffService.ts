@@ -63,6 +63,10 @@ export const TimeOffApi = createApi({
             }
         }),
 
+        getTimeOffIsAccepted: builder.query<TimeOffResponse, number>({
+            query: params => `GetTimeOffIsAccepted?year=${params}`
+        }),
+
         createTimeOffs: builder.mutation<void, ITimeOffCreate>({
             query: body => ({
                 url: `Create`,
@@ -106,6 +110,7 @@ export const TimeOffApi = createApi({
 export const {
     useSearchTimeOffQuery,
     useSearchByUserIdQuery,
+    useGetTimeOffIsAcceptedQuery,
     useCreateTimeOffsMutation,
     useUpdateTimeOffsMutation,
     useGetByIdTimeOffsQuery,

@@ -3,6 +3,14 @@ import { useTheme } from 'next-themes'
 import { MenuItem, FormControl, Select, Box, Paper, Typography, SelectChangeEvent } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import ReactECharts from 'echarts-for-react'
+import { useCountErrorReportsByStatusAndMonthQuery } from '@/services/ErrorReportService'
+import { useGetTimeOffIsAcceptedQuery } from '@/services/TimeOffService'
+import Loading from '@/components/Loading'
+
+interface ICount {
+    Unprocessed: number
+    Processed: number
+}
 
 const Chart: React.FC = () => {
     const currentYear = new Date().getFullYear()
@@ -10,28 +18,31 @@ const Chart: React.FC = () => {
     const { t } = useTranslation('common')
     const { theme } = useTheme()
 
+    const { data: responseErrorReport, isLoading: isLoadingErrorReport } =
+        useCountErrorReportsByStatusAndMonthQuery(selectedYear)
+    const dataErrorReport: ICount[] = Array.isArray(responseErrorReport?.Data) ? responseErrorReport.Data : []
+
+    const { data: responseTimeOff, isLoading: isLoadingTimeOff } = useGetTimeOffIsAcceptedQuery(selectedYear)
+    const dataTimeOff: ICount[] = Array.isArray(responseTimeOff?.Data) ? responseTimeOff.Data : []
+
     const handleYearChange = (event: SelectChangeEvent<number>) => {
         setSelectedYear(Number(event.target.value))
     }
 
-    const xAxisData = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-    const data1: number[] = []
-    const data2: number[] = []
-    const data3: number[] = []
-    const data4: number[] = []
-
-    for (let i = 0; i < 12; i++) {
-        data1.push(+(Math.random() * 2).toFixed(2))
-        data2.push(+(Math.random() * 5).toFixed(2))
-        data3.push(+(Math.random() + 0.3).toFixed(2))
-        data4.push(+Math.random().toFixed(2))
+    if (isLoadingErrorReport || isLoadingTimeOff) {
+        return <Loading />
     }
 
-    const totalLeaveApproved = data1.reduce((sum, val) => sum + val, 0).toFixed(2)
-    const totalLeavePending = data2.reduce((sum, val) => sum + val, 0).toFixed(2)
-    const totalReportApproved = data3.reduce((sum, val) => sum + val, 0).toFixed(2)
-    const totalReportPending = data4.reduce((sum, val) => sum + val, 0).toFixed(2)
+    const xAxisData = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    const data1: number[] = dataTimeOff.map(item => item.Processed)
+    const data2: number[] = dataTimeOff.map(item => item.Unprocessed)
+    const data3: number[] = dataErrorReport.map(item => item.Processed)
+    const data4: number[] = dataErrorReport.map(item => item.Unprocessed)
 
+    const totalLeaveApproved = data1.reduce((sum, val) => sum + val, 0)
+    const totalLeavePending = data2.reduce((sum, val) => sum + val, 0)
+    const totalReportApproved = data3.reduce((sum, val) => sum + val, 0)
+    const totalReportPending = data4.reduce((sum, val) => sum + val, 0)
     const emphasisStyle = {
         itemStyle: {
             shadowBlur: 10,
@@ -128,8 +139,8 @@ const Chart: React.FC = () => {
                     tooltipContent += `${param.seriesName}: ${param.value}<br/>`
                 })
 
-                tooltipContent += `<br/><strong>${t('COMMON.TIMEOFF_ERROR.TOTAL_TIMEOOF')}</strong> ${totalLeave.toFixed(2)}<br/>`
-                tooltipContent += `<strong>${t('COMMON.TIMEOFF_ERROR.TOTAL_ERROR')}</strong> ${totalErrorReport.toFixed(2)}<br/>`
+                tooltipContent += `<br/><strong>${t('COMMON.TIMEOFF_ERROR.TOTAL_TIMEOOF')}</strong> ${totalLeave}<br/>`
+                tooltipContent += `<strong>${t('COMMON.TIMEOFF_ERROR.TOTAL_ERROR')}</strong> ${totalErrorReport}<br/>`
 
                 return tooltipContent
             }

@@ -51,10 +51,15 @@ export const ErrorReportApi = createApi({
                     if (filter.keyword) params.append('Keyword', filter.keyword)
                     if (filter.isDescending !== undefined) params.append('IsDescending', filter.isDescending.toString())
                     if (filter.sortBy) params.append('SortBy', filter.sortBy)
+                    if (filter.isType) params.append('Keyword', filter.isType)
                 }
 
                 return `SearchByUserId?${params.toString()}&UserId=${userId}`
             }
+        }),
+
+        countErrorReportsByStatusAndMonth: builder.query<ErrorReportResponse, number>({
+            query: params => `CountErrorReportsByStatusAndMonth?year=${params}`
         }),
 
         getCountErrorReportsInMonth: builder.query<ErrorReportResponse, IMonthAndYear>({
@@ -96,6 +101,7 @@ export const ErrorReportApi = createApi({
 export const {
     useSearchErrorReportQuery,
     useSearchByUserIdQuery,
+    useCountErrorReportsByStatusAndMonthQuery,
     useCreateErrorReportsMutation,
     useUpdateErrorReportsMutation,
     useGetByIdErrorReportsQuery,
