@@ -1,6 +1,7 @@
 import { IEventCreate, IEventUpdate, IFilterEvent } from '@/models/Event'
 
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi } from '@reduxjs/toolkit/query/react'
+import { createBaseQuery } from './api'
 
 interface IEventResponse {
     Success: boolean
@@ -14,7 +15,7 @@ export const holidayApi = createApi({
     reducerPath: 'holidayApi',
 
     // Configures the base query with the API URL
-    baseQuery: fetchBaseQuery({ baseUrl: apiPath }),
+    baseQuery: createBaseQuery(apiPath),
 
     // Tags are used for cache invalidation
     tagTypes: ['Holiday'],

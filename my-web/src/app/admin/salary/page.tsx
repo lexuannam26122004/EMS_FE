@@ -1,7 +1,7 @@
 'use client'
 
 import { Box, Typography } from '@mui/material'
-import { BellPlus, Grid2x2Plus, Sheet } from 'lucide-react'
+import { BellPlus, Grid2x2Plus, HandCoins, Sheet } from 'lucide-react'
 import EmployeeSalaryChart from './EmployeeSalaryChart'
 import IncomeStructureChart from './IncomeStructureChart'
 import TotalIncomeChart from './TotalIncomeChart'
@@ -175,35 +175,62 @@ function OverviewSalaryPage() {
                         </Typography>
                     </Box>
                 )}
-                {/* <Box
-                    sx={{
-                        marginLeft: '20px',
-                        width: 'calc(100% / 3)',
-                        backgroundBlendMode: 'overlay',
-                        backgroundImage: 'url("/background/1.jpg")',
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                        borderRadius: '15px',
-                        zIndex: 1
-                    }}
-                >
-                    <HandCoins
-                        size={'30px'}
-                        style={{ color: 'white', marginLeft: '10px', marginTop: '20px' }}
-                    ></HandCoins>
-                    <Typography
+                {menuLeft['/admin/salary'].IsAllowView && (
+                    <Box
+                        onClick={() => router.push('/admin/salary/unpaid')}
                         sx={{
-                            color: 'var(--text-color)',
-                            padding: '10px',
-                            marginBottom: '5px',
-                            zIndex: 2,
-                            fontSize: '24px',
-                            fontWeight: 'bold'
+                            marginLeft: '20px',
+                            width: 'calc(100% / 3)',
+                            backgroundBlendMode: 'overlay',
+                            backgroundImage: 'url("images/group1.png")',
+                            backgroundSize: 'cover',
+                            backgroundColor: '#FFFF00',
+                            backgroundPosition: 'center',
+                            borderRadius: '15px',
+                            zIndex: 1,
+                            cursor: 'pointer', // Hiển thị con trỏ tay khi hover
+                            transition: 'transform 0.5s ease', // Hiệu ứng phóng to mượt mà
+                            '&:hover': {
+                                transform: 'scale(1.02)' // Phóng to nhẹ khi hover
+                            },
+                            '&::after': {
+                                content: '""',
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
+                                width: '0',
+                                height: '100%',
+                                background:
+                                    'linear-gradient(to right, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))',
+                                transform: 'translate(-50%, -50%)',
+                                opacity: 0,
+                                transition: 'width 0.4s ease, opacity 0.4s ease',
+                                zIndex: 0 // Đảm bảo pseudo-element nằm dưới nội dung
+                            },
+                            '&:active::after': {
+                                width: '200%', // Hiệu ứng gợn sóng sang hai bên
+                                opacity: 1
+                            }
                         }}
                     >
-                        {t('COMMON.SALARY.PAID')}
-                    </Typography>
-                </Box> */}
+                        <HandCoins
+                            size={'30px'}
+                            style={{ color: 'white', marginLeft: '10px', marginTop: '20px' }}
+                        ></HandCoins>
+                        <Typography
+                            sx={{
+                                color: 'green',
+                                padding: '10px',
+                                marginBottom: '5px',
+                                zIndex: 2,
+                                fontSize: '24px',
+                                fontWeight: 'bold'
+                            }}
+                        >
+                            {t('COMMON.SALARY.PAID')}
+                        </Typography>
+                    </Box>
+                )}
                 {menuLeft['/admin/salary'].IsAllowCreate && (
                     <Box
                         sx={{

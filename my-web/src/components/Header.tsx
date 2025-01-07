@@ -58,12 +58,12 @@ export default function Header() {
                     <Box> </Box>
                 )}
                 <Box className='flex items-center gap-3'>
-                    <Search />
+                    {/* <Search />
                     <Divider
                         orientation='vertical'
                         flexItem
                         sx={{ width: '1.5px', mr: 1, ml: 1, borderColor: 'var(--border-color)' }}
-                    />
+                    /> */}
                     <LanguageMenu />
                     <ColorModeIconDropdown />
                     <NotificationMenu />

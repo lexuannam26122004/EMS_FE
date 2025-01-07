@@ -1,6 +1,7 @@
 import { IDepartmentCreate, IDepartmentUpdate } from '@/models/Department'
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi } from '@reduxjs/toolkit/query/react'
+import { createBaseQuery } from './api'
 
 interface DepartmentResponse {
     Success: boolean
@@ -11,7 +12,7 @@ const apiPath = 'https://localhost:44381/api/admin/Department'
 
 export const departmentApi = createApi({
     reducerPath: 'departmentApi',
-    baseQuery: fetchBaseQuery({ baseUrl: apiPath }),
+    baseQuery: createBaseQuery(apiPath),
     tagTypes: ['Department'],
     endpoints: builder => ({
         createDepartment: builder.mutation<void, IDepartmentCreate>({

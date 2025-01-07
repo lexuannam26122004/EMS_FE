@@ -184,7 +184,8 @@
             "LOGIN_HISTORY": "Lịch sử đăng nhập",
             "HELP": "Trợ giúp",
             "CREATE_NOTIFICATION": "Tạo thông báo",
-            "CHANGE_PASSWORD": "Đổi mật khẩu"
+            "CHANGE_PASSWORD": "Đổi mật khẩu",
+            "PAGE_ADMIN": "Trang quản lý"
         },
         "TIME_DIFFERENCE": {
             "SECONDS_AGO": "{{seconds}} giây trước",
@@ -350,7 +351,8 @@
             "AVG_GROSS": "Lương Gross trung bình",
             "AVG_NET": "Lương thực lĩnh trung bình",
             "AVG_INSURANCE": "Bảo hiểm trung bình",
-            "AVG_PITAX": "Thuế trung bình"
+            "AVG_PITAX": "Thuế trung bình",
+            "PAY": "Thanh toán"
         },
         "CREATE_NOTIFICATION": {
             "TITLE_PAGE": "Tạo thông báo mới",
@@ -704,6 +706,7 @@
             "AVG_CHECK_OUT": "Trung bình giờ ra",
             "THIS_MONTH": "Tháng này",
             "THIS_YEAR": "Năm nay",
+            "MINUTES": "phút",
             "THIS_WEEK": "Tuần này",
             "ATTENDANCE_HISTORY": "Lịch sử chấm công",
             "FILTER": "Bộ lọc",

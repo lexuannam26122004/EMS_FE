@@ -9,14 +9,18 @@ export interface ITimekeeping {
     Agent: string
     IsValid: boolean
     Overtime: string
-    WorkingHours: string
+    TotalHours: number
 }
 
 export interface IFilterTimekeepingForUser {
-    Id: number
-    StartDate: Date
-    EndDate: Date
+    StartDate: string
+    EndDate: string
     IsValid: boolean
+    IsEarly: boolean
+    IsLate: boolean
+    IsOnTime: boolean
+    PageSize: number
+    PageNumber: number
 }
 
 export interface ITimekeepingCreate {

@@ -1,7 +1,8 @@
 import { ISalaryGetAll } from '@/models/salary'
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi } from '@reduxjs/toolkit/query/react'
 import { ITotalEventsByMonth } from '@/models/Event'
+import { createBaseQuery } from './api'
 
 interface SalaryResponse {
     Success: boolean
@@ -12,7 +13,7 @@ const apiPath = 'https://localhost:44381/api/admin/Salary'
 
 export const salaryApi = createApi({
     reducerPath: 'salaryApi',
-    baseQuery: fetchBaseQuery({ baseUrl: apiPath }),
+    baseQuery: createBaseQuery(apiPath),
     tagTypes: ['Salary'],
     endpoints: builder => ({
         getAllSalaries: builder.query<SalaryResponse, { filter: IFilterSysConfiguration; period: string }>({
@@ -40,9 +41,46 @@ export const salaryApi = createApi({
         updateSalary: builder.mutation<void, ISalaryGetAll>({
             query: salary => ({
                 url: 'Update',
-                method: 'Put',
+                method: 'PUT',
                 body: salary
             }),
+            invalidatesTags: ['Salary']
+        }),
+        getSalaryById: builder.query<SalaryResponse, { Id: string }>({
+            query: ({ Id }) => ({
+                url: `GetById?id=${Id}`,
+                method: 'GET'
+            }),
+            providesTags: ['Salary']
+        }),
+        updateSalaryById: builder.mutation<void, { Id: string }>({
+            query: ({ Id }) => ({
+                url: `Update?Id=${Id}`, // Properly wrap `Id` in a string template
+                method: 'PUT'
+            }),
+            invalidatesTags: ['Salary'] // This ensures the cache is updated after the mutation
+        }),
+        paymentConfirmation: builder.mutation<void, { Id: string }>({
+            query: ({ Id }) => ({
+                url: `PaymentConfirmation?Id=${Id}`,
+                method: 'PUT'
+            }),
+            invalidatesTags: ['Salary'] // Ensure cache invalidation after updating the salary status
+        }),
+        changeStatus: builder.mutation<void, string>({
+            query: id => ({
+                url: `Remove/${id}`,
+                method: 'PUT'
+            }),
+            invalidatesTags: ['Salary']
+        }),
+        changeStatusMany: builder.mutation<void, string[]>({
+            query: ids => ({
+                url: `ChangeStatusMany`,
+                method: 'PUT',
+                body: { Ids: ids }
+            }),
+            // Invalidates 'Holiday' cache so list refreshes
             invalidatesTags: ['Salary']
         }),
         getIncomeInMonth: builder.query<SalaryResponse, ITotalEventsByMonth>({
@@ -150,7 +188,12 @@ export const salaryApi = createApi({
 
 export const {
     useGetAllSalariesQuery,
+    useGetSalaryByIdQuery,
     useUpdateSalaryMutation,
+    usePaymentConfirmationMutation,
+    useUpdateSalaryByIdMutation,
+    useChangeStatusMutation,
+    useChangeStatusManyMutation,
     useGetInfoForDepartmentChartQuery,
     useGetSalaryByLevelQuery,
     useCreateSalaryMutation,
