@@ -55,11 +55,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({
     insurance,
     tax
 }) => {
-
-const StyledCard = styled(Card)(({}) => ({}))
-
-const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName, position, department }) => {
-
     return (
         <Box sx={{ maxWidth: 1000, mx: 'auto', mt: 4, p: 2 }}>
             <StyledCard>
@@ -105,7 +100,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -119,7 +113,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -133,7 +126,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -147,7 +139,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -163,7 +154,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -177,7 +167,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -191,7 +180,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -205,7 +193,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -221,7 +208,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -235,7 +221,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -249,7 +234,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -263,7 +247,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -279,7 +262,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -293,7 +275,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -312,7 +293,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                                 fontWeight='bold'
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '20px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -329,7 +309,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -343,7 +322,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -360,7 +338,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -374,7 +351,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -390,7 +366,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -404,7 +379,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -421,7 +395,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -435,7 +408,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -454,7 +426,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -468,7 +439,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -488,7 +458,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                                 fontWeight='bold'
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '20px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -505,7 +474,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -519,7 +487,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -536,7 +503,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -550,7 +516,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -571,7 +536,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '20px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -586,7 +550,6 @@ const EmployeeSalary: React.FC<EmployeeSalaryProps> = ({ avatarUrl, employeeName
                                             <Typography
                                                 sx={{
                                                     color: 'var(--text-color)',
-                                                    maxWidth: '400px',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',

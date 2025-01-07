@@ -18,46 +18,32 @@ import {
     TextField,
     InputAdornment,
     TableSortLabel,
-    Avatar
+    Avatar,
+    FormControl
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import SearchIcon from '@mui/icons-material/Search'
 //import { useRouter } from 'next/navigation'
-import { useGetAllSalariesQuery } from '@/services/SalaryService'
-import { ISalaryGetAll } from '@/models/salary'
+import { useGetAllSalariesQuery, useGetUnpaidSalaryQuery } from '@/services/SalaryService'
+import { ISalaryGetAll, IUnpaidSalary } from '@/models/salary'
+import { IFilterSysConfiguration } from '@/models/SysConfiguration'
 
-// function getContractBgColor(contractEnd: string): string {
-//     const today = new Date()
-//     const endDate = new Date(contractEnd)
+function getContractBgColor(IsPaid: boolean): string {
+    if (IsPaid) {
+        return 'var(--bg-success-color)'
+    } else {
+        return 'var(--bg-danger-color)'
+    }
+}
 
-//     const diffInMilliseconds = endDate.getTime() - today.getTime()
-//     const diffInMonths = diffInMilliseconds / (1000 * 60 * 60 * 24 * 30)
-
-//     if (diffInMonths <= 2) {
-//         return 'var(--bg-danger-color)'
-//     } else if (diffInMonths <= 4) {
-//         return 'var(--bg-warning-color)'
-//     } else {
-//         return 'var(--bg-success-color)'
-//     }
-// }
-
-// function getContractTextColor(contractEnd: string): string {
-//     const today = new Date()
-//     const endDate = new Date(contractEnd)
-
-//     const diffInMilliseconds = endDate.getTime() - today.getTime()
-//     const diffInMonths = diffInMilliseconds / (1000 * 60 * 60 * 24 * 30)
-
-//     if (diffInMonths <= 2) {
-//         return 'var(--text-danger-color)'
-//     } else if (diffInMonths <= 4) {
-//         return 'var(--text-warning-color)'
-//     } else {
-//         return 'var(--text-success-color)'
-//     }
-// }
+function getContractTextColor(IsPaid: boolean): string {
+    if (IsPaid) {
+        return 'var(--text-success-color)'
+    } else {
+        return 'var(--text-danger-color)'
+    }
+}
 
 function SalaryTablePage() {
     const { t } = useTranslation('common')
@@ -67,10 +53,9 @@ function SalaryTablePage() {
     const [rowsPerPage, setRowsPerPage] = useState('5')
     const [from, setFrom] = useState(1)
     const [to, setTo] = useState(5)
-    const [filter, setFilter] = useState<IFilterEmploymentContract>({
+    const [filter, setFilter] = useState<IFilterSysConfiguration>({
         pageSize: 5,
-        pageNumber: 1,
-        daysUntilExpiration: 180
+        pageNumber: 1
     })
     const [keyword, setKeyword] = useState('')
     // const [openDialog, setOpenDialog] = useState(false)
@@ -79,29 +64,14 @@ function SalaryTablePage() {
     const [orderBy, setOrderBy] = useState<string>('')
     // const [selectedConfig, setSelectedConfig] = useState<IGetAllSysConfiguration | null>(null)
     //const [openModal, setOpenModal] = useState(false)
-    const [period] = useState<string>('')
-    const { data: responseData, isFetching, refetch } = useGetAllSalariesQuery({ filter, period })
+    const currentYear = new Date().getFullYear()
+    const [selectedYear, setSelectedYear] = useState<number>(currentYear)
+    const year = typeof selectedYear === 'number' ? selectedYear.toString() : currentYear.toString()
 
-    const salaryData = responseData?.Data as ISalaryGetAll[]
+    const { data: responseData, isFetching, refetch } = useGetUnpaidSalaryQuery({ filter, year })
+
+    const salaryData = responseData?.Data.Records as IUnpaidSalary[]
     const totalRecords = responseData?.Data.TotalRecords as number
-
-    // const salaries = salaryData?.map((item: any) => {
-    //     return {
-    //         FullName: item.User.FullName,
-    //         AvatarPath: item.User.AvatarPath,
-    //         Date: item.User.Date,
-    //         BasicSalary: item.User.BasicSalary,
-    //         Timekeeping: item.User.Timekeeping,
-    //         Insurance: item.User.Insurance,
-    //         Benefit: item.User.Benefit,
-    //         Reward: item.User.Reward,
-    //         Discipline: item.User.Discipline,
-    //         PITax: item.User.PITax,
-    //         TotalSalary: item.User.TotalSalary,
-    //         IsPaid: item.User.IsPaid,
-    //         PayrollPeriod: item.User.PayrollPeriod
-    //     }
-    // })
 
     const handleChangePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
         setPage(newPage)
@@ -111,6 +81,10 @@ function SalaryTablePage() {
                 pageNumber: newPage
             }
         })
+    }
+
+    const handleYearChange = (event: SelectChangeEvent<number>) => {
+        setSelectedYear(event.target.value as number)
     }
 
     const handleChangeRowsPerPage = (event: SelectChangeEvent) => {
@@ -188,7 +162,7 @@ function SalaryTablePage() {
                 >
                     {t('COMMON.SALARY.UNPAID')}
                 </Typography>
-                <Box display='flex' alignItems='center' justifyContent='space-between' margin='0 0 20px 24px'>
+                <Box display='flex' alignItems='center' justifyContent='space-between' margin='0 24px 20px 24px'>
                     <Box sx={{ position: 'relative', width: '100%', height: '55px' }}>
                         <TextField
                             id='location-search'
@@ -251,6 +225,84 @@ function SalaryTablePage() {
                             }}
                         />
                     </Box>
+                    <FormControl sx={{ width: '150px' }}>
+                        <Select
+                            defaultValue={currentYear}
+                            onChange={handleYearChange}
+                            sx={{
+                                '&:hover .MuiOutlinedInput-notchedOutline': {
+                                    borderColor: 'var(--border-color)'
+                                },
+                                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                    border: '1px solid var(--border-color)' // Đặt border cho trạng thái focus
+                                },
+                                '& fieldset': {
+                                    borderRadius: '8px',
+                                    borderColor: 'var(--border-color)'
+                                },
+                                '& .MuiSelect-icon': {
+                                    color: 'var(--text-color)'
+                                },
+                                '& .MuiInputBase-input': {
+                                    color: 'var(--text-color)',
+                                    padding: '10px'
+                                }
+                            }}
+                            MenuProps={{
+                                PaperProps: {
+                                    elevation: 0,
+                                    sx: {
+                                        width: '120px',
+                                        mt: '2px',
+                                        borderRadius: '8px',
+                                        padding: '0 8px',
+                                        backgroundImage:
+                                            'url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSJ1cmwoI3BhaW50MF9yYWRpYWxfMjc0OV8xNDUxODYpIiBmaWxsLW9wYWNpdHk9IjAuMTIiLz4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0icGFpbnQwX3JhZGlhbF8yNzQ5XzE0NTE4NiIgY3g9IjAiIGN5PSIwIiByPSIxIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgZ3JhZGllbnRUcmFuc2Zvcm09InRyYW5zbGF0ZSgxMjAgMS44MTgxMmUtMDUpIHJvdGF0ZSgtNDUpIHNjYWxlKDEyMy4yNSkiPgo8c3RvcCBzdG9wLWNvbG9yPSIjMDBCOEQ5Ii8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzAwQjhEOSIgc3RvcC1vcGFjaXR5PSIwIi8+CjwvcmFkaWFsR3JhZGllbnQ+CjwvZGVmcz4KPC9zdmc+Cg==), url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSJ1cmwoI3BhaW50MF9yYWRpYWxfMjc0OV8xNDUxODcpIiBmaWxsLW9wYWNpdHk9IjAuMTIiLz4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0icGFpbnQwX3JhZGlhbF8yNzQ5XzE0NTE4NyIgY3g9IjAiIGN5PSIwIiByPSIxIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgZ3JhZGllbnRUcmFuc2Zvcm09InRyYW5zbGF0ZSgwIDEyMCkgcm90YXRlKDEzNSkgc2NhbGUoMTIzLjI1KSI+CjxzdG9wIHN0b3AtY29sb3I9IiNGRjU2MzAiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRkY1NjMwIiBzdG9wLW9wYWNpdHk9IjAiLz4KPC9yYWRpYWxHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K)',
+                                        backgroundPosition: 'top right, bottom left',
+                                        backgroundSize: '50%, 50%',
+                                        backgroundRepeat: 'no-repeat',
+                                        backdropFilter: 'blur(20px)',
+                                        backgroundColor: 'var(--background-item)',
+                                        color: 'var(--text-color)',
+                                        border: '1px solid var(--border-color)',
+                                        '& .MuiMenuItem-root': {
+                                            '&:hover': { backgroundColor: 'var(--hover-color)' },
+                                            '&.Mui-selected': {
+                                                backgroundColor: 'var(--background-selected-item)',
+                                                '&:hover': { backgroundColor: 'var(--hover-color)' }
+                                            }
+                                        }
+                                    }
+                                },
+                                anchorOrigin: {
+                                    vertical: 'bottom',
+                                    horizontal: 'right' // Căn chỉnh bên phải
+                                },
+                                transformOrigin: {
+                                    vertical: 'top',
+                                    horizontal: 'right' // Căn chỉnh bên phải
+                                }
+                            }}
+                        >
+                            {[...Array(currentYear - 2021)].map((_, index) => {
+                                const year = currentYear - index
+                                return (
+                                    <MenuItem
+                                        key={year}
+                                        value={year}
+                                        sx={{
+                                            borderRadius: '6px',
+                                            '&:last-child': {
+                                                mt: '3px'
+                                            }
+                                        }}
+                                    >
+                                        {year}
+                                    </MenuItem>
+                                )
+                            })}
+                        </Select>
+                    </FormControl>
                 </Box>
                 <TableContainer
                     sx={{
@@ -597,10 +649,10 @@ function SalaryTablePage() {
                                                 }}
                                             >
                                                 <Avatar
-                                                // src={
-                                                //     row.AvatarPath ||
-                                                //     'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'
-                                                // }
+                                                    src={
+                                                        row.AvatarPath ||
+                                                        'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'
+                                                    }
                                                 />
                                                 <Typography
                                                     sx={{
@@ -622,6 +674,7 @@ function SalaryTablePage() {
                                                     color: 'var(--text-color)',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
+                                                    textAlign: 'center',
                                                     textOverflow: 'ellipsis',
                                                     whiteSpace: 'nowrap'
                                                 }}
@@ -636,6 +689,7 @@ function SalaryTablePage() {
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     maxWidth: '400px',
+                                                    textAlign: 'center',
                                                     textOverflow: 'ellipsis',
                                                     whiteSpace: 'nowrap'
                                                 }}
@@ -649,6 +703,7 @@ function SalaryTablePage() {
                                                     color: 'var(--text-color)',
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
+                                                    textAlign: 'center',
                                                     textOverflow: 'ellipsis',
                                                     whiteSpace: 'nowrap'
                                                 }}
@@ -663,6 +718,7 @@ function SalaryTablePage() {
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     maxWidth: '280px',
+                                                    textAlign: 'center',
                                                     textOverflow: 'ellipsis',
                                                     whiteSpace: 'nowrap'
                                                 }}
@@ -692,6 +748,7 @@ function SalaryTablePage() {
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     maxWidth: '280px',
+                                                    textAlign: 'center',
                                                     textOverflow: 'ellipsis',
                                                     whiteSpace: 'nowrap'
                                                 }}
@@ -706,6 +763,7 @@ function SalaryTablePage() {
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     maxWidth: '280px',
+                                                    textAlign: 'center',
                                                     textOverflow: 'ellipsis',
                                                     whiteSpace: 'nowrap'
                                                 }}
@@ -720,6 +778,7 @@ function SalaryTablePage() {
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     maxWidth: '280px',
+                                                    textAlign: 'center',
                                                     textOverflow: 'ellipsis',
                                                     whiteSpace: 'nowrap'
                                                 }}
@@ -734,6 +793,7 @@ function SalaryTablePage() {
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     maxWidth: '280px',
+                                                    textAlign: 'center',
                                                     textOverflow: 'ellipsis',
                                                     whiteSpace: 'nowrap'
                                                 }}
@@ -748,6 +808,7 @@ function SalaryTablePage() {
                                                     fontSize: '16px',
                                                     overflow: 'hidden',
                                                     maxWidth: '280px',
+                                                    textAlign: 'center',
                                                     textOverflow: 'ellipsis',
                                                     whiteSpace: 'nowrap'
                                                 }}
@@ -762,15 +823,15 @@ function SalaryTablePage() {
                                                     padding: '5px',
                                                     display: 'flex',
                                                     minWidth: '100px',
-                                                    justifyContent: 'center'
-                                                    //backgroundColor: getContractBgColor(row.ContractEnd)
+                                                    justifyContent: 'center',
+                                                    backgroundColor: getContractBgColor(row.IsPaid)
                                                 }}
                                             >
                                                 <Typography
                                                     sx={{
                                                         fontSize: '15px',
                                                         overflow: 'hidden',
-                                                        //color: getContractTextColor(row.ContractEnd),
+                                                        color: getContractTextColor(row.IsPaid),
                                                         width: 'auto',
                                                         fontWeight: 'bold',
                                                         display: 'inline-block',
@@ -778,12 +839,9 @@ function SalaryTablePage() {
                                                         whiteSpace: 'nowrap'
                                                     }}
                                                 >
-                                                    {/* {getContractBgColor(row.ContractEnd) === 'var(--bg-danger-color)'
-                                                        ? `<= 2 ${t('COMMON.DASHBOARD.MONTHS')}`
-                                                        : getContractBgColor(row.ContractEnd) ===
-                                                            'var(--bg-warning-color)'
-                                                          ? `<= 4  ${t('COMMON.DASHBOARD.MONTHS')}`
-                                                          : `<= 6  ${t('COMMON.DASHBOARD.MONTHS')}`} */}
+                                                    {getContractBgColor(row.IsPaid) === 'var(--bg-danger-color)'
+                                                        ? `${t('COMMON.SALARY.IS_UNPAID')}`
+                                                        : `${t('COMMON.SALARY.IS_PAID')}`}
                                                 </Typography>
                                             </Box>
                                         </TableCell>

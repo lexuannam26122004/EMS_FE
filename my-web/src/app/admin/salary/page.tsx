@@ -267,8 +267,8 @@ function OverviewSalaryPage() {
                     width: '100%',
                     height: '100%',
                     overflow: 'hidden',
-                    marginTop: '15px',
-                    gap: '15px'
+                    marginTop: '24px',
+                    gap: '24px'
                 }}
             >
                 <Box sx={{ width: 'calc(100% / 4 * 3)' }}>
@@ -277,7 +277,7 @@ function OverviewSalaryPage() {
                             sx={{
                                 backgroundColor: 'var(--background-item)',
                                 width: '100%',
-                                borderRadius: '10px',
+                                borderRadius: '15px',
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: '15px',
@@ -387,11 +387,11 @@ function OverviewSalaryPage() {
                         </Box>
                     </Box>
 
-                    <Box sx={{ gap: '10px', display: 'flex', alignItems: 'center', marginTop: '10px' }}>
+                    <Box sx={{ gap: '24px', display: 'flex', alignItems: 'stretch', marginTop: '24px' }}>
                         <Box
                             sx={{
                                 backgroundColor: 'var(--background-item)',
-                                borderRadius: '5px',
+                                borderRadius: '15px',
                                 width: 'calc(100% / 2)'
                             }}
                         >
@@ -400,18 +400,18 @@ function OverviewSalaryPage() {
                         <Box
                             sx={{
                                 backgroundColor: 'var(--background-item)',
-                                borderRadius: '5px',
+                                borderRadius: '15px',
                                 width: 'calc(100% / 2)'
                             }}
                         >
                             <IncomeStructureChart />
                         </Box>
                     </Box>
-                    <Box sx={{ gap: '10px', display: 'flex', alignItems: 'center', marginTop: '10px' }}>
+                    <Box sx={{ gap: '24px', display: 'flex', alignItems: 'stretch', marginTop: '24px' }}>
                         <Box
                             sx={{
                                 backgroundColor: 'var(--background-item)',
-                                borderRadius: '5px',
+                                borderRadius: '15px',
                                 width: 'calc(100% / 2)'
                             }}
                         >
@@ -420,7 +420,7 @@ function OverviewSalaryPage() {
                         <Box
                             sx={{
                                 backgroundColor: 'var(--background-item)',
-                                borderRadius: '5px',
+                                borderRadius: '15px',
                                 width: 'calc(100% / 2)'
                             }}
                         >

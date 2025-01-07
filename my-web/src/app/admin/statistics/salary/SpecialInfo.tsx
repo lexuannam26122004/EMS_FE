@@ -77,8 +77,8 @@ export default function SpecialInfo() {
         )
     }
     return (
-        <Box sx={{ justifyContent: 'center', alignItems: 'center', gap: '24px', display: 'flex' }}>
-            <Box sx={{ width: 'calc(100% / 3)' }}>
+        <Box sx={{ width: '100%', justifyContent: 'center', alignItems: 'center', gap: '24px', display: 'flex' }}>
+            <Box sx={{ flex: 1 }}>
                 <Paper
                     elevation={0}
                     sx={{
@@ -86,6 +86,7 @@ export default function SpecialInfo() {
                         backgroundColor: 'var(--background-color-after)',
                         backgroundSize: 'cover',
                         borderRadius: '38px',
+                        width: '100%',
                         height: '100%',
                         padding: '24px',
                         flexDirection: 'column',
@@ -234,10 +235,10 @@ export default function SpecialInfo() {
                     </Box>
                 </Paper>
             </Box>
-            <Box sx={{ width: 'calc(100% / 3' }}>
+            <Box sx={{ flex: 1 }}>
                 <TotalBySex />
             </Box>
-            <Box sx={{ width: 'calc(100% / 3' }}>
+            <Box sx={{ flex: 1 }}>
                 <TotalByLevel />
             </Box>
         </Box>

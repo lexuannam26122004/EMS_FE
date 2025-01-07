@@ -62,7 +62,8 @@ export default function TotalByLevel() {
             textStyle: {
                 color: theme === 'light' ? 'black' : '#fff',
                 fontFamily: 'Arial, sans-serif'
-            }
+            },
+            itemStyle: { color: 'green' }
         },
         grid: {
             left: '3%',
@@ -141,9 +142,9 @@ export default function TotalByLevel() {
             }}
         >
             <Typography fontSize={'20px'} fontWeight={'bold'} color='var(--text-color)'>
-                Phân tích mức lương nhân viên
+                {t('COMMON.SALARY.EMPLOYEE_SALARY_ANALYSIS')}
             </Typography>
-            <ReactECharts option={option} style={{ width: '120%', height: '260px', marginTop: '10px' }}></ReactECharts>
+            <ReactECharts option={option} style={{ width: '100%', height: '260px', marginTop: '10px' }}></ReactECharts>
         </Paper>
     )
 }

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useTheme } from 'next-themes'
 import { useGetTotalIncomeOverTimeQuery } from '@/services/SalaryService'
 import { TotalIncome } from '@/models/salary'
+import Loading from '@/components/Loading'
 
 function TotalIncomeChart() {
     const { t } = useTranslation('common')
@@ -14,23 +15,7 @@ function TotalIncomeChart() {
     const totalData = data?.Data as TotalIncome[]
 
     if (isLoading) {
-        return (
-            <Paper
-                elevation={0}
-                sx={{
-                    width: '100%',
-                    padding: '24px',
-                    backgroundColor: 'var(--background-item)',
-                    borderRadius: '15px',
-                    height: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }}
-            >
-                <CircularProgress /> {/* Hiển thị spinner khi đang tải */}
-            </Paper>
-        )
+        return <Loading />
     }
     if (isError) {
         return (
@@ -212,7 +197,7 @@ function TotalIncomeChart() {
             }}
         >
             <Typography fontSize={'24px'} fontWeight={'bold'} color='var(--text-color)'>
-                Tổng thu nhập theo thời gian
+                {t('COMMON.SALARY.TOTAL_INCOME_OVERTIME')}
             </Typography>
             <ReactECharts option={option} style={{ width: '100%', height: '314px', marginTop: '10px' }}></ReactECharts>
         </Paper>
