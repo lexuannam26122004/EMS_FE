@@ -5,10 +5,6 @@ import {
     Paper,
     TextField,
     Typography,
-    Select,
-    MenuItem,
-    SelectChangeEvent,
-    InputLabel,
     Button,
     FormControl,
     FormLabel,
@@ -22,8 +18,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { XIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { useCreateNotificationMutation } from '@/services/NotificationsService'
-import { userSentNotificationId } from '@/utils/globalVariables'
+import { useCreateUsersMutation } from '@/services/JobHistoryService'
 import Radio from '@mui/material/Radio'
 import SpecificUsersModal from './SpecificUsersModal'
 import {
@@ -31,102 +26,55 @@ import {
     selectedUsersToNotifySliceSelector
 } from '@/redux/slices/selectedUsersToNotifySlice'
 import { useSelector, useDispatch } from 'react-redux'
-import DepartmentAndRoleModal from './DepartmentAndRoleModal'
 import {
     selectedDepartmentsToNotifySelector,
     selectedDepartmentsToNotifySlice
 } from '@/redux/slices/selectedDepartmentsToNotifySlice'
 import { selectedRolesToNotifySelector, selectedRolesToNotifySlice } from '@/redux/slices/selectedRolesToNotifySlice'
-import UploadFiles from './UploadFiles'
 
 function CreateNotification() {
     const { t } = useTranslation('common')
     const router = useRouter()
-    const [typeNotification, setTypeNotification] = useState<string>('')
-    const [openSelectType, setOpenSelectType] = useState(false)
-    const [createNotification, { isLoading }] = useCreateNotificationMutation()
-    const [title, setTitle] = useState('')
-    const [content, setContent] = useState('')
-    const [files, setFiles] = useState<number[]>([])
+    const [createNotification, { isLoading }] = useCreateUsersMutation()
     const [isSubmit, setIsSubmit] = useState(false)
     const dispatch = useDispatch()
     const [typeReceiveNotify, setTypeReceiveNotify] = useState('All')
     const [openSpecificUsersModal, setOpenSpecificUsersModal] = useState(false)
-    const [openDepartmentAndRolesModal, setOpenDepartmentAndRolesModal] = useState(false)
     const selectedUsers = useSelector(selectedUsersToNotifySliceSelector)
     const selectedDepartment = useSelector(selectedDepartmentsToNotifySelector)
     const selectedRole = useSelector(selectedRolesToNotifySelector)
 
+    const [startDate, setStartDate] = useState('')
+    const [endDate, setEndDate] = useState('')
+    const [note, setNote] = useState('')
+    const [jobDescription, setJobDescription] = useState('')
+    const [workLocation, setWorkLocation] = useState('')
+    const [allowance, setAllowance] = useState('')
+
     const handleCloseSpecificUsersModal = () => {
         setOpenSpecificUsersModal(false)
-    }
-    const handleCloseDepartmentAndRolesModal = () => {
-        setOpenDepartmentAndRolesModal(false)
-    }
-
-    const handleChange = (event: SelectChangeEvent<typeof typeNotification>) => {
-        setTypeNotification(event.target.value)
-    }
-
-    const handleCloseSelectType = () => {
-        setOpenSelectType(false)
-    }
-
-    const handleOpenSelectType = () => {
-        setOpenSelectType(true)
-    }
-
-    const handleSave = async () => {
-        setIsSubmit(true)
-        if (
-            typeNotification === '' ||
-            title === '' ||
-            content === '' ||
-            (typeReceiveNotify === 'Specific_Users' && selectedUsers.length === 0) ||
-            (typeReceiveNotify === 'Department_And_Role' &&
-                (selectedDepartment.length === 0 || selectedRole.length === 0))
-        ) {
-            return
-        }
-
-        const data = {
-            Type: typeNotification,
-            Content: content,
-            Title: title,
-            ListUser: selectedUsers.map(x => x.Id),
-            ListFile: files,
-            UserId: userSentNotificationId,
-            ListDept: selectedDepartment.map(x => x.Id),
-            ListRole: selectedRole.map(x => x.Id),
-            TypeToNotify: typeReceiveNotify === 'Department_And_Role' ? 2 : typeReceiveNotify === 'All' ? 1 : 3
-        }
-
-        await createNotification(data).unwrap()
     }
 
     const handleSaveAndClose = async () => {
         setIsSubmit(true)
         if (
-            typeNotification === '' ||
-            title === '' ||
-            content === '' ||
-            (typeReceiveNotify === 'Specific_Users' && selectedUsers.length === 0) ||
-            (typeReceiveNotify === 'Department_And_Role' &&
-                (selectedDepartment.length === 0 || selectedRole.length === 0))
+            jobDescription === '' ||
+            workLocation === '' ||
+            workLocation === '' ||
+            (typeReceiveNotify === 'Specific_Users' && selectedUsers.length === 0)
         ) {
             return
         }
 
         const data = {
-            Type: typeNotification,
-            Content: content,
-            Title: title,
+            StartDate: startDate,
+            EndDate: endDate,
+            Note: note,
+            JobDescription: jobDescription,
+            WorkLocation: workLocation,
+            Allowance: allowance,
             ListUser: selectedUsers.map(x => x.Id),
-            ListFile: files,
-            UserId: userSentNotificationId,
-            ListDept: selectedDepartment.map(x => x.Id),
-            ListRole: selectedRole.map(x => x.Id),
-            TypeToNotify: typeReceiveNotify === 'Department_And_Role' ? 2 : typeReceiveNotify === 'All' ? 1 : 3
+            TypeToNotify: typeReceiveNotify === 'All' ? 1 : 0
         }
 
         await createNotification(data).unwrap()
@@ -185,7 +133,7 @@ function CreateNotification() {
                             label={t('COMMON.CREATE_NOTIFICATION.TITLE*')}
                             multiline
                             maxRows={4}
-                            {...(isSubmit === true && title === '' && { error: true })}
+                            {...(isSubmit === true && jobDescription === '' && { error: true })}
                             sx={{
                                 width: '100%',
                                 '& fieldset': {
@@ -227,12 +175,12 @@ function CreateNotification() {
                                     color: 'var(--error-color)'
                                 }
                             }}
-                            value={title}
-                            onChange={e => setTitle(e.target.value)}
+                            value={jobDescription}
+                            onChange={e => setJobDescription(e.target.value)}
                         />
                         <Typography
                             sx={{
-                                visibility: isSubmit === true && title === '' ? 'visible' : 'hidden',
+                                visibility: isSubmit === true && jobDescription === '' ? 'visible' : 'hidden',
                                 color: 'var(--error-color)',
                                 margin: '1px 0 0 10px',
                                 fontSize: '12px'
@@ -241,146 +189,136 @@ function CreateNotification() {
                             {t('COMMON.TEXTFIELD.REQUIRED')}
                         </Typography>
                     </Box>
-                    <Box>
-                        <FormControl
+                </Box>
+
+
+                <Box sx={{ display: 'flex', gap: '20px', mt: '7px' }}>
+                <Box
+                        sx={{
+                            width: 'calc(50% - 10px)'
+                        }}
+                    >
+                        <TextField
+                            variant='outlined'
+                            label={t('COMMON.TIMEOFF.STARTDATE') + '*'}
+                            type='date'
+                            fullWidth
+                            {...(isSubmit && startDate === '' && { error: true })}
                             sx={{
-                                width: '140px',
                                 '& fieldset': {
                                     borderRadius: '8px',
-                                    borderColor: 'var(--border-color)' // Viền mặc định
+                                    color: 'var(--text-color)',
+                                    borderColor: 'var(--border-color)'
+                                },
+                                '& .MuiInputBase-root': {
+                                    paddingRight: '0px'
+                                },
+                                '& .MuiInputBase-input': {
+                                    paddingRight: '12px',
+                                    color: 'var(--text-color)',
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1
+                                    }
                                 },
                                 '& .MuiOutlinedInput-root:hover fieldset': {
-                                    borderColor: 'var(--hover-field-color)' // Màu hover khi không lỗi
+                                    borderColor: 'var(--hover-field-color)'
                                 },
                                 '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
-                                    borderColor: 'var(--error-color)' // Màu hover khi lỗi
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                                 },
                                 '& .MuiOutlinedInput-root.Mui-error fieldset': {
-                                    borderColor: 'var(--error-color)' // Màu viền khi lỗi
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
                                 },
                                 '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                    borderColor: 'var(--selected-field-color)' // Màu viền khi focus
-                                },
-                                '& .MuiOutlinedInput-root.Mui-error.Mui-focused fieldset': {
-                                    borderColor: 'var(--error-color)' // Màu viền khi lỗi và focus
+                                    borderColor: 'var(--selected-field-color)'
                                 },
                                 '& .MuiInputLabel-root': {
-                                    color: 'var(--text-label-color)' // Label mặc định
+                                    color: 'var(--text-label-color)'
                                 },
                                 '& .MuiInputLabel-root.Mui-focused': {
-                                    color: 'var(--selected-field-color)' // Label khi focus
+                                    color: 'var(--selected-field-color)'
                                 },
                                 '& .MuiInputLabel-root.Mui-error': {
-                                    color: 'var(--error-color)' // Label khi lỗi
+                                    color: 'var(--error-color)'
                                 }
                             }}
-                            {...(isSubmit && typeNotification === '' && { error: true })}
-                        >
-                            <InputLabel
-                                id='select-label'
-                                sx={{
-                                    color:
-                                        isSubmit && typeNotification === ''
-                                            ? 'var(--error-color)'
-                                            : 'var(--text-label-color)',
-                                    '&.Mui-focused': {
-                                        color:
-                                            isSubmit && typeNotification === ''
-                                                ? 'var(--error-color)'
-                                                : 'var(--selected-color)'
-                                    }
-                                }}
-                            >
-                                {t('COMMON.CREATE_NOTIFICATION.TYPE')}
-                            </InputLabel>
-                            <Select
-                                labelId='select-label'
-                                open={openSelectType}
-                                onClose={handleCloseSelectType}
-                                onOpen={handleOpenSelectType}
-                                value={typeNotification}
-                                onChange={handleChange}
-                                label={t('COMMON.CREATE_NOTIFICATION.TYPE')}
-                                autoFocus={false}
-                                sx={{
-                                    '&:hover .MuiOutlinedInput-notchedOutline': {
-                                        borderColor:
-                                            isSubmit && typeNotification === ''
-                                                ? 'var(--error-color)'
-                                                : 'var(--hover-color)' // Khi hover
-                                    },
-                                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                        borderColor:
-                                            isSubmit && typeNotification === ''
-                                                ? 'var(--error-color)'
-                                                : 'var(--selected-color)' // Khi focus
-                                    },
-                                    '& fieldset': {
-                                        borderRadius: '8px',
-                                        borderColor:
-                                            isSubmit && typeNotification === ''
-                                                ? 'var(--error-color)'
-                                                : 'var(--border-color)' // Viền khi không focus
-                                    },
-                                    '& .MuiSelect-icon': {
-                                        color:
-                                            isSubmit && typeNotification === ''
-                                                ? 'var(--error-color)'
-                                                : 'var(--text-color)' // Màu icon dropdown
-                                    },
-                                    '& .MuiInputBase-input': {
-                                        color: 'var(--text-color)' // Màu text
-                                    }
-                                }}
-                                MenuProps={{
-                                    PaperProps: {
-                                        elevation: 0,
-                                        sx: {
-                                            backgroundImage:
-                                                'url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSJ1cmwoI3BhaW50MF9yYWRpYWxfMjc0OV8xNDUxODYpIiBmaWxsLW9wYWNpdHk9IjAuMTIiLz4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0icGFpbnQwX3JhZGlhbF8yNzQ5XzE0NTE4NiIgY3g9IjAiIGN5PSIwIiByPSIxIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgZ3JhZGllbnRUcmFuc2Zvcm09InRyYW5zbGF0ZSgxMjAgMS44MTgxMmUtMDUpIHJvdGF0ZSgtNDUpIHNjYWxlKDEyMy4yNSkiPgo8c3RvcCBzdG9wLWNvbG9yPSIjMDBCOEQ5Ii8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzAwQjhEOSIgc3RvcC1vcGFjaXR5PSIwIi8+CjwvcmFkaWFsR3JhZGllbnQ+CjwvZGVmcz4KPC9zdmc+Cg==), url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSJ1cmwoI3BhaW50MF9yYWRpYWxfMjc0OV8xNDUxODcpIiBmaWxsLW9wYWNpdHk9IjAuMTIiLz4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0icGFpbnQwX3JhZGlhbF8yNzQ5XzE0NTE4NyIgY3g9IjAiIGN5PSIwIiByPSIxIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgZ3JhZGllbnRUcmFuc2Zvcm09InRyYW5zbGF0ZSgwIDEyMCkgcm90YXRlKDEzNSkgc2NhbGUoMTIzLjI1KSI+CjxzdG9wIHN0b3AtY29sb3I9IiNGRjU2MzAiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRkY1NjMwIiBzdG9wLW9wYWNpdHk9IjAiLz4KPC9yYWRpYWxHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K)',
-                                            backgroundPosition: 'top right, bottom left',
-                                            backgroundSize: '50%, 50%',
-                                            backgroundRepeat: 'no-repeat',
-                                            padding: '0 8px',
-                                            mt: 'px',
-                                            backdropFilter: 'blur(20px)',
-                                            borderRadius: '8px',
-                                            backgroundColor: 'var(--background-item)',
-                                            color: 'var(--text-color)',
-                                            border: '1px solid var(--border-color)',
-                                            '& .MuiMenuItem-root': {
-                                                borderRadius: '6px',
-                                                '&:hover': {
-                                                    backgroundColor: 'var(--hover-color)'
-                                                },
-                                                '&.Mui-selected': {
-                                                    backgroundColor: 'var(--background-selected-item)',
-                                                    '&:hover': {
-                                                        backgroundColor: 'var(--hover-color)'
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        autoFocus: false
-                                    }
-                                }}
-                            >
-                                <MenuItem value={'Public'}>{t('COMMON.NOTIFICATION_TYPE.PUBLIC')}</MenuItem>
-                                <MenuItem value={'Benefit'}>{t('COMMON.NOTIFICATION_TYPE.BENEFIT')}</MenuItem>
-                                <MenuItem value={'Salary'}>{t('COMMON.NOTIFICATION_TYPE.SALARY')}</MenuItem>
-                                <MenuItem value={'Reward'}>{t('COMMON.NOTIFICATION_TYPE.REWARD')}</MenuItem>
-                                <MenuItem value={'Insurance'}>{t('COMMON.NOTIFICATION_TYPE.INSURANCE')}</MenuItem>
-                                <MenuItem value={'Holiday'}>{t('COMMON.NOTIFICATION_TYPE.EVENT')}</MenuItem>
-                                <MenuItem value={'Discipline'}>{t('COMMON.NOTIFICATION_TYPE.DISCIPLINE')}</MenuItem>
-                                <MenuItem value={'Timekeeping'}>{t('COMMON.NOTIFICATION_TYPE.ATTENDANCE')}</MenuItem>
-                            </Select>
-                        </FormControl>
+                            value={startDate}
+                            onChange={e => setStartDate(e.target.value)}
+                        />
                         <Typography
                             sx={{
-                                visibility: isSubmit === true && typeNotification === '' ? 'visible' : 'hidden',
-                                color: 'var(--error-color)',
+                                color: 'red',
                                 margin: '1px 0 0 10px',
-                                fontSize: '12px'
+                                fontSize: '12px',
+                                visibility: isSubmit && startDate === '' ? 'visible' : 'hidden'
+                            }}
+                        >
+                            {t('COMMON.TEXTFIELD.REQUIRED')}
+                        </Typography>
+                    </Box>
+
+                    <Box
+                        sx={{
+                            width: 'calc(50% - 10px)'
+                        }}
+                    >
+                        <TextField
+                            variant='outlined'
+                            label={t('COMMON.TIMEOFF.ENDDATE') + '*'}
+                            type='date'
+                            fullWidth
+                            {...(isSubmit && endDate === '' && { error: true })}
+                            sx={{
+                                '& fieldset': {
+                                    borderRadius: '8px',
+                                    color: 'var(--text-color)',
+                                    borderColor: 'var(--border-color)'
+                                },
+                                '& .MuiInputBase-root': {
+                                    paddingRight: '0px'
+                                },
+                                '& .MuiInputBase-input': {
+                                    paddingRight: '12px',
+                                    color: 'var(--text-color)',
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1
+                                    }
+                                },
+                                '& .MuiOutlinedInput-root:hover fieldset': {
+                                    borderColor: 'var(--hover-field-color)'
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-focused fieldset': {
+                                    borderColor: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root': {
+                                    color: 'var(--text-label-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-focused': {
+                                    color: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-error': {
+                                    color: 'var(--error-color)'
+                                }
+                            }}
+                            value={endDate}
+                            onChange={e => setEndDate(e.target.value)}
+                        />
+                        <Typography
+                            sx={{
+                                color: 'red',
+                                margin: '1px 0 0 10px',
+                                fontSize: '12px',
+                                visibility: isSubmit && endDate === '' ? 'visible' : 'hidden'
                             }}
                         >
                             {t('COMMON.TEXTFIELD.REQUIRED')}
@@ -396,7 +334,7 @@ function CreateNotification() {
                     <TextField
                         label={t('COMMON.CREATE_NOTIFICATION.CONTENT*')}
                         multiline
-                        {...(isSubmit === true && content === '' && { error: true })}
+                        {...(isSubmit === true && note === '' && { error: true })}
                         maxRows={8}
                         minRows={4}
                         sx={{
@@ -440,12 +378,12 @@ function CreateNotification() {
                                 color: 'var(--error-color)'
                             }
                         }}
-                        value={content}
-                        onChange={e => setContent(e.target.value)}
+                        value={note}
+                        onChange={e => setNote(e.target.value)}
                     />
                     <Typography
                         sx={{
-                            visibility: isSubmit === true && content === '' ? 'visible' : 'hidden',
+                            visibility: isSubmit === true && note === '' ? 'visible' : 'hidden',
                             color: 'var(--error-color)',
                             margin: '1px 0 0 10px',
                             fontSize: '12px'
@@ -487,27 +425,6 @@ function CreateNotification() {
                                     />
                                 }
                                 label={t('COMMON.CREATE_NOTIFICATION.ALL_USERS')}
-                                sx={{
-                                    color: 'var(--text-color)'
-                                }}
-                            />
-                            <FormControlLabel
-                                value='Department_And_Role'
-                                control={
-                                    <Radio
-                                        sx={{
-                                            color: 'var(--text-color)',
-                                            '&.Mui-checked': {
-                                                color: 'var(--button-color)'
-                                            },
-                                            '&:hover': {
-                                                backgroundColor: 'var(--hover-color)'
-                                            }
-                                        }}
-                                    />
-                                }
-                                label={t('COMMON.CREATE_NOTIFICATION.DEPARTMENT_AND_ROLE')}
-                                onClick={() => setOpenDepartmentAndRolesModal(true)}
                                 sx={{
                                     color: 'var(--text-color)'
                                 }}
@@ -699,34 +616,7 @@ function CreateNotification() {
                     </Box>
                 </Box>
 
-                <Box sx={{ mt: '5px' }}>
-                    <UploadFiles files={files} setFiles={setFiles} />
-                </Box>
-
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px', mt: '20px' }}>
-                    <LoadingButton
-                        variant='contained'
-                        {...(isLoading && { loading: true })}
-                        loadingPosition='start'
-                        startIcon={<SaveIcon />}
-                        sx={{
-                            height: '53px',
-                            backgroundColor: 'var(--button-color)',
-                            width: 'auto',
-                            padding: '0px 30px',
-                            fontSize: '16px',
-                            '&:hover': {
-                                backgroundColor: 'var(--hover-button-color)'
-                            },
-                            fontWeight: 'bold',
-                            whiteSpace: 'nowrap',
-                            textTransform: 'none'
-                        }}
-                        onClick={handleSave}
-                    >
-                        {t('COMMON.BUTTON.SAVE')}
-                    </LoadingButton>
-
                     <LoadingButton
                         variant='contained'
                         {...(isLoading && { loading: true })}
@@ -775,10 +665,6 @@ function CreateNotification() {
                 </Box>
             </Paper>
             <SpecificUsersModal open={openSpecificUsersModal} handleClose={handleCloseSpecificUsersModal} />
-            <DepartmentAndRoleModal
-                open={openDepartmentAndRolesModal}
-                handleClose={handleCloseDepartmentAndRolesModal}
-            />
         </Box>
     )
 }

@@ -90,7 +90,7 @@ const AvatarMenu = () => {
 
     const handleCreateTasks = () => {
         setOpen(false)
-        router.push('/admin/notification/create')
+        router.push('/admin/tasks/create')
     }
 
     const handlePersonal = () => {
