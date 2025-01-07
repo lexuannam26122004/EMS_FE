@@ -12,7 +12,7 @@ import {
     TableContainer,
     TableSortLabel
 } from '@mui/material'
-import { ClipboardCheck } from 'lucide-react'
+import { EyeIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
@@ -491,7 +491,7 @@ function TableTimeOff({ errorsData, totalRecords, type }: IProps) {
                                             cursor: 'pointer'
                                         }}
                                     >
-                                        <Tooltip title={t('COMMON.ERROR_REPORT.CONSIDER')}>
+                                        <Tooltip title={t('COMMON.BUTTON.VIEW_DETAIL')}>
                                             <Box
                                                 display='flex'
                                                 alignItems='center'
@@ -506,7 +506,7 @@ function TableTimeOff({ errorsData, totalRecords, type }: IProps) {
                                                     }
                                                 }}
                                             >
-                                                <ClipboardCheck />
+                                                <EyeIcon />
                                             </Box>
                                         </Tooltip>
                                     </Box>

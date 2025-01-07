@@ -547,6 +547,7 @@
         },
 
         "ERROR_REPORT": {
+            "ERROR_REPORT":"Điền thông tin báo lỗi",
             "TITLE": "Danh sách báo cáo lỗi",
             "ID": "ID",
             "FULL_NAME_REPORTED": "Tên người báo cáo",

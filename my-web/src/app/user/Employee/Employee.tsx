@@ -23,13 +23,12 @@ const Employee: React.FC<EmployeeProps> = ({ aspnetUserId }) => {
     const infoMe = responseGetMeData?.Data
 
     const [openDetail, setOpenDetail] = useState(false)
+    if (isFetchingGetMe || !infoMe) {
+        return <Loading />
+    }
 
     const handleIconClick = () => {
         setOpenDetail(!openDetail)
-    }
-
-    if (isFetchingGetMe || !infoMe) {
-        return <Loading />
     }
 
     return (
