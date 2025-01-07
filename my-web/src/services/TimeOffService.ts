@@ -98,6 +98,13 @@ export const TimeOffApi = createApi({
             query: id => `GetById/${id}`
         }),
 
+        updateIsAccepted: builder.mutation<void, { id: number; isAccepted?: boolean }>({
+            query: ({ id, isAccepted }) => ({
+                url: `UpdateIsAccepted?id=${id}&isAccepted=${isAccepted}`,
+                method: 'PUT'
+            })
+        }),
+
         changeStatusTimeOffs: builder.mutation<void, number>({
             query: id => ({
                 url: `ChangeStatus/${id}/status`,
@@ -117,5 +124,6 @@ export const {
     useGetTimeOffStatisticsQuery,
     useGetTimeOffStatisticsByMonthAndYearQuery,
     useGetPendingFutureTimeOffsQuery,
+    useUpdateIsAcceptedMutation,
     useChangeStatusTimeOffsMutation
 } = TimeOffApi
