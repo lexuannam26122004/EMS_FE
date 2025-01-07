@@ -27,7 +27,6 @@ const LoginForm: React.FC = () => {
     const [showPassword, setShowPassword] = React.useState(false)
     const [createAttendanceUser, { isLoading: isLoadingAttendance }] = useCreateAttendanceUserMutation()
 
-    const { refetch } = useGetAuthMeQuery()
     const handleClickShowPassword = () => setShowPassword(show => !show)
 
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -41,6 +40,9 @@ const LoginForm: React.FC = () => {
     const handleClick = () => {
         router.push('/')
     }
+
+    const { data: responseData, refetch } = useGetAuthMeQuery()
+    const infoData = responseData?.Data
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -74,20 +76,31 @@ const LoginForm: React.FC = () => {
                 sessionStorage.setItem('auth_token', token)
                 try {
                     var responseAttendance = await createAttendanceUser(IPdata.ip).unwrap()
-                    console.log(responseAttendance)
-                    refetch()
-                    router.push('/admin')
+
+                    await refetch()
+
+                    if (infoData !== null) {
+                        if (infoData?.IsAdmin === false) {
+                            router.push('/user')
+                        } else {
+                            router.push('/admin')
+                        }
+                    } else {
+                        return
+                    }
+
                     sessionStorage.setItem('AttendanceId', responseAttendance.Data.Id)
                     toast('Đăng nhập thành công!', 'success')
                 } catch (error) {
+                    console.error('Lỗi từ API:', error)
                     sessionStorage.removeItem('auth_token')
-                    toast('Đã xảy ra lỗi. Vui lòng thử lại sau!', 'error')
+                    //toast('Đã xảy ra lỗi. Vui lòng thử lại sau!', 'error')
                 }
             } else {
                 toast(data?.message || 'Đăng nhập thất bại!', 'error')
             }
         } catch {
-            toast('Đã xảy ra lỗi. Vui lòng thử lại sau!', 'error')
+            //toast('Đã xảy ra lỗi. Vui lòng thử lại sau!', 'error')
         } finally {
             setIsLoading(false)
         }

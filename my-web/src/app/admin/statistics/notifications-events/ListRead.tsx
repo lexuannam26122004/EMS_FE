@@ -578,7 +578,7 @@ function Page() {
                         }
                     }}
                 >
-                    {notifyData.map((user, index) => (
+                    {notifyData?.map((user, index) => (
                         <Box
                             key={index}
                             sx={{

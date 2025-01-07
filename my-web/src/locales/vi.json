@@ -184,7 +184,8 @@
             "LOGIN_HISTORY": "Lịch sử đăng nhập",
             "HELP": "Trợ giúp",
             "CREATE_NOTIFICATION": "Tạo thông báo",
-            "CHANGE_PASSWORD": "Đổi mật khẩu"
+            "CHANGE_PASSWORD": "Đổi mật khẩu",
+            "PAGE_ADMIN": "Trang quản lý"
         },
         "TIME_DIFFERENCE": {
             "SECONDS_AGO": "{{seconds}} giây trước",
@@ -462,7 +463,7 @@
         },
 
         "TIMEOFF": {
-            "TIMEOFF":"Danh sách nghỉ phép",
+            "TIMEOFF": "Danh sách nghỉ phép",
             "INFORMATION": "Thông tin nhân viên",
             "FULLNAME": "Họ và tên",
             "EMPLOYEEID": "Mã nhân viên",
@@ -692,6 +693,7 @@
             "AVG_CHECK_OUT": "Trung bình giờ ra",
             "THIS_MONTH": "Tháng này",
             "THIS_YEAR": "Năm nay",
+            "MINUTES": "phút",
             "THIS_WEEK": "Tuần này",
             "ATTENDANCE_HISTORY": "Lịch sử chấm công",
             "FILTER": "Bộ lọc",

@@ -98,6 +98,11 @@ const AvatarMenu = () => {
         router.push('/user')
     }
 
+    const handleAdmin = () => {
+        setOpen(false)
+        router.push('/admin')
+    }
+
     const handleChangePassword = () => {
         setOpen(false)
         router.push('/change-password')
@@ -287,7 +292,7 @@ const AvatarMenu = () => {
                                             sx={{
                                                 color: 'var(--text-color)',
                                                 borderRadius: '8px',
-                                                padding: '10px92px',
+                                                padding: '9px 12px',
                                                 '&:hover': {
                                                     backgroundColor: 'var(--hover-color)'
                                                 }
@@ -295,6 +300,23 @@ const AvatarMenu = () => {
                                         >
                                             <User style={{ marginRight: '16px' }} />
                                             {t('COMMON.AVATAR_MENU.PERSONAL')}
+                                        </MenuItem>
+                                    )}
+
+                                    {pathName.includes('/user') && data.IsAdmin === true && (
+                                        <MenuItem
+                                            onClick={handleAdmin}
+                                            sx={{
+                                                color: 'var(--text-color)',
+                                                borderRadius: '8px',
+                                                padding: '9px 12px',
+                                                '&:hover': {
+                                                    backgroundColor: 'var(--hover-color)'
+                                                }
+                                            }}
+                                        >
+                                            <User style={{ marginRight: '16px' }} />
+                                            {t('COMMON.AVATAR_MENU.PAGE_ADMIN')}
                                         </MenuItem>
                                     )}
 
@@ -331,6 +353,7 @@ const AvatarMenu = () => {
                                         onClick={handleCreateTasks}
                                         sx={{
                                             color: 'var(--text-color)',
+                                            padding: '9px 12px',
                                             borderRadius: '8px',
                                             '&:hover': {
                                                 backgroundColor: 'var(--hover-color)'

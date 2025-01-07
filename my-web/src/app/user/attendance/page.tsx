@@ -37,7 +37,6 @@ import dayjs from 'dayjs'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers'
-import { IFilterAttendance } from '@/models/Timekeeping'
 import { toZonedTime, format } from 'date-fns-tz'
 import DataGrid from './DataGrid'
 import TableData from './TableData'
@@ -45,6 +44,8 @@ import Grow from '@mui/material/Grow'
 import ClickAwayListener from '@mui/material/ClickAwayListener'
 import MenuList from '@mui/material/MenuList'
 import DisplayInfo from './DisplayInfo'
+import { useSearchAttendanceForUserQuery } from '@/services/UserAttendanceService'
+import { IFilterTimekeepingForUser } from '@/models/Timekeeping'
 
 const convertToVietnamTime = (date: Date) => {
     if (isNaN(date.getTime())) {
@@ -373,14 +374,18 @@ function Page() {
     const { t } = useTranslation('common')
     const [type, setType] = useState(0)
     const [page, setPage] = useState(1)
-    const [rowsPerPage, setRowsPerPage] = useState('5')
-    const [from] = useState(1)
-    const [to] = useState(5)
-    const [filter, setFilter] = useState<IFilterAttendance>({
-        pageSize: 5,
-        pageNumber: 1,
-        startDate: convertToVietnamTime(new Date()),
-        endDate: convertToVietnamTime(new Date())
+    const [rowsPerPage, setRowsPerPage] = useState('10')
+    const [from, setFrom] = useState(1)
+    const [to, setTo] = useState(10)
+    const [filter, setFilter] = useState<IFilterTimekeepingForUser>({
+        PageSize: 10,
+        PageNumber: 1,
+        StartDate: convertToVietnamTime(new Date()),
+        EndDate: convertToVietnamTime(new Date()),
+        IsValid: true,
+        IsEarly: true,
+        IsLate: true,
+        IsOnTime: true
     })
     const [typeDisplay, setTypeDisplay] = useState(1)
     const [open, setOpen] = useState(false)
@@ -404,6 +409,15 @@ function Page() {
 
     const handleOkClick = () => {
         setCheckedItems({ ...tempCheckedItems })
+
+        setFilter(prevFilter => ({
+            ...prevFilter,
+            IsLate: tempCheckedItems.late,
+            IsEarly: tempCheckedItems.early,
+            IsOnTime: tempCheckedItems.onTime,
+            IsValid: tempCheckedItems.invalid
+        }))
+
         setOpen(false)
     }
 
@@ -443,7 +457,7 @@ function Page() {
         setFilter(prev => {
             return {
                 ...prev,
-                pageNumber: newPage
+                PageNumber: newPage
             }
         })
     }
@@ -454,8 +468,8 @@ function Page() {
         setFilter(prev => {
             return {
                 ...prev,
-                pageSize: Number(event.target.value),
-                pageNumber: 1
+                PageSize: Number(event.target.value),
+                PageNumber: 1
             }
         })
     }
@@ -463,8 +477,24 @@ function Page() {
     const { data: responseGetMeData, isFetching: isFetchingGetMe } = useGetAuthMeQuery()
     const infoMe = responseGetMeData?.Data
 
-    const dataAttendance = responseData.Data.Records
-    const totalRecords = responseData.Data.TotalRecords
+    const { data: responseData, isFetching: isFetchingGetAttendance, refetch } = useSearchAttendanceForUserQuery(filter)
+
+    useEffect(() => {
+        refetch()
+    }, [filter])
+
+    const dataAttendance = responseData?.Data.Records || []
+    const totalRecords = responseData?.Data.TotalRecords || 0
+
+    useEffect(() => {
+        if (!isFetchingGetAttendance && responseData?.Data) {
+            const from = (page - 1) * Number(rowsPerPage) + Math.min(1, dataAttendance.length)
+            setFrom(from)
+
+            const to = Math.min(dataAttendance.length + (page - 1) * Number(rowsPerPage), totalRecords)
+            setTo(to)
+        }
+    }, [isFetchingGetAttendance, responseData, page, rowsPerPage])
 
     if (isFetchingGetMe || !infoMe) {
         return <Loading />
@@ -1092,11 +1122,11 @@ function Page() {
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
                                 label={t('COMMON.USER.START_DATE')}
-                                value={dayjs(filter.startDate)}
+                                value={dayjs(filter.StartDate)}
                                 onChange={value =>
                                     setFilter({
                                         ...filter,
-                                        startDate: convertToVietnamTime(value?.toDate() || new Date())
+                                        StartDate: convertToVietnamTime(value?.toDate() || new Date())
                                     })
                                 }
                                 sx={{
@@ -1136,11 +1166,11 @@ function Page() {
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
                                 label={t('COMMON.USER.END_DATE')}
-                                value={dayjs(filter.startDate)}
+                                value={dayjs(filter.EndDate)}
                                 onChange={value =>
                                     setFilter({
                                         ...filter,
-                                        startDate: convertToVietnamTime(value?.toDate() || new Date())
+                                        EndDate: convertToVietnamTime(value?.toDate() || new Date())
                                     })
                                 }
                                 sx={{
@@ -1433,7 +1463,7 @@ function Page() {
                                 }
                             }}
                             value={rowsPerPage}
-                            defaultValue='5'
+                            defaultValue='10'
                             onChange={handleChangeRowsPerPage}
                             MenuProps={{
                                 PaperProps: {
