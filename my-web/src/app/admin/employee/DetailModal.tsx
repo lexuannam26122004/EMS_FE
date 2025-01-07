@@ -65,7 +65,7 @@ function DetailModal({ open, handleToggle, aspnetuser, randomIndex }: Props) {
             case 4:
                 return <Discipline aspnetUserId={aspnetuser?.Id} />
             default:
-                return <JobHistory />
+                return <JobHistory aspnetUserId={aspnetuser?.Id} />
         }
     }
 

@@ -28,9 +28,12 @@ import { disciplineApi } from '@/services/DisciplineService'
 import { messageApi } from '@/services/MessageService'
 import { ErrorReportApi } from '@/services/ErrorReportService'
 import { userNotificationsApi } from '@/services/UserNotificationsService'
+import { userSalaryApi } from '@/services/UserSalaryService'
 import { userAttendanceApi } from '@/services/UserAttendanceService'
 import { userErrorReportApi } from '@/services/UserErrorReportService'
 import { userTimeOffApi } from '@/services/UserTimeOffService'
+import { JobHistoryApi } from '@/services/JobHistoryService'
+import { userJobHistoryApi } from '@/services/UserJobHistoryService'
 
 export const store = configureStore({
     reducer: {
@@ -63,9 +66,12 @@ export const store = configureStore({
         [ErrorReportApi.reducerPath]: ErrorReportApi.reducer,
         [disciplineApi.reducerPath]: disciplineApi.reducer,
         [userNotificationsApi.reducerPath]: userNotificationsApi.reducer,
+        [userSalaryApi.reducerPath]: userSalaryApi.reducer
         [userAttendanceApi.reducerPath]: userAttendanceApi.reducer,
         [userErrorReportApi.reducerPath]: userErrorReportApi.reducer,
-        [userTimeOffApi.reducerPath]: userTimeOffApi.reducer
+        [userTimeOffApi.reducerPath]: userTimeOffApi.reducer,
+        [JobHistoryApi.reducerPath]: JobHistoryApi.reducer,
+        [userJobHistoryApi.reducerPath]: userJobHistoryApi.reducer
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware().concat(
@@ -90,9 +96,12 @@ export const store = configureStore({
             AuthApi.middleware,
             messageApi.middleware,
             userNotificationsApi.middleware,
+            userSalaryApi.middleware
             userAttendanceApi.middleware,
             userErrorReportApi.middleware,
-            userTimeOffApi.middleware
+            userTimeOffApi.middleware,
+            JobHistoryApi.middleware,
+            userJobHistoryApi.middleware
         )
 })
 

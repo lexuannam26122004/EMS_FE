@@ -70,7 +70,7 @@ const CreateEmployeePage = () => {
     const { data: userResponse, isLoading: isUsersLoading, refetch } = useGetAllUsersQuery()
     const employee = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
 
-    const { data: roleResponse, isLoading: isRoleLoading } = useGetAllRolesQuery()
+    const { data: roleResponse, isLoading: isRoleLoading } = useGetAllRolesQuery(null)
     const role = (roleResponse?.Data?.Records as IAspNetRoleGetAll[]) || []
 
     const { data: departmentResponse, isLoading: isDepartmentLoading } = useGetAllDepartmentQuery()

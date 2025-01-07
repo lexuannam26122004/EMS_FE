@@ -349,6 +349,7 @@ const AvatarMenu = () => {
                                         {t('COMMON.SIDEBAR.SCHEDULAR')}
                                     </MenuItem>
 
+
                                     <MenuItem
                                         onClick={handleCreateTasks}
                                         sx={{
@@ -363,6 +364,7 @@ const AvatarMenu = () => {
                                         <BriefcaseBusiness style={{ marginRight: '16px' }} />
                                         {t('COMMON.SIDEBAR.CREATETASKS')}
                                     </MenuItem>
+
                                     {/* <MenuItem
                                         onClick={handleClose}
                                         sx={{

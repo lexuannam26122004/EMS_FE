@@ -13,35 +13,40 @@ import {
 import { Clock, MailWarning } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useRouter } from 'next/navigation'
+import { useGetMeInfoCycleQuery } from '@/services/UserSalaryService'
+import EmployeeSalaryModal from './ModalDetail'
+
+interface infoCycle {
+    Id: string
+    Period: string
+    Ispaid: boolean
+    NumberOfWorkingHours: number
+    TotalSalary: number
+}
 
 export default function SalaryCycle() {
     const { t } = useTranslation('common')
-    // const { theme } = useTheme()
-
-
-
     const currentYear = new Date().getFullYear()
     const [selectedYear, setSelectedYear] = useState(currentYear)
+    const [openModal, setOpenModal] = useState(false)
+    const [selectedSalary, setSelectedSalary] = useState<string | null>(null)
 
-    useEffect(() => {}, [selectedYear])
+    const { data: cycleData, refetch } = useGetMeInfoCycleQuery({ year: selectedYear.toString() })
+
+    useEffect(() => {
+        refetch()
+    }, [selectedYear, cycleData])
+
+    const myData = cycleData?.Data as infoCycle[]
 
     const handleYearChange = (event: SelectChangeEvent<number>) => {
         setSelectedYear(event.target.value as number)
     }
     useEffect(() => {}, [selectedYear])
-    const data = [
-        '01-2024',
-        '02-2024',
-        '03-2024',
-        '04-2024',
-        '05-2024',
-        '06-2024',
-        '07-2024',
-        '08-2024',
-        '09-2024',
-        '10-2024'
-    ]
+    const handleClickDetail = (Id: string) => {
+        setSelectedSalary(Id)
+        setOpenModal(true)
+    }
     return (
         <Paper
             elevation={0}
@@ -158,7 +163,8 @@ export default function SalaryCycle() {
                     display: 'grid',
                     gridTemplateColumns: 'repeat(2, 1fr)',
                     gap: '30px',
-                    height: '540px',
+                    height: 'auto',
+                    maxHeight: '540px',
                     padding: '0 28px 0 35px',
                     scrollbarGutter: 'stable',
                     '&::-webkit-scrollbar': {
@@ -173,9 +179,9 @@ export default function SalaryCycle() {
                     mb: '24px'
                 }}
             >
-                {data?.map((period, index) => (
+                {myData?.map((period, index) => (
                     <Box
-                        onClick={() => router.push('/user/salary/detail')}
+                        onClick={() => handleClickDetail(period?.Id)}
                         key={index}
                         sx={{
                             position: 'relative', // Đảm bảo có thể dùng pseudo-element
@@ -217,7 +223,7 @@ export default function SalaryCycle() {
                                     style={{ marginLeft: '15px' }}
                                     color='var(--text-color)'
                                 >
-                                    {period}
+                                    {period?.Period}
                                 </Typography>
                                 <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
                                     <Box
@@ -294,19 +300,30 @@ export default function SalaryCycle() {
                                     <Typography sx={{ color: 'var(--sub-title-color)' }}>
                                         {t('COMMON.SALARY.WORKING_TIME')}
                                     </Typography>
-                                    <Typography sx={{ color: '#FFCC99', marginTop: '10px' }}>265 H</Typography>
+                                    <Typography sx={{ color: '#FFCC99', marginTop: '10px' }}>
+                                        {period?.NumberOfWorkingHours}
+                                    </Typography>
                                 </Box>
                                 <Box sx={{ flex: 1, justifyContent: 'center' }}>
                                     <Typography sx={{ color: 'var(--sub-title-color)' }}>
                                         {t('COMMON.SALARY.TOTAL_SALARY')}
                                     </Typography>
-                                    <Typography sx={{ color: '#FFCC99', marginTop: '10px' }}>20000000</Typography>
+                                    <Typography sx={{ color: '#FFCC99', marginTop: '10px' }}>
+                                        {period?.TotalSalary}
+                                    </Typography>
                                 </Box>
                             </Box>
                         </Box>
                     </Box>
                 ))}
             </Box>
+            {selectedSalary && (
+                <EmployeeSalaryModal
+                    open={openModal}
+                    handleToggle={() => setOpenModal(false)}
+                    salaryId={selectedSalary}
+                />
+            )}
         </Paper>
     )
 }

@@ -351,7 +351,8 @@
             "AVG_GROSS": "Lương Gross trung bình",
             "AVG_NET": "Lương thực lĩnh trung bình",
             "AVG_INSURANCE": "Bảo hiểm trung bình",
-            "AVG_PITAX": "Thuế trung bình"
+            "AVG_PITAX": "Thuế trung bình",
+            "PAY": "Thanh toán"
         },
         "CREATE_NOTIFICATION": {
             "TITLE_PAGE": "Tạo thông báo mới",
@@ -460,6 +461,17 @@
                     "UPDATE_EMPLOYEE": "Cập nhật nhân viên thất bại"
                 }
             }
+        },
+
+        "JOBHISTORY": {
+            "STARTDATE": "Ngày bắt đầu",
+            "ENDDATE": "Ngày kết thúc",
+            "NOTE": "Ghi chú",
+            "JOBDESCRIPTION": "Mô tả công việc",
+            "WORKLOCATION": "Địa điểm làm việc",
+            "ALLOWANCE": "Phụ cấp",
+            "CREATE_NEW_JOB": "Tạo công tác mới",
+            "ASSIGNEE": "Người nhận công tác"
         },
 
         "TIMEOFF": {

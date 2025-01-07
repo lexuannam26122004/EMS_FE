@@ -20,6 +20,30 @@ export interface IUnpaidSalary extends ISalaryGetAll {
     AvatarPath: string
 }
 
+export interface ISalaryGetById {
+    AvatarPath: string
+    FullName: string
+    EmployeeId: string
+    Id: string
+    IsActive: boolean
+    UserId: string
+    DepartmentName: string
+    RoleName: string[]
+    Date: string
+
+    TotalSalary: number
+    SalaryPayment: number
+    IsPaid: boolean
+    PayrollPeriod: string
+    ProRatedSalary: number
+    PITax: number
+    TotalInsurance: number
+    TotalBenefit: number
+    TotalReward: number
+    TotalDiscipline: number
+    NumberOfWorkingHours: number
+}
+
 export interface ISalaryByLevel {
     period: string
     under10: number

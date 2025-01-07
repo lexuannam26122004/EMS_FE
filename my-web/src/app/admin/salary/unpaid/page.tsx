@@ -18,17 +18,21 @@ import {
     InputAdornment,
     TableSortLabel,
     Avatar,
-    FormControl
+    FormControl,
+    Tooltip
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import SearchIcon from '@mui/icons-material/Search'
 //import { useRouter } from 'next/navigation'
-import { useGetUnpaidSalaryQuery } from '@/services/SalaryService'
+import { useGetUnpaidSalaryQuery, usePaymentConfirmationMutation } from '@/services/SalaryService'
 import { IUnpaidSalary } from '@/models/salary'
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
 import { debounce } from 'lodash'
 import { useCallback } from 'react'
+import { HandCoins } from 'lucide-react'
+import { useSelector } from 'react-redux'
+import { authSelector } from '@/redux/slices/authSlice'
 
 function getContractBgColor(IsPaid: boolean): string {
     if (IsPaid) {
@@ -50,6 +54,7 @@ function SalaryTablePage() {
     const { t } = useTranslation('common')
     // const router = useRouter()
     // const [selected, setSelected] = useState<number[]>([])
+    const menuLeft = useSelector(authSelector)
     const [page, setPage] = useState(1)
     const [rowsPerPage, setRowsPerPage] = useState('5')
     const [from, setFrom] = useState(1)
@@ -100,6 +105,17 @@ function SalaryTablePage() {
         })
     }
 
+    const [paymentConfirmation] = usePaymentConfirmationMutation()
+
+    const handlePaymentConfirmation = async (id: string) => {
+        try {
+            // Pass the 'id' directly to paymentConfirmation instead of using paymentId state
+            await paymentConfirmation({ Id: id }).unwrap() // Use unwrap to handle errors and success separately
+        } catch (err) {
+            alert('Error confirming payment: ' + err.message) // Error handling
+        }
+    }
+
     const debouncedSetFilter = useCallback(
         debounce(value => {
             setFilter(prev => ({
@@ -148,27 +164,14 @@ function SalaryTablePage() {
     return (
         <Box>
             <Paper
-                elevation={0}
                 sx={{
                     width: '100%',
+                    boxShadow: 'var(--box-shadow-paper)',
                     overflow: 'hidden',
                     borderRadius: '15px',
                     backgroundColor: 'var(--background-item)'
                 }}
             >
-                <Typography
-                    sx={{
-                        userSelect: 'none',
-                        color: 'var(--text-color)',
-                        fontWeight: 'bold',
-                        fontSize: '18px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        padding: '24px 24px 20px'
-                    }}
-                >
-                    {t('COMMON.SALARY.UNPAID')}
-                </Typography>
                 <Box display='flex' alignItems='center' justifyContent='space-between' margin='24px'>
                     <Box sx={{ position: 'relative', width: '100%', height: '55px' }}>
                         <TextField
@@ -324,10 +327,7 @@ function SalaryTablePage() {
                         <TableHead>
                             <TableRow
                                 sx={{
-                                    backgroundColor: 'var(--header-table-dashboard)',
-                                    '&:last-child td, &:last-child th': {
-                                        border: 'none'
-                                    }
+                                    backgroundColor: 'var(--header-color-table)'
                                 }}
                             >
                                 <TableCell sx={{ borderColor: 'var(--border-color)' }}>
@@ -628,7 +628,7 @@ function SalaryTablePage() {
                                             whiteSpace: 'nowrap'
                                         }}
                                     >
-                                        {t('COMMON.DASHBOARD.CONTRACT_STATUS')}
+                                        {t('COMMON.ACTION')}
                                     </Typography>
                                 </TableCell>
                             </TableRow>
@@ -821,33 +821,35 @@ function SalaryTablePage() {
                                             </Typography>
                                         </TableCell>
                                         <TableCell sx={{ borderColor: 'var(--border-color)', padding: '11px' }}>
-                                            <Box
-                                                sx={{
-                                                    borderRadius: '8px',
-                                                    padding: '5px',
-                                                    display: 'flex',
-                                                    minWidth: '100px',
-                                                    justifyContent: 'center',
-                                                    backgroundColor: getContractBgColor(row.IsPaid)
-                                                }}
-                                            >
-                                                <Typography
-                                                    sx={{
-                                                        fontSize: '15px',
-                                                        overflow: 'hidden',
-                                                        color: getContractTextColor(row.IsPaid),
-                                                        width: 'auto',
-                                                        fontWeight: 'bold',
-                                                        display: 'inline-block',
-                                                        textOverflow: 'ellipsis',
-                                                        whiteSpace: 'nowrap'
-                                                    }}
+                                            {menuLeft['/admin/salary'].IsAllowEdit && (
+                                                <Box
+                                                    display='flex'
+                                                    alignItems='center'
+                                                    justifyContent='center'
+                                                    gap='10px'
                                                 >
-                                                    {getContractBgColor(row.IsPaid) === 'var(--bg-danger-color)'
-                                                        ? `${t('COMMON.SALARY.IS_UNPAID')}`
-                                                        : `${t('COMMON.SALARY.IS_PAID')}`}
-                                                </Typography>
-                                            </Box>
+                                                    <Tooltip title={t('COMMON.SALARY.PAY')}>
+                                                        <Box
+                                                            display='flex'
+                                                            alignItems='center'
+                                                            justifyContent='center'
+                                                            sx={{
+                                                                cursor: 'pointer',
+                                                                color: '#00d100',
+                                                                borderRadius: '50%',
+                                                                width: '42px',
+                                                                height: '42px',
+                                                                '&:hover': {
+                                                                    backgroundColor: 'var(--hover-color)'
+                                                                }
+                                                            }}
+                                                            onClick={() => handlePaymentConfirmation(row.Id)}
+                                                        >
+                                                            <HandCoins />
+                                                        </Box>
+                                                    </Tooltip>
+                                                </Box>
+                                            )}
                                         </TableCell>
                                     </TableRow>
                                 ))}

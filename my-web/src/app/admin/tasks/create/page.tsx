@@ -14,7 +14,7 @@ import {
     Avatar
 } from '@mui/material'
 import { SaveIcon } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { XIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -32,10 +32,18 @@ import {
 } from '@/redux/slices/selectedDepartmentsToNotifySlice'
 import { selectedRolesToNotifySelector, selectedRolesToNotifySlice } from '@/redux/slices/selectedRolesToNotifySlice'
 
-function CreateNotification() {
+const getCurrentDateTime = () => {
+    const now = new Date()
+    const year = now.getFullYear()
+    const month = String(now.getMonth() + 1).padStart(2, '0')
+    const day = String(now.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+}
+
+function Create() {
     const { t } = useTranslation('common')
     const router = useRouter()
-    const [createNotification, { isLoading }] = useCreateUsersMutation()
+    const [create, { isLoading }] = useCreateUsersMutation()
     const [isSubmit, setIsSubmit] = useState(false)
     const dispatch = useDispatch()
     const [typeReceiveNotify, setTypeReceiveNotify] = useState('All')
@@ -43,7 +51,6 @@ function CreateNotification() {
     const selectedUsers = useSelector(selectedUsersToNotifySliceSelector)
     const selectedDepartment = useSelector(selectedDepartmentsToNotifySelector)
     const selectedRole = useSelector(selectedRolesToNotifySelector)
-
     const [startDate, setStartDate] = useState('')
     const [endDate, setEndDate] = useState('')
     const [note, setNote] = useState('')
@@ -54,6 +61,11 @@ function CreateNotification() {
     const handleCloseSpecificUsersModal = () => {
         setOpenSpecificUsersModal(false)
     }
+
+    useEffect(() => {
+        setStartDate(getCurrentDateTime())
+        setEndDate(getCurrentDateTime())
+    }, [])
 
     const handleSaveAndClose = async () => {
         setIsSubmit(true)
@@ -77,7 +89,7 @@ function CreateNotification() {
             TypeToNotify: typeReceiveNotify === 'All' ? 1 : 0
         }
 
-        await createNotification(data).unwrap()
+        await create(data).unwrap()
 
         router.push('/admin')
     }
@@ -124,13 +136,13 @@ function CreateNotification() {
                         marginBottom: '20px'
                     }}
                 >
-                    {t('COMMON.CREATE_NOTIFICATION.TITLE_PAGE')}
+                    {t('COMMON.JOBHISTORY.CREATE_NEW_JOB')}
                 </Typography>
 
                 <Box sx={{ display: 'flex', gap: '20px', mt: '7px' }}>
                     <Box width='100%'>
                         <TextField
-                            label={t('COMMON.CREATE_NOTIFICATION.TITLE*')}
+                            label={t('COMMON.JOBHISTORY.JOBDESCRIPTION') + '*'}
                             multiline
                             maxRows={4}
                             {...(isSubmit === true && jobDescription === '' && { error: true })}
@@ -191,16 +203,15 @@ function CreateNotification() {
                     </Box>
                 </Box>
 
-
                 <Box sx={{ display: 'flex', gap: '20px', mt: '7px' }}>
-                <Box
+                    <Box
                         sx={{
                             width: 'calc(50% - 10px)'
                         }}
                     >
                         <TextField
                             variant='outlined'
-                            label={t('COMMON.TIMEOFF.STARTDATE') + '*'}
+                            label={t('COMMON.JOBHISTORY.STARTDATE') + '*'}
                             type='date'
                             fullWidth
                             {...(isSubmit && startDate === '' && { error: true })}
@@ -266,7 +277,7 @@ function CreateNotification() {
                     >
                         <TextField
                             variant='outlined'
-                            label={t('COMMON.TIMEOFF.ENDDATE') + '*'}
+                            label={t('COMMON.JOBHISTORY.ENDDATE') + '*'}
                             type='date'
                             fullWidth
                             {...(isSubmit && endDate === '' && { error: true })}
@@ -326,13 +337,147 @@ function CreateNotification() {
                     </Box>
                 </Box>
 
+                <Box sx={{ display: 'flex', gap: '20px', mt: '7px' }}>
+                    <Box
+                        sx={{
+                            width: 'calc(50% - 10px)'
+                        }}
+                    >
+                        <TextField
+                            variant='outlined'
+                            label={t('COMMON.JOBHISTORY.WORKLOCATION') + '*'}
+                            type='text'
+                            fullWidth
+                            {...(isSubmit && workLocation === '' && { error: true })}
+                            sx={{
+                                '& fieldset': {
+                                    borderRadius: '8px',
+                                    color: 'var(--text-color)',
+                                    borderColor: 'var(--border-color)'
+                                },
+                                '& .MuiInputBase-root': {
+                                    paddingRight: '0px'
+                                },
+                                '& .MuiInputBase-input': {
+                                    paddingRight: '12px',
+                                    color: 'var(--text-color)',
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1
+                                    }
+                                },
+                                '& .MuiOutlinedInput-root:hover fieldset': {
+                                    borderColor: 'var(--hover-field-color)'
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-focused fieldset': {
+                                    borderColor: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root': {
+                                    color: 'var(--text-label-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-focused': {
+                                    color: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-error': {
+                                    color: 'var(--error-color)'
+                                }
+                            }}
+                            value={workLocation}
+                            onChange={e => setWorkLocation(e.target.value)}
+                        />
+                        <Typography
+                            sx={{
+                                color: 'red',
+                                margin: '1px 0 0 10px',
+                                fontSize: '12px',
+                                visibility: isSubmit && workLocation === '' ? 'visible' : 'hidden'
+                            }}
+                        >
+                            {t('COMMON.TEXTFIELD.REQUIRED')}
+                        </Typography>
+                    </Box>
+
+                    <Box
+                        sx={{
+                            width: 'calc(50% - 10px)'
+                        }}
+                    >
+                        <TextField
+                            variant='outlined'
+                            label={t('COMMON.JOBHISTORY.ALLOWANCE') + '*'}
+                            type='text'
+                            fullWidth
+                            {...(isSubmit && allowance === '' && { error: true })}
+                            sx={{
+                                '& fieldset': {
+                                    borderRadius: '8px',
+                                    color: 'var(--text-color)',
+                                    borderColor: 'var(--border-color)'
+                                },
+                                '& .MuiInputBase-root': {
+                                    paddingRight: '0px'
+                                },
+                                '& .MuiInputBase-input': {
+                                    paddingRight: '12px',
+                                    color: 'var(--text-color)',
+                                    fontSize: '16px',
+                                    '&::placeholder': {
+                                        color: 'var(--placeholder-color)',
+                                        opacity: 1
+                                    }
+                                },
+                                '& .MuiOutlinedInput-root:hover fieldset': {
+                                    borderColor: 'var(--hover-field-color)'
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                    borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                },
+                                '& .MuiOutlinedInput-root.Mui-focused fieldset': {
+                                    borderColor: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root': {
+                                    color: 'var(--text-label-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-focused': {
+                                    color: 'var(--selected-field-color)'
+                                },
+                                '& .MuiInputLabel-root.Mui-error': {
+                                    color: 'var(--error-color)'
+                                }
+                            }}
+                            value={allowance}
+                            onChange={e => setAllowance(e.target.value)}
+                        />
+                        <Typography
+                            sx={{
+                                color: 'red',
+                                margin: '1px 0 0 10px',
+                                fontSize: '12px',
+                                visibility: isSubmit && allowance === '' ? 'visible' : 'hidden'
+                            }}
+                        >
+                            {t('COMMON.TEXTFIELD.REQUIRED')}
+                        </Typography>
+                    </Box>
+                </Box>
+
                 <Box
                     sx={{
                         mt: '7px'
                     }}
                 >
                     <TextField
-                        label={t('COMMON.CREATE_NOTIFICATION.CONTENT*')}
+                        label={t('COMMON.JOBHISTORY.NOTE') + '*'}
                         multiline
                         {...(isSubmit === true && note === '' && { error: true })}
                         maxRows={8}
@@ -401,7 +546,7 @@ function CreateNotification() {
                                 color: 'var(--text-color)'
                             }}
                         >
-                            {t('COMMON.CREATE_NOTIFICATION.USERS_TO_NOTIFY')}
+                            {t('COMMON.JOBHISTORY.ASSIGNEE')}
                         </FormLabel>
                         <RadioGroup
                             aria-labelledby='demo-row-radio-buttons-group-label'
@@ -669,4 +814,4 @@ function CreateNotification() {
     )
 }
 
-export default CreateNotification
+export default Create

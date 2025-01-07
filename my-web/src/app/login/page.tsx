@@ -75,6 +75,7 @@ const LoginForm: React.FC = () => {
                 const token = data.Data.auth_token
                 sessionStorage.setItem('auth_token', token)
                 try {
+
                     var responseAttendance = await createAttendanceUser(IPdata.ip).unwrap()
 
                     await refetch()
