@@ -166,7 +166,7 @@ export const {
     useGetPayrollOfDepartmentOvertimeQuery,
     useGetPayrollReportQuery,
     useGetUnpaidSalaryQuery,
-    useGetPayrollOverviewQuery
+    useGetPayrollOverviewQuery,
     useGetIncomeInMonthQuery,
     useGetYearIncomeQuery
 } = salaryApi
