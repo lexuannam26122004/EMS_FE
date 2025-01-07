@@ -4,6 +4,7 @@ import ReactECharts from 'echarts-for-react'
 import { Box, CircularProgress, Paper, Typography } from '@mui/material'
 import { useTheme } from 'next-themes'
 import { useGetGrossTotalQuery } from '@/services/SalaryService'
+import { useTranslation } from 'react-i18next'
 interface IGrossTotal {
     netSalaries: number
     PITaxes: number
@@ -13,6 +14,7 @@ interface IGrossTotal {
     totalInsurance: number
 }
 export default function GrossTotal() {
+    const { t } = useTranslation()
     const { theme } = useTheme()
     const { data, isLoading, isError } = useGetGrossTotalQuery()
 
@@ -74,6 +76,7 @@ export default function GrossTotal() {
                 name: 'Access From',
                 type: 'pie',
                 radius: ['40%', '70%'],
+                center: ['50%', '60%'],
                 avoidLabelOverlap: false,
                 label: {
                     show: false,
@@ -92,21 +95,21 @@ export default function GrossTotal() {
                 data: [
                     {
                         value: grossData?.netSalary,
-                        name: 'Total Take-homes',
+                        name: t('COMMON.SALARY.TOTAL_SALARY'),
                         itemStyle: {
                             color: '#ffab00'
                         }
                     },
                     {
                         value: grossData?.totalInsurance,
-                        name: 'Total Insurances',
+                        name: t('COMMON.SALARY.TOTAL_INSURANCE'),
                         itemStyle: {
                             color: '#00a76f'
                         }
                     },
                     {
                         value: grossData?.PITax,
-                        name: 'Total Taxes',
+                        name: t('COMMON.SALARY.TOTAL_PITAX'),
                         itemStyle: {
                             color: '#c23531'
                         }
@@ -142,27 +145,33 @@ export default function GrossTotal() {
             }}
         >
             <Typography fontSize={'24px'} fontWeight={'bold'} color='var(--text-color)'>
-                Gross Total
+                {t('COMMON.SALARY.GROSS_TOTAL')}
             </Typography>
             <ReactECharts option={option} style={{ width: '100%', height: '315px', marginTop: '20px' }}></ReactECharts>
             <Box sx={{ marginTop: '15px', height: '70px' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Box sx={{ width: 15, height: 15, borderRadius: 45, backgroundColor: '#ffab00' }}></Box>
-                    <Typography sx={{ marginLeft: '10px', color: 'var(--text-color)' }}>Total Take-homes</Typography>
+                    <Typography sx={{ marginLeft: '10px', color: 'var(--text-color)' }}>
+                        {t('COMMON.SALARY.TOTAL_SALARY')}
+                    </Typography>
                     <Typography sx={{ marginLeft: 'auto', color: 'var(--text-color)' }}>
                         đ {formatCurrency(grossData?.netSalaries)}
                     </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Box sx={{ width: 15, height: 15, borderRadius: 45, backgroundColor: '#00a76f' }}></Box>
-                    <Typography sx={{ marginLeft: '10px', color: 'var(--text-color)' }}>Total Insurances</Typography>
+                    <Typography sx={{ marginLeft: '10px', color: 'var(--text-color)' }}>
+                        {t('COMMON.SALARY.TOTAL_INSURANCE')}
+                    </Typography>
                     <Typography sx={{ marginLeft: 'auto', color: 'var(--text-color)' }}>
                         đ {formatCurrency(grossData?.ins)}
                     </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Box sx={{ width: 15, height: 15, borderRadius: 45, backgroundColor: '#c23531' }}></Box>
-                    <Typography sx={{ marginLeft: '10px', color: 'var(--text-color)' }}>Total Taxes</Typography>
+                    <Typography sx={{ marginLeft: '10px', color: 'var(--text-color)' }}>
+                        {t('COMMON.SALARY.TOTAL_PITAX')}
+                    </Typography>
                     <Typography sx={{ marginLeft: 'auto', color: 'var(--text-color)' }}>
                         đ {formatCurrency(grossData?.PITaxes)}
                     </Typography>

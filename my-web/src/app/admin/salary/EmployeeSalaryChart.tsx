@@ -5,6 +5,7 @@ import { useTheme } from 'next-themes'
 import { useGetSalaryByLevelQuery } from '@/services/SalaryService'
 import { ISalaryByLevel } from '@/models/salary'
 import { useTranslation } from 'react-i18next'
+import Loading from '@/components/Loading'
 
 const EmployeeSalaryChart = () => {
     const { t } = useTranslation('common')
@@ -13,23 +14,7 @@ const EmployeeSalaryChart = () => {
     const levels = data?.Data as ISalaryByLevel
 
     if (isLoading) {
-        return (
-            <Paper
-                elevation={0}
-                sx={{
-                    width: '100%',
-                    padding: '24px',
-                    backgroundColor: 'var(--background-item)',
-                    borderRadius: '15px',
-                    height: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }}
-            >
-                <CircularProgress /> {/* Hiển thị spinner khi đang tải */}
-            </Paper>
-        )
+        return <Loading />
     }
     if (isError) {
         return (
@@ -125,7 +110,7 @@ const EmployeeSalaryChart = () => {
             }}
         >
             <Typography fontSize={'24px'} fontWeight={'bold'} color='var(--text-color)'>
-                Phân tích mức lương nhân viên
+                {t('COMMON.SALARY.EMPLOYEE_SALARY_ANALYSIS')}
             </Typography>
             <ReactECharts option={option} style={{ width: '100%', height: '320px', marginTop: '10px' }}></ReactECharts>
         </Paper>

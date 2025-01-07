@@ -145,7 +145,7 @@ export default function DisplayInfo() {
                                 color: 'var(--reward-title-color)'
                             }}
                         >
-                            {t('GROSS_PAYROLL_TOTAL')}
+                            {t('COMMON.SALARY.GROSS_PAYROLL_TOTAL')}
                         </Typography>
                         <Box
                             sx={{

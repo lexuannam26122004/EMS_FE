@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react'
 import ReactECharts from 'echarts-for-react'
 import { Box, CircularProgress, Paper, Typography } from '@mui/material'
 import { useGetInfoForDepartmentChartQuery } from '@/services/SalaryService'
-
+import { useTranslation } from 'react-i18next'
+import Loading from '@/components/Loading'
 
 export default function DepartmentChart() {
+    const { t } = useTranslation()
     const [chartData, setChartData] = useState<{ [key: string]: number }>({})
     const [loading, setLoading] = useState(true)
     const { data, isLoading, error } = useGetInfoForDepartmentChartQuery()
@@ -15,23 +17,7 @@ export default function DepartmentChart() {
         }
     }, [data])
     if (isLoading || loading) {
-        return (
-            <Paper
-                elevation={0}
-                sx={{
-                    width: '100%',
-                    padding: '24px',
-                    backgroundColor: 'var(--background-item)',
-                    borderRadius: '15px',
-                    height: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }}
-            >
-                <CircularProgress /> {/* Hiển thị spinner khi đang tải */}
-            </Paper>
-        )
+        return <Loading />
     }
     if (error) {
         return (
@@ -112,7 +98,7 @@ export default function DepartmentChart() {
         >
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Typography fontSize={'24px'} fontWeight={'bold'} color='var(--text-color)'>
-                    Tổng thu nhập theo phòng ban
+                    {t('COMMON.SALARY.TOTAL_INCOME_BY_DEPARTMENTS')}
                 </Typography>
                 <Box
                     sx={{

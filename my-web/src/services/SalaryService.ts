@@ -108,6 +108,35 @@ export const salaryApi = createApi({
                 method: 'GET'
             }),
             providesTags: ['Salary']
+        }),
+        getUnpaidSalary: builder.query<SalaryResponse, { filter: IFilterSysConfiguration; year: string }>({
+            query: ({ filter, year }) => {
+                const params = new URLSearchParams()
+
+                // Add filter parameters to URL
+                if (filter) {
+                    if (filter.createdBy) params.append('CreatedBy', filter.createdBy)
+                    if (filter.createdDate) params.append('CreatedDate', filter.createdDate.toISOString())
+                    if (filter.pageSize) params.append('PageSize', filter.pageSize.toString())
+                    if (filter.pageNumber) params.append('PageNumber', filter.pageNumber.toString())
+                    if (filter.isActive !== undefined) params.append('IsActive', filter.isActive.toString())
+                    if (filter.keyword) params.append('Keyword', filter.keyword)
+                    if (filter.isDescending !== undefined) params.append('IsDescending', filter.isDescending.toString())
+                    if (filter.sortBy) params.append('SortBy', filter.sortBy)
+                }
+
+                if (year) params.append('Year', year)
+
+                return `GetUnpaidSalary?${params.toString()}`
+            },
+            providesTags: ['Salary']
+        }),
+        getPayrollOverview: builder.query<SalaryResponse, { period: string }>({
+            query: ({ period }) => ({
+                url: `PayrollOverview?period=${period}`,
+                method: 'GET'
+            }),
+            providesTags: ['Salary']
         })
     })
 })
@@ -128,5 +157,7 @@ export const {
     useGetDisplayInfoQuery,
     useGetGrossTotalByDepartmentsQuery,
     useGetPayrollOfDepartmentOvertimeQuery,
-    useGetPayrollReportQuery
+    useGetPayrollReportQuery,
+    useGetUnpaidSalaryQuery,
+    useGetPayrollOverviewQuery
 } = salaryApi
