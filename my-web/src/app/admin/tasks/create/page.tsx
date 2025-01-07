@@ -136,13 +136,13 @@ function Create() {
                         marginBottom: '20px'
                     }}
                 >
-                    {t('COMMON.CREATE_NOTIFICATION.TITLE_PAGE')}
+                    {t('COMMON.JOBHISTORY.CREATE_NEW_JOB')}
                 </Typography>
 
                 <Box sx={{ display: 'flex', gap: '20px', mt: '7px' }}>
                     <Box width='100%'>
                         <TextField
-                            label={t('COMMON.CREATE_NOTIFICATION.TITLE*')}
+                            label={t('COMMON.JOBHISTORY.JOBDESCRIPTION') + '*'}
                             multiline
                             maxRows={4}
                             {...(isSubmit === true && jobDescription === '' && { error: true })}
@@ -211,7 +211,7 @@ function Create() {
                     >
                         <TextField
                             variant='outlined'
-                            label={t('COMMON.TIMEOFF.STARTDATE') + '*'}
+                            label={t('COMMON.JOBHISTORY.STARTDATE') + '*'}
                             type='date'
                             fullWidth
                             {...(isSubmit && startDate === '' && { error: true })}
@@ -277,7 +277,7 @@ function Create() {
                     >
                         <TextField
                             variant='outlined'
-                            label={t('COMMON.TIMEOFF.ENDDATE') + '*'}
+                            label={t('COMMON.JOBHISTORY.ENDDATE') + '*'}
                             type='date'
                             fullWidth
                             {...(isSubmit && endDate === '' && { error: true })}
@@ -345,7 +345,7 @@ function Create() {
                     >
                         <TextField
                             variant='outlined'
-                            label={t('COMMON.TIMEOFF.STARTDATE') + '*'}
+                            label={t('COMMON.JOBHISTORY.WORKLOCATION') + '*'}
                             type='text'
                             fullWidth
                             {...(isSubmit && workLocation === '' && { error: true })}
@@ -411,7 +411,7 @@ function Create() {
                     >
                         <TextField
                             variant='outlined'
-                            label={t('COMMON.TIMEOFF.ENDDATE') + '*'}
+                            label={t('COMMON.JOBHISTORY.ALLOWANCE') + '*'}
                             type='text'
                             fullWidth
                             {...(isSubmit && allowance === '' && { error: true })}
@@ -477,7 +477,7 @@ function Create() {
                     }}
                 >
                     <TextField
-                        label={t('COMMON.CREATE_NOTIFICATION.CONTENT*')}
+                        label={t('COMMON.JOBHISTORY.NOTE') + '*'}
                         multiline
                         {...(isSubmit === true && note === '' && { error: true })}
                         maxRows={8}
@@ -546,7 +546,7 @@ function Create() {
                                 color: 'var(--text-color)'
                             }}
                         >
-                            {t('COMMON.CREATE_NOTIFICATION.USERS_TO_NOTIFY')}
+                            {t('COMMON.JOBHISTORY.ASSIGNEE')}
                         </FormLabel>
                         <RadioGroup
                             aria-labelledby='demo-row-radio-buttons-group-label'

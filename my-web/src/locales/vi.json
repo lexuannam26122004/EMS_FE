@@ -461,8 +461,19 @@
             }
         },
 
+        "JOBHISTORY": {
+            "STARTDATE": "Ngày bắt đầu",
+            "ENDDATE": "Ngày kết thúc",
+            "NOTE": "Ghi chú",
+            "JOBDESCRIPTION": "Mô tả công việc",
+            "WORKLOCATION": "Địa điểm làm việc",
+            "ALLOWANCE": "Phụ cấp",
+            "CREATE_NEW_JOB": "Tạo công tác mới",
+            "ASSIGNEE": "Người nhận công tác"
+        },
+
         "TIMEOFF": {
-            "TIMEOFF":"Danh sách nghỉ phép",
+            "TIMEOFF": "Danh sách nghỉ phép",
             "INFORMATION": "Thông tin nhân viên",
             "FULLNAME": "Họ và tên",
             "EMPLOYEEID": "Mã nhân viên",
