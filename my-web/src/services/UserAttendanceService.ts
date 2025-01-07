@@ -18,16 +18,21 @@ export const userAttendanceApi = createApi({
                 const params = new URLSearchParams()
 
                 if (filter) {
-                    // if (filter.isActive !== undefined) params.append('IsActive', filter.isActive.toString())
-                    // if (filter.isRead !== undefined) params.append('IsRead', filter.isRead.toString())
-                    // if (filter.sentDate) params.append('SentDate', filter.sentDate.toISOString())
+                    if (filter.IsEarly !== undefined) params.append('IsEarly', filter.IsEarly.toString())
+                    if (filter.IsLate !== undefined) params.append('IsLate', filter.IsLate.toString())
+                    if (filter.IsOnTime !== undefined) params.append('IsOnTime', filter.IsOnTime.toString())
+                    if (filter.IsValid !== undefined) params.append('IsValid', filter.IsValid.toString())
+                    if (filter.PageSize !== undefined) params.append('PageSize', filter.PageSize.toString())
+                    if (filter.PageNumber) params.append('PageNumber', filter.PageNumber.toString())
+                    if (filter.StartDate !== undefined) params.append('StartDate', filter.StartDate.toString())
+                    if (filter.EndDate) params.append('EndDate', filter.EndDate.toString())
                 }
 
                 return `SearchForUser?${params.toString()}`
             }
         }),
-        getCountIsNew: builder.query<AttendanceResponse, void>({
-            query: () => `GetCountIsNew`
+        getCountIsNew: builder.query<AttendanceResponse, string>({
+            query: date => `GetByDate?Date=${date}`
         }),
         createAttendanceUser: builder.mutation<AttendanceResponse, string>({
             query: value => ({
@@ -36,10 +41,11 @@ export const userAttendanceApi = createApi({
                 body: { IPAddress: value }
             })
         }),
-        updateIsNew: builder.mutation<AttendanceResponse, void>({
-            query: () => ({
-                url: `UpdateIsNew`,
-                method: 'PUT'
+        checkout: builder.mutation<AttendanceResponse, number>({
+            query: value => ({
+                url: 'Checkout',
+                method: 'PUT',
+                body: { Id: value }
             })
         })
     })
@@ -49,5 +55,5 @@ export const {
     useSearchAttendanceForUserQuery,
     useCreateAttendanceUserMutation,
     useGetCountIsNewQuery,
-    useUpdateIsNewMutation
+    useCheckoutMutation
 } = userAttendanceApi

@@ -115,9 +115,9 @@ function Page({ notifications }: Props) {
     //     setOpen(prev => !prev)
     // }
 
-    const chunkedNotifications = notifications.reduce<INotificationGetById[][]>((result, _, index) => {
+    const chunkedNotifications = notifications?.reduce<INotificationGetById[][]>((result, _, index) => {
         if (index % 2 === 0) {
-            result.push(notifications.slice(index, index + 2))
+            result.push(notifications?.slice(index, index + 2))
         }
         return result
     }, [])
@@ -133,7 +133,7 @@ function Page({ notifications }: Props) {
                 padding: '0 24px'
             }}
         >
-            {chunkedNotifications.map((chunk, chunkIndex) => (
+            {chunkedNotifications?.map((chunk, chunkIndex) => (
                 <Box
                     key={chunkIndex}
                     sx={{

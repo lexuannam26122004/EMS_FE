@@ -23,7 +23,14 @@ export const usePathMaps = () => {
         '/admin/benefit': t('COMMON.SIDEBAR.BENEFIT'),
         '/admin/discipline': t('COMMON.SIDEBAR.DISCIPLINE'),
         '/admin/holiday': t('COMMON.SIDEBAR.HOLIDAY'),
-        '/admin/configuration': t('COMMON.SIDEBAR.CONFIGURATION')
+        '/admin/configuration': t('COMMON.SIDEBAR.CONFIGURATION'),
+        '/admin/statistics/attendance': t('COMMON.SIDEBAR.ATTENDANCE'),
+        '/admin/statistics/benefits': t('COMMON.SIDEBAR.BENEFITS'),
+        '/admin/statistics/salary': t('COMMON.SIDEBAR.SALARY'),
+        '/admin/statistics/employee-contract': t('COMMON.SIDEBAR.EMPLOYEE_CONTRACT'),
+        '/admin/statistics/timeoff-errorreport': t('COMMON.SIDEBAR.TIMEOFF_ERRORREPORT'),
+        '/admin/statistics/rewards-disciplines': t('COMMON.SIDEBAR.REWARDS_DISCIPLINES'),
+        '/admin/statistics/insurance': t('COMMON.SIDEBAR.INSURANCE')
     }
 
     const mapParentPathName: Record<string, string> = {
