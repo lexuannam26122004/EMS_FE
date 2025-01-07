@@ -30,6 +30,7 @@ import { ErrorReportApi } from '@/services/ErrorReportService'
 import { userNotificationsApi } from '@/services/UserNotificationsService'
 import { userErrorReportApi } from '@/services/UserErrorReportService'
 import { userTimeOffApi } from '@/services/UserTimeOffService'
+import { JobHistoryApi } from '@/services/JobHistoryService'
 
 export const store = configureStore({
     reducer: {
@@ -63,7 +64,8 @@ export const store = configureStore({
         [disciplineApi.reducerPath]: disciplineApi.reducer,
         [userNotificationsApi.reducerPath]: userNotificationsApi.reducer,
         [userErrorReportApi.reducerPath]: userErrorReportApi.reducer,
-        [userTimeOffApi.reducerPath]: userTimeOffApi.reducer
+        [userTimeOffApi.reducerPath]: userTimeOffApi.reducer,
+        [JobHistoryApi.reducerPath]: JobHistoryApi.reducer
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware().concat(
@@ -89,7 +91,8 @@ export const store = configureStore({
             messageApi.middleware,
             userNotificationsApi.middleware,
             userErrorReportApi.middleware,
-            userTimeOffApi.middleware
+            userTimeOffApi.middleware,
+            JobHistoryApi.middleware
         )
 })
 

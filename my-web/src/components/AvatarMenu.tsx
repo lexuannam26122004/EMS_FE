@@ -327,19 +327,21 @@ const AvatarMenu = () => {
                                         {t('COMMON.SIDEBAR.SCHEDULAR')}
                                     </MenuItem>
 
-                                    <MenuItem
-                                        onClick={handleCreateTasks}
-                                        sx={{
-                                            color: 'var(--text-color)',
-                                            borderRadius: '8px',
-                                            '&:hover': {
-                                                backgroundColor: 'var(--hover-color)'
-                                            }
-                                        }}
-                                    >
-                                        <BriefcaseBusiness style={{ marginRight: '16px' }} />
-                                        {t('COMMON.SIDEBAR.CREATETASKS')}
-                                    </MenuItem>
+                                    {pathName.includes('/admin') && (
+                                        <MenuItem
+                                            onClick={handleCreateTasks}
+                                            sx={{
+                                                color: 'var(--text-color)',
+                                                borderRadius: '8px',
+                                                '&:hover': {
+                                                    backgroundColor: 'var(--hover-color)'
+                                                }
+                                            }}
+                                        >
+                                            <BriefcaseBusiness style={{ marginRight: '16px' }} />
+                                            {t('COMMON.SIDEBAR.CREATETASKS')}
+                                        </MenuItem>
+                                    )}
                                     {/* <MenuItem
                                         onClick={handleClose}
                                         sx={{
