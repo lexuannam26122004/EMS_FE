@@ -3,21 +3,31 @@ import ReactECharts from 'echarts-for-react'
 import { Box, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'next-themes'
+import { useGetCountErrorReportsByTypeAndYearUserQuery } from '@/services/UserErrorReportService'
+import Loading from '@/components/Loading'
 
+interface ICountErrorReportsByType {
+    Type: string
+    Count: number
+}
 const Chart = () => {
     const { t } = useTranslation('common')
     const { theme } = useTheme()
 
-    const data = [
-        { value: 1048, name: t('COMMON.NOTIFICATION_TYPE.BENEFIT') },
-        { value: 735, name: t('COMMON.NOTIFICATION_TYPE.SALARY') },
-        { value: 580, name: t('COMMON.NOTIFICATION_TYPE.REWARD') },
-        { value: 484, name: t('COMMON.NOTIFICATION_TYPE.INSURANCE') },
-        { value: 300, name: t('COMMON.NOTIFICATION_TYPE.HOLIDAY') },
-        { value: 220, name: t('COMMON.NOTIFICATION_TYPE.DISCIPLINE') },
-        { value: 130, name: t('COMMON.NOTIFICATION_TYPE.TIMEKEEPING') }
-    ]
+    const date = new Date()
+    const year = date.getFullYear()
 
+    const { data: response, isLoading } = useGetCountErrorReportsByTypeAndYearUserQuery(year)
+    const reportData: ICountErrorReportsByType[] = Array.isArray(response?.Data) ? response.Data : []
+
+    const data = reportData?.map(item => ({
+        value: item.Count,
+        name: t(item.Type)
+    }))
+
+    if (isLoading) {
+        return <Loading />
+    }
     const option = {
         tooltip: {
             trigger: 'item',
@@ -71,7 +81,7 @@ const Chart = () => {
                 backgroundColor: 'var(--attendance-bg1)',
                 overflow: 'hidden',
                 height: '100%',
-               // border: '1px solid #e0e0e0',
+                // border: '1px solid #e0e0e0',
                 width: '100%'
             }}
         >

@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next'
 import SearchIcon from '@mui/icons-material/Search'
 import { useRouter } from 'next/navigation'
 import TableErrorReport from './TableErrorReport'
-import { useSearchByUserIdQuery } from '@/services/ErrorReportService'
+import { useSearchByUserIdQuery } from '@/services/UserErrorReportService'
 import Loading from '@/components/Loading'
 import { useGetAuthMeQuery } from '@/services/AuthService'
 import Tabs from '@mui/material/Tabs'
@@ -90,14 +90,7 @@ function ContractExpPage() {
     const { data: responseGetMeData, isFetching: isFetchingGetMe } = useGetAuthMeQuery()
     const infoMe = responseGetMeData?.Data
 
-    const {
-        data: responseData,
-        isLoading,
-        refetch
-    } = useSearchByUserIdQuery({
-        userId: infoMe?.Id,
-        filter: filter
-    })
+    const { data: responseData, isLoading, isFetching, refetch } = useSearchByUserIdQuery(filter)
 
     const errorsData = responseData?.Data?.Records as IGetAllErrorReport[]
 
@@ -183,33 +176,15 @@ function ContractExpPage() {
         })
     }
 
-    // useEffect(() => {
-    //     if (!isFetching && responseData?.Data) {
-    //         const from = (page - 1) * Number(rowsPerPage) + Math.min(1, errorsData.length)
-    //         setFrom(from)
+    useEffect(() => {
+        if (!isFetching && responseData?.Data) {
+            const from = (page - 1) * Number(rowsPerPage) + Math.min(1, errorsData.length)
+            setFrom(from)
 
-    //         const to = Math.min(errorsData.length + (page - 1) * Number(rowsPerPage), totalRecords)
-    //         setTo(to)
-    //     }
-    // }, [isFetching, responseData, page, rowsPerPage])
-
-    // useEffect(() => {
-    //     refetch()
-    // }, [filter])
-
-    // const handleSort = (property: string) => {
-    //     setFilter(prev => ({
-    //         ...prev,
-    //         sortBy: property,
-    //         isDescending: orderBy === property && order === 'asc' ? true : false
-    //     }))
-    //     if (orderBy === property) {
-    //         setOrder(order === 'asc' ? 'desc' : 'asc')
-    //     } else {
-    //         setOrder('asc')
-    //     }
-    //     setOrderBy(property)
-    // }
+            const to = Math.min(errorsData.length + (page - 1) * Number(rowsPerPage), totalRecords)
+            setTo(to)
+        }
+    }, [isFetching, responseData, page, rowsPerPage])
 
     const [currentTab, setCurrentTab] = useState(0)
 

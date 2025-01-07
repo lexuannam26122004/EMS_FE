@@ -86,7 +86,7 @@ function ContractExpPage() {
     //     setOpenModal(true)
     // }
 
-    const { data: responseData, refetch } = useSearchErrorReportQuery(filter)
+    const { data: responseData, isFetching, refetch } = useSearchErrorReportQuery(filter)
     const errorsData = responseData?.Data?.Records as IGetAllErrorReport[]
 
     const handleSort = (property: string) => {
@@ -171,33 +171,15 @@ function ContractExpPage() {
         })
     }
 
-    // useEffect(() => {
-    //     if (!isFetching && responseData?.Data) {
-    //         const from = (page - 1) * Number(rowsPerPage) + Math.min(1, errorsData.length)
-    //         setFrom(from)
+    useEffect(() => {
+        if (!isFetching && responseData?.Data) {
+            const from = (page - 1) * Number(rowsPerPage) + Math.min(1, errorsData.length)
+            setFrom(from)
 
-    //         const to = Math.min(errorsData.length + (page - 1) * Number(rowsPerPage), totalRecords)
-    //         setTo(to)
-    //     }
-    // }, [isFetching, responseData, page, rowsPerPage])
-
-    // useEffect(() => {
-    //     refetch()
-    // }, [filter])
-
-    // const handleSort = (property: string) => {
-    //     setFilter(prev => ({
-    //         ...prev,
-    //         sortBy: property,
-    //         isDescending: orderBy === property && order === 'asc' ? true : false
-    //     }))
-    //     if (orderBy === property) {
-    //         setOrder(order === 'asc' ? 'desc' : 'asc')
-    //     } else {
-    //         setOrder('asc')
-    //     }
-    //     setOrderBy(property)
-    // }
+            const to = Math.min(errorsData.length + (page - 1) * Number(rowsPerPage), totalRecords)
+            setTo(to)
+        }
+    }, [isFetching, responseData, page, rowsPerPage])
 
     const [currentTab, setCurrentTab] = useState(0)
 

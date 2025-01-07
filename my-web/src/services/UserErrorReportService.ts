@@ -19,29 +19,12 @@ interface IFilter {
     isType?: string
 }
 
-const apiPath = 'https://localhost:44381/api/admin/ErrorReport'
+const apiPath = 'https://localhost:44381/api/user/UserErrorReport'
 
-export const ErrorReportApi = createApi({
-    reducerPath: 'ErrorReportApi',
+export const userErrorReportApi = createApi({
+    reducerPath: 'userErrorReportApi',
     baseQuery: createBaseQuery(apiPath),
     endpoints: builder => ({
-        searchErrorReport: builder.query<ErrorReportResponse, IFilter>({
-            query: filter => {
-                const params = new URLSearchParams()
-
-                if (filter) {
-                    if (filter.pageSize) params.append('PageSize', filter.pageSize.toString())
-                    if (filter.pageNumber) params.append('PageNumber', filter.pageNumber.toString())
-                    if (filter.keyword) params.append('Keyword', filter.keyword)
-                    if (filter.isDescending !== undefined) params.append('IsDescending', filter.isDescending.toString())
-                    if (filter.sortBy) params.append('SortBy', filter.sortBy)
-                    if (filter.isType) params.append('Keyword', filter.isType)
-                }
-
-                return `Search/search?${params.toString()}`
-            }
-        }),
-
         searchByUserId: builder.query<ErrorReportResponse, IFilter>({
             query: filter => {
                 const params = new URLSearchParams()
@@ -59,16 +42,12 @@ export const ErrorReportApi = createApi({
             }
         }),
 
-        countErrorReportsByStatusAndMonth: builder.query<ErrorReportResponse, number>({
-            query: params => `CountErrorReportsByStatusAndMonth?year=${params}`
+        getCountErrorReportsInMonthUser: builder.query<ErrorReportResponse, IMonthAndYear>({
+            query: params => `CountErrorReportsInMonthUser?year=${params.Year}&month=${params.Month}`
         }),
 
-        getCountErrorReportsInMonth: builder.query<ErrorReportResponse, IMonthAndYear>({
-            query: params => `CountErrorReportsInMonth?year=${params.Year}&month=${params.Month}`
-        }),
-
-        getCountErrorReportsByTypeAndYear: builder.query<ErrorReportResponse, number>({
-            query: params => `CountErrorReportsByTypeAndYear?year=${params}`
+        getCountErrorReportsByTypeAndYearUser: builder.query<ErrorReportResponse, number>({
+            query: params => `CountErrorReportsByTypeAndYearUser?year=${params}`
         }),
 
         createErrorReports: builder.mutation<void, IErrorReportCreate>({
@@ -100,13 +79,11 @@ export const ErrorReportApi = createApi({
 })
 
 export const {
-    useSearchErrorReportQuery,
     useSearchByUserIdQuery,
-    useCountErrorReportsByStatusAndMonthQuery,
     useCreateErrorReportsMutation,
     useUpdateErrorReportsMutation,
     useGetByIdErrorReportsQuery,
-    useGetCountErrorReportsInMonthQuery,
-    useGetCountErrorReportsByTypeAndYearQuery,
+    useGetCountErrorReportsInMonthUserQuery,
+    useGetCountErrorReportsByTypeAndYearUserQuery,
     useChangeStatusErrorReportsMutation
-} = ErrorReportApi
+} = userErrorReportApi
