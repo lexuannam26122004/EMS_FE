@@ -1,5 +1,6 @@
 import { IEventCreate, IFilterEvent, IEventUpdate, ITotalEventsByMonth } from '@/models/Event'
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi } from '@reduxjs/toolkit/query/react'
+import { createBaseQuery } from './api'
 
 interface IEventResponse {
     Success: boolean
@@ -10,7 +11,7 @@ const apiPath = 'https://localhost:44381/api/admin/Event'
 
 export const eventApi = createApi({
     reducerPath: 'EventApis',
-    baseQuery: fetchBaseQuery({ baseUrl: apiPath }),
+    baseQuery: createBaseQuery(apiPath),
     endpoints: builder => ({
         searchEvent: builder.query<IEventResponse, IFilterEvent>({
             query: filter => {

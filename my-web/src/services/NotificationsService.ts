@@ -8,7 +8,7 @@ import {
 } from '@/models/Notifications'
 import axios from './axios'
 import { ITotalEventsByMonth } from '@/models/Event'
-
+import { createBaseQuery } from './api'
 interface NotificationsResponse {
     Success: boolean
     Data: any
@@ -30,7 +30,7 @@ export const SearchForUser = async (filter: IFilterNotificationsForUserVModel): 
 
 export const notificationsApi = createApi({
     reducerPath: 'notificationsApi',
-    baseQuery: fetchBaseQuery({ baseUrl: apiPath }),
+    baseQuery: createBaseQuery(apiPath),
     endpoints: builder => ({
         searchNotificationsForUser: builder.query<NotificationsResponse, IFilterNotificationsForUserVModel>({
             query: filter => {
