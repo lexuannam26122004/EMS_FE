@@ -66,7 +66,7 @@ export const store = configureStore({
         [ErrorReportApi.reducerPath]: ErrorReportApi.reducer,
         [disciplineApi.reducerPath]: disciplineApi.reducer,
         [userNotificationsApi.reducerPath]: userNotificationsApi.reducer,
-        [userSalaryApi.reducerPath]: userSalaryApi.reducer
+        [userSalaryApi.reducerPath]: userSalaryApi.reducer,
         [userAttendanceApi.reducerPath]: userAttendanceApi.reducer,
         [userErrorReportApi.reducerPath]: userErrorReportApi.reducer,
         [userTimeOffApi.reducerPath]: userTimeOffApi.reducer,
@@ -96,7 +96,7 @@ export const store = configureStore({
             AuthApi.middleware,
             messageApi.middleware,
             userNotificationsApi.middleware,
-            userSalaryApi.middleware
+            userSalaryApi.middleware,
             userAttendanceApi.middleware,
             userErrorReportApi.middleware,
             userTimeOffApi.middleware,
