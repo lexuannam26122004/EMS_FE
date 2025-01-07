@@ -5,9 +5,26 @@ import ReactECharts from 'echarts-for-react'
 import { Box, Paper, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'next-themes'
+import Loading from '@/components/Loading'
+import { useGetEmployeeCountByGenderQuery } from '@/services/AspNetUserService'
+
+export interface IUserByGenderGetAllDashboard {
+    Male: number
+    Female: number
+    Other: number
+}
+
 const GenderPieChart: React.FC = () => {
     const { t } = useTranslation('common')
     const { theme } = useTheme()
+
+    const { data, isFetching } = useGetEmployeeCountByGenderQuery()
+    const gender = data?.Data as IUserByGenderGetAllDashboard
+
+    if (isFetching) {
+        return <Loading />
+    }
+
     const option = {
         textStyle: {
             color: theme === 'light' ? '#000000' : '#ffffff',
@@ -48,9 +65,9 @@ const GenderPieChart: React.FC = () => {
                     show: false
                 },
                 data: [
-                    { value: 1048, name: t('COMMON.EMPLOYEE-CONTRACT.GENDER_STATISTICS_MALE') },
-                    { value: 735, name: t('COMMON.EMPLOYEE-CONTRACT.GENDER_STATISTICS_FEMALE') },
-                    { value: 580, name: t('COMMON.EMPLOYEE-CONTRACT.GENDER_STATISTICS_OTHER') }
+                    { value: gender?.Male, name: t('COMMON.EMPLOYEE-CONTRACT.GENDER_STATISTICS_MALE') },
+                    { value: gender?.Female, name: t('COMMON.EMPLOYEE-CONTRACT.GENDER_STATISTICS_FEMALE') },
+                    { value: gender?.Other, name: t('COMMON.EMPLOYEE-CONTRACT.GENDER_STATISTICS_OTHER') }
                 ]
             }
         ]

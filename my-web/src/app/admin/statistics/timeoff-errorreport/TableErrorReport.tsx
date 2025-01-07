@@ -10,27 +10,32 @@ import {
     TableCell,
     TableHead,
     TableContainer,
-    TableSortLabel
+    TableSortLabel,
+    Avatar
 } from '@mui/material'
 import { ClipboardCheck } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
 
-function getStatusBgColor(status: boolean): string {
-    if (status === false) {
+function getStatusBgColor(status: string): string {
+    if (status === '3') {
         return 'var(--bg-danger-color)'
-    } else if (status === true) {
+    } else if (status === '0') {
+        return 'var(--bg-warning-color)'
+    } else if (status === '2') {
         return 'var(--bg-success-color)'
     } else {
         return 'var(--bg-closed-color)'
     }
 }
 
-function getStatusTextColor(status: boolean): string {
-    if (status === false) {
+function getStatusTextColor(status: string): string {
+    if (status === '3') {
         return 'var(--text-danger-color)'
-    } else if (status === true) {
+    } else if (status === '0') {
+        return 'var(--text-warning-color)'
+    } else if (status === '2') {
         return 'var(--text-success-color)'
     } else {
         return 'var(--text-closed-color)'
@@ -61,21 +66,35 @@ function getStatusTextColor(status: boolean): string {
 //     }
 // }
 
-interface IGetAllTimeOff {
-    Reason: string
-    StartDate: string
-    EndDate: string
-    IsAccepted: boolean
-    Content: string
+interface IGetAllErrorReport {
+    Id: number | null
+    ReportedBy: string | null
+    ReportedDate: Date
+    Type: number | null
+    TypeId: string | null
+    Description: string | null
+    Status: string | null
+    ResolvedBy: string | null
+    ResolvedDate: Date | null
+    ResolutionDetails: string | null
+    ReportedFullName: string | null
+    ReportedId: string | null
+    ReportedAvatarPath: string | null
+    ResolvedFullName: string | null
+    ResolvedId: string | null
+    ResolvedAvatarPath: string | null
 }
+
 
 interface IProps {
-    errorsData: IGetAllTimeOff[]
+    errorsData: IGetAllErrorReport[]
     totalRecords: number
     type: number
+    
+    onSort: (property: string) => void
 }
 
-function TableTimeOff({ errorsData, totalRecords, type }: IProps) {
+function TableErrorReport({ errorsData, totalRecords, type, onSort }: IProps) {
     const { t } = useTranslation('common')
     const router = useRouter()
     const [selected, setSelected] = useState<number[]>([])
@@ -85,7 +104,6 @@ function TableTimeOff({ errorsData, totalRecords, type }: IProps) {
     const [orderBy, setOrderBy] = useState<string>('')
     // const [selectedConfig, setSelectedConfig] = useState<IGetAllSysConfiguration | null>(null)
     const [openModal, setOpenModal] = useState(false)
-
     // const handleClickDetail = (config: IGetAllSysConfiguration) => {
     //     setSelectedConfig(config)
     //     setOpenModal(true)
@@ -111,6 +129,7 @@ function TableTimeOff({ errorsData, totalRecords, type }: IProps) {
     ])
 
     const handleSort = (property: string) => {
+        onSort(property) 
         if (orderBy === property) {
             setOrder(order === 'asc' ? 'desc' : 'asc')
         } else {
@@ -124,7 +143,7 @@ function TableTimeOff({ errorsData, totalRecords, type }: IProps) {
             sx={{
                 scrollbarGutter: 'stable',
                 paddingLeft: '7px',
-                height: '303px',
+                height: '100%',
                 '&::-webkit-scrollbar': {
                     width: '7px',
                     height: '7px'
@@ -139,20 +158,20 @@ function TableTimeOff({ errorsData, totalRecords, type }: IProps) {
                 <TableHead>
                     <TableRow
                         sx={{
-                            backgroundColor: 'var(--header-table-dashboard) !important',
+                            backgroundColor: 'var(--header-table-dashboard) !important', // Đặt !important để ưu tiên
                             '& th': {
-                                backgroundColor: 'var(--header-table-dashboard) !important'
+                                backgroundColor: 'var(--header-table-dashboard) !important' // Áp dụng cho các ô
                             },
                             '&:last-child td, &:last-child th': {
                                 border: 'none'
                             }
                         }}
                     >
-                        <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                        <TableCell sx={{ borderColor: 'var(--border-color)', padding: '16px 24px' }}>
                             <TableSortLabel
-                                active={'Reason' === orderBy}
-                                direction={orderBy === 'Reason' ? order : 'asc'}
-                                onClick={() => handleSort('Reason')}
+                                active={'FullNameReported' === orderBy}
+                                direction={orderBy === 'FullNameReported' ? order : 'asc'}
+                                onClick={() => handleSort('FullNameReported')}
                                 sx={{
                                     '& .MuiTableSortLabel-icon': {
                                         color: 'var(--text-color) !important'
@@ -163,61 +182,75 @@ function TableTimeOff({ errorsData, totalRecords, type }: IProps) {
                                     sx={{
                                         fontWeight: 'bold',
                                         color: 'var(--text-color)',
-                                        maxWidth: '400px',
+                                        fontSize: '16px',
+                                        overflow: 'hidden',
+                                        //maxWidth: '200px',
+                                        textOverflow: 'ellipsis',
+                                        whiteSpace: 'nowrap'
+                                    }}
+                                >
+                                    {t('COMMON.ERROR_REPORT.FULL_NAME_REPORTED')}
+                                </Typography>
+                            </TableSortLabel>
+                        </TableCell>
+
+                        <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                            <TableSortLabel
+                                active={'Type' === orderBy}
+                                direction={orderBy === 'Type' ? order : 'asc'}
+                                onClick={() => handleSort('Type')}
+                                sx={{
+                                    '& .MuiTableSortLabel-icon': {
+                                        color: 'var(--text-color) !important'
+                                    },
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
+                                }}
+                            >
+                                <Typography
+                                    sx={{
+                                        fontWeight: 'bold',
+                                        color: 'var(--text-color)',
+                                        fontSize: '16px',
+                                        textAlign: 'center',
+                                        //maxWidth: '280px',
+                                        overflow: 'hidden',
+                                        ml: '8px',
+                                        textOverflow: 'ellipsis',
+                                        whiteSpace: 'nowrap'
+                                    }}
+                                >
+                                    {t('COMMON.ERROR_REPORT.TYPE')}
+                                </Typography>
+                            </TableSortLabel>
+                        </TableCell>
+
+                        <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                            <TableSortLabel
+                                active={'ReportedDate' === orderBy}
+                                direction={orderBy === 'ReportedDate' ? order : 'asc'}
+                                onClick={() => handleSort('ReportedDate')}
+                                sx={{
+                                    '& .MuiTableSortLabel-icon': {
+                                        color: 'var(--text-color) !important'
+                                    }
+                                }}
+                            >
+                                <Typography
+                                    sx={{
+                                        fontWeight: 'bold',
+                                        color: 'var(--text-color)',
+                                        //maxWidth: '400px',
                                         fontSize: '16px',
                                         overflow: 'hidden',
                                         textOverflow: 'ellipsis',
                                         whiteSpace: 'nowrap'
                                     }}
                                 >
-                                    {t('COMMON.TIMEOFF.REASON')}
+                                    {t('COMMON.ERROR_REPORT.REPORTED_DATE')}
                                 </Typography>
                             </TableSortLabel>
-                        </TableCell>
-
-                        <TableCell sx={{ borderColor: 'var(--border-color)' }}>
-                            <Typography
-                                sx={{
-                                    fontWeight: 'bold',
-                                    color: 'var(--text-color)',
-                                    fontSize: '16px',
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
-                                    whiteSpace: 'nowrap'
-                                }}
-                            >
-                                {t('COMMON.TIMEOFF.CONTENT')}
-                            </Typography>
-                        </TableCell>
-
-                        <TableCell sx={{ borderColor: 'var(--border-color)' }}>
-                            <Typography
-                                sx={{
-                                    fontWeight: 'bold',
-                                    color: 'var(--text-color)',
-                                    fontSize: '16px',
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
-                                    whiteSpace: 'nowrap'
-                                }}
-                            >
-                                {t('COMMON.TIMEOFF.STARTDATE')}
-                            </Typography>
-                        </TableCell>
-
-                        <TableCell sx={{ borderColor: 'var(--border-color)' }}>
-                            <Typography
-                                sx={{
-                                    fontWeight: 'bold',
-                                    color: 'var(--text-color)',
-                                    fontSize: '16px',
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
-                                    whiteSpace: 'nowrap'
-                                }}
-                            >
-                                {t('COMMON.TIMEOFF.ENDDATE')}
-                            </Typography>
                         </TableCell>
 
                         <TableCell sx={{ borderColor: 'var(--border-color)' }}>
@@ -232,11 +265,11 @@ function TableTimeOff({ errorsData, totalRecords, type }: IProps) {
                                     whiteSpace: 'nowrap'
                                 }}
                             >
-                                {t('COMMON.TIMEOFF.ISACCEPTED')}
+                                {t('COMMON.ERROR_REPORT.STATUS')}
                             </Typography>
                         </TableCell>
 
-                        {/*{type >= 3 && (
+                        {type >= 3 && (
                             <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                 <TableSortLabel
                                     active={'FullNameResolved' === orderBy}
@@ -290,7 +323,7 @@ function TableTimeOff({ errorsData, totalRecords, type }: IProps) {
                                     </Typography>
                                 </TableSortLabel>
                             </TableCell>
-                        )}*/}
+                        )}
 
                         <TableCell sx={{ borderColor: 'var(--border-color)', padding: '16px 24px' }}>
                             <Typography
@@ -300,7 +333,7 @@ function TableTimeOff({ errorsData, totalRecords, type }: IProps) {
                                     fontSize: '16px',
                                     overflow: 'hidden',
                                     textAlign: 'center',
-                                    maxWidth: '280px',
+                                    //maxWidth: '280px',
                                     textOverflow: 'ellipsis',
                                     whiteSpace: 'nowrap'
                                 }}
@@ -312,7 +345,7 @@ function TableTimeOff({ errorsData, totalRecords, type }: IProps) {
                 </TableHead>
                 <TableBody>
                     {errorsData &&
-                        errorsData.map((row: IGetAllTimeOff, index: number) => (
+                        errorsData.map((row: IGetAllErrorReport, index: number) => (
                             <TableRow
                                 key={index}
                                 sx={{
@@ -321,19 +354,78 @@ function TableTimeOff({ errorsData, totalRecords, type }: IProps) {
                                     }
                                 }}
                             >
-                                <TableCell sx={{ borderColor: 'var(--border-color)' }}>
-                                    <Typography
+                                <TableCell
+                                    sx={{
+                                        borderColor: 'var(--border-color)',
+                                        // borderStyle: 'dashed',
+                                        padding: '16px 0 16px 24px'
+                                    }}
+                                >
+                                    <Box
                                         sx={{
-                                            color: 'var(--text-color)',
-                                            fontSize: '16px',
-                                            maxWidth: '100px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '14px'
+                                        }}
+                                    >
+                                        <Avatar
+                                            sx={{
+                                                mt: '-2px'
+                                            }}
+                                            src={
+                                                row?.ReportedAvatarPath ||
+                                                'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'
+                                            }
+                                        />
+
+                                        <Box>
+                                            <Typography
+                                                sx={{
+                                                    color: 'var(--text-color)',
+                                                    fontSize: '16px',
+                                                    //: '200px',
+                                                    overflow: 'hidden',
+                                                    textOverflow: 'ellipsis',
+                                                    whiteSpace: 'nowrap'
+                                                }}
+                                            >
+                                                {row?.ReportedFullName}
+                                            </Typography>
+                                            <Typography
+                                                sx={{
+                                                    color: 'var(--created-date-color)',
+                                                    fontSize: '16px',
+                                                    mt: '-0px',
+                                                    overflow: 'hidden',
+                                                    textOverflow: 'ellipsis',
+                                                    whiteSpace: 'nowrap'
+                                                }}
+                                            >
+                                                {row?.ReportedId}
+                                            </Typography>
+                                        </Box>
+                                    </Box>
+                                </TableCell>
+
+                                <TableCell sx={{ borderColor: 'var(--border-color)' }}>
+                                    <Box
+                                        sx={{
+                                            color: getStatusBgColor(row?.Status),
+                                            fontSize: '15px',
                                             overflow: 'hidden',
+                                            borderRadius: '8px',
+                                            border: '1px dashed var(--border-color)',
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            padding: '5px',
+                                            //maxWidth: '280px',
                                             textOverflow: 'ellipsis',
                                             whiteSpace: 'nowrap'
                                         }}
                                     >
-                                        {row.Reason}
-                                    </Typography>
+                                        {t(String(row?.Type))}
+                                    </Box>
                                 </TableCell>
 
                                 <TableCell sx={{ borderColor: 'var(--border-color)' }}>
@@ -341,43 +433,13 @@ function TableTimeOff({ errorsData, totalRecords, type }: IProps) {
                                         sx={{
                                             color: 'var(--text-color)',
                                             fontSize: '16px',
-                                            maxWidth: '200px',
+                                            //maxWidth: '280px',
                                             overflow: 'hidden',
                                             textOverflow: 'ellipsis',
                                             whiteSpace: 'nowrap'
                                         }}
                                     >
-                                        {row.Content}
-                                    </Typography>
-                                </TableCell>
-
-                                <TableCell sx={{ borderColor: 'var(--border-color)' }}>
-                                    <Typography
-                                        sx={{
-                                            color: 'var(--text-color)',
-                                            fontSize: '16px',
-                                            maxWidth: '280px',
-                                            overflow: 'hidden',
-                                            textOverflow: 'ellipsis',
-                                            whiteSpace: 'nowrap'
-                                        }}
-                                    >
-                                        {formatDate(row.StartDate)}
-                                    </Typography>
-                                </TableCell>
-
-                                <TableCell sx={{ borderColor: 'var(--border-color)' }}>
-                                    <Typography
-                                        sx={{
-                                            color: 'var(--text-color)',
-                                            fontSize: '16px',
-                                            maxWidth: '280px',
-                                            overflow: 'hidden',
-                                            textOverflow: 'ellipsis',
-                                            whiteSpace: 'nowrap'
-                                        }}
-                                    >
-                                        {formatDate(row.EndDate)}
+                                        {formatDate(row?.ReportedDate?.toString())}
                                     </Typography>
                                 </TableCell>
 
@@ -387,16 +449,16 @@ function TableTimeOff({ errorsData, totalRecords, type }: IProps) {
                                             borderRadius: '8px',
                                             padding: '5px',
                                             display: 'flex',
-                                            minWidth: '100px',
+                                            //minWidth: '100px',
                                             justifyContent: 'center',
-                                            backgroundColor: getStatusBgColor(row.IsAccepted)
+                                            backgroundColor: getStatusBgColor(row?.Status)
                                         }}
                                     >
                                         <Typography
                                             sx={{
                                                 fontSize: '15px',
                                                 overflow: 'hidden',
-                                                color: getStatusTextColor(row.IsAccepted),
+                                                color: getStatusTextColor(row?.Status),
                                                 width: 'auto',
                                                 fontWeight: 'bold',
                                                 display: 'inline-block',
@@ -404,16 +466,18 @@ function TableTimeOff({ errorsData, totalRecords, type }: IProps) {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {row.IsAccepted === null
-                                                ? t('COMMON.TIMEOFF.PENDING')
-                                                : row.IsAccepted
-                                                  ? t('COMMON.TIMEOFF.AGREE')
-                                                  : t('COMMON.TIMEOFF.REFUSE')}
+                                            {row?.Status === '1'
+                                                ? 'In Progress'
+                                                : row?.Status === '2'
+                                                  ? 'Resolved'
+                                                  : row?.Status === '3'
+                                                    ? 'Rejected'
+                                                    : 'Pending'}
                                         </Typography>
                                     </Box>
                                 </TableCell>
 
-                                {/*{row.FullNameResolved && type >= 3 && (
+                                {type >= 3 && (
                                     <TableCell sx={{ borderColor: 'var(--border-color)', padding: '0 16px' }}>
                                         <Box
                                             sx={{
@@ -424,7 +488,7 @@ function TableTimeOff({ errorsData, totalRecords, type }: IProps) {
                                         >
                                             <Avatar
                                                 src={
-                                                    row.AvatarReportedPath ||
+                                                    row?.ResolvedAvatarPath ||
                                                     'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'
                                                 }
                                             />
@@ -434,13 +498,13 @@ function TableTimeOff({ errorsData, totalRecords, type }: IProps) {
                                                     sx={{
                                                         color: 'var(--text-color)',
                                                         fontSize: '16px',
-                                                        maxWidth: '260px',
+                                                        //maxWidth: '260px',
                                                         overflow: 'hidden',
                                                         textOverflow: 'ellipsis',
                                                         whiteSpace: 'nowrap'
                                                     }}
                                                 >
-                                                    {row.FullNameReported}
+                                                    {row?.ResolvedFullName}
                                                 </Typography>
                                                 <Typography
                                                     sx={{
@@ -451,35 +515,35 @@ function TableTimeOff({ errorsData, totalRecords, type }: IProps) {
                                                         whiteSpace: 'nowrap'
                                                     }}
                                                 >
-                                                    {row.EmployeeIdReported}
+                                                    {row?.ResolvedId}
                                                 </Typography>
                                             </Box>
                                         </Box>
                                     </TableCell>
                                 )}
 
-                                {row.ResolvedDate && type >= 3 && (
+                                {type >= 3 && (
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                         <Typography
                                             sx={{
                                                 color: 'var(--text-color)',
                                                 fontSize: '16px',
-                                                maxWidth: '280px',
+                                                //maxWidth: '280px',
                                                 overflow: 'hidden',
                                                 textOverflow: 'ellipsis',
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {formatDate(row.ResolvedDate)}
+                                            {formatDate(row?.ResolvedDate?.toString())}
                                         </Typography>
                                     </TableCell>
-                                )}*/}
+                                )}
 
                                 <TableCell
                                     sx={{
                                         padding: '16px 24px',
                                         borderColor: 'var(--border-color)',
-                                        width: '146px',
+                                        //width: '146px',
                                         cursor: 'pointer'
                                     }}
                                 >
@@ -519,4 +583,4 @@ function TableTimeOff({ errorsData, totalRecords, type }: IProps) {
     )
 }
 
-export default TableTimeOff
+export default TableErrorReport

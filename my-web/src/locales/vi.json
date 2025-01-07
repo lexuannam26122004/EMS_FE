@@ -82,10 +82,14 @@
             "REWARD": "Thưởng",
             "INSURANCE": "Bảo hiểm",
             "DISCIPLINE": "Kỉ luật",
-            "HOLIDAY": "Nghỉ lễ",
-            "TIMEKEEPING": "Bảng công"
+            "EVENT": "Sự kiện",
+            "ATTENDANCE": "Bảng công"
         },
         "NOTIFICATION": {
+            "HIGH_SCORE": "Điểm cao",
+            "LOW_SCORE": "Điểm thấp",
+            "NOTE_NOT_READ": "Những người chưa đọc lần nào sẽ không hiện",
+            "AMOUNT": "Số lượng",
             "TITLE": "Thông báo",
             "BUTTON": {
                 "ALL": "Tất cả",
@@ -400,6 +404,7 @@
             "DEPARTMENT": "Phòng ban",
             "AGE_OF_EMPLOYEE": "Độ tuổi của Nhân viên",
             "AGE": "Độ tuổi",
+            "STAT_EVENT_BY_YEAR": "Thống kê Sự kiện theo năm",
             "THAN_LAST_YEAR": "so với năm {{year}}",
             "YEAR": "Năm",
             "SUM": "Tổng",
@@ -463,8 +468,11 @@
             "REASON": "Lý do nghỉ phép",
             "CONTENT": "Nội dung nghỉ phép",
             "ISACCEPTED": "Trạng thái",
-            "STARTDATE": "Ngày bắt đầu nghỉ phép",
-            "ENDDATE": "Ngày kết thúc nghỉ phép",
+            "STARTDATE": "Ngày bắt đầu",
+            "ENDDATE": "Ngày kết thúc",
+            "PENDING": "Chưa giải quyết",
+            "AGREE": "Đồng ý",
+            "REFUSE": "Từ chối",
             "CREATE": {
                 "CREATE_TIMEOFF": "Thêm mới thông tin nghỉ phép",
                 "SUCCESS": {

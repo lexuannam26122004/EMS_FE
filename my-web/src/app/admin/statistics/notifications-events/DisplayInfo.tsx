@@ -2,15 +2,30 @@
 
 import { Box, Paper, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import { useStatNotificationByMonthQuery } from '@/services/NotificationsService'
+import { ITotalEventsByMonth } from '@/models/Event'
+import { useTotalEventsByMonthQuery } from '@/services/EventService'
+import Loading from '@/components/Loading'
 
 function Page() {
     const { t } = useTranslation('common')
-    const totalNotify = 29
-    const notifyPercent = 25.5
-    const totalEvent = 12
-    const eventPercent = -20.5
-    const rate = 75
-    const ratePercent = 25.5
+
+    const month = new Date().getMonth() + 1
+    const year = new Date().getFullYear()
+
+    const filter: ITotalEventsByMonth = { Month: month, Year: year }
+
+    const { data: notifyData, isLoading: isLoadingNotify } = useStatNotificationByMonthQuery(filter)
+    const { data: eventData, isLoading: isLoadingEvent } = useTotalEventsByMonthQuery(filter)
+
+    const totalNotify = notifyData?.Data.Counts
+    const notifyPercent = notifyData?.Data.Rate?.toFixed(1) ?? 0
+    const totalEvent = eventData?.Data.CountEvent
+    const eventPercent = eventData?.Data.Rate?.toFixed(1) ?? 0
+    const rate = notifyData?.Data.ReadCounts?.toFixed(2) ?? 0
+    const ratePercent = notifyData?.Data.RateRead?.toFixed(1) ?? 0
+
+    if (isLoadingNotify || isLoadingEvent) return <Loading />
 
     return (
         <Box

@@ -1,5 +1,4 @@
 'use client'
-import { IFilterEmploymentContract } from '@/models/EmploymentContract'
 import {
     Box,
     Select,
@@ -18,11 +17,12 @@ import { useTranslation } from 'react-i18next'
 import SearchIcon from '@mui/icons-material/Search'
 import { useRouter } from 'next/navigation'
 import TableTimeOff from './TableTimeOff'
-import ErrorPage from '@/app/user/requests/ErrorPage'
+import TimeOffPage from '@/app/user/requests/TimeOffPage'
 import { useGetAuthMeQuery } from '@/services/AuthService'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Loading from '@/components/Loading'
+import { useSearchByUserIdQuery } from '@/services/TimeOffService'
 
 function a11yProps(index: number) {
     return {
@@ -39,82 +39,14 @@ interface IGetAllTimeOff {
     Content: string
 }
 
-const responseData = {
-    Data: {
-        TotalRecords: 10,
-        Records: [
-            {
-                Reason: 'Nghỉ phép',
-                StartDate: '2025-01-01T09:00:00.000Z',
-                EndDate: '2025-01-07T09:00:00.000Z',
-                IsAccepted: true,
-                Content: 'Nghỉ phép năm cho chuyến đi gia đình'
-            },
-            {
-                Reason: 'Nghỉ ốm',
-                StartDate: '2025-01-03T09:00:00.000Z',
-                EndDate: '2025-01-05T09:00:00.000Z',
-                IsAccepted: true,
-                Content: 'Đang hồi phục sau cảm lạnh'
-            },
-            {
-                Reason: 'Nghỉ phép cá nhân',
-                StartDate: '2025-01-10T09:00:00.000Z',
-                EndDate: '2025-01-12T09:00:00.000Z',
-                IsAccepted: false,
-                Content: 'Công việc cá nhân, chưa được phê duyệt'
-            },
-            {
-                Reason: 'Nghỉ phép',
-                StartDate: '2025-01-15T09:00:00.000Z',
-                EndDate: '2025-01-18T09:00:00.000Z',
-                IsAccepted: true,
-                Content: 'Nghỉ phép đi du lịch gia đình'
-            },
-            {
-                Reason: 'Nghỉ phép y tế',
-                StartDate: '2025-02-01T09:00:00.000Z',
-                EndDate: '2025-02-02T09:00:00.000Z',
-                IsAccepted: true,
-                Content: 'Đang tiến hành thủ tục y tế'
-            },
-            {
-                Reason: 'Nghỉ thai sản',
-                StartDate: '2025-03-01T09:00:00.000Z',
-                EndDate: '2025-05-01T09:00:00.000Z',
-                IsAccepted: true,
-                Content: 'Nghỉ thai sản để sinh con'
-            },
-            {
-                Reason: 'Nghỉ phép khẩn cấp',
-                StartDate: '2025-03-05T09:00:00.000Z',
-                EndDate: '2025-03-06T09:00:00.000Z',
-                IsAccepted: true,
-                Content: 'Công việc gia đình khẩn cấp'
-            },
-            {
-                Reason: 'Nghỉ phép',
-                StartDate: '2025-04-10T09:00:00.000Z',
-                EndDate: '2025-04-15T09:00:00.000Z',
-                IsAccepted: true,
-                Content: 'Nghỉ phép đi du lịch biển với bạn bè'
-            },
-            {
-                Reason: 'Nghỉ phép cá nhân',
-                StartDate: '2025-05-01T09:00:00.000Z',
-                EndDate: '2025-05-02T09:00:00.000Z',
-                IsAccepted: false,
-                Content: 'Yêu cầu nghỉ phép cá nhân, chưa được phê duyệt'
-            },
-            {
-                Reason: 'Nghỉ phép',
-                StartDate: '2025-06-15T09:00:00.000Z',
-                EndDate: '2025-06-20T09:00:00.000Z',
-                IsAccepted: true,
-                Content: 'Nghỉ phép đi leo núi và các hoạt động ngoài trời'
-            }
-        ]
-    }
+interface IFilter {
+    isActive?: boolean
+    createdDate?: Date
+    pageSize?: number
+    pageNumber?: number
+    sortBy?: string
+    isDescending?: boolean
+    keyword?: string
 }
 
 function ContractExpPage() {
@@ -125,10 +57,9 @@ function ContractExpPage() {
     const [rowsPerPage, setRowsPerPage] = useState('5')
     const [from, setFrom] = useState(1)
     const [to, setTo] = useState(5)
-    const [filter, setFilter] = useState<IFilterEmploymentContract>({
+    const [filter, setFilter] = useState<IFilter>({
         pageSize: 5,
-        pageNumber: 1,
-        daysUntilExpiration: 60
+        pageNumber: 1
     })
     const [keyword, setKeyword] = useState('')
     const [openDialog, setOpenDialog] = useState(false)
@@ -137,8 +68,23 @@ function ContractExpPage() {
     const [orderBy, setOrderBy] = useState<string>('')
     const [openErrorReport, setopenErrorReport] = useState(false)
 
-    const { data: responseDataGetMe, isFetching: isFetchingGetMe } = useGetAuthMeQuery()
-    const user = responseDataGetMe?.Data || null
+    const { data: responseGetMeData, isFetching: isFetchingGetMe } = useGetAuthMeQuery()
+    const infoMe = responseGetMeData?.Data
+
+    const {
+        data: timeoffResponse,
+        isLoading: istimeoffsLoading,
+        refetch
+    } = useSearchByUserIdQuery({
+        userId: infoMe?.Id,
+        filter: filter
+    })
+
+    const errorsData = timeoffResponse?.Data.Records as IGetAllTimeOff[]
+
+    useEffect(() => {
+        refetch()
+    }, [])
 
     useEffect(() => {}, [
         router,
@@ -146,7 +92,6 @@ function ContractExpPage() {
         rowsPerPage,
         from,
         to,
-        filter,
         selected,
         openDialog,
         selectedRow,
@@ -162,9 +107,7 @@ function ContractExpPage() {
         setOrderBy
     ])
 
-    const errorsData = responseData?.Data.Records as IGetAllTimeOff[]
-
-    const totalRecords = (responseData?.Data.TotalRecords as number) || 0
+    const totalRecords = (timeoffResponse?.Data.TotalRecords as number) || 0
 
     const handleChangePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
         setPage(newPage)
@@ -235,9 +178,11 @@ function ContractExpPage() {
             case 0: // All
                 return errorsData
             case 1: // In Progress
-                return errorsData.filter(item => item.IsAccepted === false)
+                return errorsData.filter(item => item.IsAccepted === null)
             case 2: // Resolved
                 return errorsData.filter(item => item.IsAccepted === true)
+            case 3: // Resolved
+                return errorsData.filter(item => item.IsAccepted === false)
             default:
                 return errorsData
         }
@@ -245,10 +190,10 @@ function ContractExpPage() {
 
     const counts = useMemo(
         () => ({
-            0: errorsData.length,
-
-            1: errorsData.filter(item => item.IsAccepted === false).length,
-            2: errorsData.filter(item => item.IsAccepted === true).length
+            0: errorsData?.length ?? 0,
+            1: errorsData?.filter(item => item.IsAccepted === null).length ?? 0,
+            2: errorsData?.filter(item => item.IsAccepted === true).length ?? 0,
+            3: errorsData?.filter(item => item.IsAccepted === false).length ?? 0
         }),
         [errorsData]
     )
@@ -265,14 +210,16 @@ function ContractExpPage() {
         justifyContent: 'center'
     }
 
-    if (isFetchingGetMe) {
+    if (isFetchingGetMe || istimeoffsLoading || !infoMe) {
         return <Loading />
     }
 
     return (
         <Box
             sx={{
-                padding: '35px',
+                paddingTop: '35px',
+                paddingLeft: '35px',
+                paddingRight: '35px',
                 boxShadow: 'var(--box-shadow-paper)',
                 borderRadius: '30px',
                 backgroundColor: 'var(--attendance-bg1)',
@@ -376,14 +323,14 @@ function ContractExpPage() {
                             }}
                             label={
                                 <Box style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    {t('COMMON.ERROR_REPORT.IN_PROGRESS')}
+                                    {t('COMMON.TIMEOFF.PENDING')}
                                     <Box
                                         style={{
                                             ...badgeStyle,
                                             backgroundColor:
-                                                currentTab === 2 ? 'var(--bg-closed-color)' : 'var(--bg-closed-color1)',
+                                                currentTab === 1 ? 'var(--bg-closed-color)' : 'var(--bg-closed-color1)',
                                             color:
-                                                currentTab === 2
+                                                currentTab === 1
                                                     ? 'var(--text-closed-color)'
                                                     : 'var(--text-closed-color1)'
                                         }}
@@ -406,16 +353,16 @@ function ContractExpPage() {
                             }}
                             label={
                                 <Box style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    {t('COMMON.ERROR_REPORT.RESOLVED')}
+                                    {t('COMMON.TIMEOFF.AGREE')}
                                     <Box
                                         style={{
                                             ...badgeStyle,
                                             backgroundColor:
-                                                currentTab === 3
+                                                currentTab === 2
                                                     ? 'var(--bg-success-color)'
                                                     : 'var(--bg-success-color1)',
                                             color:
-                                                currentTab === 3
+                                                currentTab === 2
                                                     ? 'var(--text-success-color)'
                                                     : 'var(--text-success-color1)'
                                         }}
@@ -425,6 +372,37 @@ function ContractExpPage() {
                                 </Box>
                             }
                             {...a11yProps(2)}
+                        />
+
+                        <Tab
+                            sx={{
+                                textTransform: 'none',
+                                color: 'var(--text-rejected-color1)',
+                                fontWeight: '600',
+                                '&.Mui-selected': {
+                                    color: 'var(--text-color)',
+                                    fontWeight: '600'
+                                }
+                            }}
+                            label={
+                                <Box style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    {t('COMMON.TIMEOFF.REFUSE')}
+                                    <Box
+                                        style={{
+                                            ...badgeStyle,
+                                            backgroundColor:
+                                                currentTab === 3 ? 'var(--bg-danger-color)' : 'var(--bg-danger-color1)',
+                                            color:
+                                                currentTab === 3
+                                                    ? 'var(--text-danger-color)'
+                                                    : 'var(--text-danger-color1)'
+                                        }}
+                                    >
+                                        {counts[3]}
+                                    </Box>
+                                </Box>
+                            }
+                            {...a11yProps(3)}
                         />
                     </Tabs>
                 </Box>
@@ -629,12 +607,13 @@ function ContractExpPage() {
                 </Box>
             </Paper>
 
-            <ErrorPage
-                handleToggle={() => setopenErrorReport(false)}
+            <TimeOffPage
+                handleToggle={() => {
+                    setopenErrorReport(false)
+                    refetch()
+                }}
                 open={openErrorReport}
-                reportedBy={user.Id}
-                type={''}
-                typeId={''}
+                reportedBy={infoMe.Id}
             />
         </Box>
     )

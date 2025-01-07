@@ -42,6 +42,10 @@ export const userApi = createApi({
             query: () => 'GetEmployeeCountByAge'
         }),
 
+        getEmployeeCountByGender: builder.query<ApiResponse, void>({
+            query: () => 'GetEmployeeCountByGender'
+        }),
+
         changeStatusUsers: builder.mutation<void, string>({
             query: id => ({
                 url: `ChangeStatus/${id}`,
@@ -58,5 +62,6 @@ export const {
     useGetByIdUsersQuery,
     useChangeStatusUsersMutation,
     useGetEmployeeCountByAgeQuery,
+    useGetEmployeeCountByGenderQuery,
     useGetEmployeeCountByDepartmentQuery
 } = userApi

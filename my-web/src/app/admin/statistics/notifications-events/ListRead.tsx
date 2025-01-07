@@ -1,86 +1,37 @@
-import { Box, InputLabel, Paper, Typography } from '@mui/material'
+import { Box, InputLabel, Paper, Tooltip, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SelectChangeEvent, TextField, InputAdornment, Pagination, Avatar } from '@mui/material'
-import Select from '@mui/material/Select'
-import MenuItem from '@mui/material/MenuItem'
-import FormControl from '@mui/material/FormControl'
+// import Select from '@mui/material/Select'
+// import MenuItem from '@mui/material/MenuItem'
+// import FormControl from '@mui/material/FormControl'
+import { DatePicker } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import SearchIcon from '@mui/icons-material/Search'
-import { Star } from 'lucide-react'
-import { IFilterReadNotificationsForUserVModel } from '@/models/Notifications'
+import { CircleAlert, Star } from 'lucide-react'
+import { ICountNotifyReadByUser } from '@/models/Notifications'
+import { toZonedTime, format } from 'date-fns-tz'
+import dayjs from 'dayjs'
+import { debounce } from 'lodash'
+import { useCallback } from 'react'
+import { useCountNotifyReadByUserQuery } from '@/services/NotificationsService'
+import Loading from '@/components/Loading'
+import { ICountNotifyReadByUserResponse } from '@/models/Notifications'
 
-const users = [
-    {
-        avatarPath: 'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-1.webp',
-        fullname: 'Lê Xuân Nam',
-        count: 30,
-        employeeID: 'CC-001',
-        roles: ['Leader']
-    },
-    {
-        avatarPath: 'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-2.webp',
-        fullname: 'Lê Xuân Thanh',
-        count: 24,
-        employeeID: 'CC-025',
-        roles: ['Leader']
-    },
-    {
-        avatarPath: 'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-3.webp',
-        fullname: 'Lê Thị Tuyết Phương',
-        count: 20,
-        employeeID: 'CC-039',
-        roles: ['Manager']
-    },
-    {
-        avatarPath: 'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-4.webp',
-        fullname: 'Hùng Bùi Vỹ',
-        count: 19,
-        employeeID: 'CC-054',
-        roles: ['Employee']
-    },
-    {
-        avatarPath: 'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-5.webp',
-        fullname: 'Lê Tuấn Khang',
-        count: 15,
-        employeeID: 'CC-095',
-        roles: ['Employee']
-    },
-    {
-        avatarPath: 'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-6.webp',
-        fullname: 'Bùi Thị Thanh Hằng',
-        count: 14,
-        employeeID: 'CC-031',
-        roles: ['Employee']
-    },
-    {
-        avatarPath: 'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-7.webp',
-        fullname: 'Tuấn Hùng',
-        count: 12,
-        employeeID: 'CC-029',
-        roles: ['Employee']
-    },
-    {
-        avatarPath: 'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-8.webp',
-        fullname: 'Lê Tuấn Phương',
-        count: 10,
-        employeeID: 'CC-055',
-        roles: ['Employee']
-    },
-    {
-        avatarPath: 'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-9.webp',
-        fullname: 'Bùi Thị Thanh Mai',
-        count: 9,
-        employeeID: 'CC-091',
-        roles: ['Employee']
-    },
-    {
-        avatarPath: 'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-9.webp',
-        fullname: 'Vũ Thị Yến Nhi',
-        count: 7,
-        employeeID: 'CC-105',
-        roles: ['Employee']
+const convertToVietnamTime = (date: Date) => {
+    if (isNaN(date.getTime())) {
+        throw new Error('Invalid Date')
     }
-]
+
+    const timeZone = 'Asia/Ho_Chi_Minh'
+
+    const vietnamTime = toZonedTime(date, timeZone)
+
+    const formattedDate = format(vietnamTime, "yyyy-MM-dd'T'HH:mm:ss")
+
+    return formattedDate // Trả về thời gian đã được định dạng
+}
 
 // interface IGetAll {
 //     avatarPath: string
@@ -90,43 +41,61 @@ const users = [
 //     roles: string[]
 // }
 
-const responseData = {
-    Data: {
-        TotalRecords: users.length,
-        Records: users
-    }
-}
+// const responseData = {
+//     Data: {
+//         TotalRecords: users.length,
+//         Records: users
+//     }
+// }
 
 function Page() {
     const { t } = useTranslation('common')
-
-    const currentMonth = new Date().getMonth()
-    const currentYear = new Date().getFullYear()
-    const [type, setType] = useState(0)
-    const [value, setValue] = useState(currentMonth)
     const [keyword, setKeyword] = useState('')
-    const [filter, setFilter] = useState<IFilterReadNotificationsForUserVModel>({
-        pageSize: 7,
-        pageNumber: 1
+    const [filter, setFilter] = useState<ICountNotifyReadByUser>({
+        pageNumber: 1,
+        startDate: '2024-01-01', //dayjs().startOf('month').format('YYYY-MM-DD'),
+        endDate: dayjs().endOf('month').format('YYYY-MM-DD')
     })
+    const [from, setFrom] = useState(1)
+    const [to, setTo] = useState(10)
+    const [page, setPage] = useState(1)
 
-    const handleSearchKeyword = () => {
-        console.log('Search keyword:', keyword, value, filter)
+    const { data: responseData, isLoading, isFetching, refetch } = useCountNotifyReadByUserQuery(filter)
+
+    const notifyData = responseData?.Data.Records as ICountNotifyReadByUserResponse[]
+
+    const debouncedSetFilter = useCallback(
+        debounce(value => {
+            setFilter(prev => ({
+                ...prev,
+                fullName: value,
+                pageNumber: 1
+            }))
+        }, 100),
+        []
+    )
+
+    useEffect(() => {
+        if (!isFetching && responseData?.Data) {
+            const from = (page - 1) * 10 + Math.min(1, notifyData.length)
+            setFrom(from)
+
+            const to = Math.min(notifyData.length + (page - 1) * 10, totalRecords)
+            setTo(to)
+        }
+    }, [isFetching, responseData, page])
+
+    useEffect(() => {
+        refetch()
+    }, [filter])
+
+    const handleSearchKeyword = value => {
+        setPage(1)
+        setKeyword(value)
+        debouncedSetFilter(value)
     }
-
-    //const notifyData = responseData?.Data.Records as IGetAll[]
 
     const totalRecords = (responseData?.Data.TotalRecords as number) || 0
-
-    const handleTypeChange = (event: SelectChangeEvent<number>) => {
-        setType(event.target.value as number)
-    }
-
-    const handleValueChange = (event: SelectChangeEvent<number>) => {
-        setValue(event.target.value as number)
-    }
-
-    const [page, setPage] = useState(1)
 
     const handleChangePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
         setPage(newPage)
@@ -136,6 +105,10 @@ function Page() {
                 pageNumber: newPage
             }
         })
+    }
+
+    if (isLoading) {
+        return <Loading />
     }
 
     return (
@@ -163,7 +136,7 @@ function Page() {
                 {t('COMMON.STAT_NOTIFY.READ_NOTIFY_PER_EMPLOYEE')}
             </Typography>
 
-            <Box
+            {/* <Box
                 sx={{
                     mt: '24px',
                     padding: '0 24px',
@@ -422,9 +395,106 @@ function Page() {
                               })}
                     </Select>
                 </FormControl>
+            </Box> */}
+
+            <Box
+                sx={{
+                    mt: '24px',
+                    padding: '0 24px',
+                    display: 'flex',
+                    gap: '18px'
+                }}
+            >
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                        label={t('COMMON.USER.START_DATE')}
+                        value={dayjs(filter.startDate)}
+                        onChange={value => {
+                            setFilter({
+                                ...filter,
+                                startDate: convertToVietnamTime(value?.toDate() || new Date())
+                            })
+                            setPage(1)
+                        }}
+                        sx={{
+                            width: '100%',
+                            '& .MuiInputBase-root': {
+                                color: 'var(--text-color)'
+                            },
+                            '& .MuiInputBase-input': {
+                                padding: '9.5px 0 9.5px 14px !important'
+                            },
+                            '& .MuiInputLabel-root': {
+                                color: 'var(--text-label-color)'
+                            },
+                            '& .MuiOutlinedInput-notchedOutline': {
+                                borderRadius: '8px',
+                                borderColor: 'var(--border-dialog)'
+                            },
+                            '& .MuiSvgIcon-root': {
+                                color: 'var(--text-label-color)' // Màu của icon (lịch)
+                            },
+                            '& .MuiOutlinedInput-root': {
+                                '&:hover .MuiOutlinedInput-notchedOutline': {
+                                    borderColor: 'var(--hover-field-color)' // Màu viền khi hover
+                                },
+                                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                    borderColor: 'var(--selected-field-color) !important' // Màu viền khi focus, thêm !important để ghi đè
+                                }
+                            },
+                            '& .MuiInputLabel-root.Mui-focused': {
+                                color: 'var(--selected-field-color)'
+                            }
+                        }}
+                    />
+                </LocalizationProvider>
+
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                        label={t('COMMON.USER.END_DATE')}
+                        value={dayjs(filter.endDate)}
+                        onChange={value => {
+                            setFilter({
+                                ...filter,
+                                endDate: convertToVietnamTime(value?.toDate() || new Date())
+                            })
+                            setPage(1)
+                        }}
+                        sx={{
+                            width: '100%',
+                            '& .MuiInputBase-root': {
+                                color: 'var(--text-color)'
+                            },
+                            '& .MuiInputBase-input': {
+                                padding: '9.5px 0 9.5px 14px !important'
+                            },
+                            '& .MuiInputLabel-root': {
+                                color: 'var(--text-label-color)'
+                            },
+                            '& .MuiOutlinedInput-notchedOutline': {
+                                borderRadius: '8px',
+                                borderColor: 'var(--border-dialog)'
+                            },
+                            '& .MuiSvgIcon-root': {
+                                color: 'var(--text-label-color)' // Màu của icon (lịch)
+                            },
+                            '& .MuiOutlinedInput-root': {
+                                '&:hover .MuiOutlinedInput-notchedOutline': {
+                                    borderColor: 'var(--hover-field-color)' // Màu viền khi hover
+                                },
+                                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                    borderColor: 'var(--selected-field-color) !important' // Màu viền khi focus, thêm !important để ghi đè
+                                }
+                            },
+                            '& .MuiInputLabel-root.Mui-focused': {
+                                color: 'var(--selected-field-color)'
+                            }
+                        }}
+                    />
+                </LocalizationProvider>
             </Box>
 
-            <Box sx={{ position: 'relative', width: '100%', mt: '5px', padding: '0 24px' }}>
+            <Box sx={{ position: 'relative', width: '100%', mt: '16px', padding: '0 24px' }}>
                 <TextField
                     id='location-search'
                     type='search'
@@ -432,7 +502,7 @@ function Page() {
                     variant='outlined'
                     required
                     value={keyword}
-                    onChange={e => setKeyword(e.target.value)}
+                    onChange={e => handleSearchKeyword(e.target.value)}
                     sx={{
                         color: 'var(--text-color)',
                         padding: '0px',
@@ -457,9 +527,6 @@ function Page() {
                         '& .MuiOutlinedInput-root.Mui-focused fieldset': {
                             borderColor: 'var(--selected-field-color)'
                         }
-                    }}
-                    onKeyDown={() => {
-                        handleSearchKeyword()
                     }}
                     slotProps={{
                         input: {
@@ -511,7 +578,7 @@ function Page() {
                         }
                     }}
                 >
-                    {users.map((user, index) => (
+                    {notifyData.map((user, index) => (
                         <Box
                             key={index}
                             sx={{
@@ -575,12 +642,16 @@ function Page() {
                                         height: '45px'
                                     }}
                                     src={
-                                        user.avatarPath ||
+                                        user.AvatarPath ||
                                         'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'
                                     }
                                 />
                             </Box>
-                            <Box>
+                            <Box
+                                sx={{
+                                    mr: '5px'
+                                }}
+                            >
                                 <Typography
                                     sx={{
                                         color: 'var(--text-color)',
@@ -588,7 +659,7 @@ function Page() {
                                         fontSize: '16px'
                                     }}
                                 >
-                                    {user.fullname}
+                                    {user.UserFullName}
                                 </Typography>
                                 <Typography
                                     sx={{
@@ -596,7 +667,7 @@ function Page() {
                                         fontSize: '14px'
                                     }}
                                 >
-                                    {user.employeeID}
+                                    {user.EmployeeId}
                                 </Typography>
                             </Box>
                             <Box
@@ -623,40 +694,49 @@ function Page() {
                                         marginRight: '6px'
                                     }}
                                 />
-                                {user.count}
+                                {user.ReadCount}
                             </Box>
                         </Box>
                     ))}
                 </Box>
             </Box>
-            <Pagination
-                count={Math.ceil(totalRecords / 7)}
-                page={page}
-                onChange={handleChangePage}
-                boundaryCount={1}
-                siblingCount={2}
-                variant='outlined'
-                sx={{
-                    padding: '0px 24px 20px',
-                    ml: 'auto',
-                    color: 'var(--text-color)',
-                    borderColor: 'var(--border-color)',
-                    '& .MuiPaginationItem-root': {
+            <Box display='flex' alignItems='center' justifyContent='space-between' padding='0px 24px 20px'>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                    <Typography sx={{ color: 'var(--text-color)' }}>
+                        {t('COMMON.PAGINATION.FROM_TO', { from, to, totalRecords })}
+                    </Typography>
+                    <Tooltip title={t('COMMON.NOTIFICATION.NOTE_NOT_READ')}>
+                        <CircleAlert size={22} color='var(--text-color)' />
+                    </Tooltip>
+                </Box>
+                <Pagination
+                    count={Math.ceil(totalRecords / 10)}
+                    page={page}
+                    onChange={handleChangePage}
+                    boundaryCount={1}
+                    siblingCount={2}
+                    variant='outlined'
+                    sx={{
+                        ml: 'auto',
                         color: 'var(--text-color)',
                         borderColor: 'var(--border-color)',
-                        '&.Mui-selected': {
-                            backgroundColor: 'var(--background-selected-item) ',
-                            borderColor: 'var(--background-selected-item) ',
-                            color: 'var(--text-color)'
-                        },
-                        '&:hover': {
-                            backgroundColor: 'var(--hover-color) !important',
-                            borderColor: 'var(--hover-color) !important'
+                        '& .MuiPaginationItem-root': {
+                            color: 'var(--text-color)',
+                            borderColor: 'var(--border-color)',
+                            '&.Mui-selected': {
+                                backgroundColor: 'var(--background-selected-item) ',
+                                borderColor: 'var(--background-selected-item) ',
+                                color: 'var(--text-color)'
+                            },
+                            '&:hover': {
+                                backgroundColor: 'var(--hover-color) !important',
+                                borderColor: 'var(--hover-color) !important'
+                            }
                         }
-                    }
-                }}
-                color='primary'
-            />
+                    }}
+                    color='primary'
+                />
+            </Box>
         </Paper>
     )
 }

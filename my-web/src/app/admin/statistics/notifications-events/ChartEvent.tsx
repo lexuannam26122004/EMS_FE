@@ -3,6 +3,8 @@ import ReactECharts from 'echarts-for-react'
 import { useTheme } from 'next-themes'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useStatEventByYearQuery } from '@/services/EventService'
+import Loading from '@/components/Loading'
 
 export default function ChartSalary() {
     const { t } = useTranslation('common')
@@ -10,11 +12,16 @@ export default function ChartSalary() {
     const currentYear = new Date().getFullYear()
     const [selectedYear, setSelectedYear] = useState(currentYear)
 
+    const { data, isLoading } = useStatEventByYearQuery(selectedYear)
+
+    const eventData1 = data?.Data.EventsByMonth ?? []
+    const eventData2 = data?.Data.EventsByMonthPrev ?? []
+
     const handleYearChange = (event: SelectChangeEvent<number>) => {
         setSelectedYear(event.target.value as number)
     }
 
-    const percent = 43
+    const percent = data?.Data.Rate.toFixed(2) ?? 0
 
     const option = {
         animation: true, // Bật hiệu ứng chuyển tiếp
@@ -85,7 +92,7 @@ export default function ChartSalary() {
             {
                 name: t('COMMON.DASHBOARD.YEAR') + ' ' + selectedYear.toString(),
                 type: 'line',
-                data: [40, 45, 40, 50, 50, 60, 70, 90, 150, 40, 50, 50],
+                data: eventData1,
                 smooth: true,
                 symbol: 'circle', // Hiển thị biểu tượng tròn
                 symbolSize: 8, // Kích thước biểu tượng
@@ -118,7 +125,7 @@ export default function ChartSalary() {
             {
                 name: t('COMMON.DASHBOARD.YEAR') + ' ' + (selectedYear - 1).toString(),
                 type: 'line',
-                data: [10, 30, 15, 50, 80, 90, 100, 70, 40, 15, 80, 80],
+                data: eventData2,
                 smooth: true,
                 symbol: 'circle', // Hiển thị biểu tượng tròn
                 symbolSize: 8, // Kích thước biểu tượng
@@ -151,6 +158,10 @@ export default function ChartSalary() {
         ]
     }
 
+    if (isLoading) {
+        return <Loading />
+    }
+
     return (
         <Paper
             elevation={1}
@@ -179,7 +190,7 @@ export default function ChartSalary() {
                             color: 'var(--text-color)'
                         }}
                     >
-                        {t('COMMON.DASHBOARD.EMPLOYEE_SALARY_BY_MONTH')}
+                        {t('COMMON.DASHBOARD.STAT_EVENT_BY_YEAR')}
                     </Typography>
                     <Typography
                         sx={{
@@ -237,6 +248,10 @@ export default function ChartSalary() {
                                     border: '1px solid var(--border-color)',
                                     '& .MuiMenuItem-root': {
                                         '&:hover': { backgroundColor: 'var(--hover-color)' },
+                                        '&:not(:first-of-type)': {
+                                            // Đổi từ :first-child sang :first-of-type
+                                            mt: '3px'
+                                        },
                                         '&.Mui-selected': {
                                             backgroundColor: 'var(--background-selected-item)',
                                             '&:hover': { backgroundColor: 'var(--hover-color)' }
@@ -261,10 +276,7 @@ export default function ChartSalary() {
                                     key={year}
                                     value={year}
                                     sx={{
-                                        borderRadius: '6px',
-                                        '&:last-child': {
-                                            mt: '3px'
-                                        }
+                                        borderRadius: '6px'
                                     }}
                                 >
                                     {year}

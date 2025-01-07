@@ -3,6 +3,8 @@ import ReactECharts from 'echarts-for-react'
 import { useTheme } from 'next-themes'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useStatNotificationByTypeQuery } from '@/services/NotificationsService'
+import Loading from '@/components/Loading'
 
 export default function Chart() {
     const { t } = useTranslation('common')
@@ -10,11 +12,18 @@ export default function Chart() {
     const currentYear = new Date().getFullYear()
     const [selectedYear, setSelectedYear] = useState(currentYear)
 
+    const { data: notifyResponse, isLoading: isLoadingNotify, refetch } = useStatNotificationByTypeQuery(selectedYear)
+
+    const notificationData = notifyResponse?.Data?.NotificationData || {}
+
     const handleYearChange = (event: SelectChangeEvent<number>) => {
         setSelectedYear(event.target.value as number)
+        refetch()
     }
 
-    const percent = 43
+    const percent = notifyResponse?.Data?.Rate.toFixed(1) || 0
+
+    const maxValue = Math.max(...Object.values(notificationData).map(value => value as number))
 
     const option = {
         animation: true, // Bật hiệu ứng chuyển tiếp
@@ -30,15 +39,12 @@ export default function Chart() {
         },
         dataset: {
             source: [
-                ['score', 'amount', 'product'],
-                [55, 55, t('COMMON.NOTIFICATION_TYPE.PUBLIC')],
-                [15, 15, t('COMMON.NOTIFICATION_TYPE.SALARY')],
-                [24, 24, t('COMMON.NOTIFICATION_TYPE.BENEFIT')],
-                [45, 45, t('COMMON.NOTIFICATION_TYPE.REWARD')],
-                [28, 28, t('COMMON.NOTIFICATION_TYPE.INSURANCE')],
-                [10, 10, t('COMMON.NOTIFICATION_TYPE.HOLIDAY')],
-                [39, 39, t('COMMON.NOTIFICATION_TYPE.DISCIPLINE')],
-                [5, 5, t('COMMON.NOTIFICATION_TYPE.TIMEKEEPING')]
+                ['score', 'amount', 'product'], // Tiêu đề các cột
+                ...Object.entries(notificationData).map(([key, value]) => [
+                    value, // Số liệu (amount và score giống nhau ở đây)
+                    value,
+                    t(`COMMON.NOTIFICATION_TYPE.${key.toUpperCase()}`) // Lấy tên sản phẩm bằng hàm dịch
+                ])
             ]
         },
         calculable: true,
@@ -50,7 +56,7 @@ export default function Chart() {
             containLabel: true
         },
         xAxis: {
-            name: 'amount',
+            name: t('COMMON.NOTIFICATION.AMOUNT'),
             boundaryGap: true, // Để cột không chạm vào nhau
             axisLine: {
                 lineStyle: {
@@ -66,6 +72,10 @@ export default function Chart() {
         },
         yAxis: {
             type: 'category',
+            textStyle: {
+                color: 'red',
+                fontFamily: 'Arial, sans-serif'
+            },
             axisLine: {
                 lineStyle: {
                     color: theme === 'dark' ? '#919EAB' : '#637381'
@@ -86,8 +96,8 @@ export default function Chart() {
                 fontFamily: 'Arial, sans-serif'
             },
             min: 0,
-            max: 50,
-            text: ['High Score', 'Low Score'],
+            max: maxValue,
+            text: [t('COMMON.NOTIFICATION.HIGH_SCORE'), t('COMMON.NOTIFICATION.LOW_SCORE')],
             dimension: 0,
             inRange: {
                 color: ['#d24c2f', '#d99347', '#00a76f']
@@ -102,6 +112,10 @@ export default function Chart() {
                 }
             }
         ]
+    }
+
+    if (isLoadingNotify) {
+        return <Loading />
     }
 
     return (
@@ -188,7 +202,7 @@ export default function Chart() {
                                     color: 'var(--text-color)',
                                     border: '1px solid var(--border-color)',
                                     '& .MuiMenuItem-root': {
-                                        '&:not(:first-child)': {
+                                        '&:not(:first-of-type)': {
                                             mt: '3px'
                                         },
                                         '&:hover': { backgroundColor: 'var(--hover-color)' },

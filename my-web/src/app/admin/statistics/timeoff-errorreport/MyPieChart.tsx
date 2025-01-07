@@ -4,25 +4,38 @@ import { MenuItem, FormControl, Select, Box, Paper, Typography, SelectChangeEven
 import { useTranslation } from 'react-i18next'
 import ReactECharts from 'echarts-for-react'
 import { useTheme } from 'next-themes'
+import Loading from '@/components/Loading'
+import { useGetCountErrorReportsByTypeAndYearQuery } from '@/services/ErrorReportService'
+
+interface ICountErrorReportsByType {
+    Type: string
+    Count: number
+}
+
 const Chart: React.FC = () => {
     const currentYear = new Date().getFullYear()
     const [selectedYear, setSelectedYear] = useState(currentYear)
     const { t } = useTranslation('common')
     const { theme } = useTheme()
+
+    const { data: response, isLoading } = useGetCountErrorReportsByTypeAndYearQuery(selectedYear)
+    const data: ICountErrorReportsByType[] = Array.isArray(response?.Data) ? response.Data : []
+
     const handleYearChange = (event: SelectChangeEvent<number>) => {
         setSelectedYear(Number(event.target.value))
     }
 
-    const reportData = [
-        { score: 12, amount: 12, type: 'Lương' },
-        { score: 14, amount: 14, type: 'Lợi ích' },
-        { score: 5, amount: 5, type: 'Kỉ luật' },
-        { score: 25, amount: 25, type: 'Khen thưởng' },
-        { score: 17, amount: 17, type: 'Cá Nhân' },
-        { score: 8, amount: 8, type: 'Hợp đồng' }
-    ]
+    if (isLoading) {
+        return <Loading />
+    }
 
-    const maxScore = Math.max(...reportData.map(item => item.score))
+    const reportData = data.map(item => ({
+        score: item.Count,
+        amount: item.Count,
+        type: t(item.Type)
+    }))
+
+    const maxScore = reportData.length > 0 ? Math.max(...reportData.map(item => item.score)) : 0
 
     const option = {
         textStyle: {

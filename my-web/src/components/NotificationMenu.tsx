@@ -6,8 +6,7 @@ import NotificationsPage from '@/app/admin/notification/page'
 import { usePathname } from 'next/navigation'
 import { useSelector, useDispatch } from 'react-redux'
 import { countNewNotificationSelector, countNewNotificationSlice } from '@/redux/slices/countNewNotificationSlice'
-import { useGetCountIsNewQuery } from '@/services/NotificationsService'
-import { userId } from '@/utils/globalVariables'
+import { useGetCountIsNewQuery } from '@/services/UserNotificationsService'
 
 interface Props {
     isUser?: boolean
@@ -19,7 +18,7 @@ const NotificationMenu = ({ isUser }: Props) => {
     const [open, setOpen] = useState(false)
     const [hover, setHover] = useState(false)
     const dispatch = useDispatch()
-    const { data: response, isFetching } = useGetCountIsNewQuery(userId)
+    const { data: response, isFetching } = useGetCountIsNewQuery()
 
     const unreadCount = useSelector(countNewNotificationSelector)
 
