@@ -554,7 +554,19 @@
             }
         },
 
+        "JOBHISTORY": {
+            "STARTDATE": "Start Date",
+            "ENDDATE": "End Date",
+            "NOTE": "Note",
+            "JOBDESCRIPTION": "Job Description",
+            "WORKLOCATION": "Work Location",
+            "ALLOWANCE": "Allowance",
+            "CREATE_NEW_JOB": "Create New Job",
+            "ASSIGNEE": "Job Recipient"
+        },
+
         "TIMEOFF": {
+            "TIMEOFF": "Time Off List",
             "INFORMATION": "Employee Information",
             "FULLNAME": "Full Name",
             "EMPLOYEEID": "Employee ID",

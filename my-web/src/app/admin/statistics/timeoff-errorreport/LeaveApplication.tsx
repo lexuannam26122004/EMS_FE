@@ -5,7 +5,7 @@ import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import { Building, ChevronLeft, ChevronRight, IdCard, UserRoundCog } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { useGetPendingFutureTimeOffsQuery } from '@/services/TimeOffService'
+import { useGetPendingFutureTimeOffsQuery, useUpdateIsAcceptedMutation } from '@/services/TimeOffService'
 import Loading from '@/components/Loading'
 
 interface ITimeOffS {
@@ -28,11 +28,14 @@ export default function LeaveRequestCarousel() {
     const [currentSlide, setCurrentSlide] = useState(0)
     const { t } = useTranslation('common')
 
-    const { data: response, isLoading } = useGetPendingFutureTimeOffsQuery()
+    const { data: response, isLoading, refetch } = useGetPendingFutureTimeOffsQuery()
 
     const dataTimeOff = (response?.Data as ITimeOffS[]) || []
 
+    const [updateIsAccepted] = useUpdateIsAcceptedMutation()
+
     const leaveRequests = dataTimeOff.map(item => ({
+        Id: item.Id,
         FullName: item.FullName || 'N/A',
         Roles: item.Roles,
         CreatedDate: item.CreatedDate || 'N/A',
@@ -73,6 +76,11 @@ export default function LeaveRequestCarousel() {
     const handlePrev = () => {
         const prevSlide = currentSlide - 1 < 0 ? 0 : currentSlide - 1
         sliderRef.current?.slickGoTo(prevSlide)
+    }
+
+    const handleButtonClick = async isAccepted => {
+        await updateIsAccepted({ id: dataTimeOff[currentSlide]?.Id, isAccepted })
+        refetch()
     }
 
     if (isLoading) {
@@ -374,6 +382,7 @@ export default function LeaveRequestCarousel() {
                         },
                         textTransform: 'none'
                     }}
+                    onClick={() => handleButtonClick(false)}
                 >
                     {t('COMMON.DASHBOARD.REJECT')}
                 </Button>
@@ -393,6 +402,7 @@ export default function LeaveRequestCarousel() {
                         },
                         textTransform: 'none'
                     }}
+                    onClick={() => handleButtonClick(true)}
                 >
                     {t('COMMON.DASHBOARD.ACCEPT')}
                 </Button>

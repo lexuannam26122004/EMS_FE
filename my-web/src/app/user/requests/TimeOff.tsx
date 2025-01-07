@@ -22,7 +22,7 @@ import { useGetAuthMeQuery } from '@/services/AuthService'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Loading from '@/components/Loading'
-import { useSearchByUserIdQuery } from '@/services/TimeOffService'
+import { useSearchByUserIdQuery } from '@/services/UserTimeOffService'
 
 function a11yProps(index: number) {
     return {
@@ -71,14 +71,7 @@ function ContractExpPage() {
     const { data: responseGetMeData, isFetching: isFetchingGetMe } = useGetAuthMeQuery()
     const infoMe = responseGetMeData?.Data
 
-    const {
-        data: timeoffResponse,
-        isLoading: istimeoffsLoading,
-        refetch
-    } = useSearchByUserIdQuery({
-        userId: infoMe?.Id,
-        filter: filter
-    })
+    const { data: timeoffResponse, isLoading: istimeoffsLoading, isFetching, refetch } = useSearchByUserIdQuery(filter)
 
     const errorsData = timeoffResponse?.Data.Records as IGetAllTimeOff[]
 
@@ -142,33 +135,15 @@ function ContractExpPage() {
         })
     }
 
-    // useEffect(() => {
-    //     if (!isFetching && responseData?.Data) {
-    //         const from = (page - 1) * Number(rowsPerPage) + Math.min(1, errorsData.length)
-    //         setFrom(from)
+    useEffect(() => {
+        if (!isFetching && timeoffResponse?.Data) {
+            const from = (page - 1) * Number(rowsPerPage) + Math.min(1, errorsData.length)
+            setFrom(from)
 
-    //         const to = Math.min(errorsData.length + (page - 1) * Number(rowsPerPage), totalRecords)
-    //         setTo(to)
-    //     }
-    // }, [isFetching, responseData, page, rowsPerPage])
-
-    // useEffect(() => {
-    //     refetch()
-    // }, [filter])
-
-    // const handleSort = (property: string) => {
-    //     setFilter(prev => ({
-    //         ...prev,
-    //         sortBy: property,
-    //         isDescending: orderBy === property && order === 'asc' ? true : false
-    //     }))
-    //     if (orderBy === property) {
-    //         setOrder(order === 'asc' ? 'desc' : 'asc')
-    //     } else {
-    //         setOrder('asc')
-    //     }
-    //     setOrderBy(property)
-    // }
+            const to = Math.min(errorsData.length + (page - 1) * Number(rowsPerPage), totalRecords)
+            setTo(to)
+        }
+    }, [isFetching, timeoffResponse, page, rowsPerPage])
 
     const [currentTab, setCurrentTab] = useState(0)
 
@@ -252,7 +227,7 @@ function ContractExpPage() {
                         fontWeight: 'bold'
                     }}
                 >
-                    {t('Danh sách xin nghỉ phép')}
+                     {t('COMMON.TIMEOFF.TIMEOFF')}
                 </Typography>
             </Box>
 
