@@ -350,7 +350,8 @@
             "AVG_GROSS": "Lương Gross trung bình",
             "AVG_NET": "Lương thực lĩnh trung bình",
             "AVG_INSURANCE": "Bảo hiểm trung bình",
-            "AVG_PITAX": "Thuế trung bình"
+            "AVG_PITAX": "Thuế trung bình",
+            "PAY": "Thanh toán"
         },
         "CREATE_NOTIFICATION": {
             "TITLE_PAGE": "Tạo thông báo mới",

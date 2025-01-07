@@ -352,7 +352,8 @@
             "AVG_GROSS": "Average Gross Salary",
             "AVG_NET": "Average Net Salary",
             "AVG_INSURANCE": "Average Insurance",
-            "AVG_PITAX": "Average Personal Income Tax"
+            "AVG_PITAX": "Average Personal Income Tax",
+            "PAY": "Payment"
         },
         "BENEFIT": {
             "NAME": "Name",

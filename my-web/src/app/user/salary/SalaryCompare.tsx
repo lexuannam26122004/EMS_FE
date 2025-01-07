@@ -1,4 +1,5 @@
 'use client'
+import { useGetIncomeByYearQuery } from '@/services/UserSalaryService'
 import { MenuItem, FormControl, Select, Box, Paper, Typography, SelectChangeEvent } from '@mui/material'
 import ReactECharts from 'echarts-for-react'
 import { useTheme } from 'next-themes'
@@ -12,11 +13,17 @@ export default function SalaryCompare() {
     const currentYear = new Date().getFullYear()
     const [selectedYear, setSelectedYear] = useState(currentYear)
 
+    const { data, refetch } = useGetIncomeByYearQuery({ year: selectedYear.toString() })
+
+    const salaryData = data?.Data
+
     useEffect(() => {}, [selectedYear])
     const handleYearChange = (event: SelectChangeEvent<number>) => {
         setSelectedYear(event.target.value as number)
     }
-    useEffect(() => {}, [selectedYear])
+    useEffect(() => {
+        refetch()
+    }, [selectedYear, data])
 
     const option = {
         textStyle: {
@@ -93,10 +100,10 @@ export default function SalaryCompare() {
         ],
         series: [
             {
-                name: 'Direct',
+                name: t('COMMON.SALARY.TOTAL_SALARY'),
                 type: 'bar',
                 barWidth: '60%',
-                data: [10, 52, 200, 334, 390, 330, 220],
+                data: salaryData,
                 itemStyle: {
                     color: '#FF6600'
                 }

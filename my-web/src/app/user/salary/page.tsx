@@ -1,13 +1,33 @@
 'use client'
 import { Paper, Box, Avatar, Typography } from '@mui/material'
 import { Mail, MapPinHouse, NotepadText, RefreshCw, Smartphone } from 'lucide-react'
-import React from 'react'
+import React, { useEffect } from 'react'
 import SalaryCompare from './SalaryCompare'
 import SalaryCycle from './SalaryCycle'
 import { useTranslation } from 'react-i18next'
+import { useGetMeInfoQuery } from '@/services/UserSalaryService'
+
+interface info {
+    AvatarPath: string
+    FullName: string
+    RoleName: string[]
+    DepartmentName: string
+    PhoneNumber: string
+    Email: string
+    Address: string
+    StartDateWork: Date
+    PayrollCycle: number
+}
 
 export default function EmployeeSalary() {
     const { t } = useTranslation()
+
+    const { data: infoData, refetch } = useGetMeInfoQuery()
+    const myData = infoData?.Data as info
+
+    useEffect(() => {
+        refetch()
+    }, [infoData])
 
     return (
         <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: '30px' }}>
@@ -30,7 +50,10 @@ export default function EmployeeSalary() {
                         }}
                     >
                         <Avatar
-                            src='https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-3.webp'
+                            src={
+                                myData?.AvatarPath ||
+                                'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-3.webp'
+                            }
                             sx={{
                                 width: '120px',
                                 height: '120px'
@@ -44,7 +67,7 @@ export default function EmployeeSalary() {
                                 marginTop: '10px'
                             }}
                         >
-                            Lê Xuân Nam
+                            {myData?.FullName}
                         </Typography>
                         <Typography
                             sx={{
@@ -53,7 +76,7 @@ export default function EmployeeSalary() {
                                 color: 'var(--text-color)'
                             }}
                         >
-                            Administrator
+                            {myData?.RoleName.join(', ')}
                         </Typography>
                         <Typography
                             sx={{
@@ -62,26 +85,26 @@ export default function EmployeeSalary() {
                                 color: 'var(--text-color)'
                             }}
                         >
-                            Human Resources
+                            {myData?.DepartmentName}
                         </Typography>
                     </Box>
                     <Box sx={{ marginRight: '20px', marginTop: '15px', gap: '15px' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <Smartphone size={'24px'} color='orange'></Smartphone>
                             <Typography fontSize={'14px'} color='var(--text-color)' style={{ marginLeft: '10px' }}>
-                                0833.367.548
+                                {myData?.PhoneNumber}
                             </Typography>
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', marginTop: '15px' }}>
                             <Mail size={'24px'} color='blue'></Mail>
                             <Typography fontSize={'14px'} color='var(--text-color)' style={{ marginLeft: '10px' }}>
-                                lexuannam6426@gmail.com
+                                {myData?.Email}
                             </Typography>
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', marginTop: '15px' }}>
                             <MapPinHouse size={'24px'} color='green'></MapPinHouse>
                             <Typography fontSize={'14px'} color='var(--text-color)' style={{ marginLeft: '10px' }}>
-                                Gia Nghĩa, ĐăkNông
+                                {myData?.Address}
                             </Typography>
                         </Box>
                     </Box>
@@ -114,7 +137,7 @@ export default function EmployeeSalary() {
                             </Box>
                             <Box>
                                 <Typography sx={{ fontSize: '20px', fontWeight: 'bold', color: 'var(--text-color)' }}>
-                                    11-1-2022
+                                    {myData?.StartDateWork.toString()}
                                 </Typography>
                                 <Typography sx={{ fontSize: '15px', mt: '5px', color: 'var(--text-color)' }}>
                                     {t('COMMON.EMPLOYEE.STARTDATEWORK')}
@@ -149,7 +172,7 @@ export default function EmployeeSalary() {
                             </Box>
                             <Box>
                                 <Typography sx={{ fontSize: '20px', fontWeight: 'bold', color: 'var(--text-color)' }}>
-                                    24
+                                    {myData?.PayrollCycle}
                                 </Typography>
                                 <Typography sx={{ fontSize: '15px', mt: '5px', color: 'var(--text-color)' }}>
                                     {t('COMMON.SALARY.CYCLE')}

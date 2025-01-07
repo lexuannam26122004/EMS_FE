@@ -3,7 +3,14 @@ import AlertDialog from '@/components/AlertDialog'
 import Loading from '@/components/Loading'
 import { ISalaryGetAll } from '@/models/salary'
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
-import { useGetAllSalariesQuery, useGetPayrollOverviewQuery, useGetPeriodQuery } from '@/services/SalaryService'
+import {
+    useChangeStatusManyMutation,
+    useChangeStatusMutation,
+    useGetAllSalariesQuery,
+    useGetPayrollOverviewQuery,
+    useGetPeriodQuery,
+    useUpdateSalaryByIdMutation
+} from '@/services/SalaryService'
 import { formatDate } from '@/utils/formatDate'
 import {
     Box,
@@ -31,7 +38,6 @@ import {
     FormControl,
     Pagination
 } from '@mui/material'
-import { data } from '@remix-run/router'
 import {
     BadgeCheck,
     BadgeDollarSign,
@@ -47,8 +53,11 @@ import {
     Trash2,
     Users
 } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useRouter } from 'next/navigation'
+import { debounce } from 'lodash'
+import EmployeeSalaryModal from '@/app/admin/salary/detail/ModalDetail'
 
 function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
     return (
@@ -92,36 +101,29 @@ function GetAllSalaryPage() {
     const [keyword, setKeyword] = useState('')
     const [isChangeMany, setIsChangeMany] = useState(false)
     const [openDialog, setOpenDialog] = useState(false)
-    // const [selectedRow, setSelectedRow] = useState<string | null>(null)
+    const router = useRouter()
+
+    const [selectedRow, setSelectedRow] = useState<string | null>(null)
     const [order, setOrder] = useState<'asc' | 'desc'>('asc')
     const [orderBy, setOrderBy] = useState<string>('')
     const [filter, setFilter] = useState<IFilterSysConfiguration>({
         pageSize: 10,
         pageNumber: 1
     })
-    const [progress] = useState(50)
-
-    useEffect(() => {}, [
-        progress,
-        page,
-        rowsPerPage,
-        from,
-        setRowsPerPage,
-        setIsChangeMany,
-        setFrom,
-        setTo,
-        to,
-        keyword,
-        isChangeMany,
-        openDialog,
-        order,
-        orderBy,
-        filter
-    ])
 
     const { data: periodData, isFetching: periodFetching } = useGetPeriodQuery()
     const periodList = periodData?.Data || []
-    const [period, setPeriod] = useState<string>()
+    const [period, setPeriod] = useState<string>('')
+
+    const {
+        data: responseData,
+        isFetching,
+        isLoading,
+        refetch
+    } = useGetAllSalariesQuery({
+        filter,
+        period: period || ''
+    })
 
     useEffect(() => {
         if (periodList.length > 0) {
@@ -129,17 +131,11 @@ function GetAllSalaryPage() {
             refetch()
         }
     }, [periodList])
-    const {
-        data: responseData,
-        isFetching,
-        refetch
-    } = useGetAllSalariesQuery({
-        filter,
-        period: period || ''
-    })
 
-    const salaryData = Array.isArray(responseData?.Data.Records) ? (responseData.Data.Records as ISalaryGetAll[]) : []
-    useEffect(() => {}, [salaryData])
+    const salaryData = responseData?.Data.Records as ISalaryGetAll[]
+    useEffect(() => {
+        refetch()
+    }, [salaryData])
     const totalRecords = responseData?.Data.TotalRecords as number
 
     const { data: cycleResponseData, isFetching: cycleFetching } = useGetPayrollOverviewQuery({ period: period || '' })
@@ -152,7 +148,24 @@ function GetAllSalaryPage() {
         }
     }, [period, cycleFetching, periodList, refetch])
 
+    useEffect(() => {
+        refetch()
+    }, [filter])
+
+    console.log(period)
+
+    const [deleteSalary] = useChangeStatusMutation()
+    const [deleteManySalaries] = useChangeStatusManyMutation()
+    const [updateSalary] = useUpdateSalaryByIdMutation()
+
     const isSelected = (id: string) => selected.includes(id)
+
+    const [openModal, setOpenModal] = useState(false)
+    const [selectedSalary, setSelectedSalary] = useState<string | null>(null)
+    const handleClickDetail = (Id: string) => {
+        setSelectedSalary(Id)
+        setOpenModal(true)
+    }
 
     const handleCheckboxClick = (id: string) => {
         setSelected(prev => (prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]))
@@ -188,15 +201,25 @@ function GetAllSalaryPage() {
         })
     }
 
-    const handleSearchKeyword = () => {
-        setPage(1)
-        setFilter(prev => {
-            return {
+    const debouncedSetFilter = useCallback(
+        debounce(value => {
+            setFilter(prev => ({
                 ...prev,
-                keyword: keyword,
+                keyword: value,
                 pageNumber: 1
-            }
-        })
+            }))
+        }, 100),
+        []
+    )
+
+    const handleUpdate = (id: string) => {
+        updateSalary({ Id: id }).unwrap()
+    }
+
+    const handleSearchKeyword = value => {
+        setPage(1)
+        setKeyword(value)
+        debouncedSetFilter(value)
     }
 
     useEffect(() => {
@@ -227,9 +250,35 @@ function GetAllSalaryPage() {
         setOrderBy(property)
     }
 
-    const handleDeleteManySysConfiguration = () => {}
+    const handleDeleteClick = async (id: string) => {
+        setOpenDialog(true)
+        setSelectedRow(id)
+    }
 
-    const handleDeleteSysConfiguration = () => {}
+    const handleDeleteManyClick = async () => {
+        setIsChangeMany(true)
+        setOpenDialog(true)
+    }
+
+    const handleDeleteManySalary = async () => {
+        if (selected.length > 0) {
+            await deleteManySalaries(selected)
+            setIsChangeMany(false)
+            setSelected([])
+            setOpenDialog(false)
+        }
+    }
+
+    const handleDeleteSalary = async () => {
+        if (selectedRow) {
+            await deleteSalary(selectedRow)
+            if (isSelected(selectedRow)) {
+                setSelected(prev => prev.filter(item => item !== selectedRow))
+            }
+            setOpenDialog(false)
+            setSelectedRow(null)
+        }
+    }
 
     const handlePeriodChange = (event: SelectChangeEvent<string>) => {
         setPeriod(event.target.value as string)
@@ -242,7 +291,16 @@ function GetAllSalaryPage() {
         return value.toLocaleString('vi-VN') + ' ' + t('COMMON.SALARY.VND')
     }
 
-    if (isFetching || periodFetching) {
+    const paperRef = useRef(null)
+    const [paperHeight, setPaperHeight] = useState(500)
+
+    useEffect(() => {
+        if (paperRef.current && isLoading === false) {
+            setPaperHeight(paperRef.current.offsetHeight)
+        }
+    }, [isLoading, salaryData])
+
+    if (isLoading || periodFetching) {
         return <Loading />
     }
 
@@ -259,7 +317,7 @@ function GetAllSalaryPage() {
             <Box
                 sx={{
                     width: 'calc(100% / 5 + 30px)',
-                    height: '100%',
+                    height: { paperHeight },
                     backgroundColor: 'var(--background-color)',
                     overflowY: 'auto',
                     scrollbarGutter: 'stable',
@@ -292,6 +350,7 @@ function GetAllSalaryPage() {
                                 borderColor: 'var(--selected-field-color)'
                             }
                         }}
+                        onClick={() => router.back()}
                     >
                         <ChevronLeft size={24} color='var(--text-color)' />
                     </IconButton>
@@ -639,6 +698,7 @@ function GetAllSalaryPage() {
                 }}
             >
                 <Paper
+                    ref={paperRef}
                     sx={{
                         width: '100%',
                         height: '100%',
@@ -656,7 +716,7 @@ function GetAllSalaryPage() {
                                 variant='outlined'
                                 required
                                 value={keyword}
-                                onChange={e => setKeyword(e.target.value)}
+                                onChange={e => handleSearchKeyword(e.target.value)}
                                 sx={{
                                     color: 'var(--text-color)',
                                     padding: '0px',
@@ -681,9 +741,6 @@ function GetAllSalaryPage() {
                                     '& .MuiOutlinedInput-root.Mui-focused fieldset': {
                                         borderColor: 'var(--selected-field-color)'
                                     }
-                                }}
-                                onKeyDown={() => {
-                                    handleSearchKeyword()
                                 }}
                                 slotProps={{
                                     input: {
@@ -738,14 +795,14 @@ function GetAllSalaryPage() {
                                     whiteSpace: 'nowrap',
                                     textTransform: 'none'
                                 }}
-                                //onClick={() => handleDeleteManyClick()}
+                                onClick={() => handleDeleteManyClick()}
                             >
                                 {t('COMMON.BUTTON.DELETE')}
                             </Button>
 
                             <FormControl fullWidth>
                                 <Select
-                                    defaultValue={period}
+                                    value={period}
                                     onChange={handlePeriodChange}
                                     sx={{
                                         '&:hover .MuiOutlinedInput-notchedOutline': {
@@ -1438,7 +1495,7 @@ function GetAllSalaryPage() {
                                                                     backgroundColor: 'var(--hover-color)'
                                                                 }
                                                             }}
-                                                            //onClick={() => handleClickDetail(row)}
+                                                            onClick={() => handleClickDetail(row.Id)}
                                                         >
                                                             <EyeIcon />
                                                         </Box>
@@ -1458,7 +1515,7 @@ function GetAllSalaryPage() {
                                                                     backgroundColor: 'var(--hover-color)'
                                                                 }
                                                             }}
-                                                            //onClick={() => handleButtonUpdateClick(row.Id)}
+                                                            onClick={() => handleUpdate(row.Id)}
                                                         >
                                                             <Pencil />
                                                         </Box>
@@ -1478,7 +1535,7 @@ function GetAllSalaryPage() {
                                                                     backgroundColor: 'var(--hover-color)'
                                                                 }
                                                             }}
-                                                            //onClick={() => handleDeleteClick(row.Id)}
+                                                            onClick={() => handleDeleteClick(row.Id)}
                                                         >
                                                             <Trash2 />
                                                         </Box>
@@ -1608,8 +1665,15 @@ function GetAllSalaryPage() {
                 setOpen={setOpenDialog}
                 buttonCancel={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.CANCEL')}
                 buttonConfirm={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.DELETE')}
-                onConfirm={() => (isChangeMany ? handleDeleteManySysConfiguration() : handleDeleteSysConfiguration())}
+                onConfirm={() => (isChangeMany ? handleDeleteManySalary() : handleDeleteSalary())}
             />
+            {selectedSalary && (
+                <EmployeeSalaryModal
+                    open={openModal}
+                    handleToggle={() => setOpenModal(false)}
+                    salaryId={selectedSalary}
+                />
+            )}
         </Box>
     )
 }
