@@ -49,7 +49,7 @@ const CreateTimeOff = () => {
 
     const [createTimeOff, { isSuccess, isError, reset }] = useCreateTimeOffsMutation()
 
-    const { refetch } = useSearchTimeOffQuery()
+    const { refetch } = useSearchTimeOffQuery(null)
 
     const { data: userResponse, isLoading: isUsersLoading } = useGetAllUsersQuery()
     const employee = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []

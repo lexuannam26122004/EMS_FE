@@ -1,5 +1,6 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi } from '@reduxjs/toolkit/query/react'
 import { IFilterRole } from '../models/AspNetRole'
+import { createBaseQuery } from './api'
 
 interface RoleResponse {
     Success: boolean
@@ -10,7 +11,7 @@ const apiPath = 'https://localhost:44381/api/admin/AspNetRole'
 
 export const roleApi = createApi({
     reducerPath: 'roleApi',
-    baseQuery: fetchBaseQuery({ baseUrl: apiPath }),
+    baseQuery: createBaseQuery(apiPath),
     endpoints: builder => ({
         getAllRoles: builder.query<RoleResponse, IFilterRole>({
             query: filter => {

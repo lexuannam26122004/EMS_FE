@@ -47,7 +47,7 @@ const UpdateTimeOff = () => {
     const toast = useToast()
     const [isSubmit, setIsSubmit] = useState(false)
 
-    const { refetch } = useSearchTimeOffQuery()
+    const { refetch } = useSearchTimeOffQuery(null)
 
     const { data: userResponse, isLoading: isUsersLoading } = useGetAllUsersQuery()
     const employee = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []

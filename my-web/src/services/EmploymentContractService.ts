@@ -1,4 +1,5 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi } from '@reduxjs/toolkit/query/react'
+import { createBaseQuery } from './api'
 import {
     IEmploymentContractCreate,
     IFilterEmploymentContract,
@@ -19,7 +20,7 @@ const apiPath = 'https://localhost:44381/api/admin/EmploymentContract'
 
 export const EmploymentContractApi = createApi({
     reducerPath: 'EmploymentContractApi',
-    baseQuery: fetchBaseQuery({ baseUrl: apiPath }),
+    baseQuery: createBaseQuery(apiPath),
     endpoints: builder => ({
         searchEmploymentContracts: builder.query<EmploymentContractResponse, void>({
             query: () => 'Search/search'

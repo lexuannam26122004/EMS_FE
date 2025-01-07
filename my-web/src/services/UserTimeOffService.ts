@@ -1,6 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { ITimeOffCreate, ITimeOffUpdate } from '@/models/TimeOff'
-import { ITotalEventsByMonth } from '@/models/Event'
 import { createBaseQuery } from './api'
 interface TimeOffResponse {
     Success: boolean
@@ -21,30 +20,12 @@ interface IFilter {
     keyword?: string
 }
 
-const apiPath = 'https://localhost:44381/api/admin/TimeOff'
+const apiPath = 'https://localhost:44381/api/user/UserTimeOff'
 
-export const TimeOffApi = createApi({
-    reducerPath: 'TimeOffApi',
+export const userTimeOffApi = createApi({
+    reducerPath: 'userTimeOffApi',
     baseQuery: createBaseQuery(apiPath),
     endpoints: builder => ({
-        searchTimeOff: builder.query<TimeOffResponse, IFilter>({
-            query: filter => {
-                const params = new URLSearchParams()
-
-                if (filter) {
-                    if (filter.createdDate) params.append('CreatedDate', filter.createdDate.toDateString())
-                    if (filter.pageSize) params.append('PageSize', filter.pageSize.toString())
-                    if (filter.pageNumber) params.append('PageNumber', filter.pageNumber.toString())
-                    if (filter.isActive !== undefined) params.append('IsActive', filter.isActive.toString())
-                    if (filter.keyword) params.append('Keyword', filter.keyword)
-                    if (filter.isDescending !== undefined) params.append('IsDescending', filter.isDescending.toString())
-                    if (filter.sortBy) params.append('SortBy', filter.sortBy)
-                }
-
-                return `Search/search?${params.toString()}`
-            }
-        }),
-
         searchByUserId: builder.query<TimeOffResponse, IFilter>({
             query: filter => {
                 const params = new URLSearchParams()
@@ -63,10 +44,6 @@ export const TimeOffApi = createApi({
             }
         }),
 
-        getTimeOffIsAccepted: builder.query<TimeOffResponse, number>({
-            query: params => `GetTimeOffIsAccepted?year=${params}`
-        }),
-
         createTimeOffs: builder.mutation<void, ITimeOffCreate>({
             query: body => ({
                 url: `Create`,
@@ -82,28 +59,14 @@ export const TimeOffApi = createApi({
             })
         }),
 
-        getTimeOffStatistics: builder.query<TimeOffResponse, ITotalEventsByMonth>({
-            query: params => `GetTimeOffStatistics/time-off-statistics?month=${params.Month}&year=${params.Year}`
-        }),
-
-        getTimeOffStatisticsByMonthAndYear: builder.query<TimeOffResponse, IMonthAndYear>({
-            query: params => `GetTimeOffStatistics/time-off-statistics?year=${params.Year}&month=${params.Month}`
-        }),
-
-        getPendingFutureTimeOffs: builder.query<TimeOffResponse, void>({
-            query: () => `GetPendingFutureTimeOffs/pending-future-timeoffs`
+        countTimeOffsInMonthUser: builder.query<TimeOffResponse, IMonthAndYear>({
+            query: params => `CountTimeOffsInMonthUser?month=${params.Month}&year=${params.Year}`
         }),
 
         getByIdTimeOffs: builder.query<TimeOffResponse, number>({
             query: id => `GetById/${id}`
         }),
 
-        updateIsAccepted: builder.mutation<void, { id: number; isAccepted?: boolean }>({
-            query: ({ id, isAccepted }) => ({
-                url: `UpdateIsAccepted?id=${id}&isAccepted=${isAccepted}`,
-                method: 'PUT'
-            })
-        }),
 
         changeStatusTimeOffs: builder.mutation<void, number>({
             query: id => ({
@@ -115,15 +78,10 @@ export const TimeOffApi = createApi({
 })
 
 export const {
-    useSearchTimeOffQuery,
     useSearchByUserIdQuery,
-    useGetTimeOffIsAcceptedQuery,
     useCreateTimeOffsMutation,
     useUpdateTimeOffsMutation,
     useGetByIdTimeOffsQuery,
-    useGetTimeOffStatisticsQuery,
-    useGetTimeOffStatisticsByMonthAndYearQuery,
-    useGetPendingFutureTimeOffsQuery,
-    useUpdateIsAcceptedMutation,
+    useCountTimeOffsInMonthUserQuery,
     useChangeStatusTimeOffsMutation
-} = TimeOffApi
+} = userTimeOffApi

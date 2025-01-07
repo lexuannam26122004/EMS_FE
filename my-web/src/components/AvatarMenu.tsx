@@ -13,7 +13,7 @@ import {
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 // import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined'
-import { ChevronDown, CalendarClock, ChevronUp, User } from 'lucide-react'
+import { ChevronDown, CalendarClock, ChevronUp, User, BriefcaseBusiness } from 'lucide-react'
 // import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 // import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
 import VpnKeyOutlinedIcon from '@mui/icons-material/VpnKeyOutlined'
@@ -86,6 +86,11 @@ const AvatarMenu = () => {
     const handleCreateNotification = () => {
         setOpen(false)
         router.push('/admin/notification/create')
+    }
+
+    const handleCreateTasks = () => {
+        setOpen(false)
+        router.push('/admin/tasks/create')
     }
 
     const handlePersonal = () => {
@@ -322,7 +327,7 @@ const AvatarMenu = () => {
                                         {t('COMMON.SIDEBAR.SCHEDULAR')}
                                     </MenuItem>
 
-                                    {/* <MenuItem
+                                    <MenuItem
                                         onClick={handleCreateTasks}
                                         sx={{
                                             color: 'var(--text-color)',
@@ -334,7 +339,7 @@ const AvatarMenu = () => {
                                     >
                                         <BriefcaseBusiness style={{ marginRight: '16px' }} />
                                         {t('COMMON.SIDEBAR.CREATETASKS')}
-                                    </MenuItem> */}
+                                    </MenuItem>
                                     {/* <MenuItem
                                         onClick={handleClose}
                                         sx={{

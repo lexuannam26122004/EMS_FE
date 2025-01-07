@@ -387,7 +387,7 @@ function DetailModal({ open, handleToggle, reportedBy }: Props) {
                         fullWidth
                         multiline
                         minRows={4}
-                        maxRows={12}
+                        maxRows={4}
                         sx={{
                             mt: '15px',
                             '& fieldset': {
