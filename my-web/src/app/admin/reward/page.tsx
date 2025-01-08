@@ -39,6 +39,7 @@ import { IRewardGetAll } from '@/models/Reward'
 import { formatNumberToMoney } from '@/utils/formatNumberWithUnit'
 import { CirclePlus, ClipboardCheck } from 'lucide-react'
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
+import router, { useRouter } from 'next/navigation'
 
 function a11yProps(index: number) {
     return {
@@ -65,7 +66,7 @@ function getStatusTextColor(status: boolean): string {
 
 function Page() {
     const { t } = useTranslation('common')
-    //const router = useRouter()
+    const router = useRouter()
     //const [selected, setSelected] = useState<number[]>([])
     const [page, setPage] = useState(1)
     const [rowsPerPage, setRowsPerPage] = useState('10')
@@ -186,11 +187,11 @@ function Page() {
 
     const counts = useMemo(
         () => ({
-            0: totalRecords,
+            0: 10,
             1: rewardData?.filter(item => item.IsReceived === false).length,
             2: rewardData?.filter(item => item.IsReceived === true).length
         }),
-        [rewardData, totalRecords]
+        [rewardData]
     )
 
     const badgeStyle: React.CSSProperties = {
@@ -251,7 +252,7 @@ function Page() {
                             whiteSpace: 'nowrap',
                             textTransform: 'none'
                         }}
-                        //onClick={() => router.push('/admin/benefit/create-benefit')}
+                        onClick={() => router.push('/admin/reward/create')}
                         //onClick={() => handleOpenCreateDialog()}
                     >
                         {t('COMMON.BUTTON.CREATE')}

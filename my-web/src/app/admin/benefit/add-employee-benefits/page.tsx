@@ -1,10 +1,9 @@
 'use client'
-import { IBenefitGetAll, IGetAllBenefitUser } from '@/models/Benefit'
+import { IGetAllBenefitUser } from '@/models/Benefit'
 import Slider from 'rc-slider'
 import 'rc-slider/assets/index.css'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import {
-    useGetAllBenefitsQuery,
     useChangeStatusBenefitMutation,
     useChangeStatusManyBenefitMutation,
     useGetAllBenefitUserQuery
@@ -39,13 +38,11 @@ import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import SearchIcon from '@mui/icons-material/Search'
 import { CirclePlus, EyeIcon, Pencil, Trash2 } from 'lucide-react'
-import AlertDialog from '@/components/AlertDialog'
-import { IFilterSysConfiguration } from '@/models/SysConfiguration'
 
 import { useRouter } from 'next/navigation'
-import { formatDate } from '@/utils/formatDate'
-import { IAspNetRoleGetAll } from '@/models/AspNetRole'
-import { useGetAllRolesQuery } from '@/services/AspNetRoleService'
+// import { formatDate } from '@/utils/formatDate'
+// import { IAspNetRoleGetAll } from '@/models/AspNetRole'
+// import { useGetAllRolesQuery } from '@/services/AspNetRoleService'
 import { useGetAllDepartmentQuery } from '@/services/DepartmentService'
 import { IDepartmentGetAll } from '@/models/Department'
 import Loading from '@/components/Loading'
@@ -60,8 +57,8 @@ function BenefitPage() {
     const [to, setTo] = useState(10)
     const [keyword, setKeyword] = useState('')
     const [isSubmit] = useState(false)
-    const [openDialog, setOpenDialog] = useState(false)
-    const [selectedRow, setSelectedRow] = useState<string | null>(null)
+    const [setOpenDialog] = useState(false)
+    const [setSelectedRow] = useState<string | null>(null)
     const [order, setOrder] = useState<'asc' | 'desc'>('asc')
     const [orderBy, setOrderBy] = useState<string>('')
     const [filter, setFilter] = useState<IGetAllBenefitUser>({
@@ -587,7 +584,7 @@ function BenefitPage() {
                                 step={1000}
                                 value={priceRange}
                                 onChange={handleSliderChange}
-                                onAfterChange={handleSliderAfterChange}
+                                onChangeComplete={handleSliderAfterChange}
                                 style={{ marginBottom: '20px' }}
                             />
                             <p>

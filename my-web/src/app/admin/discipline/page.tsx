@@ -39,6 +39,7 @@ import { IDisciplineGetAll } from '@/models/Discipline'
 import { formatNumberToMoney } from '@/utils/formatNumberWithUnit'
 import { CirclePlus, ClipboardCheck } from 'lucide-react'
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
+import { useRouter } from 'next/navigation'
 
 function a11yProps(index: number) {
     return {
@@ -65,7 +66,7 @@ function getStatusTextColor(status: boolean): string {
 
 function Page() {
     const { t } = useTranslation('common')
-    //const router = useRouter()
+    const router = useRouter()
     //const [selected, setSelected] = useState<number[]>([])
     const [page, setPage] = useState(1)
     const [rowsPerPage, setRowsPerPage] = useState('10')
@@ -176,9 +177,9 @@ function Page() {
             case 0: // All
                 return disciplineData
             case 1: // Pending
-                return disciplineData.filter(item => item.IsReceived === false)
+                return disciplineData.filter(item => item.IsPenalized === false)
             case 2: // In Progress
-                return disciplineData.filter(item => item.IsReceived === true)
+                return disciplineData.filter(item => item.IsPenalized === true)
             default:
                 return disciplineData
         }
@@ -186,11 +187,11 @@ function Page() {
 
     const counts = useMemo(
         () => ({
-            0: totalRecords,
-            1: disciplineData?.filter(item => item.IsReceived === false).length,
-            2: disciplineData?.filter(item => item.IsReceived === true).length
+            0: 10,
+            1: disciplineData?.filter(item => item.IsPenalized === false).length,
+            2: disciplineData?.filter(item => item.IsPenalized === true).length
         }),
-        [disciplineData, totalRecords]
+        [disciplineData]
     )
 
     const badgeStyle: React.CSSProperties = {
@@ -251,7 +252,7 @@ function Page() {
                             whiteSpace: 'nowrap',
                             textTransform: 'none'
                         }}
-                        //onClick={() => router.push('/admin/benefit/create-benefit')}
+                        onClick={() => router.push('/admin/discipline/create')}
                         //onClick={() => handleOpenCreateDialog()}
                     >
                         {t('COMMON.BUTTON.CREATE')}
@@ -900,14 +901,14 @@ function Page() {
                                                     display: 'flex',
                                                     minWidth: '100px',
                                                     justifyContent: 'center',
-                                                    backgroundColor: getStatusBgColor(row.IsReceived)
+                                                    backgroundColor: getStatusBgColor(row.IsPenalized)
                                                 }}
                                             >
                                                 <Typography
                                                     sx={{
                                                         fontSize: '15px',
                                                         overflow: 'hidden',
-                                                        color: getStatusTextColor(row.IsReceived),
+                                                        color: getStatusTextColor(row.IsPenalized),
                                                         width: 'auto',
                                                         fontWeight: 'bold',
                                                         display: 'inline-block',
@@ -915,9 +916,7 @@ function Page() {
                                                         whiteSpace: 'nowrap'
                                                     }}
                                                 >
-                                                    {row.IsReceived
-                                                        ? t('COMMON.REWARD_DISCIPLINE.PROCESSED')
-                                                        : t('COMMON.REWARD_DISCIPLINE.UNPROCESSED')}
+                                                    {row.IsPenalized ? t('Đã xử lý') : t('Chưa xử lý')}
                                                 </Typography>
                                             </Box>
                                         </TableCell>

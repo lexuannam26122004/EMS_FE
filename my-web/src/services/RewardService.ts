@@ -3,6 +3,7 @@ import { IFilterSysConfiguration } from '@/models/SysConfiguration'
 import { fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { createBaseQuery } from './api'
+import { ICreateReward, IRewardGetAll, IUpdateReward } from '@/models/Reward'
 
 interface RewardResponse {
     Success: boolean
@@ -15,6 +16,39 @@ export const rewardApi = createApi({
     baseQuery: createBaseQuery(apiPath),
     tagTypes: ['Reward'],
     endpoints: builder => ({
+        createBenefit: builder.mutation<void, ICreateReward>({
+            query: benefit => ({
+                url: 'Create',
+                method: 'POST',
+                body: benefit
+            }),
+            invalidatesTags: ['Reward']
+        }),
+
+        ChangeStatusBenefit: builder.mutation<void, string>({
+            query: id => ({
+                url: `ChangeStatus/${id}`,
+                method: 'PUT'
+            })
+        }),
+        updateBenefit: builder.mutation<void, IUpdateReward>({
+            query: benefit => ({
+                url: 'Update',
+                method: 'PUT',
+                body: benefit
+            }),
+            invalidatesTags: ['Reward']
+        }),
+        ChangeStatusManyBenefit: builder.mutation<void, string[]>({
+            query: ids => ({
+                url: `ChangeStatusMany`,
+                method: 'PUT',
+                body: { Ids: ids }
+            })
+        }),
+        GetByIdBenefit: builder.query<RewardResponse, string>({
+            query: id => `GetById?id=${id}`
+        }),
         getAllRewards: builder.query<RewardResponse, IFilterSysConfiguration>({
             query: filter => {
                 const params = new URLSearchParams()
@@ -37,4 +71,11 @@ export const rewardApi = createApi({
     })
 })
 
-export const { useGetAllRewardsQuery } = rewardApi
+export const {
+    useGetAllRewardsQuery,
+    useChangeStatusBenefitMutation,
+    useChangeStatusManyBenefitMutation,
+    useCreateBenefitMutation,
+    useGetByIdBenefitQuery,
+    useUpdateBenefitMutation
+} = rewardApi
