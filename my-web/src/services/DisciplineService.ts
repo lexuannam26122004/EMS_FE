@@ -2,6 +2,7 @@
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { createBaseQuery } from './api'
+import { ICreateDiscipline, IUpdateDiscipline } from '@/models/Discipline'
 
 interface DisciplineResponse {
     Success: boolean
@@ -14,6 +15,39 @@ export const disciplineApi = createApi({
     baseQuery: createBaseQuery(apiPath),
     tagTypes: ['Discipline'],
     endpoints: builder => ({
+        createBenefit: builder.mutation<void, ICreateDiscipline>({
+            query: benefit => ({
+                url: 'Create',
+                method: 'POST',
+                body: benefit
+            }),
+            invalidatesTags: ['Discipline']
+        }),
+
+        ChangeStatusBenefit: builder.mutation<void, string>({
+            query: id => ({
+                url: `ChangeStatus/${id}`,
+                method: 'PUT'
+            })
+        }),
+        updateBenefit: builder.mutation<void, IUpdateDiscipline>({
+            query: benefit => ({
+                url: 'Update',
+                method: 'PUT',
+                body: benefit
+            }),
+            invalidatesTags: ['Discipline']
+        }),
+        ChangeStatusManyBenefit: builder.mutation<void, string[]>({
+            query: ids => ({
+                url: `ChangeStatusMany`,
+                method: 'PUT',
+                body: { Ids: ids }
+            })
+        }),
+        GetByIdBenefit: builder.query<DisciplineResponse, string>({
+            query: id => `GetById?id=${id}`
+        }),
         getAllDisciplines: builder.query<DisciplineResponse, IFilterSysConfiguration>({
             query: filter => {
                 const params = new URLSearchParams()
@@ -36,4 +70,11 @@ export const disciplineApi = createApi({
     })
 })
 
-export const { useGetAllDisciplinesQuery } = disciplineApi
+export const {
+    useGetAllDisciplinesQuery,
+    useChangeStatusBenefitMutation,
+    useCreateBenefitMutation,
+    useChangeStatusManyBenefitMutation,
+    useGetByIdBenefitQuery,
+    useUpdateBenefitMutation
+} = disciplineApi

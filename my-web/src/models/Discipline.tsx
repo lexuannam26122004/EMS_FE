@@ -8,7 +8,18 @@ export interface IDisciplineGetAll {
     CreatedDate: string
     Reason?: string
     Note?: string
-    IsReceived: boolean
+    IsPenalized: boolean
+}
+
+export interface ICreateDiscipline {
+    UserId: string
+    Reason?: string
+    Note?: string
+    Money?: number
+}
+
+export interface IUpdateDiscipline extends ICreateDiscipline {
+    Id: number
 }
 export interface IDiscipline extends IDisciplineGetAll {
     Date: string
