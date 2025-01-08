@@ -14,6 +14,7 @@ import {
     Avatar
 } from '@mui/material'
 import axios from 'axios'
+import Loading from '@/components/Loading'
 import { useTranslation } from 'react-i18next'
 import { SaveIcon, XIcon, RefreshCcwIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
@@ -228,7 +229,7 @@ const CreateEmployeePage = () => {
         setIsSubmit(false)
     }
 
-    if (isUsersLoading || isRoleLoading || isDepartmentLoading) return <div>Loading...</div>
+    if (isUsersLoading || isRoleLoading || isDepartmentLoading) return <Loading />
 
     const triggerFileInput = () => {
         document.getElementById('fileInput')?.click()

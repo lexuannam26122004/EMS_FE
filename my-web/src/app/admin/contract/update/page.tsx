@@ -12,7 +12,7 @@ import {
     Autocomplete,
     Avatar
 } from '@mui/material'
-
+import Loading from '@/components/Loading'
 import { useTranslation } from 'react-i18next'
 import { SaveIcon, XIcon, RefreshCcwIcon } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -207,7 +207,7 @@ const UpdateEmploymentContract = () => {
         setIsSubmit(false)
     }
 
-    if (isUsersLoading) return <div>Loading...</div>
+    if (isUsersLoading) return <Loading />
 
     return (
         <Box sx={{ width: '720px', maxWidth: '100%', margin: '0 auto' }}>

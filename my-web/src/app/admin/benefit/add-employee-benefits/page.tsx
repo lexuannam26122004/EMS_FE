@@ -1,12 +1,13 @@
 'use client'
-import { IBenefitGetAll } from '@/models/Benefit'
+import { IBenefitGetAll, IGetAllBenefitUser } from '@/models/Benefit'
 import Slider from 'rc-slider'
 import 'rc-slider/assets/index.css'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import {
     useGetAllBenefitsQuery,
     useChangeStatusBenefitMutation,
-    useChangeStatusManyBenefitMutation
+    useChangeStatusManyBenefitMutation,
+    useGetAllBenefitUserQuery
 } from '@/services/BenefitService'
 import {
     Box,
@@ -31,9 +32,10 @@ import {
     TableSortLabel,
     FormControlLabel,
     Divider,
-    Collapse
+    Collapse,
+    debounce
 } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import SearchIcon from '@mui/icons-material/Search'
 import { CirclePlus, EyeIcon, Pencil, Trash2 } from 'lucide-react'
@@ -51,7 +53,7 @@ import Loading from '@/components/Loading'
 function BenefitPage() {
     const { t } = useTranslation('common')
     const router = useRouter()
-    const [selected, setSelected] = useState<string[]>([])
+    const [selected, setSelected] = useState<number[]>([])
     const [page, setPage] = useState(1)
     const [rowsPerPage, setRowsPerPage] = useState('10')
     const [from, setFrom] = useState(1)
@@ -62,118 +64,31 @@ function BenefitPage() {
     const [selectedRow, setSelectedRow] = useState<string | null>(null)
     const [order, setOrder] = useState<'asc' | 'desc'>('asc')
     const [orderBy, setOrderBy] = useState<string>('')
+    const [filter, setFilter] = useState<IGetAllBenefitUser>({
+        pageSize: 10,
+        pageNumber: 1
+    })
     //const [name, setName] = useState('')
     //const [benefitContribution, setBenefitContribution] = useState<number>(0)
     //const [benefitTypeId, setBenefitTypeId] = useState<number>(0)
     //const [nameOfBenefitType, setNameOfBenefitType] = useState('')
     const [isChangeMany, setIsChangeMany] = useState(false)
 
-    const [roles, setRoles] = useState<string[]>([])
-    const { data: roleResponse } = useGetAllRolesQuery()
-    const role = (roleResponse?.Data?.Records as IAspNetRoleGetAll[]) || []
-
-    const [departments, setDepartments] = useState<string[]>([])
+    const [departments, setDepartments] = useState<number[]>([])
     const { data: departmentResponse } = useGetAllDepartmentQuery()
     const department = (departmentResponse?.Data?.Records as IDepartmentGetAll[]) || []
 
     const [gender, setGender] = useState<number | ''>('')
     const [priceRange, setPriceRange] = useState<[number, number]>([0, 26500000])
 
-    const [isOpenRole, setIsOpenRole] = useState(false)
     const [isOpenDepartment, setIsOpenDepartment] = useState(false)
 
     const [isOpenGender, setIsOpenGender] = useState(false)
-    // Hàm để toggle trạng thái hiển thị danh sách
-    const toggleListRole = () => {
-        setIsOpenRole(prevState => !prevState)
-    }
 
-    const toggleListDepartment = () => {
-        setIsOpenDepartment(prevState => !prevState)
-    }
+    const { data: benefitUserResponseData, isLoading, isFetching, refetch } = useGetAllBenefitUserQuery(filter)
 
-    const toggleListGender = () => {
-        setIsOpenGender(prevState => !prevState)
-    }
-
-    const handleSliderChange = (value: number | number[]) => {
-        if (Array.isArray(value) && value.length === 2) {
-            let [minValue, maxValue] = value
-
-            // Đảm bảo rằng minValue không thể vượt qua maxValue hiện tại
-            minValue = Math.min(minValue, priceRange[1])
-
-            // Đảm bảo rằng maxValue không thể vượt qua minValue hiện tại
-            maxValue = Math.max(maxValue, priceRange[0])
-
-            // Cập nhật giá trị priceRange với giá trị min và max hợp lệ
-            setPriceRange([minValue, maxValue])
-        }
-    }
-
-    const [filter, setFilter] = useState<IFilterSysConfiguration>({
-        pageSize: 10,
-        pageNumber: 1
-    })
-
-    const handleRoleChange = (event: React.ChangeEvent<HTMLInputElement>, role: string) => {
-        if (event.target.checked) {
-            // Thêm role vào danh sách roles nếu checkbox được tích
-            setRoles([...roles, role])
-        } else {
-            // Xóa role khỏi danh sách roles nếu checkbox bị bỏ tích
-            setRoles(roles.filter(r => r !== role))
-        }
-    }
-
-    const handleDepartmentChange = (event: React.ChangeEvent<HTMLInputElement>, department: string) => {
-        if (event.target.checked) {
-            // Thêm role vào danh sách roles nếu checkbox được tích
-            setDepartments([...departments, department])
-        } else {
-            // Xóa role khỏi danh sách roles nếu checkbox bị bỏ tích
-            setDepartments(departments.filter(r => r !== department))
-        }
-    }
-
-    const handleGenderChange = (event: React.ChangeEvent<HTMLInputElement>, value: number) => {
-        // Nếu người dùng chọn, set gender, nếu bỏ chọn, set gender về '' (không chọn gì)
-        if (gender === value) {
-            setGender('') // Nếu đã chọn rồi, bỏ chọn
-        } else {
-            setGender(value) // Chọn giới tính mới
-        }
-    }
-
-    const { data: responseData, isFetching, refetch } = useGetAllBenefitsQuery(filter)
-    const [deleteBenefit, { isSuccess: isSuccessDelete }] = useChangeStatusBenefitMutation()
-    //const [createBenefit, { isSuccess, isLoading, isError }] = useCreateBenefitMutation()
-    //const [updateBenefit] = useUpdateBenefitMutation()
-    const [isSuccess] = useState(false)
-    const [changeManyBenefit] = useChangeStatusManyBenefitMutation()
-
-    const benefitData = responseData?.Data.Records as IBenefitGetAll[]
-    const totalRecords = responseData?.Data.TotalRecords as number
-
-    const isSelected = (id: string) => selected.includes(id)
-
-    const handleCheckboxClick = (id: string) => {
-        setSelected(prev => (prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]))
-    }
-
-    useEffect(() => {
-        if (isSuccess) {
-            refetch()
-        }
-    }, [isSuccess])
-
-    const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.checked) {
-            setSelected(benefitData.map(row => row.Id))
-        } else {
-            setSelected([])
-        }
-    }
+    const benefitUserData = benefitUserResponseData?.Data.Records as IGetAllBenefitUser[]
+    const totalRecords = benefitUserResponseData?.Data.TotalRecords as number
 
     const handleChangePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
         setPage(newPage)
@@ -186,47 +101,149 @@ function BenefitPage() {
     }
 
     const handleChangeRowsPerPage = (event: SelectChangeEvent) => {
-        const newRowsPerPage = event.target.value as string
-        setRowsPerPage(newRowsPerPage)
         setPage(1)
-        setFilter(prev => ({
-            ...prev,
-            pageSize: Number(newRowsPerPage),
-            pageNumber: 1
-        }))
-    }
-
-    const handleSearchKeyword = () => {
-        setPage(1)
+        setRowsPerPage(event.target.value as string)
         setFilter(prev => {
             return {
                 ...prev,
-                keyword: keyword,
+                pageSize: Number(event.target.value),
                 pageNumber: 1
             }
         })
     }
 
+    const debouncedSetFilter = useCallback(
+        debounce(value => {
+            setFilter(prev => ({
+                ...prev,
+                keyword: value,
+                pageNumber: 1
+            }))
+        }, 100),
+        []
+    )
+
+    const handleSearchKeyword = value => {
+        setPage(1)
+        setKeyword(value)
+        debouncedSetFilter(value)
+    }
+
+    // const debouncedHandleSearch = useCallback(debounce(handleSearchKeyword, 200), [])
+
     useEffect(() => {
-        if (!isFetching && responseData?.Data) {
-            const from = (page - 1) * Number(rowsPerPage) + 1
+        if (!isFetching && benefitUserResponseData?.Data) {
+            const from = (page - 1) * Number(rowsPerPage) + Math.min(1, benefitUserData.length)
             setFrom(from)
 
-            const to = Math.min(page * Number(rowsPerPage), totalRecords)
+            const to = Math.min(benefitUserData.length + (page - 1) * Number(rowsPerPage), totalRecords)
             setTo(to)
         }
-    }, [isFetching, responseData, page, rowsPerPage])
+    }, [isFetching, benefitUserResponseData, page, rowsPerPage])
+
+    useEffect(() => {
+        setFilter(prev => ({
+            ...prev,
+            //FromBenefitContribution: priceRange[0],
+            //ToBenefitContribution: priceRange[1],
+            Gender: gender !== '' ? Boolean(gender) : undefined,
+            DepartmentIds: departments.length > 0 ? departments : undefined,
+            pageNumber: 1
+        }))
+    }, [gender, departments])
+
+    const updateFilter = useCallback((newFilter: Partial<IGetAllBenefitUser>) => {
+        setFilter(prev => {
+            const updatedFilter = { ...prev, ...newFilter }
+            refetch() // Gọi API ngay sau khi cập nhật filter
+            return updatedFilter
+        })
+    }, [])
 
     useEffect(() => {
         refetch()
-    }, [page, rowsPerPage, keyword])
+    }, [filter])
+
+    const toggleListDepartment = () => {
+        setIsOpenDepartment(prevState => !prevState)
+    }
+
+    const toggleListGender = () => {
+        setIsOpenGender(prevState => !prevState)
+    }
+
+    const handleSliderChange = (value: number | number[]) => {
+        if (Array.isArray(value) && value.length === 2) {
+            const [minValue, maxValue] = value
+
+            // Cập nhật giá trị trong thời gian thực
+            setPriceRange([minValue, maxValue])
+        }
+    }
+
+    // Hàm gọi API chỉ khi buông chuột
+    const handleSliderAfterChange = (value: number | number[]) => {
+        if (Array.isArray(value) && value.length === 2) {
+            const [minValue, maxValue] = value
+
+            // Cập nhật filter khi giá trị cuối cùng được chọn
+            setFilter(prev => ({
+                ...prev,
+                FromBenefitContribution: minValue,
+                ToBenefitContribution: maxValue
+            }))
+
+            // Gọi API (nếu có logic để fetch data)
+            //fetchDataWithPriceRange(minValue, maxValue)
+        }
+    }
+
+    const handleDepartmentChange = (event: React.ChangeEvent<HTMLInputElement>, department: number) => {
+        if (event.target.checked) {
+            setDepartments([...departments, department])
+        } else {
+            setDepartments(departments.filter(r => r !== department))
+        }
+    }
+
+    const handleGenderChange = (event: React.ChangeEvent<HTMLInputElement>, value: number) => {
+        if (gender === value) {
+            setGender('')
+        } else {
+            setGender(value)
+        }
+    }
+
+    //const { data: responseData, isFetching, refetch } = useGetAllBenefitsQuery(filter)
+    const [deleteBenefit, { isSuccess: isSuccessDelete }] = useChangeStatusBenefitMutation()
+    //const [createBenefit, { isSuccess, isLoading, isError }] = useCreateBenefitMutation()
+    //const [updateBenefit] = useUpdateBenefitMutation()
+    const [changeManyBenefit] = useChangeStatusManyBenefitMutation()
+
+    const isSelected = (id: number) => selected.includes(id)
+
+    const handleCheckboxClick = (id: number) => {
+        setSelected(prev => (prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]))
+    }
+
+    const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.checked) {
+            setSelected(benefitUserData.map(row => row.Id))
+        } else {
+            setSelected([])
+        }
+    }
+
+    useEffect(() => {
+        refetch()
+    }, [keyword])
 
     const handleDeleteClick = async (id: string) => {
         setOpenDialog(true)
         setSelectedRow(id)
     }
 
-    const handleChangeManyClick = async () => {
+    /* const handleChangeManyClick = async () => {
         setIsChangeMany(true)
         setOpenDialog(true)
     }
@@ -244,8 +261,8 @@ function BenefitPage() {
         await handleChangeStatusManyBenefit()
         refetch()
     }
-
-    const handleDeleteBenefit = async () => {
+ */
+    /*  const handleDeleteBenefit = async () => {
         if (selectedRow) {
             await deleteBenefit(selectedRow)
             if (isSelected(selectedRow)) {
@@ -254,7 +271,7 @@ function BenefitPage() {
             setOpenDialog(false)
             setSelectedRow(null)
         }
-    }
+    } */
 
     useEffect(() => {
         if (isSuccessDelete) {
@@ -351,130 +368,6 @@ function BenefitPage() {
                         },
                         '& .MuiSelect-icon': {
                             color:
-                                isSubmit && (!Array.isArray(roles) || roles.length === 0)
-                                    ? 'var(--error-color)'
-                                    : 'var(--text-color)'
-                        }
-                    }}
-                >
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center'
-                        }}
-                    >
-                        <Typography variant='body1' sx={{ fontWeight: 'bold', color: 'var(--text-color)' }}>
-                            Selected Roles:
-                            <span style={{ color: 'green' }}>
-                                {roles.join(', ')} {/* Hiển thị danh sách role đã chọn */}
-                            </span>
-                        </Typography>
-                        <Box>
-                            <Button
-                                onClick={toggleListRole}
-                                style={{
-                                    borderRadius: '6px',
-                                    color: 'var(--text-color)',
-                                    padding: '4px 4px', // Thu nhỏ padding
-                                    minWidth: 'auto',
-                                    border: '2px solid var(--text-color)'
-                                }}
-                                className={`
-                                absolute right-3
-                                bg-[var(--background-color)]
-                                border border-[var(--border-color)]
-                                hover:bg-[var(--hover-color)]
-                                hover:border-[var(--hover-color)]`}
-                            >
-                                {isOpenRole ? <ChevronUp /> : <ChevronDown />}
-                            </Button>
-                        </Box>
-                    </Box>
-
-                    {/*
-                    <Box sx={{ marginTop: '16px' }}>
-                        {roles.map((roleItem, index) => (
-                            <Chip key={index} label={roleItem} sx={{ marginRight: '8px', marginBottom: '8px' }} />
-                        ))}
-                    </Box>
-                    */}
-                    <Collapse in={isOpenRole} timeout='auto' unmountOnExit>
-                        <Box sx={{ marginTop: '16px' }}>
-                            {role.map(roleItem => (
-                                <div key={roleItem.Id} style={{}}>
-                                    <FormControlLabel
-                                        key={roleItem.Id}
-                                        control={
-                                            <Checkbox
-                                                checked={roles.includes(roleItem.Name)} // Kiểm tra xem role có trong danh sách roles không
-                                                onChange={event => handleRoleChange(event, roleItem.Name)} // Xử lý thay đổi checkbox
-                                                sx={{
-                                                    color: 'var(--text-color)',
-                                                    '&.Mui-checked': {
-                                                        color: 'var(--selected-color)'
-                                                    }
-                                                }}
-                                            />
-                                        }
-                                        label={roleItem.Name}
-                                        sx={{
-                                            color: 'var(--text-color)',
-                                            '& .MuiTypography-root': {
-                                                fontSize: '16px'
-                                            }
-                                        }}
-                                    />
-                                </div>
-                            ))}
-                        </Box>
-                    </Collapse>
-                </Box>
-                <Divider sx={{ marginTop: '15px', marginBottom: '10px', borderColor: 'var(--border-color)' }} />
-
-                <Box
-                    sx={{
-                        margin: '10px',
-                        '& fieldset': {
-                            borderRadius: '8px',
-                            color: 'var(--text-color)',
-                            borderColor: 'var(--border-color)'
-                        },
-                        '& .MuiInputBase-root': {
-                            paddingRight: '0px'
-                        },
-                        '& .MuiInputBase-input': {
-                            paddingRight: '12px',
-                            color: 'var(--text-color)',
-                            fontSize: '16px',
-                            '&::placeholder': {
-                                color: 'var(--placeholder-color)',
-                                opacity: 1
-                            }
-                        },
-                        '& .MuiOutlinedInput-root:hover fieldset': {
-                            borderColor: 'var(--hover-field-color)'
-                        },
-                        '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
-                            borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
-                        },
-                        '& .MuiOutlinedInput-root.Mui-error fieldset': {
-                            borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
-                        },
-                        '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                            borderColor: 'var(--selected-field-color)'
-                        },
-                        '& .MuiInputLabel-root': {
-                            color: 'var(--text-label-color)'
-                        },
-                        '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'var(--selected-field-color)'
-                        },
-                        '& .MuiInputLabel-root.Mui-error': {
-                            color: 'var(--error-color)'
-                        },
-                        '& .MuiSelect-icon': {
-                            color:
                                 isSubmit && (!Array.isArray(departments) || departments.length === 0)
                                     ? 'var(--error-color)'
                                     : 'var(--text-color)'
@@ -491,7 +384,12 @@ function BenefitPage() {
                         <Typography variant='body1' sx={{ color: 'var(--text-color)', fontWeight: 'bold' }}>
                             Selected Departments:
                             <span style={{ color: 'green' }}>
-                                {departments.join(', ')} {/* Hiển thị danh sách role đã chọn */}
+                                {departments
+                                    .map(id => {
+                                        const dep = department.find(d => d.Id === id) // Tìm phòng ban trong danh sách
+                                        return dep ? dep.Name : 'Unknown' // Trả về tên phòng ban hoặc "Unknown"
+                                    })
+                                    .join(', ')}
                             </span>
                         </Typography>
                         <Box>
@@ -530,8 +428,8 @@ function BenefitPage() {
                                         key={department.Id}
                                         control={
                                             <Checkbox
-                                                checked={departments.includes(department.Name)} // Kiểm tra xem role có trong danh sách roles không
-                                                onChange={event => handleDepartmentChange(event, department.Name)} // Xử lý thay đổi checkbox
+                                                checked={departments.includes(department.Id)} // Kiểm tra xem role có trong danh sách roles không
+                                                onChange={event => handleDepartmentChange(event, department.Id)} // Xử lý thay đổi checkbox
                                                 sx={{
                                                     color: 'var(--text-color)',
                                                     '&.Mui-checked': {
@@ -689,6 +587,7 @@ function BenefitPage() {
                                 step={1000}
                                 value={priceRange}
                                 onChange={handleSliderChange}
+                                onAfterChange={handleSliderAfterChange}
                                 style={{ marginBottom: '20px' }}
                             />
                             <p>
@@ -717,7 +616,7 @@ function BenefitPage() {
                                 placeholder={t('COMMON.SYS_CONFIGURATION.PLACEHOLDER_SEARCH')}
                                 variant='outlined'
                                 value={keyword}
-                                onChange={e => setKeyword(e.target.value)}
+                                onChange={e => handleSearchKeyword(e.target.value)}
                                 sx={{
                                     color: 'var(--text-color)',
                                     padding: '0px',
@@ -737,12 +636,6 @@ function BenefitPage() {
                                     },
                                     '& .MuiOutlinedInput-root.Mui-focused fieldset': {
                                         borderColor: 'var(--selected-color)'
-                                    }
-                                }}
-                                onKeyDown={e => {
-                                    if (e.key === 'Enter') {
-                                        e.preventDefault()
-                                        handleSearchKeyword()
                                     }
                                 }}
                                 InputProps={{
@@ -793,7 +686,7 @@ function BenefitPage() {
                                     whiteSpace: 'nowrap',
                                     textTransform: 'none'
                                 }}
-                                onClick={() => handleChangeManyClick()}
+                                //onClick={() => handleChangeManyClick()}
                                 //onClick={() => handleDeleteBenefit()}
                             >
                                 {t('COMMON.BUTTON.DELETE')}
@@ -832,10 +725,12 @@ function BenefitPage() {
                                         sx={{ borderColor: 'var(--border-color)', paddingLeft: '8.5px' }}
                                     >
                                         <Checkbox
-                                            indeterminate={selected.length > 0 && selected.length < benefitData.length}
+                                            indeterminate={
+                                                selected.length > 0 && selected.length < benefitUserData.length
+                                            }
                                             checked={
-                                                benefitData && selected.length > 0
-                                                    ? selected.length === benefitData.length
+                                                benefitUserData && selected.length > 0
+                                                    ? selected.length === benefitUserData.length
                                                     : false
                                             }
                                             onChange={handleSelectAllClick}
@@ -871,32 +766,7 @@ function BenefitPage() {
                                             </Typography>
                                         </TableSortLabel>
                                     </TableCell>
-                                    <TableCell>
-                                        <TableSortLabel
-                                            active={orderBy === 'BenefitTypeName'}
-                                            direction={orderBy === 'BenefitTypeName' ? order : 'asc'}
-                                            onClick={() => handleSort('BenefitTypeName')}
-                                            sx={{
-                                                '& .MuiTableSortLabel-icon': {
-                                                    color: 'var(--text-color) !important'
-                                                },
-                                                width: '200px'
-                                            }}
-                                        >
-                                            <Typography
-                                                sx={{
-                                                    fontWeight: 'bold',
-                                                    color: 'var(--text-color)',
-                                                    fontSize: '16px',
-                                                    overflow: 'hidden',
-                                                    textOverflow: 'ellipsis',
-                                                    whiteSpace: 'nowrap'
-                                                }}
-                                            >
-                                                {t('COMMON.BENEFIT.TYPE_NAME')} {/* Cập nhật khóa dịch này */}
-                                            </Typography>
-                                        </TableSortLabel>
-                                    </TableCell>
+
                                     <TableCell sx={{ borderColor: 'var(--border-color)' }}>
                                         <TableSortLabel
                                             active={orderBy === 'Name'}
@@ -920,7 +790,7 @@ function BenefitPage() {
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                {t('COMMON.BENEFIT.NAME')}
+                                                {t('Full Name')}
                                             </Typography>
                                         </TableSortLabel>
                                     </TableCell>
@@ -945,7 +815,7 @@ function BenefitPage() {
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                {t('COMMON.BENEFIT.CONTRIBUTION')}
+                                                {t('Department')}
                                             </Typography>
                                         </TableSortLabel>
                                     </TableCell>
@@ -971,7 +841,7 @@ function BenefitPage() {
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                {t('COMMON.SYS_CONFIGURATION.CREATED_DATE')}
+                                                {t('Gender')}
                                             </Typography>
                                         </TableSortLabel>
                                     </TableCell>
@@ -997,7 +867,7 @@ function BenefitPage() {
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                {t('Người tạo')}
+                                                {t('Contribution')}
                                             </Typography>
                                         </TableSortLabel>
                                     </TableCell>
@@ -1020,7 +890,7 @@ function BenefitPage() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {benefitData?.map(row => (
+                                {benefitUserData?.map(row => (
                                     <TableRow key={row.Id} selected={isSelected(row.Id)}>
                                         <TableCell padding='checkbox'>
                                             <Checkbox
@@ -1029,23 +899,11 @@ function BenefitPage() {
                                             />
                                         </TableCell>
                                         <TableCell sx={{ fontWeight: 'bold' }}>{row.Id}</TableCell>
-                                        <TableCell sx={{ width: '200px' }}>{row.NameOfBenefitType}</TableCell>
-                                        <TableCell sx={{ width: '200px' }}>{row.Name}</TableCell>
-                                        <TableCell>{row.BenefitContribution}</TableCell>
-                                        <TableCell sx={{ borderColor: 'var(--border-color)' }}>
-                                            <Typography
-                                                sx={{
-                                                    color: 'var(--text-color)',
-                                                    fontSize: '16px',
-                                                    overflow: 'hidden',
-                                                    textOverflow: 'ellipsis',
-                                                    whiteSpace: 'nowrap'
-                                                }}
-                                            >
-                                                {formatDate(row.CreatedDate)}
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell sx={{ width: '100px' }}>{row.CreatedBy}</TableCell>
+                                        <TableCell sx={{ width: '200px' }}>{row.FullName}</TableCell>
+                                        <TableCell sx={{ width: '200px' }}>{row.DepartmentName}</TableCell>
+                                        <TableCell>{row.Gender}</TableCell>
+
+                                        <TableCell sx={{ width: '100px' }}>{row.BenefitContribution}</TableCell>
                                         <TableCell>
                                             <Box
                                                 display='flex'
@@ -1108,7 +966,7 @@ function BenefitPage() {
                                                                 backgroundColor: 'var(--hover-color)'
                                                             }
                                                         }}
-                                                        onClick={() => handleDeleteClick(row.Id)}
+                                                        //onClick={() => handleDeleteClick(row.Id)}
                                                     >
                                                         <Trash2 />
                                                     </Box>
@@ -1210,7 +1068,7 @@ function BenefitPage() {
                     </Box>
                 </Paper>
 
-                <AlertDialog
+                {/* <AlertDialog
                     title={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.TITLE')}
                     content={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.CONTENT')}
                     type='warning'
@@ -1219,7 +1077,7 @@ function BenefitPage() {
                     buttonCancel={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.CANCEL')}
                     buttonConfirm={t('COMMON.ALERT_DIALOG.CONFIRM_DELETE.DELETE')}
                     onConfirm={() => (isChangeMany ? handleConfirmChangeMany() : handleDeleteBenefit())}
-                />
+                /> */}
             </Box>
         </Box>
     )

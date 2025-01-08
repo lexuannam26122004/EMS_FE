@@ -318,7 +318,7 @@ function DepartmentTable() {
                                 whiteSpace: 'nowrap',
                                 textTransform: 'none'
                             }}
-                            onClick={() => router.push('/admin/benefit/create-benefit')}
+                            onClick={() => router.push('/admin/department/create')}
                             //onClick={() => handleOpenCreateDialog()}
                         >
                             {t('COMMON.BUTTON.CREATE')}

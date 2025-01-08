@@ -2,6 +2,7 @@
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
 import { fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { createApi } from '@reduxjs/toolkit/query/react'
+import { createBaseQuery } from './api'
 
 interface RewardResponse {
     Success: boolean
@@ -11,7 +12,7 @@ const apiPath = 'https://localhost:44381/api/admin/Reward'
 
 export const rewardApi = createApi({
     reducerPath: 'rewardApi',
-    baseQuery: fetchBaseQuery({ baseUrl: apiPath }),
+    baseQuery: createBaseQuery(apiPath),
     tagTypes: ['Reward'],
     endpoints: builder => ({
         getAllRewards: builder.query<RewardResponse, IFilterSysConfiguration>({

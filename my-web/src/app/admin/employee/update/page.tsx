@@ -13,6 +13,7 @@ import {
     ListItemText,
     Avatar
 } from '@mui/material'
+import Loading from '@/components/Loading'
 import axios from 'axios'
 import { useSearchParams } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
@@ -250,7 +251,7 @@ const UpdateEmployeePage = () => {
         setIsSubmit(false)
     }
 
-    if (isUsersLoading || isRoleLoading || isDepartmentLoading) return <div>Loading...</div>
+    if (isUsersLoading || isRoleLoading || isDepartmentLoading) return <Loading />
 
     const triggerFileInput = () => {
         document.getElementById('fileInput')?.click()

@@ -15,7 +15,7 @@ import {
 import { useTranslation } from 'react-i18next'
 import { SaveIcon, XIcon, RefreshCcwIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-
+import Loading from '@/components/Loading'
 import { useEffect, useState } from 'react'
 import LoadingButton from '@mui/lab/LoadingButton'
 import { useToast } from '@/hooks/useToast'
@@ -123,7 +123,7 @@ const CreateTimeOff = () => {
         setIsSubmit(false)
     }
 
-    if (isUsersLoading) return <div>Loading...</div>
+    if (isUsersLoading) return <Loading />
 
     return (
         <Box sx={{ width: '720px', maxWidth: '100%', margin: '0 auto' }}>

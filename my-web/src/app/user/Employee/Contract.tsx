@@ -3,10 +3,9 @@ import { useTranslation } from 'react-i18next'
 import { useRef, useEffect, useState } from 'react'
 import ErrorPage from '@/app/user/requests/ErrorPage'
 import { Download, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react'
-import { IEmploymentContractSearch } from '@/models/EmploymentContract'
-import { useSearchEmploymentContractsQuery } from '@/services/EmploymentContractService'
-import { IAspNetUserGetAll } from '@/models/AspNetUser'
-import { useGetAllUsersQuery } from '@/services/AspNetUserService'
+
+import { useSearchUserQuery } from '@/services/UserEmploymentContractService'
+
 import { formatDate } from '@/utils/formatDate'
 
 import Loading from '@/components/Loading'
@@ -19,13 +18,9 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
     const { t } = useTranslation('common')
     const [openErrorReport, setopenErrorReport] = useState(false)
 
-    const { data: userResponse, isLoading: isUsersLoading } = useGetAllUsersQuery()
-    const { data: contractResponse, isLoading: isContractsLoading } = useSearchEmploymentContractsQuery()
-    const employee = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
-    const contract = ((contractResponse?.Data?.Records as IEmploymentContractSearch[]) || []).find(
-        ct => ct.UserId === aspnetUserId
-    )
-    const manager = employee?.find(ep => ep.Id === contract?.ManagerId)
+    const { data: contractResponse, isFetching, isLoading } = useSearchUserQuery()
+
+    const contract = contractResponse?.Data
 
     const [openDetail, setOpenDetail] = useState(false)
 
@@ -38,7 +33,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
         prevOpen.current = open
     }, [open])
 
-    if (isContractsLoading || isUsersLoading) {
+    if (isLoading || !contract || isFetching) {
         return <Loading />
     }
 
@@ -144,7 +139,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
             >
                 <Avatar
                     src={
-                        manager?.AvatarPath ||
+                        contract?.ManagerAvatarPath ||
                         'https://localhost:44381/avatars/aa1678f0-75b0-48d2-ae98-50871178e9bd.jfif'
                     }
                     sx={{
@@ -163,7 +158,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                                 flexGrow: 1
                             }}
                         >
-                            {'Người phụ trách : ' + `${manager?.EmployeeId} ${manager?.FullName}`}
+                            {'Người phụ trách : ' + `${contract?.ManagerEmployeeId} ${contract?.ManagerFullName}`}
                         </Typography>
                         <Box
                             sx={{
@@ -230,7 +225,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                                     fontSize: '17px'
                                 }}
                             >
-                                {formatDate(contract?.StartDate.toString())}
+                                {formatDate(contract?.StartDate?.toString())}
                             </Typography>
                         </Box>
                         <Box>
@@ -249,7 +244,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                                     fontSize: '17px'
                                 }}
                             >
-                                {formatDate(contract?.EndDate.toString())}
+                                {formatDate(contract?.EndDate?.toString())}
                             </Typography>
                         </Box>
                         <Box>
@@ -427,7 +422,7 @@ const Contract: React.FC<ContractProps> = ({ aspnetUserId }) => {
                 open={openErrorReport}
                 reportedBy={aspnetUserId}
                 type={'COMMON.SIDEBAR.CONTRACT'}
-                typeId={''}
+                typeId={contract?.Id}
             />
         </Box>
     )

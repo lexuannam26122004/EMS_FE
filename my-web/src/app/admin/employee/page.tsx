@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import Loading from '@/components/Loading'
 import { useRouter } from 'next/navigation'
 import {
     Box,
@@ -62,7 +63,7 @@ function EmployeeTable() {
         setOpenModal(true)
     }
 
-    if (isUsersLoading) return <div>Loading...</div>
+    if (isUsersLoading) return <Loading />
 
     const filteredUsers = users.filter(
         user =>

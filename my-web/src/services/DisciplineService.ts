@@ -2,6 +2,7 @@
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
 import { fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { createApi } from '@reduxjs/toolkit/query/react'
+import { createBaseQuery } from './api'
 
 interface DisciplineResponse {
     Success: boolean
@@ -11,7 +12,7 @@ const apiPath = 'https://localhost:44381/api/admin/Discipline'
 
 export const disciplineApi = createApi({
     reducerPath: 'disciplineApi',
-    baseQuery: fetchBaseQuery({ baseUrl: apiPath }),
+    baseQuery: createBaseQuery(apiPath),
     tagTypes: ['Discipline'],
     endpoints: builder => ({
         getAllDisciplines: builder.query<DisciplineResponse, IFilterSysConfiguration>({

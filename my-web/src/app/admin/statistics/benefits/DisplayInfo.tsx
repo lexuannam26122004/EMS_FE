@@ -3,6 +3,14 @@
 import { Box, Paper, Typography } from '@mui/material'
 import { TrendingDown, TrendingUp } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
+import { useGetTotalBenefitAndEmployeeByMonthAndYearQuery } from '@/services/BenefitService'
+
+interface Get {
+    TotalBenefit: number
+    BenefitPercent: number
+    TotalEmployee: number
+    EmployeeBenefitPercent: number
+}
 
 function Page() {
     const { t } = useTranslation('common')
@@ -16,6 +24,14 @@ function Page() {
     const employeeBenefitPercent = 200
     const totalInsurance = 67
     const insurancePercent = 100
+    const month = new Date().getMonth() + 1
+    const year = new Date().getFullYear()
+
+    const { data: responsedata } = useGetTotalBenefitAndEmployeeByMonthAndYearQuery({
+        year: year,
+        month: month
+    })
+    const data = responsedata?.Data as Get
 
     return (
         <Box
@@ -87,7 +103,7 @@ function Page() {
                         fontWeight: 'bold'
                     }}
                 >
-                    {totalBenefit}
+                    {data?.TotalBenefit}
                 </Typography>
                 <Box
                     sx={{
@@ -99,13 +115,13 @@ function Page() {
                         alignItems: 'center'
                     }}
                 >
-                    {benefitPercent !== null &&
-                        (!(!benefitPercent || benefitPercent >= 0) ? (
+                    {data?.BenefitPercent !== null &&
+                        (!(!data?.BenefitPercent || data?.BenefitPercent >= 0) ? (
                             <TrendingDown style={{ marginRight: '6px' }} />
                         ) : (
                             <TrendingUp style={{ marginRight: '6px' }} />
                         ))}
-                    {benefitPercent !== null ? benefitPercent + '%' : t('COMMON.DASHBOARD.NO_CHANGE')}
+                    {data?.BenefitPercent !== null ? data?.BenefitPercent + '%' : t('COMMON.DASHBOARD.NO_CHANGE')}
                     <Typography
                         sx={{
                             ml: '6px',
@@ -178,7 +194,7 @@ function Page() {
                         fontWeight: 'bold'
                     }}
                 >
-                    {totalEmployeeBenefit}
+                    {data?.TotalEmployee}
                 </Typography>
                 <Box
                     sx={{
@@ -190,13 +206,15 @@ function Page() {
                         alignItems: 'center'
                     }}
                 >
-                    {employeeBenefitPercent !== null &&
-                        (!(!employeeBenefitPercent || employeeBenefitPercent >= 0) ? (
+                    {data?.EmployeeBenefitPercent !== null &&
+                        (!(!data?.EmployeeBenefitPercent || data?.EmployeeBenefitPercent >= 0) ? (
                             <TrendingDown style={{ marginRight: '6px' }} />
                         ) : (
                             <TrendingUp style={{ marginRight: '6px' }} />
                         ))}
-                    {employeeBenefitPercent !== null ? employeeBenefitPercent + '%' : t('COMMON.DASHBOARD.NO_CHANGE')}
+                    {data?.EmployeeBenefitPercent !== null
+                        ? data?.EmployeeBenefitPercent + '%'
+                        : t('COMMON.DASHBOARD.NO_CHANGE')}
                     <Typography
                         sx={{
                             ml: '6px',
