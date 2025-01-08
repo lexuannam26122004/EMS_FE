@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import ReactECharts from 'echarts-for-react'
-import { Box, CircularProgress, Paper, Typography } from '@mui/material'
+import { Box, Paper, Typography } from '@mui/material'
 import { useGetInfoForDepartmentChartQuery } from '@/services/SalaryService'
 import { useTranslation } from 'react-i18next'
 import Loading from '@/components/Loading'

@@ -1,11 +1,31 @@
 'use client'
 import { Avatar, Box, Paper, Typography } from '@mui/material'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import Detail from './reward'
 import Discipline from './disciplines'
+import { useGetMeInfoQuery } from '@/services/UserSalaryService'
+
+interface info {
+    AvatarPath: string
+    FullName: string
+    RoleName: string[]
+    DepartmentName: string
+    PhoneNumber: string
+    Email: string
+    Address: string
+    StartDateWork: string
+    PayrollCycle: number
+    Birthday: string
+}
 export default function Page() {
     const { t } = useTranslation()
+    const { data: infoData, refetch } = useGetMeInfoQuery()
+    const myData = infoData?.Data as info
+
+    useEffect(() => {
+        refetch()
+    }, [infoData])
     return (
         <Box>
             <Paper
@@ -59,7 +79,10 @@ export default function Page() {
                     }}
                 >
                     <Avatar
-                        src='https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-3.webp'
+                        src={
+                            myData?.AvatarPath ||
+                            'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-3.webp'
+                        }
                         sx={{
                             width: '120px',
                             height: '120px'
@@ -74,7 +97,7 @@ export default function Page() {
                                 color: 'var(--text-color)'
                             }}
                         >
-                            fullname
+                            {myData?.FullName}
                         </Typography>
 
                         <Box
@@ -101,7 +124,7 @@ export default function Page() {
                                         fontSize: '17px'
                                     }}
                                 >
-                                    role
+                                    {myData?.RoleName.join(', ')}
                                 </Typography>
                             </Box>
                             <Box>
@@ -120,7 +143,7 @@ export default function Page() {
                                         fontSize: '17px'
                                     }}
                                 >
-                                    0999.999.999
+                                    {myData?.PhoneNumber}
                                 </Typography>
                             </Box>
                             <Box>
@@ -139,7 +162,7 @@ export default function Page() {
                                         fontSize: '17px'
                                     }}
                                 >
-                                    hehe@gmail.com
+                                    {myData?.Email}
                                 </Typography>
                             </Box>
                             <Box>
@@ -158,7 +181,7 @@ export default function Page() {
                                         fontSize: '17px'
                                     }}
                                 >
-                                    22-12-2000
+                                    {myData?.Birthday}
                                 </Typography>
                             </Box>
                             <Box>
@@ -177,7 +200,7 @@ export default function Page() {
                                         fontSize: '17px'
                                     }}
                                 >
-                                    department
+                                    {myData?.DepartmentName}
                                 </Typography>
                             </Box>
                             <Box>
@@ -196,7 +219,7 @@ export default function Page() {
                                         fontSize: '17px'
                                     }}
                                 >
-                                    22-2-2022
+                                    {myData?.StartDateWork}
                                 </Typography>
                             </Box>
                         </Box>

@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactECharts from 'echarts-for-react'
-import { CircularProgress, Paper, Typography } from '@mui/material'
+import { Paper, Typography } from '@mui/material'
 import { useTheme } from 'next-themes'
 import { useGetSalaryByLevelQuery } from '@/services/SalaryService'
 import { ISalaryByLevel } from '@/models/salary'

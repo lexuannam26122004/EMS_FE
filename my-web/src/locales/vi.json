@@ -422,7 +422,10 @@
             "ROLES": "Vai trò",
             "EMPLOYEE_ID": "Mã nhân viên",
             "REJECT": "Từ chối",
-            "ACCEPT": "Đồng ý"
+            "ACCEPT": "Đồng ý",
+            "DESCRIPTION": "Mô Tả",
+            "TYPE": "Loại",
+            "STATUS": "Trạng thái"
         },
 
         "EMPLOYEE": {

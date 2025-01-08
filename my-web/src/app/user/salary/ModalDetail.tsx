@@ -12,8 +12,7 @@ import {
     TableRow,
     TableCell,
     Paper,
-    Modal,
-    CircularProgress
+    Modal
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { ISalaryGetById } from '@/models/salary'
@@ -97,9 +96,7 @@ const EmployeeSalary: React.FC<ISalaryGetById & { handleToggle: () => void; open
     DepartmentName,
     RoleName,
     Date,
-    TotalSalary,
     SalaryPayment,
-    IsPaid,
     PayrollPeriod,
     ProRatedSalary,
     PITax,
@@ -232,7 +229,7 @@ const EmployeeSalary: React.FC<ISalaryGetById & { handleToggle: () => void; open
                                     Tổng số tiền thực nhận:
                                 </Typography>
                                 <Typography color='var(--text-color)'>
-                                    {(TotalSalary - TotalInsurance - PITax).toLocaleString('vi-VN', {
+                                    {(SalaryPayment - TotalInsurance - PITax).toLocaleString('vi-VN', {
                                         style: 'currency',
                                         currency: 'VND'
                                     })}

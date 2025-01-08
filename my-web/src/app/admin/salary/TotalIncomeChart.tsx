@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactECharts from 'echarts-for-react'
-import { CircularProgress, Paper, Typography } from '@mui/material'
+import { Paper, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'next-themes'
 import { useGetTotalIncomeOverTimeQuery } from '@/services/SalaryService'

@@ -6,7 +6,6 @@ import { useTheme } from 'next-themes'
 import { useTranslation } from 'react-i18next'
 import { useGetPayrollReportQuery } from '@/services/SalaryService'
 import Loading from '@/components/Loading'
-import { number } from 'echarts'
 
 export default function PayrollReport() {
     const { theme } = useTheme()

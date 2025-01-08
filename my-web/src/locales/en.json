@@ -473,7 +473,10 @@
             "EMPLOYEE_ID": "Employee ID",
             "REJECT": "Reject",
             "ACCEPT": "Accept",
-            "REPORT_ERROR": "Report errors"
+            "REPORT_ERROR": "Report errors",
+            "DESCRIPTION": "Description",
+            "TYPE": "Type",
+            "STATUS": "Status"
         },
         "ERROR_REPORT": {
             "TITLE": "Error report list",
