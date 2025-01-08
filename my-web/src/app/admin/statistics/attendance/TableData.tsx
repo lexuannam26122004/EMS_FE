@@ -51,21 +51,6 @@ const avatars = [
     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-19.webp'
 ]
 
-function convertTimeFormat(time: string): string {
-    // Tách chuỗi thời gian thành giờ, phút và giây
-    if (!time) return 'N/A'
-
-    const [hours = 0, minutes = 0, seconds = 0] = time?.split(':').map(part => Math.floor(Number(part))) || [0, 0, 0]
-
-    // Format từng phần thành chuỗi 2 chữ số
-    const formattedHours = String(hours).padStart(2, '0')
-    const formattedMinutes = String(minutes).padStart(2, '0')
-    const formattedSeconds = String(seconds).padStart(2, '0')
-
-    // Kết quả format thành hh:mm:ss
-    return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`
-}
-
 function TableErrorReport({ attendanceData }: IProps) {
     const { t } = useTranslation('common')
     // const router = useRouter()

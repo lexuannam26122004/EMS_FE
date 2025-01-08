@@ -9,13 +9,6 @@ import { useGetEmployeeStatsByMonthAndYearQuery } from '@/services/EmploymentCon
 import { useGetIncomeInMonthQuery } from '@/services/SalaryService'
 import { useGetTimeOffStatisticsQuery } from '@/services/TimeOffService'
 
-interface IEmployeeStats {
-    StartCount: number
-    StartPercentChange: number
-    EndCount: number
-    EndPercentChange: number
-}
-
 function DisplayInfo() {
     const { t } = useTranslation('common')
 

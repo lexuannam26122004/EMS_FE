@@ -8,8 +8,8 @@ import { useGetYearIncomeQuery } from '@/services/SalaryService'
 export default function ChartSalary() {
     const { t } = useTranslation('common')
     const { theme } = useTheme()
-    const currentYear = new Date().getFullYear()
-    const [selectedYear, setSelectedYear] = useState(currentYear)
+    const currentYear = 2024
+    const [selectedYear, setSelectedYear] = useState(2024)
 
     const handleYearChange = (event: SelectChangeEvent<number>) => {
         setSelectedYear(event.target.value as number)
@@ -17,7 +17,7 @@ export default function ChartSalary() {
 
     const { data: responseData } = useGetYearIncomeQuery({ year: selectedYear })
 
-    const response = responseData.Data
+    const response = responseData?.Data
 
     const percent = 13.5
 
@@ -44,7 +44,7 @@ export default function ChartSalary() {
             itemGap: 30,
             formatter: (name: string) => {
                 const year = name.split(' ')[1] // Lấy năm từ tên
-                const total = year === selectedYear.toString() ? '1.23k' : '6.79k' // Thay đổi giá trị tổng theo năm
+                const total = year === selectedYear.toString() ? '14.4b' : '12.2b' // Thay đổi giá trị tổng theo năm
                 return `${name} (${t('COMMON.DASHBOARD.SUM')}: ${total})` // Thay đổi cách hiển thị
             }
         },

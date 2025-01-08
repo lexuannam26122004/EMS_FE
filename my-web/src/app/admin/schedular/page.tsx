@@ -259,7 +259,7 @@ const MyCalendar = () => {
         // const formattedEndDate = format(endTime, 'yyyy-MM-dd')
 
         if (newEvent.allDay) {
-            let endDate = new Date(endTime)
+            const endDate = new Date(endTime)
             endDate.setDate(endDate.getDate() + 1) // Thêm 1 ngày
             endDate.setHours(0, 0, 0, 0) // Đặt giờ là 00:00:00
             endTime = convertToVietnamTime(endDate)
@@ -351,7 +351,7 @@ const MyCalendar = () => {
         // const formattedEndDate = format(endTime, 'yyyy-MM-dd')
 
         if (info.event.allDay) {
-            let endDate = new Date(endTime)
+            const endDate = new Date(endTime)
             endDate.setHours(0, 0, 0, 0)
             endTime = convertToVietnamTime(endDate)
         }

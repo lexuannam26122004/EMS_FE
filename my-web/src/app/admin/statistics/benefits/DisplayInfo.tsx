@@ -17,11 +17,11 @@ function Page() {
     //const totalReward = 29
     //const rewardPercent = 25.5
     //const totalDis = 12
-    //const disPercent = -20.5
-    const totalBenefit = 100
-    const benefitPercent = -1.5
-    const totalEmployeeBenefit = 20
-    const employeeBenefitPercent = 200
+    // //const disPercent = -20.5
+    // const totalBenefit = 100
+    // const benefitPercent = -1.5
+    // const totalEmployeeBenefit = 20
+    // const employeeBenefitPercent = 200
     const totalInsurance = 67
     const insurancePercent = 100
     const month = new Date().getMonth() + 1

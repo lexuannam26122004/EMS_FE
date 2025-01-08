@@ -13,8 +13,8 @@ import { IAspNetUserGetAll } from '@/models/AspNetUser'
 function CreateConfigurationPage() {
     const { t } = useTranslation('common')
     const router = useRouter()
-    const [key, setKey] = useState('')
-    const [type, setType] = useState('')
+    const [key] = useState('')
+    const [type] = useState('')
     const [value, setValue] = useState('')
     const [description, setDescription] = useState('')
     const toast = useToast()
@@ -23,7 +23,7 @@ function CreateConfigurationPage() {
 
     const [createSysConfiguration, { isSuccess, isLoading, isError }] = useCreateSysConfigurationMutation()
 
-    const { data: userResponse, isLoading: isUsersLoading } = useGetAllUsersQuery()
+    const { data: userResponse } = useGetAllUsersQuery()
     const employee = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
 
     const handleSave = async () => {

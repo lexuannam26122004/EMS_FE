@@ -7,6 +7,7 @@ import { Building, ChevronLeft, ChevronRight, IdCard, UserRoundCog } from 'lucid
 import { useTranslation } from 'react-i18next'
 import { useGetPendingFutureTimeOffsQuery, useUpdateIsAcceptedMutation } from '@/services/TimeOffService'
 import Loading from '@/components/Loading'
+import { formatDate } from '@/utils/formatDate'
 
 interface ITimeOffS {
     Id: number
@@ -326,7 +327,7 @@ export default function LeaveRequestCarousel() {
                                     }}
                                 >
                                     <Chip
-                                        label={request.StartDate}
+                                        label={formatDate(request.StartDate)}
                                         sx={{
                                             fontSize: '13px',
                                             fontWeight: 'bold',
@@ -335,7 +336,7 @@ export default function LeaveRequestCarousel() {
                                         }}
                                     />
                                     <Chip
-                                        label={request.EndDate}
+                                        label={formatDate(request.EndDate)}
                                         sx={{
                                             fontSize: '13px',
                                             fontWeight: 'bold',

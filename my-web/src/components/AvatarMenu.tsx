@@ -26,6 +26,7 @@ import { authSelector } from '@/redux/slices/authSlice'
 import { useSelector } from 'react-redux'
 import { useCheckoutMutation } from '@/services/UserAttendanceService'
 import { useToast } from '@/hooks/useToast'
+import Loading from '@/components/Loading'
 
 const rotate = keyframes`
     0% {
@@ -154,6 +155,10 @@ const AvatarMenu = () => {
     }
 
     const menuLeft = useSelector(authSelector)
+
+    if (menuLeft === null || menuLeft === undefined) {
+        return <Loading />
+    }
 
     return (
         <Box>
@@ -367,7 +372,7 @@ const AvatarMenu = () => {
                                         </MenuItem>
                                     )}
 
-                                    {menuLeft['Notifications'].IsAllowCreate && (
+                                    {menuLeft['Notifications']?.IsAllowCreate && (
                                         <MenuItem
                                             onClick={handleCreateNotification}
                                             sx={{

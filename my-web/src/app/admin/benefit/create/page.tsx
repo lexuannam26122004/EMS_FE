@@ -30,7 +30,6 @@ function CreateBenefitPage() {
     const { t } = useTranslation('common')
     const router = useRouter()
     const [name, setName] = useState('')
-    const [contribution, setContribution] = useState<number | ''>('')
     const [benefitTypeId, setBenefitTypeId] = useState<number | null>()
     const [benefitTypeName, setBenefitTypeName] = useState('')
     const [benefitTypeDescription, setBenefitTypeDescription] = useState<string | null>(null)

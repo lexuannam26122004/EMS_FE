@@ -3,7 +3,7 @@ import { Autocomplete, Box, Button, Paper, TextField, Typography } from '@mui/ma
 import { useTranslation } from 'react-i18next'
 import { SaveIcon, XIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useUpdateSysConfigurationMutation, useGetByIdSysConfigurationQuery } from '@/services/SysConfigurationService'
+// import { useUpdateSysConfigurationMutation, useGetByIdSysConfigurationQuery } from '@/services/SysConfigurationService'
 import { useEffect, useState } from 'react'
 import LoadingButton from '@mui/lab/LoadingButton'
 import { useToast } from '@/hooks/useToast'
@@ -18,10 +18,10 @@ function UpdateConfigurationPage() {
     const [Id, setBenefitTypeName] = useState('')
     const [name, setName] = useState('')
 
-    const [key, setKey] = useState('')
-    const [type, setType] = useState('')
-    const [value, setValue] = useState('')
-    const [description, setDescription] = useState('')
+    // const [key, setKey] = useState('')
+    // const [type, setType] = useState('')
+    // const [value, setValue] = useState('')
+    // const [description, setDescription] = useState('')
     const toast = useToast()
     const [isSubmit, setIsSubmit] = useState(false)
 
@@ -88,6 +88,8 @@ function UpdateConfigurationPage() {
 
     const specialOption = { Id: -1, Name: '---Lựa chọn---', Description: null }
     const optionsWithSpecial = [specialOption, ...benefitTypesData]
+
+    useEffect(() => {}, [Id])
 
     return (
         <Box sx={{ width: '720px', maxWidth: '100%', margin: '0 auto' }}>

@@ -36,12 +36,7 @@ const NotificationsPage = ({ menu }: INotificationsPageProps) => {
 
     const unreadCount = useSelector(countNewNotificationSelector)
 
-    const {
-        data: dataResponse,
-        refetch,
-        isLoading: isLoadingNotify,
-        isFetching
-    } = useSearchNotificationsForUserQuery(filter)
+    const { data: dataResponse, refetch, isLoading: isLoadingNotify } = useSearchNotificationsForUserQuery(filter)
 
     useEffect(() => {
         if (!isLoadingNotify && dataResponse) {
