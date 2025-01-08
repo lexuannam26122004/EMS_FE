@@ -3,6 +3,7 @@ import ReactECharts from 'echarts-for-react'
 import { useTheme } from 'next-themes'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useGetYearIncomeQuery } from '@/services/SalaryService'
 
 export default function ChartSalary() {
     const { t } = useTranslation('common')
@@ -14,7 +15,11 @@ export default function ChartSalary() {
         setSelectedYear(event.target.value as number)
     }
 
-    const percent = 43
+    const { data: responseData } = useGetYearIncomeQuery({ year: selectedYear })
+
+    const response = responseData.Data
+
+    const percent = 13.5
 
     const option = {
         animation: true, // Bật hiệu ứng chuyển tiếp
@@ -84,10 +89,7 @@ export default function ChartSalary() {
             {
                 name: t('COMMON.DASHBOARD.YEAR') + ' ' + selectedYear.toString(),
                 type: 'line',
-                data: [
-                    700000000, 905000000, 1310000000, 720000000, 535000000, 950000000, 1365000000, 970000000, 480000000,
-                    1290000000, 1100000000, 1105000000
-                ],
+                data: response?.yearList,
                 smooth: true,
                 symbol: 'circle', // Hiển thị biểu tượng tròn
                 symbolSize: 8, // Kích thước biểu tượng
@@ -120,10 +122,7 @@ export default function ChartSalary() {
             {
                 name: t('COMMON.DASHBOARD.YEAR') + ' ' + (selectedYear - 1).toString(),
                 type: 'line',
-                data: [
-                    1020000000, 950000000, 1200000000, 820000000, 1235000000, 1200000000, 1000000000, 1070000000,
-                    1280000000, 859000000, 930000000, 1305000000
-                ],
+                data: response?.bYearList,
                 smooth: true,
                 symbol: 'circle', // Hiển thị biểu tượng tròn
                 symbolSize: 8, // Kích thước biểu tượng

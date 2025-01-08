@@ -75,7 +75,6 @@ const LoginForm: React.FC = () => {
                 const token = data.Data.auth_token
                 sessionStorage.setItem('auth_token', token)
                 try {
-
                     var responseAttendance = await createAttendanceUser(IPdata.ip).unwrap()
 
                     await refetch()
@@ -95,7 +94,7 @@ const LoginForm: React.FC = () => {
                 } catch (error) {
                     console.error('Lỗi từ API:', error)
                     sessionStorage.removeItem('auth_token')
-                    //toast('Đã xảy ra lỗi. Vui lòng thử lại sau!', 'error')
+                    toast('Tên tài khoản hoặc mật khẩu không đúng!', 'error')
                 }
             } else {
                 toast(data?.message || 'Đăng nhập thất bại!', 'error')

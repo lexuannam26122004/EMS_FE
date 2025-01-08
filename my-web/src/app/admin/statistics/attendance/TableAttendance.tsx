@@ -68,7 +68,7 @@ const responseData = {
                 Agent: 'Chrome',
                 IsValid: true,
                 Overtime: '01:00',
-                WorkingHours: '08:00'
+                TotalHours: 8.05
             },
             {
                 Id: 2,
@@ -84,7 +84,7 @@ const responseData = {
                 Agent: 'Firefox',
                 IsValid: true,
                 Overtime: '00:45',
-                WorkingHours: '07:45'
+                TotalHours: 8.09
             },
             {
                 Id: 3,
@@ -100,7 +100,7 @@ const responseData = {
                 Agent: 'Edge',
                 IsValid: true,
                 Overtime: '01:30',
-                WorkingHours: '08:30'
+                TotalHours: 8.15
             },
             {
                 Id: 4,
@@ -116,7 +116,7 @@ const responseData = {
                 Agent: 'Safari',
                 IsValid: false,
                 Overtime: '00:00',
-                WorkingHours: '07:00'
+                TotalHours: 7.5
             },
             {
                 Id: 5,
@@ -125,14 +125,14 @@ const responseData = {
                 AvatarPath: '/avatars/charlie_davis.png',
                 Date: new Date('2024-12-01'),
                 CheckInTime: '08:10',
-                CheckOutTime: '17:10',
+                CheckOutTime: '18:10',
                 CheckInIP: '192.168.1.5',
                 Note: 'On time',
                 Agent: 'Chrome',
                 Department: 'Customer Support',
                 IsValid: true,
                 Overtime: '00:50',
-                WorkingHours: '08:00'
+                TotalHours: 8
             },
             {
                 Id: 6,
@@ -148,7 +148,7 @@ const responseData = {
                 Department: 'IT Services',
                 IsValid: true,
                 Overtime: '01:15',
-                WorkingHours: '08:15'
+                TotalHours: 8
             },
             {
                 Id: 7,
@@ -164,7 +164,7 @@ const responseData = {
                 IsValid: true,
                 Department: 'Human Resources',
                 Overtime: '00:00',
-                WorkingHours: '08:00'
+                TotalHours: 8
             },
             {
                 Id: 8,
@@ -180,7 +180,7 @@ const responseData = {
                 IsValid: true,
                 Overtime: '01:15',
                 Department: 'Human Resources',
-                WorkingHours: '08:15'
+                TotalHours: 8
             },
             {
                 Id: 9,
@@ -196,7 +196,7 @@ const responseData = {
                 Agent: 'Safari',
                 IsValid: false,
                 Overtime: '00:00',
-                WorkingHours: '07:45'
+                TotalHours: 8
             },
             {
                 Id: 10,
@@ -212,7 +212,7 @@ const responseData = {
                 Agent: 'Chrome',
                 IsValid: true,
                 Overtime: '00:50',
-                WorkingHours: '08:15'
+                TotalHours: 8
             },
             {
                 Id: 11,
@@ -228,7 +228,7 @@ const responseData = {
                 Agent: 'Edge',
                 IsValid: true,
                 Overtime: '00:00',
-                WorkingHours: '08:00'
+                TotalHours: 8
             },
             {
                 Id: 12,
@@ -244,7 +244,7 @@ const responseData = {
                 Agent: 'Firefox',
                 IsValid: true,
                 Overtime: '01:10',
-                WorkingHours: '08:10'
+                TotalHours: 8
             },
             {
                 Id: 13,
@@ -260,7 +260,7 @@ const responseData = {
                 Agent: 'Chrome',
                 IsValid: true,
                 Overtime: '00:40',
-                WorkingHours: '07:50'
+                TotalHours: 8
             },
             {
                 Id: 14,
@@ -276,7 +276,7 @@ const responseData = {
                 IsValid: true,
                 Department: 'Human Resources',
                 Overtime: '00:30',
-                WorkingHours: '08:10'
+                TotalHours: 8
             },
             {
                 Id: 15,
@@ -292,7 +292,7 @@ const responseData = {
                 Agent: 'Edge',
                 IsValid: false,
                 Overtime: '00:00',
-                WorkingHours: '07:00'
+                TotalHours: 8
             },
             {
                 Id: 16,
@@ -308,7 +308,7 @@ const responseData = {
                 Agent: 'Chrome',
                 IsValid: true,
                 Overtime: '01:15',
-                WorkingHours: '08:15'
+                TotalHours: 8
             },
             {
                 Id: 17,
@@ -324,7 +324,7 @@ const responseData = {
                 Agent: 'Firefox',
                 IsValid: true,
                 Overtime: '00:00',
-                WorkingHours: '08:00'
+                TotalHours: 8
             },
             {
                 Id: 18,
@@ -340,7 +340,7 @@ const responseData = {
                 Agent: 'Chrome',
                 IsValid: true,
                 Overtime: '01:20',
-                WorkingHours: '08:30'
+                TotalHours: 8
             },
             {
                 Id: 19,
@@ -356,7 +356,7 @@ const responseData = {
                 Agent: 'Safari',
                 IsValid: false,
                 Overtime: '00:00',
-                WorkingHours: '07:45'
+                TotalHours: 8
             },
             {
                 Id: 20,
@@ -372,7 +372,7 @@ const responseData = {
                 Agent: 'Firefox',
                 IsValid: true,
                 Overtime: '00:50',
-                WorkingHours: '08:10'
+                TotalHours: 8
             }
             // Thêm các record khác tương tự
         ]
@@ -780,7 +780,7 @@ function Page() {
                         />
                     </Box>
 
-                    <Box>
+                    {/* <Box>
                         <FormControl
                             sx={{
                                 width: '140px',
@@ -898,7 +898,7 @@ function Page() {
                                 <MenuItem value={'Timekeeping'}>{t('COMMON.NOTIFICATION_TYPE.TIMEKEEPING')}</MenuItem>
                             </Select>
                         </FormControl>
-                    </Box>
+                    </Box> */}
 
                     <Box
                         sx={{

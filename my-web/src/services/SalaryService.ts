@@ -53,6 +53,13 @@ export const salaryApi = createApi({
             }),
             providesTags: ['Salary']
         }),
+        getYearIncome: builder.query<SalaryResponse, { year: number }>({
+            query: ({ year }) => ({
+                url: `GetYearIncome?year=${year}`,
+                method: 'GET'
+            }),
+            providesTags: ['Salary']
+        }),
         updateSalaryById: builder.mutation<void, { Id: string }>({
             query: ({ Id }) => ({
                 url: `Update?Id=${Id}`, // Properly wrap `Id` in a string template
@@ -85,9 +92,6 @@ export const salaryApi = createApi({
         }),
         getIncomeInMonth: builder.query<SalaryResponse, ITotalEventsByMonth>({
             query: params => `GetIncomeInMonth?month=${params.Month}&year=${params.Year}`
-        }),
-        getYearIncome: builder.query<SalaryResponse, number>({
-            query: value => `GetYearIncome?year=${value}`
         }),
         getInfoForDepartmentChart: builder.query<SalaryResponse, void>({
             query: () => 'GetInfoForDepartmentChart',

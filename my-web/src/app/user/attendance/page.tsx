@@ -47,327 +47,44 @@ import DisplayInfo from './DisplayInfo'
 import { useSearchAttendanceForUserQuery } from '@/services/UserAttendanceService'
 import { IFilterTimekeepingForUser } from '@/models/Timekeeping'
 
-const convertToVietnamTime = (date: Date) => {
+const convertToVietnamTimeStart = (date: Date) => {
     if (isNaN(date.getTime())) {
         throw new Error('Invalid Date')
     }
 
     const timeZone = 'Asia/Ho_Chi_Minh'
 
-    const vietnamTime = toZonedTime(date, timeZone)
+    // Đặt giờ phút giây về 00:00:00
+    const startOfDay = new Date(date)
+    startOfDay.setHours(0, 0, 0, 0) // Giờ, phút, giây, mili giây = 0
 
+    // Chuyển đổi sang múi giờ Việt Nam
+    const vietnamTime = toZonedTime(startOfDay, timeZone)
+
+    // Định dạng lại ngày giờ
     const formattedDate = format(vietnamTime, "yyyy-MM-dd'T'HH:mm:ss")
 
     return formattedDate // Trả về thời gian đã được định dạng
 }
 
-const responseData = {
-    Data: {
-        TotalRecords: 20,
-        Records: [
-            {
-                Id: 1,
-                UserId: 'CC001',
-                FullName: 'John Doe',
-                AvatarPath: '/avatars/john_doe.png',
-                Date: new Date('2024-12-01'),
-                CheckInTime: '08:00',
-                CheckOutTime: '17:00',
-                CheckInIP: '192.168.1.1',
-                Note: 'Normal working day',
-                Agent: 'Chrome',
-                IsValid: true,
-                Overtime: '01:00',
-                WorkingHours: '08:00'
-            },
-            {
-                Id: 2,
-                UserId: 'CC002',
-                FullName: 'Jane Smith',
-                AvatarPath: '/avatars/jane_smith.png',
-                Date: new Date('2024-12-01'),
-                CheckInTime: '08:15',
-                CheckOutTime: '16:30',
-                CheckInIP: '192.168.1.2',
-                Note: 'Slightly late',
-                Agent: 'Firefox',
-                IsValid: true,
-                Overtime: '00:45',
-                WorkingHours: '07:45'
-            },
-            {
-                Id: 3,
-                UserId: 'CC003',
-                FullName: 'Alice Johnson',
-                AvatarPath: '/avatars/alice_johnson.png',
-                Date: new Date('2024-12-01'),
-                CheckInTime: '07:50',
-                CheckOutTime: '16:50',
-                CheckInIP: '192.168.1.3',
-                Note: 'Early check-in',
-                Agent: 'Edge',
-                IsValid: true,
-                Overtime: '01:30',
-                WorkingHours: '08:30'
-            },
-            {
-                Id: 4,
-                UserId: 'CC004',
-                FullName: 'Bob Brown',
-                AvatarPath: '/avatars/bob_brown.png',
-                Date: new Date('2024-12-01'),
-                CheckInTime: '09:00',
-                CheckOutTime: '18:00',
-                CheckInIP: '192.168.1.4',
-                Note: 'Late check-in',
-                Agent: 'Safari',
-                IsValid: false,
-                Overtime: '00:00',
-                WorkingHours: '07:00'
-            },
-            {
-                Id: 5,
-                UserId: 'CC005',
-                FullName: 'Charlie Davis',
-                AvatarPath: '/avatars/charlie_davis.png',
-                Date: new Date('2024-12-01'),
-                CheckInTime: '08:10',
-                CheckOutTime: '17:10',
-                CheckInIP: '192.168.1.5',
-                Note: 'On time',
-                Agent: 'Chrome',
-                IsValid: true,
-                Overtime: '00:50',
-                WorkingHours: '08:00'
-            },
-            {
-                Id: 6,
-                UserId: 'CC006',
-                FullName: 'Diana Evans',
-                AvatarPath: '/avatars/diana_evans.png',
-                Date: new Date('2024-12-01'),
-                CheckInTime: '08:30',
-                CheckOutTime: '17:45',
-                CheckInIP: '192.168.1.6',
-                Note: 'Worked extra hours',
-                Agent: 'Firefox',
-                IsValid: true,
-                Overtime: '01:15',
-                WorkingHours: '08:15'
-            },
-            {
-                Id: 7,
-                UserId: 'CC007',
-                FullName: 'Ethan Wilson',
-                AvatarPath: '/avatars/ethan_wilson.png',
-                Date: new Date('2024-12-01'),
-                CheckInTime: '08:00',
-                CheckOutTime: '17:00',
-                CheckInIP: '192.168.1.7',
-                Note: 'Normal working day',
-                Agent: 'Edge',
-                IsValid: true,
-                Overtime: '00:00',
-                WorkingHours: '08:00'
-            },
-            {
-                Id: 8,
-                UserId: 'CC008',
-                FullName: 'Fiona Harris',
-                AvatarPath: '/avatars/fiona_harris.png',
-                Date: new Date('2024-12-01'),
-                CheckInTime: '08:45',
-                CheckOutTime: '18:00',
-                CheckInIP: '192.168.1.8',
-                Note: 'Late check-in, overtime worked',
-                Agent: 'Chrome',
-                IsValid: true,
-                Overtime: '01:15',
-                WorkingHours: '08:15'
-            },
-            {
-                Id: 9,
-                UserId: 'CC009',
-                FullName: 'George King',
-                AvatarPath: '/avatars/george_king.png',
-                Date: new Date('2024-12-01'),
-                CheckInTime: '07:45',
-                CheckOutTime: '16:30',
-                CheckInIP: '192.168.1.9',
-                Note: 'Left early',
-                Agent: 'Safari',
-                IsValid: false,
-                Overtime: '00:00',
-                WorkingHours: '07:45'
-            },
-            {
-                Id: 10,
-                UserId: 'CC010',
-                FullName: 'Hannah Moore',
-                AvatarPath: '/avatars/hannah_moore.png',
-                Date: new Date('2024-12-01'),
-                CheckInTime: '08:05',
-                CheckOutTime: '17:20',
-                CheckInIP: '192.168.1.10',
-                Note: 'Slightly early',
-                Agent: 'Chrome',
-                IsValid: true,
-                Overtime: '00:50',
-                WorkingHours: '08:15'
-            },
-            {
-                Id: 11,
-                UserId: 'CC011',
-                FullName: 'Ian Turner',
-                AvatarPath: '/avatars/ian_turner.png',
-                Date: new Date('2024-12-01'),
-                CheckInTime: '08:00',
-                CheckOutTime: '17:00',
-                CheckInIP: '192.168.1.11',
-                Note: 'Normal working day',
-                Agent: 'Edge',
-                IsValid: true,
-                Overtime: '00:00',
-                WorkingHours: '08:00'
-            },
-            {
-                Id: 12,
-                UserId: 'CC012',
-                FullName: 'Jessica Wright',
-                AvatarPath: '/avatars/jessica_wright.png',
-                Date: new Date('2024-12-01'),
-                CheckInTime: '07:55',
-                CheckOutTime: '16:50',
-                CheckInIP: '192.168.1.12',
-                Note: 'Early check-in',
-                Agent: 'Firefox',
-                IsValid: true,
-                Overtime: '01:10',
-                WorkingHours: '08:10'
-            },
-            {
-                Id: 13,
-                UserId: 'CC013',
-                FullName: 'Kevin Scott',
-                AvatarPath: '/avatars/kevin_scott.png',
-                Date: new Date('2024-12-01'),
-                CheckInTime: '08:20',
-                CheckOutTime: '17:30',
-                CheckInIP: '192.168.1.13',
-                Note: 'Slightly late',
-                Agent: 'Chrome',
-                IsValid: true,
-                Overtime: '00:40',
-                WorkingHours: '07:50'
-            },
-            {
-                Id: 14,
-                UserId: 'CC014',
-                FullName: 'Laura Carter',
-                AvatarPath: '/avatars/laura_carter.png',
-                Date: new Date('2024-12-01'),
-                CheckInTime: '08:00',
-                CheckOutTime: '17:10',
-                CheckInIP: '192.168.1.14',
-                Note: 'Normal working day',
-                Agent: 'Safari',
-                IsValid: true,
-                Overtime: '00:30',
-                WorkingHours: '08:10'
-            },
-            {
-                Id: 15,
-                UserId: 'CC015',
-                FullName: 'Michael Adams',
-                AvatarPath: '/avatars/michael_adams.png',
-                Date: new Date('2024-12-01'),
-                CheckInTime: '09:00',
-                CheckOutTime: '18:00',
-                CheckInIP: '192.168.1.15',
-                Note: 'Late check-in',
-                Agent: 'Edge',
-                IsValid: false,
-                Overtime: '00:00',
-                WorkingHours: '07:00'
-            },
-            {
-                Id: 16,
-                UserId: 'CC016',
-                FullName: 'Natalie Baker',
-                AvatarPath: '/avatars/natalie_baker.png',
-                Date: new Date('2024-12-01'),
-                CheckInTime: '08:30',
-                CheckOutTime: '17:45',
-                CheckInIP: '192.168.1.16',
-                Note: 'Worked extra hours',
-                Agent: 'Chrome',
-                IsValid: true,
-                Overtime: '01:15',
-                WorkingHours: '08:15'
-            },
-            {
-                Id: 17,
-                UserId: 'CC017',
-                FullName: 'Oliver Brown',
-                AvatarPath: '/avatars/oliver_brown.png',
-                Date: new Date('2024-12-01'),
-                CheckInTime: '08:00',
-                CheckOutTime: '17:00',
-                CheckInIP: '192.168.1.17',
-                Note: 'Normal working day',
-                Agent: 'Firefox',
-                IsValid: true,
-                Overtime: '00:00',
-                WorkingHours: '08:00'
-            },
-            {
-                Id: 18,
-                UserId: 'CC018',
-                FullName: 'Penelope Clark',
-                AvatarPath: '/avatars/penelope_clark.png',
-                Date: new Date('2024-12-01'),
-                CheckInTime: '08:40',
-                CheckOutTime: '18:10',
-                CheckInIP: '192.168.1.18',
-                Note: 'Late check-in, overtime worked',
-                Agent: 'Chrome',
-                IsValid: true,
-                Overtime: '01:20',
-                WorkingHours: '08:30'
-            },
-            {
-                Id: 19,
-                UserId: 'CC019',
-                FullName: 'Quentin Diaz',
-                AvatarPath: '/avatars/quentin_diaz.png',
-                Date: new Date('2024-12-01'),
-                CheckInTime: '07:45',
-                CheckOutTime: '16:50',
-                CheckInIP: '192.168.1.19',
-                Note: 'Left early',
-                Agent: 'Safari',
-                IsValid: false,
-                Overtime: '00:00',
-                WorkingHours: '07:45'
-            },
-            {
-                Id: 20,
-                UserId: 'CC020',
-                FullName: 'Rachel Evans',
-                AvatarPath: '/avatars/rachel_evans.png',
-                Date: new Date('2024-12-01'),
-                CheckInTime: '08:10',
-                CheckOutTime: '17:20',
-                CheckInIP: '192.168.1.20',
-                Note: 'Normal day',
-                Agent: 'Firefox',
-                IsValid: true,
-                Overtime: '00:50',
-                WorkingHours: '08:10'
-            }
-            // Thêm các record khác tương tự
-        ]
+const convertToVietnamTimeEnd = (date: Date) => {
+    if (isNaN(date.getTime())) {
+        throw new Error('Invalid Date')
     }
+
+    const timeZone = 'Asia/Ho_Chi_Minh'
+
+    // Đặt giờ, phút, giây về 23:59:59
+    const endOfDay = new Date(date)
+    endOfDay.setHours(23, 59, 59, 999) // Giờ = 23, phút = 59, giây = 59, mili giây = 999
+
+    // Chuyển đổi sang múi giờ Việt Nam
+    const vietnamTime = toZonedTime(endOfDay, timeZone)
+
+    // Định dạng lại ngày giờ
+    const formattedDate = format(vietnamTime, "yyyy-MM-dd'T'HH:mm:ss")
+
+    return formattedDate // Trả về thời gian đã được định dạng
 }
 
 function Page() {
@@ -380,8 +97,8 @@ function Page() {
     const [filter, setFilter] = useState<IFilterTimekeepingForUser>({
         PageSize: 10,
         PageNumber: 1,
-        StartDate: convertToVietnamTime(new Date()),
-        EndDate: convertToVietnamTime(new Date()),
+        StartDate: convertToVietnamTimeStart(new Date()),
+        EndDate: convertToVietnamTimeEnd(new Date()),
         IsValid: true,
         IsEarly: true,
         IsLate: true,
@@ -880,7 +597,7 @@ function Page() {
                         </Box>
                         <Box>
                             <Typography sx={{ fontSize: '20px', fontWeight: 'bold', color: 'var(--text-color)' }}>
-                                309
+                                5
                             </Typography>
                             <Typography sx={{ fontSize: '15px', mt: '5px', color: 'var(--text-color)' }}>
                                 {t('COMMON.USER.TOTAL_ATTENDANCE')}
@@ -914,7 +631,7 @@ function Page() {
                         </Box>
                         <Box>
                             <Typography sx={{ fontSize: '20px', fontWeight: 'bold', color: 'var(--text-color)' }}>
-                                309
+                                7:53
                             </Typography>
                             <Typography sx={{ fontSize: '15px', mt: '5px', color: 'var(--text-color)' }}>
                                 {t('COMMON.USER.AVG_CHECK_IN')}
@@ -948,7 +665,7 @@ function Page() {
                         </Box>
                         <Box>
                             <Typography sx={{ fontSize: '20px', fontWeight: 'bold', color: 'var(--text-color)' }}>
-                                309
+                                18:05
                             </Typography>
                             <Typography sx={{ fontSize: '15px', mt: '5px', color: 'var(--text-color)' }}>
                                 {t('COMMON.USER.AVG_CHECK_OUT')}
@@ -982,7 +699,7 @@ function Page() {
                         </Box>
                         <Box>
                             <Typography sx={{ fontSize: '20px', fontWeight: 'bold', color: 'var(--text-color)' }}>
-                                309
+                                5
                             </Typography>
                             <Typography sx={{ fontSize: '15px', mt: '5px', color: 'var(--text-color)' }}>
                                 {t('COMMON.USER.TOTAL_LATE')}
@@ -1126,7 +843,7 @@ function Page() {
                                 onChange={value =>
                                     setFilter({
                                         ...filter,
-                                        StartDate: convertToVietnamTime(value?.toDate() || new Date())
+                                        StartDate: convertToVietnamTimeStart(value?.toDate() || new Date())
                                     })
                                 }
                                 sx={{
@@ -1170,7 +887,7 @@ function Page() {
                                 onChange={value =>
                                     setFilter({
                                         ...filter,
-                                        EndDate: convertToVietnamTime(value?.toDate() || new Date())
+                                        EndDate: convertToVietnamTimeEnd(value?.toDate() || new Date())
                                     })
                                 }
                                 sx={{

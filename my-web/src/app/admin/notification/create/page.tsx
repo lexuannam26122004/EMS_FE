@@ -38,8 +38,10 @@ import {
 } from '@/redux/slices/selectedDepartmentsToNotifySlice'
 import { selectedRolesToNotifySelector, selectedRolesToNotifySlice } from '@/redux/slices/selectedRolesToNotifySlice'
 import UploadFiles from './UploadFiles'
+import { useToast } from '@/hooks/useToast'
 
 function CreateNotification() {
+    const toast = useToast()
     const { t } = useTranslation('common')
     const router = useRouter()
     const [typeNotification, setTypeNotification] = useState<string>('')
@@ -101,7 +103,15 @@ function CreateNotification() {
             TypeToNotify: typeReceiveNotify === 'Department_And_Role' ? 2 : typeReceiveNotify === 'All' ? 1 : 3
         }
 
-        await createNotification(data).unwrap()
+        try {
+            await createNotification(data).unwrap()
+        } catch (error) {
+            if (error.status === 403) {
+                toast('Bạn không có quyền tạo. Vui lòng tải lại trang', 'error')
+            } else {
+                toast('Có lỗi xảy ra khi tạo thông báo. Vui lòng thử lại!' + error, 'error')
+            }
+        }
     }
 
     const handleSaveAndClose = async () => {
@@ -129,7 +139,15 @@ function CreateNotification() {
             TypeToNotify: typeReceiveNotify === 'Department_And_Role' ? 2 : typeReceiveNotify === 'All' ? 1 : 3
         }
 
-        await createNotification(data).unwrap()
+        try {
+            await createNotification(data).unwrap()
+        } catch (error) {
+            if (error.status === 403) {
+                toast('Bạn không có quyền tạo. Vui lòng tải lại trang', 'error')
+            } else {
+                toast('Có lỗi xảy ra khi tạo thông báo. Vui lòng thử lại!' + error, 'error')
+            }
+        }
 
         router.push('/admin')
     }

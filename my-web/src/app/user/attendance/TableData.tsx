@@ -40,6 +40,7 @@ import { ITimekeeping } from '@/models/Timekeeping'
 // ]
 
 function convertTimeFormat(time: string): string {
+    if (!time) return 'N/A'
     // Tách chuỗi thời gian thành giờ, phút và giây
     const [hours = 0, minutes = 0, seconds = 0] = time?.split(':').map(part => Math.floor(Number(part))) || [0, 0, 0]
 
