@@ -1,5 +1,6 @@
 import { IMessageCreate } from '@/models/Message'
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi } from '@reduxjs/toolkit/query/react'
+import { createBaseQuery } from './api'
 
 interface IMessageResponse {
     Success: boolean
@@ -9,7 +10,7 @@ interface IMessageResponse {
 const apiPath = 'https://localhost:44381/api/admin/Message'
 export const messageApi = createApi({
     reducerPath: 'messageApi',
-    baseQuery: fetchBaseQuery({ baseUrl: apiPath }),
+    baseQuery: createBaseQuery(apiPath),
     tagTypes: ['Message'],
     endpoints: builder => ({
         getAllMessage: builder.query<IMessageResponse, void>({
@@ -23,8 +24,12 @@ export const messageApi = createApi({
                 body: message
             }),
             invalidatesTags: ['Message']
+        }),
+        getMeMessage: builder.query<IMessageResponse, void>({
+            query: () => `GetMeMessage`,
+            providesTags: ['Message']
         })
     })
 })
 
-export const { useGetAllMessageQuery, useCreateMessageMutation } = messageApi
+export const { useGetAllMessageQuery, useCreateMessageMutation, useGetMeMessageQuery } = messageApi
