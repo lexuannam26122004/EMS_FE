@@ -35,8 +35,7 @@ function DetailModal({ open, handleToggle, reportedBy, type, typeId }: Props) {
     const { data: userResponse, isLoading: isUsersLoading } = useGetAllUsersQuery()
     const employee = (userResponse?.Data?.Records as IAspNetUserGetAll[]) || []
 
-    const user = employee.find(em => em.Id === reportedBy);
-
+    const user = employee.find(em => em.Id === reportedBy)
 
     const [createErrorReport, { isSuccess, isError, reset }] = useCreateErrorReportsMutation()
     const { refetch } = useSearchErrorReportQuery(null)
@@ -127,7 +126,7 @@ function DetailModal({ open, handleToggle, reportedBy, type, typeId }: Props) {
                             color: 'var(--text-color)'
                         }}
                     >
-                        {t('Điền thông tin báo cáo lỗi')}
+                        {t('COMMON.ERROR_REPORT.ERROR_REPORT')}
                     </Typography>
 
                     <Box
@@ -175,7 +174,7 @@ function DetailModal({ open, handleToggle, reportedBy, type, typeId }: Props) {
                         >
                             <TextField
                                 variant='outlined'
-                                label={t('Thông tin nhân viên') + '*'}
+                                label={t('COMMON.TIMEOFF.INFORMATION') + '*'}
                                 type='text'
                                 fullWidth
                                 sx={{
@@ -242,83 +241,7 @@ function DetailModal({ open, handleToggle, reportedBy, type, typeId }: Props) {
                         >
                             <TextField
                                 variant='outlined'
-                                label={t('Ngày tạo báo cáo') + '*'}
-                                type='date'
-                                fullWidth
-                                sx={{
-                                    '& fieldset': {
-                                        borderRadius: '8px',
-                                        color: 'var(--text-color)',
-                                        borderColor: 'var(--border-color)'
-                                    },
-                                    '& .MuiInputBase-root': {
-                                        paddingRight: '0px'
-                                    },
-                                    '& .MuiInputBase-input': {
-                                        paddingRight: '12px',
-                                        color: 'var(--text-color)',
-                                        fontSize: '16px',
-                                        '&::placeholder': {
-                                            color: 'var(--placeholder-color)',
-                                            opacity: 1
-                                        }
-                                    },
-                                    '& .MuiOutlinedInput-root:hover fieldset': {
-                                        borderColor: 'var(--hover-field-color)'
-                                    },
-                                    '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
-                                        borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
-                                    },
-                                    '& .MuiOutlinedInput-root.Mui-error fieldset': {
-                                        borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
-                                    },
-                                    '& .MuiOutlinedInput-root.Mui-focused fieldset': {
-                                        borderColor: 'var(--selected-field-color)'
-                                    },
-                                    '& .MuiInputLabel-root': {
-                                        color: 'var(--text-label-color)'
-                                    },
-                                    '& .MuiInputLabel-root.Mui-focused': {
-                                        color: 'var(--selected-field-color)'
-                                    },
-                                    '& .MuiInputLabel-root.Mui-error': {
-                                        color: 'var(--error-color)'
-                                    }
-                                }}
-                                value={reportedDate.toISOString().split('T')[0]}
-                                InputProps={{
-                                    readOnly: true
-                                }}
-                            />
-                            <Typography
-                                sx={{
-                                    color: 'red',
-                                    margin: '1px 0 0 10px',
-                                    fontSize: '12px',
-                                    visibility: 'hidden'
-                                }}
-                            >
-                                {t('COMMON.TEXTFIELD.REQUIRED')}
-                            </Typography>
-                        </Box>
-                    </Box>
-
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            gap: '20px',
-                            mt: '20px'
-                        }}
-                    >
-                        <Box
-                            sx={{
-                                width: 'calc(50% - 10px)'
-                            }}
-                        >
-                            <TextField
-                                variant='outlined'
-                                label={t('Loại')}
+                                label={t('COMMON.SYS_CONFIGURATION.ACTION_CONFIGURATION.TYPE')}
                                 fullWidth
                                 {...(isSubmit && Type === '' && { error: true })}
                                 sx={{
@@ -373,6 +296,82 @@ function DetailModal({ open, handleToggle, reportedBy, type, typeId }: Props) {
                                     margin: '1px 0 0 10px',
                                     fontSize: '12px',
                                     visibility: isSubmit && Type === '' ? 'visible' : 'hidden'
+                                }}
+                            >
+                                {t('COMMON.TEXTFIELD.REQUIRED')}
+                            </Typography>
+                        </Box>
+                    </Box>
+
+                    <Box
+                        sx={{
+                            display: 'none',
+                            justifyContent: 'center',
+                            gap: '20px',
+                            mt: '20px'
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                width: 'calc(50% - 10px)'
+                            }}
+                        >
+                            <TextField
+                                variant='outlined'
+                                label={t('Ngày tạo báo cáo') + '*'}
+                                type='date'
+                                fullWidth
+                                sx={{
+                                    '& fieldset': {
+                                        borderRadius: '8px',
+                                        color: 'var(--text-color)',
+                                        borderColor: 'var(--border-color)'
+                                    },
+                                    '& .MuiInputBase-root': {
+                                        paddingRight: '0px'
+                                    },
+                                    '& .MuiInputBase-input': {
+                                        paddingRight: '12px',
+                                        color: 'var(--text-color)',
+                                        fontSize: '16px',
+                                        '&::placeholder': {
+                                            color: 'var(--placeholder-color)',
+                                            opacity: 1
+                                        }
+                                    },
+                                    '& .MuiOutlinedInput-root:hover fieldset': {
+                                        borderColor: 'var(--hover-field-color)'
+                                    },
+                                    '& .MuiOutlinedInput-root.Mui-error:hover fieldset': {
+                                        borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                    },
+                                    '& .MuiOutlinedInput-root.Mui-error fieldset': {
+                                        borderColor: 'var(--error-color) !important' // Màu lỗi khi hover
+                                    },
+                                    '& .MuiOutlinedInput-root.Mui-focused fieldset': {
+                                        borderColor: 'var(--selected-field-color)'
+                                    },
+                                    '& .MuiInputLabel-root': {
+                                        color: 'var(--text-label-color)'
+                                    },
+                                    '& .MuiInputLabel-root.Mui-focused': {
+                                        color: 'var(--selected-field-color)'
+                                    },
+                                    '& .MuiInputLabel-root.Mui-error': {
+                                        color: 'var(--error-color)'
+                                    }
+                                }}
+                                value={reportedDate.toISOString().split('T')[0]}
+                                InputProps={{
+                                    readOnly: true
+                                }}
+                            />
+                            <Typography
+                                sx={{
+                                    color: 'red',
+                                    margin: '1px 0 0 10px',
+                                    fontSize: '12px',
+                                    visibility: 'hidden'
                                 }}
                             >
                                 {t('COMMON.TEXTFIELD.REQUIRED')}
@@ -450,12 +449,12 @@ function DetailModal({ open, handleToggle, reportedBy, type, typeId }: Props) {
 
                     <TextField
                         variant='outlined'
-                        label={t('Nội dung')}
+                        label={t('COMMON.EMPLOYEE.NOTE')}
                         id='fullWidth'
                         fullWidth
                         multiline
-                        minRows={4}
-                        maxRows={4}
+                        minRows={8}
+                        maxRows={8}
                         sx={{
                             mt: '20px',
                             '& fieldset': {

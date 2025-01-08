@@ -479,6 +479,7 @@
             "STATUS": "Status"
         },
         "ERROR_REPORT": {
+            "ERROR_REPORT": "Fill in the error report",
             "TITLE": "Error report list",
             "ID": "ID",
             "FULL_NAME_REPORTED": "Reporter Full Name",

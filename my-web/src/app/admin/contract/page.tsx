@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import Loading from '@/components/Loading'
 import { useRouter } from 'next/navigation'
 import {
     Box,
@@ -79,7 +80,7 @@ const EmployeeTable: React.FC = () => {
         }
     })
 
-    if (isContractsLoading || isUsersLoading) return <div>Loading...</div>
+    if (isContractsLoading || isUsersLoading) return <Loading />
 
     const filteredUsers = users.filter(
         user =>
