@@ -2,7 +2,7 @@ import { MessageCircleMore } from 'lucide-react'
 import { Box, Tooltip, TextField, IconButton } from '@mui/material'
 import { useEffect, useRef, useState } from 'react'
 import { Close as CloseIcon, Send as SendIcon } from '@mui/icons-material'
-import { useCreateMessageMutation, useGetAllMessageQuery } from '@/services/MessageService'
+import { useCreateMessageMutation, useGetMeMessageQuery } from '@/services/MessageService'
 import { IMessageGetAll } from '@/models/Message'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { useGetAuthMeQuery } from '@/services/AuthService'
@@ -31,11 +31,15 @@ export default function ChatButton() {
     const [type, setType] = useState(true)
 
     const [createMessage] = useCreateMessageMutation()
-    const { data: responseData } = useGetAllMessageQuery()
+    const { data: responseData, refetch } = useGetMeMessageQuery()
     const messageData = (responseData?.Data as IMessageGetAll[]) || []
 
     const { data: meData } = useGetAuthMeQuery()
     const user = meData?.Data || null
+
+    useEffect(() => {
+        refetch()
+    }, [responseData])
 
     const handleToggleChat = () => {
         setIsOpen(true)
@@ -61,7 +65,7 @@ export default function ChatButton() {
 
             try {
                 // Gọi API createMessage
-                await createMessage({ Content: newMessage, Type: type, UserId: user?.Id })
+                await createMessage({ Content: newMessage, Type: type })
                     .unwrap()
                     .then(response => {
                         console.log('Message sent successfully:', response)
@@ -72,7 +76,7 @@ export default function ChatButton() {
                 const modelResponse = await runPrompt(newMessage) // Gửi tin nhắn người dùng và nhận phản hồi từ API
 
                 // Lưu phản hồi của chatbot vào cơ sở dữ liệu
-                await createMessage({ Content: modelResponse, Type: false, UserId: user?.Id }).unwrap()
+                await createMessage({ Content: modelResponse, Type: false }).unwrap()
 
                 // Cập nhật lại danh sách tin nhắn để hiển thị phản hồi
                 setMessages([...messages, { text: modelResponse, sender: 'bot' }])
@@ -196,7 +200,7 @@ export default function ChatButton() {
                         animation: `${isAppear ? 'slideUp' : 'slideDown'} 0.5s ease forwards`
                     }}
                 >
-                    <Tooltip title='Chat với chúng tôi' placement='left'>
+                    <Tooltip title='Chia sẻ cảm xúc' placement='left'>
                         <Box
                             sx={{
                                 width: '50px',
@@ -250,7 +254,7 @@ export default function ChatButton() {
                             alignItems: 'center'
                         }}
                     >
-                        Chat với chúng tôi
+                        Chia sẻ cảm xúc
                         <IconButton onClick={handleCloseChat} sx={{ color: 'white' }}>
                             <CloseIcon />
                         </IconButton>
