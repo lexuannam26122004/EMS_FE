@@ -1,6 +1,5 @@
 //import { IRewardGetAll } from "@/models/Reward";
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
-import { fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { createBaseQuery } from './api'
 

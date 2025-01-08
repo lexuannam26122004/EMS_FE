@@ -44,7 +44,7 @@ const AvatarMenu = () => {
     const anchorRef = useRef<HTMLDivElement | null>(null)
     const [open, setOpen] = useState(false)
 
-    const [checkout, { isLoading: isCheckingOut, isSuccess }] = useCheckoutMutation()
+    const [checkout] = useCheckoutMutation()
 
     const [avatarPath, setAvatarPath] = useState('')
     const [fullName, setFullName] = useState('')

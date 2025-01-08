@@ -25,7 +25,7 @@ const LoginForm: React.FC = () => {
     const router = useRouter()
     const { t } = useTranslation('common')
     const [showPassword, setShowPassword] = React.useState(false)
-    const [createAttendanceUser, { isLoading: isLoadingAttendance }] = useCreateAttendanceUserMutation()
+    const [createAttendanceUser] = useCreateAttendanceUserMutation()
 
     const handleClickShowPassword = () => setShowPassword(show => !show)
 
@@ -75,7 +75,7 @@ const LoginForm: React.FC = () => {
                 const token = data.Data.auth_token
                 sessionStorage.setItem('auth_token', token)
                 try {
-                    var responseAttendance = await createAttendanceUser(IPdata.ip).unwrap()
+                    const responseAttendance = await createAttendanceUser(IPdata.ip).unwrap()
 
                     await refetch()
 
