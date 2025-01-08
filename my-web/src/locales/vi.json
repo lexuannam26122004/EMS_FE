@@ -179,6 +179,7 @@
             "SETTINGS": "Cài đặt",
             "LOGOUT": "Đăng xuất",
             "PERSONAL": "Trang cá nhân",
+            "CHECK_OUT": "Kết thúc ca làm",
             "TIMEKEEPING": "Chấm công",
             "CALENDAR": "Lịch",
             "LOGIN_HISTORY": "Lịch sử đăng nhập",
@@ -549,7 +550,7 @@
         },
 
         "ERROR_REPORT": {
-            "ERROR_REPORT":"Điền thông tin báo lỗi",
+            "ERROR_REPORT": "Điền thông tin báo lỗi",
             "TITLE": "Danh sách báo cáo lỗi",
             "ID": "ID",
             "FULL_NAME_REPORTED": "Tên người báo cáo",
@@ -645,6 +646,7 @@
             "ON_TIME": "Số nhân viên đúng giờ",
             "LATE": "Số nhân viên đi trễ",
             "ABSENT": "Số nhân viên vắng mặt",
+            "MINUTES": "phút",
             "LEAVE": "Số nhân viên nghỉ phép",
             "EARLY": "Số nhân viên đi sớm",
             "INVALID": "Số chấm công không hợp lệ",
@@ -671,7 +673,8 @@
             "DETAIL_EMPLOYEE": "Thông tin chi tiết nhân viên",
             "DOWNLOAD_INFO": "Tải thông tin",
             "LIST_ATTENDANCE": "Danh sách chấm công",
-            "ERROR_REPORT": "Báo lỗi"
+            "ERROR_REPORT": "Báo lỗi",
+            "TOTAL_HOURS": "Tổng giờ làm"
         },
         "INSURANCE_BENEFIT": {
             "LAST_MONTH": "tháng trước",

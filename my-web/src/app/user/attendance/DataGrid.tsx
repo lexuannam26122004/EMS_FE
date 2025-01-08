@@ -13,6 +13,8 @@ interface DataGridProps {
 
 function convertTimeFormat(time: string): string {
     // Tách chuỗi thời gian thành giờ, phút và giây
+    if (!time) return 'N/A'
+
     const [hours = 0, minutes = 0, seconds = 0] = time?.split(':').map(part => Math.floor(Number(part))) || [0, 0, 0]
 
     // Format từng phần thành chuỗi 2 chữ số

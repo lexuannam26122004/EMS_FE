@@ -13,7 +13,7 @@ import {
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 // import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined'
-import { ChevronDown, CalendarClock, ChevronUp, User, BriefcaseBusiness } from 'lucide-react'
+import { ChevronDown, CalendarClock, ChevronUp, User, BriefcaseBusiness, ScanBarcode } from 'lucide-react'
 // import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 // import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
 import VpnKeyOutlinedIcon from '@mui/icons-material/VpnKeyOutlined'
@@ -22,6 +22,10 @@ import { PencilLine } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 import { keyframes } from '@emotion/react'
 import { useGetAuthMeQuery } from '@/services/AuthService'
+import { authSelector } from '@/redux/slices/authSlice'
+import { useSelector } from 'react-redux'
+import { useCheckoutMutation } from '@/services/UserAttendanceService'
+import { useToast } from '@/hooks/useToast'
 
 const rotate = keyframes`
     0% {
@@ -33,11 +37,14 @@ const rotate = keyframes`
 `
 
 const AvatarMenu = () => {
+    const toast = useToast()
     const pathName = usePathname()
     const router = useRouter()
     const { t } = useTranslation('common')
     const anchorRef = useRef<HTMLDivElement | null>(null)
     const [open, setOpen] = useState(false)
+
+    const [checkout, { isLoading: isCheckingOut, isSuccess }] = useCheckoutMutation()
 
     const [avatarPath, setAvatarPath] = useState('')
     const [fullName, setFullName] = useState('')
@@ -113,6 +120,27 @@ const AvatarMenu = () => {
         router.push('/user/schedular')
     }
 
+    const attendanceId = sessionStorage.getItem('AttendanceId')
+
+    const handleCheckOut = async () => {
+        try {
+            const attendance = sessionStorage.getItem('AttendanceId')
+            if (attendance) {
+                await checkout(Number(attendance)).unwrap() // Chuyển từ string sang number
+                toast('Chấm công ra thành công!', 'success')
+                sessionStorage.removeItem('AttendanceId')
+            } else {
+                toast('Lỗi khi chấm công hết giờ', 'error')
+            }
+        } catch (error) {
+            if (error.status === 400) {
+                toast('Phiên đăng nhập không hợp lệ!', 'error')
+            } else {
+                toast('Lỗi khi chấm công hết giờ', 'error')
+            }
+        }
+    }
+
     // const handleCreateTasks = () => {
     //     setOpen(false)
     //     router.push('/admin/tasks/create')
@@ -124,6 +152,8 @@ const AvatarMenu = () => {
         refetch()
         router.push('/login')
     }
+
+    const menuLeft = useSelector(authSelector)
 
     return (
         <Box>
@@ -320,36 +350,56 @@ const AvatarMenu = () => {
                                         </MenuItem>
                                     )}
 
-                                    <MenuItem
-                                        onClick={handleCreateNotification}
-                                        sx={{
-                                            color: 'var(--text-color)',
-                                            padding: '9px 12px',
-                                            borderRadius: '8px',
-                                            '&:hover': {
-                                                backgroundColor: 'var(--hover-color)'
-                                            }
-                                        }}
-                                    >
-                                        <PencilLine style={{ marginRight: '16px' }} />
-                                        {t('COMMON.AVATAR_MENU.CREATE_NOTIFICATION')}
-                                    </MenuItem>
-                                    <MenuItem
-                                        onClick={handleSchedular}
-                                        sx={{
-                                            color: 'var(--text-color)',
-                                            padding: '9px 12px',
-                                            borderRadius: '8px',
-                                            '&:hover': {
-                                                backgroundColor: 'var(--hover-color)'
-                                            }
-                                        }}
-                                    >
-                                        <CalendarClock style={{ marginRight: '16px' }} />
-                                        {t('COMMON.SIDEBAR.SCHEDULAR')}
-                                    </MenuItem>
+                                    {attendanceId && attendanceId != '1' && (
+                                        <MenuItem
+                                            onClick={handleCheckOut}
+                                            sx={{
+                                                color: 'var(--text-color)',
+                                                padding: '9px 12px',
+                                                borderRadius: '8px',
+                                                '&:hover': {
+                                                    backgroundColor: 'var(--hover-color)'
+                                                }
+                                            }}
+                                        >
+                                            <ScanBarcode style={{ marginRight: '16px' }} />
+                                            {t('COMMON.AVATAR_MENU.CHECK_OUT')}
+                                        </MenuItem>
+                                    )}
 
+                                    {menuLeft['Notifications'].IsAllowCreate && (
+                                        <MenuItem
+                                            onClick={handleCreateNotification}
+                                            sx={{
+                                                color: 'var(--text-color)',
+                                                padding: '9px 12px',
+                                                borderRadius: '8px',
+                                                '&:hover': {
+                                                    backgroundColor: 'var(--hover-color)'
+                                                }
+                                            }}
+                                        >
+                                            <PencilLine style={{ marginRight: '16px' }} />
+                                            {t('COMMON.AVATAR_MENU.CREATE_NOTIFICATION')}
+                                        </MenuItem>
+                                    )}
 
+                                    {pathName.includes('/admin') && (
+                                        <MenuItem
+                                            onClick={handleSchedular}
+                                            sx={{
+                                                color: 'var(--text-color)',
+                                                padding: '9px 12px',
+                                                borderRadius: '8px',
+                                                '&:hover': {
+                                                    backgroundColor: 'var(--hover-color)'
+                                                }
+                                            }}
+                                        >
+                                            <CalendarClock style={{ marginRight: '16px' }} />
+                                            {t('COMMON.SIDEBAR.SCHEDULAR')}
+                                        </MenuItem>
+                                    )}
                                     <MenuItem
                                         onClick={handleCreateTasks}
                                         sx={{

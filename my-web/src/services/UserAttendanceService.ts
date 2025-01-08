@@ -31,8 +31,11 @@ export const userAttendanceApi = createApi({
                 return `SearchForUser?${params.toString()}`
             }
         }),
-        getCountIsNew: builder.query<AttendanceResponse, string>({
+        getByDate: builder.query<AttendanceResponse, string>({
             query: date => `GetByDate?Date=${date}`
+        }),
+        stats: builder.query<AttendanceResponse, string>({
+            query: date => `Stats?Date=${date}`
         }),
         createAttendanceUser: builder.mutation<AttendanceResponse, string>({
             query: value => ({
@@ -54,6 +57,7 @@ export const userAttendanceApi = createApi({
 export const {
     useSearchAttendanceForUserQuery,
     useCreateAttendanceUserMutation,
-    useGetCountIsNewQuery,
-    useCheckoutMutation
+    useStatsQuery,
+    useCheckoutMutation,
+    useGetByDateQuery
 } = userAttendanceApi

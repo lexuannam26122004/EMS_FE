@@ -18,19 +18,6 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ITimekeeping } from '@/models/Timekeeping'
 
-function convertTimeFormat(time: string): string {
-    // Tách chuỗi thời gian thành giờ và phút
-    const [hours, minutes] = time.split(':').map(Number)
-
-    // Xây dựng chuỗi kết quả
-    let result = `${hours}h`
-    if (minutes > 0) {
-        result += ` ${minutes}p`
-    }
-
-    return result
-}
-
 interface IGetAll extends ITimekeeping {
     AvatarPath: string
     FullName: string
@@ -63,6 +50,21 @@ const avatars = [
     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-18.webp',
     'https://api-prod-minimal-v620.pages.dev/assets/images/avatar/avatar-19.webp'
 ]
+
+function convertTimeFormat(time: string): string {
+    // Tách chuỗi thời gian thành giờ, phút và giây
+    if (!time) return 'N/A'
+
+    const [hours = 0, minutes = 0, seconds = 0] = time?.split(':').map(part => Math.floor(Number(part))) || [0, 0, 0]
+
+    // Format từng phần thành chuỗi 2 chữ số
+    const formattedHours = String(hours).padStart(2, '0')
+    const formattedMinutes = String(minutes).padStart(2, '0')
+    const formattedSeconds = String(seconds).padStart(2, '0')
+
+    // Kết quả format thành hh:mm:ss
+    return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`
+}
 
 function TableErrorReport({ attendanceData }: IProps) {
     const { t } = useTranslation('common')
@@ -241,7 +243,7 @@ function TableErrorReport({ attendanceData }: IProps) {
                                     whiteSpace: 'nowrap'
                                 }}
                             >
-                                {t('COMMON.ATTENDANCE.OVERTIME')}
+                                {t('COMMON.ATTENDANCE.TOTAL_HOURS')}
                             </Typography>
                         </TableCell>
 
@@ -414,7 +416,7 @@ function TableErrorReport({ attendanceData }: IProps) {
                                             whiteSpace: 'nowrap'
                                         }}
                                     >
-                                        {convertTimeFormat(row.Overtime)}
+                                        {(row.TotalHours * 60).toFixed(2) + ' ' + t('COMMON.ATTENDANCE.MINUTES')}
                                     </Typography>
                                 </TableCell>
                                 <TableCell
