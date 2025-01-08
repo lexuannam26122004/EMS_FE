@@ -6,43 +6,75 @@ import 'slick-carousel/slick/slick-theme.css'
 import { Building, ChevronLeft, ChevronRight, IdCard, UserRoundCog } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
-const leaveRequests = [
+// Sample Error Report Data based on provided SQL schema
+const errorReports = [
     {
+        Id: 1,
+        ReportedBy: 'EMP001',
+        ReportedDate: '2024-12-20T10:00:00',
+        Type: 'Salary',
+        TypeId: 101,
+        Description: 'Incorrect salary calculation for November',
+        Status: 'Pending',
+        ResolvedBy: null,
+        ResolvedDate: null,
+        ResolutionDetails: null,
+        AvatarPath: '/AvatarPath1.jpg',
         FullName: 'Nguyen Van A',
         Roles: 'Software Engineer',
-        CreatedDate: '15 Dec 2024 4:55pm',
         Department: 'IT Department',
-        EmployeeId: 'EMP001',
-        Reason: 'Personal Reasons',
-        Content:
-            'Undergoing a minor surgery and need recovery time. Undergoing a minor surgery and need recovery time. Need to take a short break to handle some personal. Need to take a short break to handle some personal. Need to take a short break to handle some personal. Need to take a short break to handle some personal',
-        StartDate: '20 Dec 2024',
-        EndDate: '22 Dec 2024',
-        AvatarPath: '/AvatarPath1.jpg'
+        EmployeeId: 'EMP001'
     },
     {
+        Id: 2,
+        ReportedBy: 'EMP002',
+        ReportedDate: '2024-12-21T14:30:00',
+        Type: 'Tax',
+        TypeId: 202,
+        Description: 'Tax deduction error in payslip',
+        Status: 'Resolved',
+        ResolvedBy: 'ADM001',
+        ResolvedDate: '2024-12-22T16:00:00',
+        ResolutionDetails: 'Tax rate was corrected.',
+        AvatarPath: '/AvatarPath2.jpg',
         FullName: 'Tran Thi B',
         Roles: 'Project Manager',
-        CreatedDate: '15 Dec 2024 4:55pm',
-        Reason: 'Medical leave',
         Department: 'HR Department',
-        EmployeeId: 'EMP002',
-        Content: 'Undergoing a minor surgery and need recovery time.',
-        StartDate: '18 Dec 2024',
-        EndDate: '25 Dec 2024',
-        AvatarPath: '/AvatarPath2.jpg'
+        EmployeeId: 'EMP002'
     },
     {
+        Id: 3,
+        ReportedBy: 'EMP003',
+        ReportedDate: '2024-12-22T09:00:00',
+        Type: 'Bonus',
+        TypeId: 303,
+        Description: 'Bonus not added to November salary',
+        Status: 'Pending',
+        ResolvedBy: null,
+        ResolvedDate: null,
+        ResolutionDetails: null,
+        AvatarPath: '/Avatar3.jpg',
         FullName: 'Le Van C',
         Roles: 'UI/UX Designer',
-        CreatedDate: '15 Dec 2024 4:55pm',
-        Reason: 'Vacation',
         Department: 'Design Department',
-        EmployeeId: 'EMP003',
-        Content: 'Taking a vacation trip with family.',
-        StartDate: '24 Dec 2024',
-        EndDate: '31 Dec 2024',
-        AvatarPath: '/Avatar3.jpg'
+        EmployeeId: 'EMP003'
+    },
+    {
+        Id: 4,
+        ReportedBy: 'EMP001',
+        ReportedDate: '2024-12-20T10:00:00',
+        Type: 'Salary',
+        TypeId: 101,
+        Description: 'Another salary calculation error for December',
+        Status: 'Pending',
+        ResolvedBy: null,
+        ResolvedDate: null,
+        ResolutionDetails: null,
+        AvatarPath: '/AvatarPath1.jpg',
+        FullName: 'Nguyen Van A',
+        Roles: 'Software Engineer',
+        Department: 'IT Department',
+        EmployeeId: 'EMP001'
     }
 ]
 
@@ -69,10 +101,10 @@ export default function ErrorSalary() {
     }
 
     const isFirstSlide = currentSlide === 0
-    const isLastSlide = currentSlide === leaveRequests.length - 1
+    const isLastSlide = currentSlide === errorReports.length - 1
 
     const handleNext = () => {
-        const nextSlide = currentSlide + 1 >= leaveRequests.length ? leaveRequests.length - 1 : currentSlide + 1
+        const nextSlide = currentSlide + 1 >= errorReports.length ? errorReports.length - 1 : currentSlide + 1
         sliderRef.current?.slickGoTo(nextSlide)
     }
 
@@ -165,7 +197,7 @@ export default function ErrorSalary() {
                 variant='body2'
                 sx={{ color: 'var(--sub-title-color)', padding: '0 24px', marginBottom: 3, mt: '0px' }}
             >
-                {leaveRequests.length} {t('COMMON.DASHBOARD.REQUESTS')}
+                {errorReports.length} {t('COMMON.DASHBOARD.REQUESTS')}
             </Typography>
 
             <Box
@@ -184,7 +216,7 @@ export default function ErrorSalary() {
                 }}
             >
                 <Slider ref={sliderRef} {...settings}>
-                    {leaveRequests.map((request, index) => (
+                    {errorReports.map((report, index) => (
                         <Card
                             key={index}
                             sx={{
@@ -204,21 +236,22 @@ export default function ErrorSalary() {
                                 <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
                                     <Avatar
                                         sx={{ marginRight: 2, height: '48px', width: '48px' }}
-                                        src={request.AvatarPath}
-                                        alt={request.FullName}
+                                        src={report.AvatarPath}
+                                        alt={report.FullName}
                                     />
                                     <Box>
                                         <Typography
                                             variant='subtitle1'
                                             sx={{ fontWeight: 'bold', fontSize: '14px', color: 'var(--text-color)' }}
                                         >
-                                            {request.FullName}
+                                            {report.FullName}
                                         </Typography>
                                         <Typography
                                             variant='body2'
                                             sx={{ fontSize: '12px', color: 'var(--created-date-color)', mt: '4px' }}
                                         >
-                                            {t('COMMON.DASHBOARD.POSTED')} {request.CreatedDate}
+                                            {t('COMMON.DASHBOARD.POSTED')}{' '}
+                                            {new Date(report.ReportedDate).toLocaleString()}
                                         </Typography>
                                     </Box>
                                 </Box>
@@ -250,7 +283,7 @@ export default function ErrorSalary() {
                                             variant='body2'
                                             sx={{ fontSize: '14px', color: 'var(--text-color)', fontWeight: 'bold' }}
                                         >
-                                            {request.Department}
+                                            {report.Department}
                                         </Typography>
                                     </Box>
                                     <Box
@@ -269,7 +302,7 @@ export default function ErrorSalary() {
                                             variant='body2'
                                             sx={{ fontSize: '14px', color: 'var(--text-color)', fontWeight: 'bold' }}
                                         >
-                                            {request.Roles}
+                                            {report.Roles}
                                         </Typography>
                                     </Box>
                                     <Box
@@ -288,7 +321,7 @@ export default function ErrorSalary() {
                                             variant='body2'
                                             sx={{ fontSize: '14px', color: 'var(--text-color)', fontWeight: 'bold' }}
                                         >
-                                            {request.EmployeeId}
+                                            {report.EmployeeId}
                                         </Typography>
                                     </Box>
                                 </Box>
@@ -303,13 +336,13 @@ export default function ErrorSalary() {
                                         color: 'var(--text-color)'
                                     }}
                                 >
-                                    {t('COMMON.DASHBOARD.REASON') + ':'} {request.Reason}
+                                    {t('COMMON.DASHBOARD.DESCRIPTION') + ':'}
                                 </Typography>
                                 <Typography
                                     variant='body2'
                                     sx={{ marginBottom: 2, fontSize: '14px', color: 'var(--text-color)' }}
                                 >
-                                    {request.Content}
+                                    {report.Description}
                                 </Typography>
                                 <Box
                                     sx={{
@@ -319,7 +352,7 @@ export default function ErrorSalary() {
                                     }}
                                 >
                                     <Chip
-                                        label={request.StartDate}
+                                        label={`${t('COMMON.DASHBOARD.TYPE')}: ${report.Type}`}
                                         sx={{
                                             fontSize: '13px',
                                             fontWeight: 'bold',
@@ -328,12 +361,15 @@ export default function ErrorSalary() {
                                         }}
                                     />
                                     <Chip
-                                        label={request.EndDate}
+                                        label={`${t('COMMON.DASHBOARD.STATUS')}: ${report.Status}`}
                                         sx={{
                                             fontSize: '13px',
                                             fontWeight: 'bold',
                                             color: 'var(--text-color)',
-                                            backgroundColor: 'var(--chip-bg-color)'
+                                            backgroundColor:
+                                                report.Status === 'Resolved'
+                                                    ? 'var(--chip-resolved-bg-color)'
+                                                    : 'var(--chip-pending-bg-color)'
                                         }}
                                     />
                                 </Box>

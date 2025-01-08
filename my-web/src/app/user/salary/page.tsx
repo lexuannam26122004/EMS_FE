@@ -15,8 +15,9 @@ interface info {
     PhoneNumber: string
     Email: string
     Address: string
-    StartDateWork: Date
+    StartDateWork: string
     PayrollCycle: number
+    Birthday: string
 }
 
 export default function EmployeeSalary() {
@@ -137,7 +138,7 @@ export default function EmployeeSalary() {
                             </Box>
                             <Box>
                                 <Typography sx={{ fontSize: '20px', fontWeight: 'bold', color: 'var(--text-color)' }}>
-                                    {myData?.StartDateWork.toString()}
+                                    {myData?.StartDateWork}
                                 </Typography>
                                 <Typography sx={{ fontSize: '15px', mt: '5px', color: 'var(--text-color)' }}>
                                     {t('COMMON.EMPLOYEE.STARTDATEWORK')}

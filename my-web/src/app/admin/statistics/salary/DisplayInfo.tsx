@@ -12,7 +12,7 @@ import {
     Tooltip
 } from '@mui/material'
 import { BadgeHelp } from 'lucide-react'
-import React, { useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {

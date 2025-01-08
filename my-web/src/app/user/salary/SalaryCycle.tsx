@@ -16,6 +16,21 @@ import { useTranslation } from 'react-i18next'
 import { useGetMeInfoCycleQuery } from '@/services/UserSalaryService'
 import EmployeeSalaryModal from './ModalDetail'
 
+function getContractBgColor(IsPaid: boolean): string {
+    if (IsPaid) {
+        return 'var(--bg-success-color)'
+    } else {
+        return 'var(--bg-danger-color)'
+    }
+}
+
+function getContractTextColor(IsPaid: boolean): string {
+    if (IsPaid) {
+        return 'var(--text-success-color)'
+    } else {
+        return 'var(--text-danger-color)'
+    }
+}
 interface infoCycle {
     Id: string
     Period: string
@@ -233,14 +248,14 @@ export default function SalaryCycle() {
                                             display: 'flex',
                                             minWidth: '100px',
                                             justifyContent: 'center',
-                                            backgroundColor: 'var(--bg-danger-color)'
+                                            backgroundColor: getContractBgColor(period?.Ispaid)
                                         }}
                                     >
                                         <Typography
                                             sx={{
                                                 fontSize: '15px',
                                                 overflow: 'hidden',
-                                                color: 'var(--text-danger-color)',
+                                                color: getContractTextColor(period?.Ispaid),
                                                 width: 'auto',
                                                 fontWeight: 'bold',
                                                 display: 'inline-block',
@@ -248,7 +263,9 @@ export default function SalaryCycle() {
                                                 whiteSpace: 'nowrap'
                                             }}
                                         >
-                                            {t('COMMON.ATTENDANCE.STATUS_INVALID')}
+                                            {getContractBgColor(period?.Ispaid) === 'var(--bg-danger-color)'
+                                                ? `${t('COMMON.SALARY.IS_UNPAID')}`
+                                                : `${t('COMMON.SALARY.IS_PAID')}`}
                                         </Typography>
                                     </Box>
                                     <Tooltip title='error report'>
