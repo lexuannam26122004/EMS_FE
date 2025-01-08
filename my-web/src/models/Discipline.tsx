@@ -10,3 +10,6 @@ export interface IDisciplineGetAll {
     Note?: string
     IsReceived: boolean
 }
+export interface IDiscipline extends IDisciplineGetAll {
+    Date: string
+}

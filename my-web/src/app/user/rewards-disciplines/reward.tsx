@@ -1,5 +1,7 @@
 'use client'
+import { IRewardGetAll } from '@/models/Reward'
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
+import { useGetMeRewardInfoQuery } from '@/services/UserRewardService'
 import {
     Box,
     Table,
@@ -9,7 +11,6 @@ import {
     TableHead,
     TableSortLabel,
     TableRow,
-    Tooltip,
     Typography,
     Paper,
     Pagination,
@@ -18,9 +19,25 @@ import {
     SelectChangeEvent,
     FormControl
 } from '@mui/material'
-import { ClipboardCheck } from 'lucide-react'
+
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+function getContractBgColor(IsPaid: boolean): string {
+    if (IsPaid) {
+        return 'var(--bg-success-color)'
+    } else {
+        return 'var(--bg-danger-color)'
+    }
+}
+
+function getContractTextColor(IsPaid: boolean): string {
+    if (IsPaid) {
+        return 'var(--text-success-color)'
+    } else {
+        return 'var(--text-danger-color)'
+    }
+}
 
 export default function Detail() {
     const { t } = useTranslation('common')
@@ -32,12 +49,24 @@ export default function Detail() {
     const [orderBy, setOrderBy] = useState<string>('')
     const [page, setPage] = useState(1)
     const [rowsPerPage, setRowsPerPage] = useState('5')
-    const [from] = useState(1)
-    const [to] = useState(5)
+    const [from, setFrom] = useState(1)
+    const [to, setTo] = useState(5)
     const [filter, setFilter] = useState<IFilterSysConfiguration>({
         pageSize: 5,
         pageNumber: 1
     })
+
+    const currentYear = new Date().getFullYear()
+    const [selectedYear, setSelectedYear] = useState(currentYear)
+
+    useEffect(() => {}, [selectedYear, from, to, order, orderBy, filter])
+
+    const handleYearChange = (event: SelectChangeEvent<number>) => {
+        setSelectedYear(event.target.value as number)
+    }
+    const { data, isFetching } = useGetMeRewardInfoQuery({ filter, year: selectedYear })
+    const dataReward = data?.Data.Records as IRewardGetAll[]
+    const totalRecords = data?.Data.TotalRecords
 
     const handleChangePage = (event: React.ChangeEvent<unknown>, newPage: number) => {
         setPage(newPage)
@@ -61,15 +90,22 @@ export default function Detail() {
         })
     }
 
-    // const [selectedConfig, setSelectedConfig] = useState<IGetAllSysConfiguration | null>(null)
-    //const [openModal, setOpenModal] = useState(false)
+    useEffect(() => {
+        if (!isFetching && data?.Data) {
+            const from = (page - 1) * Number(rowsPerPage) + Math.min(1, dataReward.length)
+            setFrom(from)
 
-    // const handleClickDetail = (config: IGetAllSysConfiguration) => {
-    //     setSelectedConfig(config)
-    //     setOpenModal(true)
-    // }
+            const to = Math.min(dataReward.length + (page - 1) * Number(rowsPerPage), totalRecords)
+            setTo(to)
+        }
+    }, [isFetching, data, page, rowsPerPage])
 
     const handleSort = (property: string) => {
+        setFilter(prev => ({
+            ...prev,
+            sortBy: property,
+            isDescending: orderBy === property && order === 'asc' ? true : false
+        }))
         if (orderBy === property) {
             setOrder(order === 'asc' ? 'desc' : 'asc')
         } else {
@@ -77,17 +113,6 @@ export default function Detail() {
         }
         setOrderBy(property)
     }
-
-    const currentYear = new Date().getFullYear()
-    const [selectedYear, setSelectedYear] = useState(currentYear)
-
-    useEffect(() => {}, [selectedYear, from, to, order, orderBy, filter])
-
-    const handleYearChange = (event: SelectChangeEvent<number>) => {
-        setSelectedYear(event.target.value as number)
-    }
-    const data = ['1', '2']
-    useEffect(() => {}, [from, to, filter, selectedYear])
 
     return (
         <Box>
@@ -115,7 +140,7 @@ export default function Detail() {
                                 color: 'var(--text-color)'
                             }}
                         >
-                            {t('reward')}
+                            {t('COMMON.REWARD_DISCIPLINE.REWARD')}
                         </Typography>
                     </Box>
                     <FormControl sx={{ width: '90px' }}>
@@ -352,28 +377,11 @@ export default function Detail() {
                                         {t('COMMON.ERROR_REPORT.STATUS')}
                                     </Typography>
                                 </TableCell>
-
-                                <TableCell sx={{ borderColor: 'var(--border-color)', padding: '16px 35px' }}>
-                                    <Typography
-                                        sx={{
-                                            fontWeight: 'bold',
-                                            color: 'var(--text-color)',
-                                            fontSize: '16px',
-                                            overflow: 'hidden',
-                                            textAlign: 'center',
-                                            maxWidth: '280px',
-                                            textOverflow: 'ellipsis',
-                                            whiteSpace: 'nowrap'
-                                        }}
-                                    >
-                                        {t('COMMON.ERROR_REPORT.ACTION')}
-                                    </Typography>
-                                </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data &&
-                                data.map((row, index: number) => (
+                            {dataReward &&
+                                dataReward.map((row, index: number) => (
                                     <TableRow
                                         key={index}
                                         sx={{
@@ -400,7 +408,7 @@ export default function Detail() {
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                date
+                                                {row.Date}
                                             </Typography>
                                         </TableCell>
 
@@ -422,7 +430,7 @@ export default function Detail() {
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                reason
+                                                {row.Reason}
                                             </Typography>
                                         </TableCell>
 
@@ -446,7 +454,7 @@ export default function Detail() {
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                money
+                                                {row.Money}
                                             </Typography>
                                         </TableCell>
 
@@ -467,7 +475,7 @@ export default function Detail() {
                                                     whiteSpace: 'nowrap'
                                                 }}
                                             >
-                                                note
+                                                {row.Note}
                                             </Typography>
                                         </TableCell>
                                         <TableCell
@@ -485,14 +493,14 @@ export default function Detail() {
                                                     display: 'flex',
                                                     minWidth: '100px',
                                                     justifyContent: 'center',
-                                                    backgroundColor: 'var(--bg-danger-color)'
+                                                    backgroundColor: getContractBgColor(row.IsReceived)
                                                 }}
                                             >
                                                 <Typography
                                                     sx={{
                                                         fontSize: '15px',
                                                         overflow: 'hidden',
-                                                        color: 'var(--text-danger-color)',
+                                                        color: getContractTextColor(row.IsReceived),
                                                         width: 'auto',
                                                         fontWeight: 'bold',
                                                         display: 'inline-block',
@@ -500,208 +508,10 @@ export default function Detail() {
                                                         whiteSpace: 'nowrap'
                                                     }}
                                                 >
-                                                    {t('COMMON.ATTENDANCE.STATUS_INVALID')}
+                                                    {getContractBgColor(row.IsReceived) === 'var(--bg-danger-color)'
+                                                        ? `${t('COMMON.REWARD_DISCIPLINE.UNRECEIVED')}`
+                                                        : `${t('COMMON.REWARD_DISCIPLINE.RECEIVED')}`}
                                                 </Typography>
-                                            </Box>
-                                            {/* {row.IsValid === false ? (
-                                        <Box
-                                            sx={{
-                                                borderRadius: '8px',
-                                                padding: '5px 10px',
-                                                display: 'flex',
-                                                minWidth: '100px',
-                                                justifyContent: 'center',
-                                                backgroundColor: 'var(--bg-danger-color)'
-                                            }}
-                                        >
-                                            <Typography
-                                                sx={{
-                                                    fontSize: '15px',
-                                                    overflow: 'hidden',
-                                                    color: 'var(--text-danger-color)',
-                                                    width: 'auto',
-                                                    fontWeight: 'bold',
-                                                    display: 'inline-block',
-                                                    textOverflow: 'ellipsis',
-                                                    whiteSpace: 'nowrap'
-                                                }}
-                                            >
-                                                {t('COMMON.ATTENDANCE.STATUS_INVALID')}
-                                            </Typography>
-                                        </Box>
-                                    ) : row.CheckInTime > '08:00:00' ? (
-                                        row.CheckOutTime < '17:00' ? (
-                                            <Box>
-                                                <Box
-                                                    sx={{
-                                                        borderRadius: '8px',
-                                                        padding: '5px 10px',
-                                                        display: 'flex',
-                                                        minWidth: '100px',
-                                                        justifyContent: 'center',
-                                                        backgroundColor: 'var(--bg-warning-color)'
-                                                    }}
-                                                >
-                                                    <Typography
-                                                        sx={{
-                                                            fontSize: '15px',
-                                                            overflow: 'hidden',
-                                                            color: 'var(--text-warning-color)',
-                                                            width: 'auto',
-                                                            fontWeight: 'bold',
-                                                            display: 'inline-block',
-                                                            textOverflow: 'ellipsis',
-                                                            whiteSpace: 'nowrap'
-                                                        }}
-                                                    >
-                                                        {t('COMMON.ATTENDANCE.STATUS_LATE')}
-                                                    </Typography>
-                                                </Box>
-
-                                                <Box
-                                                    sx={{
-                                                        mt: '10px',
-                                                        borderRadius: '8px',
-                                                        padding: '5px 10px',
-                                                        display: 'flex',
-                                                        minWidth: '100px',
-                                                        justifyContent: 'center',
-                                                        backgroundColor: 'var(--bg-closed-color)'
-                                                    }}
-                                                >
-                                                    <Typography
-                                                        sx={{
-                                                            fontSize: '15px',
-                                                            overflow: 'hidden',
-                                                            color: 'var(--text-closed-color)',
-                                                            width: 'auto',
-                                                            fontWeight: 'bold',
-                                                            display: 'inline-block',
-                                                            textOverflow: 'ellipsis',
-                                                            whiteSpace: 'nowrap'
-                                                        }}
-                                                    >
-                                                        {t('COMMON.ATTENDANCE.STATUS_EARLY')}
-                                                    </Typography>
-                                                </Box>
-                                            </Box>
-                                        ) : (
-                                            <Box
-                                                sx={{
-                                                    borderRadius: '8px',
-                                                    padding: '5px 10px',
-                                                    display: 'flex',
-                                                    minWidth: '100px',
-                                                    justifyContent: 'center',
-                                                    backgroundColor: 'var(--bg-warning-color)'
-                                                }}
-                                            >
-                                                <Typography
-                                                    sx={{
-                                                        fontSize: '15px',
-                                                        overflow: 'hidden',
-                                                        color: 'var(--text-warning-color)',
-                                                        width: 'auto',
-                                                        fontWeight: 'bold',
-                                                        display: 'inline-block',
-                                                        textOverflow: 'ellipsis',
-                                                        whiteSpace: 'nowrap'
-                                                    }}
-                                                >
-                                                    {t('COMMON.ATTENDANCE.STATUS_LATE')}
-                                                </Typography>
-                                            </Box>
-                                        )
-                                    ) : row.CheckOutTime < '17:00' ? (
-                                        <Box
-                                            sx={{
-                                                borderRadius: '8px',
-                                                padding: '5px 10px',
-                                                display: 'flex',
-                                                minWidth: '100px',
-                                                justifyContent: 'center',
-                                                backgroundColor: 'var(--bg-closed-color)'
-                                            }}
-                                        >
-                                            <Typography
-                                                sx={{
-                                                    fontSize: '15px',
-                                                    overflow: 'hidden',
-                                                    color: 'var(--text-closed-color)',
-                                                    width: 'auto',
-                                                    fontWeight: 'bold',
-                                                    display: 'inline-block',
-                                                    textOverflow: 'ellipsis',
-                                                    whiteSpace: 'nowrap'
-                                                }}
-                                            >
-                                                {t('COMMON.ATTENDANCE.STATUS_EARLY')}
-                                            </Typography>
-                                        </Box>
-                                    ) : (
-                                        <Box
-                                            sx={{
-                                                borderRadius: '8px',
-                                                padding: '5px 10px',
-                                                display: 'flex',
-                                                minWidth: '100px',
-                                                justifyContent: 'center',
-                                                backgroundColor: 'var(--bg-success-color)'
-                                            }}
-                                        >
-                                            <Typography
-                                                sx={{
-                                                    fontSize: '15px',
-                                                    overflow: 'hidden',
-                                                    color: 'var(--text-success-color)',
-                                                    width: 'auto',
-                                                    fontWeight: 'bold',
-                                                    display: 'inline-block',
-                                                    textOverflow: 'ellipsis',
-                                                    whiteSpace: 'nowrap'
-                                                }}
-                                            >
-                                                {t('COMMON.ATTENDANCE.STATUS_ON_TIME')}
-                                            </Typography>
-                                        </Box>
-                                    )} */}
-                                        </TableCell>
-
-                                        <TableCell
-                                            sx={{
-                                                borderStyle: 'dashed',
-                                                padding: '16px 24px',
-                                                borderColor: 'var(--border-color)',
-                                                width: '146px',
-                                                cursor: 'pointer'
-                                            }}
-                                        >
-                                            <Box
-                                                display='flex'
-                                                alignItems='center'
-                                                justifyContent='center'
-                                                sx={{
-                                                    cursor: 'pointer'
-                                                }}
-                                            >
-                                                <Tooltip title={t('COMMON.REWARD_DISCIPLINE.VIEW_DETAIL')}>
-                                                    <Box
-                                                        display='flex'
-                                                        alignItems='center'
-                                                        justifyContent='center'
-                                                        sx={{
-                                                            color: '#00d100',
-                                                            borderRadius: '50%',
-                                                            width: '42px',
-                                                            height: '42px',
-                                                            '&:hover': {
-                                                                backgroundColor: 'var(--hover-color)'
-                                                            }
-                                                        }}
-                                                    >
-                                                        <ClipboardCheck />
-                                                    </Box>
-                                                </Tooltip>
                                             </Box>
                                         </TableCell>
                                     </TableRow>
@@ -709,7 +519,7 @@ export default function Detail() {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <Box display='flex' alignItems='center' justifyContent='space-between' padding='35px'>
+                <Box display='flex' alignItems='center' justifyContent='space-between' padding='24px'>
                     <Box display='flex' alignItems='center'>
                         <Typography sx={{ mr: '10px', color: 'var(--text-color)' }}>
                             {t('COMMON.PAGINATION.ROWS_PER_PAGE')}
@@ -787,11 +597,11 @@ export default function Detail() {
                             <MenuItem value={40}>40</MenuItem>
                         </Select>
                         <Typography sx={{ ml: '30px', color: 'var(--text-color)' }}>
-                            {/* {t('COMMON.PAGINATION.FROM_TO', { from, to, totalRecords })} */}
+                            {t('COMMON.PAGINATION.FROM_TO', { from, to, totalRecords })}
                         </Typography>
                     </Box>
                     <Pagination
-                        count={Math.ceil(3 / Number(rowsPerPage))}
+                        count={Math.ceil(totalRecords / Number(rowsPerPage))}
                         page={page}
                         onChange={handleChangePage}
                         boundaryCount={1}

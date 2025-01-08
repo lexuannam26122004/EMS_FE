@@ -266,23 +266,23 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                     <SidebarItem
                         icon={<Gift />}
                         text={t('Phúc lợi')}
-                        route='/admin/benefit'
-                        active={pathname === '/admin/benefit'}
+                        //route='/admin/benefit'
+                        //active={pathname === '/admin/benefit'}
                     >
-                        {/* {menuLeft['/admin/benefit'].IsAllowView && (
+                        {menuLeft['/admin/benefit'].IsAllowView && (
                             <SidebarItem
                                 icon={<ChartNoAxesCombined />}
                                 text={t('Danh sách phúc lợi')}
                                 route='/admin/benefit'
                             />
-                        )} */}
-                        {/* {menuLeft['/admin/benefit/add-employee-benefits'].IsAllowView && (
+                        )}
+                        {menuLeft['/admin/benefit/add-employee-benefits'].IsAllowView && (
                             <SidebarItem
                                 icon={<ChartNoAxesCombined />}
                                 text={t('Phúc lợi nhân viên')}
                                 route='/admin/benefit/add-employee-benefits'
                             />
-                        )} */}
+                        )}
                     </SidebarItem>
                 )}
                 {menuLeft['Discipline'].IsAllowView && (

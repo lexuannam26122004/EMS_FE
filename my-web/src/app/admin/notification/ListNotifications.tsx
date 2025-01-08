@@ -1,7 +1,7 @@
 import { INotificationsForUser } from '@/models/Notifications'
 import React, { useCallback, useState, useEffect } from 'react'
 import { Box, Typography, Avatar, Popper, MenuItem, styled } from '@mui/material'
-import { Ellipsis, Check, Trash2 } from 'lucide-react'
+import { Ellipsis, Check } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useChangeNotificationReadMutation, useDeleteNotificationMutation } from '@/services/NotificationsService'
 import { useDispatch, useSelector } from 'react-redux'

@@ -19,40 +19,25 @@ import {
     TableSortLabel,
     Avatar,
     FormControl,
-    Tooltip
+    Tooltip,
+    IconButton
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import SearchIcon from '@mui/icons-material/Search'
-//import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useGetUnpaidSalaryQuery, usePaymentConfirmationMutation } from '@/services/SalaryService'
 import { IUnpaidSalary } from '@/models/salary'
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
 import { debounce } from 'lodash'
 import { useCallback } from 'react'
-import { HandCoins } from 'lucide-react'
+import { ChevronLeft, HandCoins } from 'lucide-react'
 import { useSelector } from 'react-redux'
 import { authSelector } from '@/redux/slices/authSlice'
 
-function getContractBgColor(IsPaid: boolean): string {
-    if (IsPaid) {
-        return 'var(--bg-success-color)'
-    } else {
-        return 'var(--bg-danger-color)'
-    }
-}
-
-function getContractTextColor(IsPaid: boolean): string {
-    if (IsPaid) {
-        return 'var(--text-success-color)'
-    } else {
-        return 'var(--text-danger-color)'
-    }
-}
-
 function SalaryTablePage() {
     const { t } = useTranslation('common')
-    // const router = useRouter()
+    const router = useRouter()
     // const [selected, setSelected] = useState<number[]>([])
     const menuLeft = useSelector(authSelector)
     const [page, setPage] = useState(1)
@@ -172,6 +157,31 @@ function SalaryTablePage() {
                     backgroundColor: 'var(--background-item)'
                 }}
             >
+                <Box
+                    sx={{
+                        marginTop: '10px',
+                        display: 'flex',
+                        alignItems: 'center'
+                    }}
+                >
+                    <IconButton
+                        sx={{
+                            marginRight: '16px',
+                            '& .MuiOutlinedInput-root:hover fieldset': {
+                                borderColor: 'var(--hover-field-color)'
+                            },
+                            '& .MuiOutlinedInput-root.Mui-focused fieldset': {
+                                borderColor: 'var(--selected-field-color)'
+                            }
+                        }}
+                        onClick={() => router.back()}
+                    >
+                        <ChevronLeft size={24} color='var(--text-color)' />
+                    </IconButton>
+                    <Typography fontSize={'24px'} fontWeight={'bold'} color='var(--text-color)'>
+                        {t('COMMON.SALARY.UNPAID')}
+                    </Typography>
+                </Box>
                 <Box display='flex' alignItems='center' justifyContent='space-between' margin='24px'>
                     <Box sx={{ position: 'relative', width: '100%', height: '55px' }}>
                         <TextField

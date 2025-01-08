@@ -39,7 +39,7 @@ import {
 import CircleIcon from '@mui/icons-material/Circle'
 import './styles.css'
 import { useTranslation } from 'react-i18next'
-import { CalendarRange, ChevronLeft, ChevronRight, Trash2 } from 'lucide-react'
+import { CalendarRange, ChevronLeft, ChevronRight } from 'lucide-react'
 import { RootState } from '@/redux/store'
 import { useSelector } from 'react-redux'
 import {
