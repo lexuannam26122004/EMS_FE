@@ -316,7 +316,7 @@ function BenefitPage() {
                                 whiteSpace: 'nowrap',
                                 textTransform: 'none'
                             }}
-                            onClick={() => router.push('/admin/benefit/create-benefit')}
+                            onClick={() => router.push('/admin/benefit/create')}
                             //onClick={() => handleOpenCreateDialog()}
                         >
                             {t('COMMON.BUTTON.CREATE')}
@@ -563,7 +563,7 @@ function BenefitPage() {
                                                             backgroundColor: 'var(--hover-color)'
                                                         }
                                                     }}
-                                                    //onClick={() => handleUpdate(row)}
+                                                    onClick={() => router.push(`/admin/benefit/update?id=${row.Id}`)}
                                                 >
                                                     <Pencil />
                                                 </Box>

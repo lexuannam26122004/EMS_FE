@@ -3,10 +3,12 @@ import {
     IBenefitGetAllType,
     IBenefitUpdate,
     IBenefitTypeCreate,
-    IBenefitTypeUpdate
+    IBenefitTypeUpdate,
+    IGetAllBenefitUser
 } from '@/models/Benefit'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
+import { createBaseQuery } from './api'
 
 interface BenefitResponse {
     Success: boolean
@@ -17,7 +19,7 @@ const apiPath = 'https://localhost:44381/api/admin/Benefit'
 
 export const benefitApi = createApi({
     reducerPath: 'benefitApi',
-    baseQuery: fetchBaseQuery({ baseUrl: apiPath }),
+    baseQuery: createBaseQuery(apiPath),
     tagTypes: ['Benefit'],
     endpoints: builder => ({
         createBenefit: builder.mutation<void, IBenefitCreate>({
@@ -96,12 +98,54 @@ export const benefitApi = createApi({
                 return `GetAllBenefitType?`
             }*/
         }),
+        GetByIdBenefit: builder.query<BenefitResponse, string>({
+            query: id => `GetById?id=${id}`
+        }),
+
+        GetTotalBenefitAndEmployeeByMonthAndYear: builder.query<BenefitResponse, { year: number; month: number }>({
+            query: ({ year, month }) => ({
+                url: `GetTotalBenefitAndEmployeeByMonthAndYear/monthly-stats?year=${year}&month=${month}`,
+                method: 'GET'
+            })
+        }),
+
         deleteBenefitType: builder.mutation<void, number>({
             query: id => ({
                 url: `DeleteBenefitType/${id}`,
                 method: 'DELETE'
             }),
             invalidatesTags: ['Benefit']
+        }),
+        getAllBenefitUser: builder.query<BenefitResponse, IGetAllBenefitUser | void>({
+            query: filter => {
+                const params = new URLSearchParams()
+
+                if (filter) {
+                    //if (filter.createdBy) params.append('CreatedBy', filter.createdBy)
+                    //if (filter.createdDate) params.append('CreatedDate', filter.createdDate.toDateString())
+                    if (filter.pageSize) params.append('PageSize', filter.pageSize.toString())
+                    if (filter.pageNumber) params.append('PageNumber', filter.pageNumber.toString())
+                    //if (filter.isActive !== undefined) params.append('IsActive', filter.isActive.toString())
+                    if (filter.keyword) params.append('Keyword', filter.keyword)
+                    if (filter.isDescending !== undefined) params.append('IsDescending', filter.isDescending.toString())
+                    if (filter.sortBy) params.append('SortBy', filter.sortBy)
+                    if (filter.ToBenefitContribution)
+                        params.append('ToBenefitContribution', filter.ToBenefitContribution.toString())
+                    if (filter.FromBenefitContribution)
+                        params.append('FromBenefitContribution', filter.FromBenefitContribution.toString())
+                    if (filter.Gender !== undefined) {
+                        params.append('Gender', filter.Gender ? 'True' : 'False')
+                    }
+                    if (filter.DepartmentIds && filter.DepartmentIds.length > 0) {
+                        filter.DepartmentIds.forEach(id => {
+                            params.append('DepartmentIds', id.toString())
+                        })
+                    }
+                }
+
+                return `GetAllBenefitUser?${params.toString()}`
+            },
+            providesTags: ['Benefit']
         })
     })
 })
@@ -115,5 +159,8 @@ export const {
     useGetAllBenefitsTypeQuery,
     useCreateBenefitTypeMutation,
     useUpdateBenefitTypeMutation,
-    useDeleteBenefitTypeMutation
+    useDeleteBenefitTypeMutation,
+    useGetAllBenefitUserQuery,
+    useGetByIdBenefitQuery,
+    useGetTotalBenefitAndEmployeeByMonthAndYearQuery
 } = benefitApi

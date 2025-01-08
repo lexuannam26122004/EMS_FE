@@ -1,6 +1,6 @@
 export interface IBenefitCreate {
     Name: string
-    BenefitContribution: number
+    //BenefitContribution: number
     BenefitTypeId: number
 }
 
@@ -20,7 +20,7 @@ export interface IBenefitGetAllType {
 export interface IBenefitUpdate {
     Id: string
     Name: string
-    BenefitContribution: number
+    //BenefitContribution: number
     BenefitTypeId: number
 }
 
@@ -33,4 +33,21 @@ export interface IBenefitTypeUpdate {
     Id: number
     Name: string
     Description: string
+}
+
+export interface IGetAllBenefitUser {
+    Id?: number
+    pageSize?: number
+    pageNumber?: number
+    sortBy?: string
+    isDescending?: boolean
+    keyword?: string
+    UserId?: string
+    DepartmentIds?: number[]
+    Gender?: boolean
+    FromBenefitContribution?: number
+    ToBenefitContribution?: number
+    FullName?: string
+    DepartmentName?: string
+    BenefitContribution?: number
 }

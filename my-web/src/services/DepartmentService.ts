@@ -1,6 +1,10 @@
 import { IDepartmentCreate, IDepartmentUpdate } from '@/models/Department'
 import { IFilterSysConfiguration } from '@/models/SysConfiguration'
+<<<<<<< Updated upstream
 import { createApi } from '@reduxjs/toolkit/query/react'
+=======
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+>>>>>>> Stashed changes
 import { createBaseQuery } from './api'
 
 interface DepartmentResponse {

@@ -101,12 +101,12 @@ function CreateBenefitPage() {
 
     const handleSave = async () => {
         setIsSubmit(true)
-        if (name === '' || !benefitTypeId || contribution === '') {
+        if (name === '' || !benefitTypeId) {
             return
         }
         const data = {
             Name: name,
-            BenefitContribution: Number(contribution),
+            //BenefitContribution: Number(contribution),
             BenefitTypeId: benefitTypeId
         }
         await createBenefit(data).unwrap()
@@ -303,15 +303,6 @@ function CreateBenefitPage() {
                             }
                         }}
                         isOptionEqualToValue={(option, value) => option.Id === value.Id}
-                    />
-                    <TextField
-                        variant='outlined'
-                        label={t('COMMON.BENEFIT.CONTRIBUTION')}
-                        fullWidth
-                        type='number'
-                        {...(isSubmit && contribution === '' && { error: true })}
-                        value={contribution}
-                        onChange={e => setContribution(Number(e.target.value))}
                     />
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px', mt: '20px' }}>
