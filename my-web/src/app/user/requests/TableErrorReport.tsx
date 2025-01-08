@@ -17,6 +17,7 @@ import { EyeIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
+import DetailError from './DetailError'
 
 function getStatusBgColor(status: string): string {
     if (status === '3') {
@@ -103,10 +104,16 @@ function TableErrorReport({ errorsData, totalRecords, type, onSort }: IProps) {
     const [orderBy, setOrderBy] = useState<string>('')
     // const [selectedConfig, setSelectedConfig] = useState<IGetAllSysConfiguration | null>(null)
     const [openModal, setOpenModal] = useState(false)
+    const [selectedConfig, setSelectedConfig] = useState<IGetAllErrorReport | null>(null)
     // const handleClickDetail = (config: IGetAllSysConfiguration) => {
     //     setSelectedConfig(config)
     //     setOpenModal(true)
     // }
+
+    const handleClickDetail = (config: IGetAllErrorReport) => {
+        setSelectedConfig(config)
+        setOpenModal(true)
+    }
 
     useEffect(() => {}, [
         totalRecords,
@@ -488,6 +495,7 @@ function TableErrorReport({ errorsData, totalRecords, type, onSort }: IProps) {
                                                         backgroundColor: 'var(--hover-color)'
                                                     }
                                                 }}
+                                                onClick={() => handleClickDetail(row)}
                                             >
                                                 <EyeIcon />
                                             </Box>
@@ -498,6 +506,9 @@ function TableErrorReport({ errorsData, totalRecords, type, onSort }: IProps) {
                         ))}
                 </TableBody>
             </Table>
+            {selectedConfig && (
+                <DetailError handleToggle={() => setOpenModal(false)} open={openModal} configuration={selectedConfig} />
+            )}
         </TableContainer>
     )
 }
